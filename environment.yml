@@ -1,0 +1,15 @@
+name: evo_v_base
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - dataclasses          # Needed for older Python, harmless in 3.11+
+      - pyyaml               # If your planner needs YAML support
+      - numpy                # Common scientific dependency
+      - pandas               # Useful for reports / tables
+      - pytest               # For running any future tests
+      - black                # Optional: code formatting
+      - isort                # Optional: import sorting
