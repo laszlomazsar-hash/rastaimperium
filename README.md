@@ -1,4 +1,4 @@
-# Rasta Imperium
+# RASTA EVO-V
 
 A sovereign digital territory built on mythic-technical architecture.  
 Powered by FastAPI, Jinja2, and a layered revelation framework.
