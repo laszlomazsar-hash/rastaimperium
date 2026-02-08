@@ -2,66 +2,71 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Rasta Imperium</title>
+<title>Rasta Imperium | One Love</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root {
-  --gold:#d4af37; --green:#2e7d32; --red:#c62828;
-  --bg:#0b0b0b; --panel:#111; --border:#222;
+:root{
+  --red:#c62828;
+  --gold:#d4af37;
+  --green:#2e7d32;
+  --bg:#0b0b0b;
+  --panel:#111;
+  --border:#222;
   --text:#eaeaea;
 }
 
-* { box-sizing:border-box; }
+*{box-sizing:border-box}
 
-body {
+body{
   margin:0;
   font-family:system-ui, monospace;
   background:var(--bg);
   color:var(--text);
 }
 
-header {
+header{
   height:4px;
   background:linear-gradient(90deg,var(--red),var(--gold),var(--green));
 }
 
-nav {
+nav{
   display:flex;
   justify-content:center;
   gap:24px;
   padding:20px;
   border-bottom:1px solid var(--border);
+  flex-wrap:wrap;
 }
 
-nav a {
+nav a{
   color:#777;
   text-decoration:none;
-  font-size:0.75rem;
+  font-size:.75rem;
   letter-spacing:3px;
   text-transform:uppercase;
 }
 
 nav a.active,
-nav a:hover { color:var(--gold); }
+nav a:hover{color:var(--gold)}
 
-section {
+section{
   display:none;
-  max-width:820px;
+  max-width:900px;
   margin:0 auto;
   padding:60px 20px;
 }
 
-section.active { display:block; }
+section.active{display:block}
 
-h1,h2 {
+h1,h2{
   color:var(--gold);
   letter-spacing:4px;
   text-transform:uppercase;
   font-weight:400;
 }
 
-textarea {
+textarea{
   width:100%;
   height:140px;
   background:var(--panel);
@@ -71,7 +76,7 @@ textarea {
   font-family:inherit;
 }
 
-button {
+button{
   margin-top:16px;
   padding:10px 28px;
   background:none;
@@ -80,21 +85,26 @@ button {
   cursor:pointer;
 }
 
-button:hover {
+button:hover{
   background:var(--gold);
   color:#000;
 }
 
-.panel {
+.panel{
   margin-top:30px;
   padding:20px;
   background:var(--panel);
   border-left:3px solid var(--green);
 }
 
-.muted {
-  opacity:0.5;
-  font-size:0.9rem;
+.muted{
+  opacity:.55;
+  font-size:.9rem;
+  line-height:1.7;
+}
+
+ul{
+  padding-left:20px;
 }
 </style>
 </head>
@@ -104,22 +114,70 @@ button:hover {
 
 <nav>
   <a href="#" onclick="show('home',this)" class="active">Home</a>
+  <a href="#" onclick="show('revolution',this)">Revolution</a>
   <a href="#" onclick="show('field',this)">Field</a>
-  <a href="#" onclick="show('codex',this)">Codex</a>
+  <a href="#" onclick="show('reggae',this)">Reggae</a>
   <a href="#" onclick="show('ethics',this)">Ethics</a>
 </nav>
 
 <section id="home" class="active">
   <h1>Rasta Imperium</h1>
-  <p class="muted">A symbolic interface. Nothing more. Nothing less.</p>
+  <p class="muted">
+    One Love is not agreement.<br>
+    It is respect without fear.
+  </p>
+</section>
+
+<section id="revolution">
+  <h2>The Revolution</h2>
+
+  <p>
+    This space began as a symbolic expression — words, rhythm, and ideas
+    shared digitally.
+  </p>
+
+  <p>
+    Over time, it became clear that symbols alone do not change the world.
+    Change happens when values are lived, not displayed.
+  </p>
+
+  <p>
+    This is where symbolism meets reality.
+  </p>
+
+  <p>
+    The revolution spoken of here is not violent, political, or ideological.
+    It does not seek power, followers, or opposition.
+  </p>
+
+  <p>
+    It is a quiet, lived shift:
+  </p>
+
+  <ul class="muted">
+    <li>from confusion to clarity</li>
+    <li>from reaction to responsibility</li>
+    <li>from performance to integrity</li>
+    <li>from consumption to creation</li>
+  </ul>
+
+  <p>
+    Reggae has always carried this message —
+    not by force, but through rhythm, memory, and truth.
+  </p>
+
+  <p class="muted">
+    Nothing here asks you to change who you are.
+    It simply invites reflection on how you live.
+  </p>
 </section>
 
 <section id="field">
   <h2>The Field</h2>
   <p class="muted">Input is optional. Silence is valid.</p>
 
-  <textarea id="input" placeholder="Enter signal…"></textarea>
-  <button onclick="processSignal()">Reflect</button>
+  <textarea id="input" placeholder="Share a thought, or leave it empty…"></textarea>
+  <button onclick="reflect()">Reflect</button>
 
   <div class="panel">
     <p><strong>State:</strong> <span id="state">—</span></p>
@@ -128,58 +186,76 @@ button:hover {
   </div>
 </section>
 
-<section id="codex">
-  <h2>Codex</h2>
+<section id="reggae">
+  <h2>Reggae & Wisdom</h2>
+
   <p>
-    What aligns, flows.<br>
-    What distorts, stabilizes.<br>
-    What is silent, remains.
+    Reggae is rhythm with responsibility.<br>
+    Wisdom is action without spectacle.
+  </p>
+
+  <p>
+    The music does not command change.
+    It creates space for remembrance.
+  </p>
+
+  <p class="muted">
+    This project honors reggae as lived culture —
+    not branding, not performance, not escape.
   </p>
 </section>
 
 <section id="ethics">
   <h2>Ethics</h2>
+
   <p class="muted">
-    This system does not judge, remember, rank, or decide truth.<br>
-    No data is stored. No identity is inferred.
+    This website does not judge, remember, rank, or guide belief.<br>
+    No data is stored. No identity is inferred.<br>
+    The system reflects input and returns to silence.
+  </p>
+
+  <p class="muted">
+    There are no leaders here, no conversions, no authority.
+    Only shared humanity.
   </p>
 </section>
 
 <script>
 let indexValue = 1.0;
 
-function show(id, el) {
+function show(id, el){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
   if(el) el.classList.add("active");
 }
 
-function harmonic(text) {
-  if(/love|truth|peace|jah|zion/i.test(text)) return 1.2;
-  if(/hate|fear|anger|babylon/i.test(text)) return 0.8;
-  return 1.0;
-}
-
-function processSignal() {
+function reflect(){
   const text = input.value.trim();
+  const stateEl = document.getElementById("state");
+  const indexEl = document.getElementById("index");
+  const responseEl = document.getElementById("response");
+
   if(!text){
-    state.textContent = "SILENCE";
-    response.textContent = "No signal reflected.";
+    stateEl.textContent = "SILENCE";
+    responseEl.textContent = "Nothing added. Nothing taken.";
     return;
   }
 
-  const h = harmonic(text);
-  indexValue = (indexValue * 0.9) + (h * 0.1);
-  indexValue = Math.min(Math.max(indexValue,0.7),1.3);
+  let h = 1.0;
+  if(/love|peace|truth|respect|unity/i.test(text)) h = 1.1;
+  if(/hate|fear|anger|violence/i.test(text)) h = 0.9;
 
-  state.textContent =
+  indexValue = (indexValue * 0.9) + (h * 0.1);
+  indexValue = Math.min(Math.max(indexValue,0.8),1.2);
+
+  stateEl.textContent =
     h > 1.05 ? "OPEN" :
-    h < 0.95 ? "GUARDED" :
+    h < 0.95 ? "TENSE" :
     "NEUTRAL";
 
-  index.textContent = indexValue.toFixed(2);
-  response.textContent = "The field reflects the input.";
+  indexEl.textContent = indexValue.toFixed(2);
+  responseEl.textContent = "The field reflects what was shared.";
   input.value = "";
 }
 </script>
