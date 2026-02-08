@@ -58,7 +58,6 @@ section{
   padding:60px 20px;
 }
 
-section.hidden{display:none}
 
 h1,h2{
   color:var(--gold);
@@ -121,11 +120,11 @@ ul{
 </main>
 
 <nav>
-  <a href="#" onclick="show('home',this,event)" class="active">Home</a>
-  <a href="#" onclick="show('revolution',this,event)">Revolution</a>
-  <a href="#" onclick="show('field',this,event)">Field</a>
-  <a href="#" onclick="show('reggae',this,event)">Reggae</a>
-  <a href="#" onclick="show('ethics',this,event)">Ethics</a>
+  <a href="#home" class="active">Home</a>
+  <a href="#revolution">Revolution</a>
+  <a href="#field">Field</a>
+  <a href="#reggae">Reggae</a>
+  <a href="#ethics">Ethics</a>
 </nav>
 
 <section id="home">
@@ -136,7 +135,7 @@ ul{
   </p>
 </section>
 
-<section id="revolution" class="hidden">
+<section id="revolution">
   <h2>The Revolution</h2>
 
   <p>
@@ -180,7 +179,7 @@ ul{
   </p>
 </section>
 
-<section id="field" class="hidden">
+<section id="field">
   <h2>The Field</h2>
   <p class="muted">Input is optional. Silence is valid.</p>
 
@@ -194,7 +193,7 @@ ul{
   </div>
 </section>
 
-<section id="reggae" class="hidden">
+<section id="reggae">
   <h2>Reggae & Wisdom</h2>
 
   <p>
@@ -213,7 +212,7 @@ ul{
   </p>
 </section>
 
-<section id="ethics" class="hidden">
+<section id="ethics">
   <h2>Ethics</h2>
 
   <p class="muted">
@@ -234,14 +233,6 @@ const inputEl = document.getElementById("input");
 const stateEl = document.getElementById("state");
 const indexEl = document.getElementById("index");
 const responseEl = document.getElementById("response");
-
-function show(id, el, event){
-  if (event) event.preventDefault();
-  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-  document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
-  if(el) el.classList.add("active");
-}
 
 function reflect(){
   const text = inputEl.value.trim();
