@@ -9,8 +9,13 @@
 </head>
 <body>
   <main class="page page-presence">
+    <nav class="section-nav">
+      <a href="#home" onclick="return show('home', this, event)">Presence</a>
+      <a href="#gateways" onclick="return show('gateways', this, event)">Gateways</a>
+      <a href="#contact" onclick="return show('contact', this, event)">First Contact</a>
+    </nav>
 
-    <section class="hero">
+    <section id="home" class="hero" data-section>
       <h1>Rasta Imperium</h1>
       <p class="tagline">A sovereign mythic‑technical field for civilization, code, and covenant.</p>
       <p class="subline">
@@ -20,7 +25,7 @@
       <a href="/curiosity" class="btn btn-primary">Enter Through Curiosity</a>
     </section>
 
-    <section class="pillars">
+    <section id="gateways" class="pillars" data-section>
       <h2>The Four Gateways</h2>
       <ul class="pillars-list">
         <li>
@@ -42,7 +47,7 @@
       </ul>
     </section>
 
-    <section class="cta-secondary">
+    <section id="contact" class="cta-secondary" data-section>
       <h2>Choose Your First Contact</h2>
       <p>You can enter through practice, understanding, product, or architecture. The field is the same.</p>
       <p>
@@ -54,5 +59,28 @@
     </section>
 
   </main>
+  <script>
+    function show(id, el, event) {
+      const evt = event || window.event;
+      if (evt && evt.preventDefault) {
+        evt.preventDefault();
+      }
+      const sections = document.querySelectorAll("[data-section]");
+      if (!sections.length) {
+        return false;
+      }
+      sections.forEach((section) => {
+        section.hidden = section.id !== id;
+      });
+      document.querySelectorAll(".section-nav a").forEach((link) => {
+        link.classList.toggle("is-active", link === el);
+      });
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, "", `#${id}`);
+      }
+      return false;
+    }
+
+  </script>
 </body>
 </html>
