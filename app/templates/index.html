@@ -51,13 +51,13 @@ nav a.active,
 nav a:hover{color:var(--gold)}
 
 section{
-  display:none;
+  display:block;
   max-width:900px;
   margin:0 auto;
   padding:60px 20px;
 }
 
-section.active{display:block}
+section.hidden{display:none}
 
 h1,h2{
   color:var(--gold);
@@ -120,7 +120,7 @@ ul{
   <a href="#" onclick="show('ethics',this,event)">Ethics</a>
 </nav>
 
-<section id="home" class="active">
+<section id="home">
   <h1>Rasta Imperium</h1>
   <p class="muted">
     One Love is not agreement.<br>
@@ -128,7 +128,7 @@ ul{
   </p>
 </section>
 
-<section id="revolution">
+<section id="revolution" class="hidden">
   <h2>The Revolution</h2>
 
   <p>
@@ -172,7 +172,7 @@ ul{
   </p>
 </section>
 
-<section id="field">
+<section id="field" class="hidden">
   <h2>The Field</h2>
   <p class="muted">Input is optional. Silence is valid.</p>
 
@@ -186,7 +186,7 @@ ul{
   </div>
 </section>
 
-<section id="reggae">
+<section id="reggae" class="hidden">
   <h2>Reggae & Wisdom</h2>
 
   <p>
@@ -205,7 +205,7 @@ ul{
   </p>
 </section>
 
-<section id="ethics">
+<section id="ethics" class="hidden">
   <h2>Ethics</h2>
 
   <p class="muted">
@@ -229,8 +229,8 @@ const responseEl = document.getElementById("response");
 
 function show(id, el, event){
   if (event) event.preventDefault();
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
   document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
   if(el) el.classList.add("active");
 }
