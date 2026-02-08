@@ -17,7 +17,7 @@ import seaborn as sns
 class ARKEvolutionFinalPDF:
     """Final professional PDF documentation generator."""
 
-    def __init__(self) -> None:
+    def __init__(self, output_dir: Path | None = None) -> None:
         self.pdf = FPDF("P", "mm", "A4")
         self.pdf.set_auto_page_break(auto=True, margin=15)
         self.pdf.set_title("ARK Evolution - Recursive Self-Transcendence MAX ∞")
@@ -27,6 +27,8 @@ class ARKEvolutionFinalPDF:
 
         self.documentation_date = datetime.now().strftime("%B %d, %Y")
         self.version = "1.0 - Ultimate Enhancement"
+        self.output_dir = output_dir or Path.cwd()
+        self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def generate_final_documentation(self) -> str:
         """Generate complete final documentation."""
@@ -51,15 +53,15 @@ class ARKEvolutionFinalPDF:
             "ARK_Evolution_Recursive_Self_Transcendence_FINAL_"
             f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
         )
-
-        self.pdf.output(filename)
+        output_path = self.output_dir / filename
+        self.pdf.output(str(output_path))
 
         print("\n🎯 FINAL DOCUMENTATION COMPLETE!")
-        print(f"📁 Generated: {filename}")
+        print(f"📁 Generated: {output_path}")
         print(f"📊 Pages: {self.pdf.page_no()}")
         print("🎯 Status: Ready for enterprise deployment")
 
-        return filename
+        return str(output_path)
 
     def _create_final_title_page(self) -> None:
         """Create professional title page with enhanced design."""
@@ -767,6 +769,7 @@ reliability_uptime = 0.999
     def _add_system_flow_diagram(self) -> None:
         """Add system architecture flow diagram."""
 
+        sns.set_theme(style="whitegrid")
         fig, ax = plt.subplots(figsize=(10, 8))
 
         steps = [
@@ -789,10 +792,19 @@ reliability_uptime = 0.999
             "#98D8C8",
         ]
 
+        positions = np.arange(len(steps))
         for i, (step, color) in enumerate(zip(steps, colors)):
-            y_pos = len(steps) - i - 1
+            y_pos = positions[len(steps) - i - 1]
             ax.barh(y_pos, 1, height=0.8, color=color, alpha=0.8)
-            ax.text(0.5, y_pos, step, ha="center", va="center", fontsize=12, fontweight="bold")
+            ax.text(
+                0.5,
+                y_pos,
+                step,
+                ha="center",
+                va="center",
+                fontsize=12,
+                fontweight="bold",
+            )
 
         for i in range(len(steps) - 1):
             ax.annotate(
@@ -809,14 +821,14 @@ reliability_uptime = 0.999
 
         plt.tight_layout()
 
-        temp_file = "temp_flow_diagram.png"
+        temp_file = self.output_dir / "temp_flow_diagram.png"
         plt.savefig(temp_file, dpi=150, bbox_inches="tight")
         plt.close()
 
-        self.pdf.image(temp_file, x=20, w=170)
+        self.pdf.image(str(temp_file), x=20, w=170)
 
-        if Path(temp_file).exists():
-            Path(temp_file).unlink()
+        if temp_file.exists():
+            temp_file.unlink()
 
     def _add_safety_certification(self) -> None:
         """Add safety certification section."""
