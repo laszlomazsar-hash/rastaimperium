@@ -113,11 +113,11 @@ ul{
 <header></header>
 
 <nav>
-  <a href="#" onclick="show('home',this)" class="active">Home</a>
-  <a href="#" onclick="show('revolution',this)">Revolution</a>
-  <a href="#" onclick="show('field',this)">Field</a>
-  <a href="#" onclick="show('reggae',this)">Reggae</a>
-  <a href="#" onclick="show('ethics',this)">Ethics</a>
+  <a href="#" onclick="show('home',this,event)" class="active">Home</a>
+  <a href="#" onclick="show('revolution',this,event)">Revolution</a>
+  <a href="#" onclick="show('field',this,event)">Field</a>
+  <a href="#" onclick="show('reggae',this,event)">Reggae</a>
+  <a href="#" onclick="show('ethics',this,event)">Ethics</a>
 </nav>
 
 <section id="home" class="active">
@@ -222,8 +222,13 @@ ul{
 
 <script>
 let indexValue = 1.0;
+const inputEl = document.getElementById("input");
+const stateEl = document.getElementById("state");
+const indexEl = document.getElementById("index");
+const responseEl = document.getElementById("response");
 
-function show(id, el){
+function show(id, el, event){
+  if (event) event.preventDefault();
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
@@ -231,10 +236,7 @@ function show(id, el){
 }
 
 function reflect(){
-  const text = input.value.trim();
-  const stateEl = document.getElementById("state");
-  const indexEl = document.getElementById("index");
-  const responseEl = document.getElementById("response");
+  const text = inputEl.value.trim();
 
   if(!text){
     stateEl.textContent = "SILENCE";
@@ -256,7 +258,7 @@ function reflect(){
 
   indexEl.textContent = indexValue.toFixed(2);
   responseEl.textContent = "The field reflects what was shared.";
-  input.value = "";
+  inputEl.value = "";
 }
 </script>
 </body>
