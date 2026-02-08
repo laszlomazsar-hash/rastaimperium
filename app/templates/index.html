@@ -23,6 +23,7 @@ body{
   font-family:system-ui, monospace;
   background:var(--bg);
   color:var(--text);
+  min-height:100vh;
 }
 
 header{
@@ -112,6 +113,13 @@ ul{
 <body>
 <header></header>
 
+<main>
+  <div class="hero">
+    <h1>Rasta Imperium</h1>
+    <p class="muted">One Love is respect without fear. The field remains open.</p>
+  </div>
+</main>
+
 <nav>
   <a href="#" onclick="show('home',this,event)" class="active">Home</a>
   <a href="#" onclick="show('revolution',this,event)">Revolution</a>
@@ -121,7 +129,7 @@ ul{
 </nav>
 
 <section id="home">
-  <h1>Rasta Imperium</h1>
+  <h2>Home</h2>
   <p class="muted">
     One Love is not agreement.<br>
     It is respect without fear.
@@ -263,3 +271,20 @@ function reflect(){
 </script>
 </body>
 </html>
+main{
+  max-width:900px;
+  margin:0 auto;
+  padding:40px 20px 0;
+}
+
+.hero{
+  padding:24px 0 10px;
+}
+
+.hero h1{
+  margin:0 0 8px;
+}
+
+.hero p{
+  margin:0;
+}
