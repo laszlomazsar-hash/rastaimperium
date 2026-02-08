@@ -54,5 +54,19 @@
     </section>
 
   </main>
+  <script>
+    const inputEl = document.getElementById("input");
+    const stateEl = document.getElementById("state");
+    const indexEl = document.getElementById("index");
+    const responseEl = document.getElementById("response");
+
+    function reflect() {
+      if (!inputEl || !stateEl || !indexEl || !responseEl) {
+        return;
+      }
+      stateEl.textContent = inputEl.value;
+      responseEl.textContent = indexEl.textContent;
+    }
+  </script>
 </body>
 </html>
