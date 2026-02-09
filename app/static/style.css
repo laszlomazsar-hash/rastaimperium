@@ -152,17 +152,69 @@ ul li {
   filter: brightness(1.05);
 }
 
+/* Gateways */
+.gateway-grid {
+  margin: 1.5rem 0 0.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.gateway.ark-gateway {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.2rem 1.4rem;
+  border-radius: 16px;
+  border: 1px solid rgba(127, 90, 240, 0.4);
+  text-decoration: none;
+  background: radial-gradient(circle at top, rgba(127, 90, 240, 0.2), rgba(15, 18, 30, 0.95));
+  box-shadow: 0 12px 30px rgba(7, 9, 16, 0.35);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.gateway.ark-gateway:hover {
+  transform: translateY(-2px);
+  border-color: rgba(127, 90, 240, 0.8);
+  box-shadow: 0 16px 36px rgba(7, 9, 16, 0.45);
+}
+
+.gateway-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #f5f5f5;
+}
+
+.gateway-subtitle {
+  font-size: 0.95rem;
+  color: #cfd3ff;
+}
+
 /* Page-specific tweaks */
 .page-presence .pillars-list li {
   margin-bottom: 0.9rem;
 }
 
 .page-curiosity .artifact,
+.page-nuggets .artifact,
 .page-codex .contents {
   background: rgba(15, 18, 30, 0.9);
   border-radius: 12px;
   padding: 1.5rem 1.4rem;
   border: 1px solid #22263a;
+}
+
+.curiosity-gateway {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.3rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(44, 182, 125, 0.2), rgba(240, 255, 248, 0.08));
+  border: 1px solid rgba(149, 255, 214, 0.35);
+  box-shadow: 0 0 18px rgba(110, 255, 200, 0.18);
+}
+
+.curiosity-gateway p {
+  color: #e2f7ee;
 }
 
 .page-recognition .pillar-links {
