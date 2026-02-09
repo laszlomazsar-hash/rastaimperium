@@ -26,5 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       alert('Consultation request submitted (placeholder). Backend integration pending.');
     });
-  });
+  }
+
+  const selfHostForm = document.getElementById('self-host-form');
+  if (selfHostForm) {
+    selfHostForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      alert('License request submitted (placeholder). Backend integration pending.');
+    });
+  }
 });
