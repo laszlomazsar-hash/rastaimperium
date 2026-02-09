@@ -7,6 +7,7 @@ Powered by FastAPI, Jinja2, and a layered revelation framework.
 - `/app` — FastAPI application and routes  
 - `/templates` — Jinja2 templates for the Imperium pages  
 - `/static` — CSS and assets  
+- `/Codex.html` — Canonical Codex document served at `/codex` and `/api/v1/codex`  
 - `/migrations` — Alembic migrations  
 - `Procfile` — Railway deployment  
 - `requirements.txt` — Python dependencies  

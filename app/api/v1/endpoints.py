@@ -11,6 +11,7 @@ from app.ark_engine.api.routers.divine_guidance import router as divine_router
 
 router = APIRouter()
 router.include_router(divine_router, prefix="/divine", tags=["divine"])
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 @router.get("/wisdom")
 async def get_wisdom():
