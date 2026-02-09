@@ -31,6 +31,126 @@ section {
   margin: auto;
 }
 
+.sacred-geometry-section {
+  text-align: center;
+}
+
+.geometry-intro {
+  margin: 0 auto 2rem;
+  max-width: 640px;
+  color: #444;
+}
+
+.imperium-geometry {
+  position: relative;
+  width: 420px;
+  height: 420px;
+  margin: 0 auto;
+}
+
+.glyph-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, #ffd27f 40%, transparent 70%);
+  box-shadow: 0 0 30px rgba(255, 210, 127, 0.4);
+}
+
+.glyph-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.gate {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+  text-decoration: none;
+  color: #111;
+  backdrop-filter: blur(2px);
+}
+
+.gate:hover {
+  border-color: #ffd27f;
+  box-shadow: 0 0 20px rgba(255, 210, 127, 0.4);
+  transform: scale(1.05);
+}
+
+.gate-top {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gate-bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gate-left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gate-right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.line {
+  position: absolute;
+  background: linear-gradient(to bottom, #ffd27f, transparent);
+  opacity: 0.4;
+}
+
+.line-top {
+  width: 2px;
+  height: 150px;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.line-bottom {
+  width: 2px;
+  height: 150px;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.line-left {
+  height: 2px;
+  width: 150px;
+  left: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.line-right {
+  height: 2px;
+  width: 150px;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 h1,
 h2,
 h3 {
@@ -112,5 +232,15 @@ form button:hover {
   .tier,
   .service {
     flex: 1 1 100%;
+  }
+
+  .imperium-geometry {
+    width: 320px;
+    height: 320px;
+  }
+
+  .gate {
+    width: 96px;
+    height: 96px;
   }
 }
