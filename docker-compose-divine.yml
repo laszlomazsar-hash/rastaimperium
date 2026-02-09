@@ -11,8 +11,8 @@ services:
       - "8083:8000"
     environment:
       - ENVIRONMENT=divine
-      - DB_URL=postgresql://ark:${POSTGRES_PASSWORD}@postgres-divine:5432/ark_divine
-      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis-divine:6379/1
+      - DB_URL=postgresql://ark:jahbless@postgres-divine:5432/ark_divine
+      - REDIS_URL=redis://redis-divine:6379/1
       - VIBRATION_ANALYSIS_ENABLED=true
       - JAH_GUIDANCE_ENABLED=true
       - SACRED_HOURS_ENABLED=true
@@ -38,7 +38,7 @@ services:
     image: postgres:15-alpine
     environment:
       - POSTGRES_USER=ark
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PASSWORD=jahbless
       - POSTGRES_DB=ark_divine
     volumes:
       - postgres_data_divine:/var/lib/postgresql/data
@@ -47,7 +47,7 @@ services:
 
   redis-divine:
     image: redis:7-alpine
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    command: redis-server --appendonly yes --requirepass jahguide
     volumes:
       - redis_data_divine:/data
     networks:
