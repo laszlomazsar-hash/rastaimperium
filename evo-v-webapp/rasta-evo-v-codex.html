@@ -186,6 +186,31 @@
         color: #cbd5f5;
       }
 
+      .panel {
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        background: rgba(30, 41, 59, 0.6);
+      }
+
+      .tag-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #0f172a;
+        background: #f8fafc;
+      }
+
       @media (max-width: 720px) {
         header.hero {
           padding: 3.5rem 1.5rem 2.5rem;
@@ -230,6 +255,17 @@
           A focused brief on emergent signal flows, orchestration patterns, and
           stewardship guardrails tuned for Evo-V operators.
         </p>
+      </section>
+      <section class="panel">
+        <h2>Artifacts &amp; Seals</h2>
+        <p>
+          Immutable records, audit artifacts, and seals.
+          <a href="manifest.txt">Download Certificate of Manifestation</a>
+        </p>
+        <div class="tag-group">
+          <span class="tag">Immutable</span>
+          <span class="tag">Genesis</span>
+        </div>
       </section>
       <section>
         <h2>Signal Pathways</h2>
