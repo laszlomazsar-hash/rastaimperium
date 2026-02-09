@@ -1,10 +1,13 @@
 import json
+from pathlib import Path
 from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
 from app.core.redis import redis_manager
 from app.ark_engine.api.routers.divine_guidance import router as divine_router
 
 router = APIRouter()
 router.include_router(divine_router, prefix="/divine", tags=["divine"])
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 @router.get("/wisdom")
 async def get_wisdom():
@@ -31,3 +34,12 @@ async def get_wisdom():
         "source": "Fresh Computation",
         "data": wisdom_data
     }
+
+@router.get("/codex")
+async def get_codex():
+    codex_path = REPO_ROOT / "Codex.html"
+    try:
+        with open(codex_path, encoding="utf-8") as file:
+            return HTMLResponse(file.read(), media_type="text/html")
+    except FileNotFoundError:
+        return HTMLResponse("Codex not found.", status_code=404)
