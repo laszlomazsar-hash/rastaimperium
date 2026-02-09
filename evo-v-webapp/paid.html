@@ -3,140 +3,142 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Evo-V Observatory | Paid Services</title>
+    <title>EVO-V Paid Services</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <header>
-      <h1>Evo-V Observatory</h1>
-      <p>Paid services supporting the mission without blending ethical lines.</p>
-      <nav>
-        <a href="index.html">Observatory</a>
-        <a href="paid.html">Services</a>
-        <a href="principles.html">Principles</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+      <div class="hero">
+        <div class="badge">Paid instances · Ethical separation</div>
+        <h1>EVO-V Paid Services</h1>
+        <p>
+          Provision trusted EVO-V infrastructure without influencing adaptive
+          reasoning. Paid access supports secure hosting, monitoring, and
+          consultative expertise.
+        </p>
+        <div class="button-row">
+          <a class="button" href="contact.html">Speak with the team</a>
+          <a class="button-outline" href="index.html">View observatory</a>
+        </div>
+        <nav>
+          <a href="index.html">Public</a>
+          <a href="paid.html">Paid</a>
+          <a href="principles.html">Principles</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
     </header>
 
     <main>
-      <section class="disclaimer">
-        <strong>Ethical separation notice:</strong>
-        Paid services operate independently from the public observatory stream.
-        We do not sell access to protected data, and paid clients do not influence
-        public reporting priorities.
-      </section>
-
-      <section class="layout-grid two-column">
-        <div>
-          <h2>Hosted Instance</h2>
+      <section>
+        <div class="section-title">
+          <h2>Private instance provisioning</h2>
           <p>
-            Deploy Evo-V in a managed environment with dedicated monitoring,
-            uptime guarantees, and private dashboards.
+            Choose hosted or self-hosted options with clear operating boundaries
+            and audit-ready compliance tooling.
           </p>
-          <form id="instance-form">
-            <div>
-              <label for="instance-name">Organization name</label>
-              <input id="instance-name" name="instance-name" required />
-            </div>
-            <div>
-              <label for="instance-email">Primary contact email</label>
-              <input
-                id="instance-email"
-                name="instance-email"
-                type="email"
-                required
-              />
-            </div>
-            <div>
-              <label for="instance-notes">Deployment notes</label>
-              <textarea id="instance-notes" name="instance-notes"></textarea>
-            </div>
-            <button type="submit">Request hosted instance</button>
-          </form>
         </div>
-
-        <div>
-          <h2>Self-Hosted License</h2>
-          <p>
-            Install Evo-V on your infrastructure with compliance artifacts and
-            a private license agreement.
-          </p>
-          <form id="license-form">
-            <div>
-              <label for="license-name">Organization name</label>
-              <input id="license-name" name="license-name" required />
-            </div>
-            <div>
-              <label for="license-region">Primary region</label>
-              <input id="license-region" name="license-region" required />
-            </div>
-            <div>
-              <label for="license-goals">Primary goals</label>
-              <textarea id="license-goals" name="license-goals"></textarea>
-            </div>
-            <button class="secondary" type="submit">Request license pack</button>
-          </form>
-        </div>
-      </section>
-
-      <section class="layout-grid two-column">
-        <div>
-          <h2>Consultation & Alignment</h2>
-          <p>
-            Strategy sessions for teams needing governance guidance or model
-            alignment review.
-          </p>
-          <form id="consult-form">
-            <div>
-              <label for="consult-name">Full name</label>
-              <input id="consult-name" name="consult-name" required />
-            </div>
-            <div>
-              <label for="consult-email">Email address</label>
-              <input
-                id="consult-email"
-                name="consult-email"
-                type="email"
-                required
-              />
-            </div>
-            <div>
-              <label for="consult-focus">Focus area</label>
-              <textarea id="consult-focus" name="consult-focus"></textarea>
-            </div>
-            <button type="submit">Book consultation</button>
-          </form>
-        </div>
-
-        <div>
-          <h2>Knowledge Products</h2>
-          <p>
-            Research briefs, readiness audits, and scenario playbooks designed
-            for internal teams.
-          </p>
-          <div class="card-stack">
-            <div>
-              <strong>Signal Readiness Brief</strong>
-              <p>Quarterly briefings tailored to your sector.</p>
-            </div>
-            <div>
-              <strong>Ethics Drill Kit</strong>
-              <p>Facilitated exercises for governance teams.</p>
-            </div>
-            <div>
-              <strong>Scenario Playbooks</strong>
-              <p>Decision support for emergent ecological risks.</p>
-            </div>
+        <div class="services">
+          <div class="service">
+            <h3>Hosted Instance (SaaS)</h3>
+            <p>Monthly subscription, fixed compute limits, automated updates.</p>
+            <form id="instance-form">
+              <label for="saas-name">Name / Organization</label>
+              <input id="saas-name" type="text" required />
+              <label for="saas-email">Email</label>
+              <input id="saas-email" type="email" required />
+              <label for="saas-type">Instance Type</label>
+              <select id="saas-type" required>
+                <option value="standard">Standard</option>
+                <option value="enterprise">Enterprise</option>
+              </select>
+              <button type="submit">Request Hosted Instance</button>
+              <span class="notice">Provisioning available within 7 days.</span>
+            </form>
           </div>
-          <a class="button" href="contact.html">Request a custom bundle</a>
+          <div class="service">
+            <h3>Self-hosted License</h3>
+            <p>One-time license + maintenance. Enterprise-friendly.</p>
+            <form id="self-host-form">
+              <label for="self-host-name">Name / Organization</label>
+              <input id="self-host-name" type="text" required />
+              <label for="self-host-email">Email</label>
+              <input id="self-host-email" type="email" required />
+              <button type="submit">Request License</button>
+              <span class="notice">Deployment checklist included.</span>
+            </form>
+          </div>
+          <div class="service">
+            <h3>Consultative Services</h3>
+            <ul>
+              <li>System audits</li>
+              <li>Feedback loop design</li>
+              <li>Governance reviews</li>
+              <li>Adaptive risk analysis</li>
+            </ul>
+            <form id="consult-form">
+              <label for="consult-name">Name / Organization</label>
+              <input id="consult-name" type="text" required />
+              <label for="consult-email">Email</label>
+              <input id="consult-email" type="email" required />
+              <label for="consult-notes">Request Details</label>
+              <textarea id="consult-notes" placeholder="Describe your request" required></textarea>
+              <button type="submit">Request Consultation</button>
+              <span class="notice">Response within 48 hours.</span>
+            </form>
+          </div>
+          <div class="service">
+            <h3>Knowledge Products</h3>
+            <p>Codex document, technical book, whitepapers, training material.</p>
+            <a href="#" class="button">Explore Knowledge Products</a>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          <p>
+            EVO-V core remains ethically intact. No influence or behavioural
+            manipulation is ever sold.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2>Ethical separation guarantee</h2>
+          <p>
+            Commercial contracts cover infrastructure, security, and advisory
+            work only. Adaptive reasoning is isolated from billing, sales, or
+            marketing systems.
+          </p>
+        </div>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Zero monetised feedback</h3>
+            <p>
+              Revenue signals never touch evaluation loops or model updates.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Audit visibility</h3>
+            <p>
+              Each paid instance ships with observatory dashboards and audit
+              exports.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Governance by design</h3>
+            <p>
+              Dedicated compliance workflows keep EVO-V aligned to its charter.
+            </p>
+          </div>
         </div>
       </section>
     </main>
 
     <footer>
-      <p>© 2024 Evo-V Observatory. Paid offerings support public research.</p>
+      <p>&copy; 2026 EVO-V Infrastructure</p>
+      <p class="notice">All forms are placeholders for future integration.</p>
     </footer>
-
-    <script src="app.js"></script>
   </body>
 </html>
