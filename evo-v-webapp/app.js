@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (selfHostForm) {
     selfHostForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      alert('Self-host request submitted (placeholder). Backend integration pending.');
+      alert('License request submitted (placeholder). Backend integration pending.');
     });
   }
 });

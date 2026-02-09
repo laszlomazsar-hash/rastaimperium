@@ -26,11 +26,11 @@
           <p>Monthly subscription, fixed compute limits, automated updates.</p>
           <form id="instance-form">
             <label for="saas-name">Name / Organization</label>
-            <input id="saas-name" type="text" required />
+            <input id="saas-name" name="saasName" type="text" required />
             <label for="saas-email">Email</label>
-            <input id="saas-email" type="email" required />
+            <input id="saas-email" name="saasEmail" type="email" required />
             <label for="saas-type">Instance Type</label>
-            <select id="saas-type" required>
+            <select id="saas-type" name="instanceType" required>
               <option value="standard">Standard</option>
               <option value="enterprise">Enterprise</option>
             </select>
@@ -42,9 +42,9 @@
           <p>One-time license + maintenance. Enterprise-friendly.</p>
           <form id="self-host-form">
             <label for="self-host-name">Name / Organization</label>
-            <input id="self-host-name" type="text" required />
+            <input id="self-host-name" name="selfHostName" type="text" required />
             <label for="self-host-email">Email</label>
-            <input id="self-host-email" type="email" required />
+            <input id="self-host-email" name="selfHostEmail" type="email" required />
             <button type="submit">Request License</button>
           </form>
         </div>
@@ -58,10 +58,14 @@
           </ul>
           <form id="consult-form">
             <label for="consult-name">Name / Organization</label>
-            <input id="consult-name" type="text" required />
+            <input id="consult-name" name="consultName" type="text" required />
             <label for="consult-email">Email</label>
-            <input id="consult-email" type="email" required />
-            <textarea placeholder="Describe your request" required></textarea>
+            <input id="consult-email" name="consultEmail" type="email" required />
+            <textarea
+              name="consultRequest"
+              placeholder="Describe your request"
+              required
+            ></textarea>
             <button type="submit">Request Consultation</button>
           </form>
         </div>
