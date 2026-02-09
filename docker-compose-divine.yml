@@ -14,7 +14,10 @@ services:
     environment:
       - ENVIRONMENT=divine
       - DB_URL=postgresql://ark:${POSTGRES_PASSWORD}@postgres-divine:5432/ark_divine
-      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis-divine:6379/1
+      - REDIS_HOST=redis-divine
+      - REDIS_PORT=6379
+      - REDIS_DB=1
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
       - VIBRATION_ANALYSIS_ENABLED=true
       - JAH_GUIDANCE_ENABLED=true
       - SACRED_HOURS_ENABLED=true
