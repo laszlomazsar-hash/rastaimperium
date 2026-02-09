@@ -18,8 +18,8 @@ https://rastaimperium.com
 When running `docker-compose-divine.yml`, set the following environment variables (Docker Compose reads them from `.env.divine` by default):
 
 ```
-POSTGRES_PASSWORD=your-local-password
-REDIS_PASSWORD=your-local-password
+POSTGRES_PASSWORD=change-me
+REDIS_PASSWORD=change-me
 ```
 
 You can copy `.env.divine.example` to `.env.divine` and update the values before starting the stack.
