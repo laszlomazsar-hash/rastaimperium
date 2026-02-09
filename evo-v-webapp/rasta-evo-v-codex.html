@@ -67,6 +67,26 @@
         animation: heroPulse 22s ease-in-out infinite reverse;
       }
 
+      .sacred-geometry {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 70vw;
+        max-width: 900px;
+        transform: translate(-50%, -50%);
+        opacity: 0.12;
+        mix-blend-mode: screen;
+        pointer-events: none;
+        z-index: 0;
+        animation: spinSlow 70s linear infinite;
+      }
+
+      .sacred-geometry svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
       @keyframes heroPulse {
         0% {
           transform: translate3d(0, 0, 0) scale(1);
@@ -76,6 +96,15 @@
         }
         100% {
           transform: translate3d(-1%, 1%, 0) scale(1);
+        }
+      }
+
+      @keyframes spinSlow {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
         }
       }
 
@@ -204,6 +233,20 @@
   </head>
   <body>
     <header class="hero">
+      <div class="sacred-geometry" aria-hidden="true">
+        <svg viewBox="0 0 800 800" role="img" focusable="false">
+          <g fill="none" stroke="rgba(226, 232, 240, 0.6)" stroke-width="2">
+            <circle cx="400" cy="160" r="120" />
+            <circle cx="520" cy="230" r="120" />
+            <circle cx="520" cy="370" r="120" />
+            <circle cx="400" cy="440" r="120" />
+            <circle cx="280" cy="370" r="120" />
+            <circle cx="280" cy="230" r="120" />
+            <circle cx="400" cy="300" r="200" />
+            <circle cx="400" cy="300" r="300" />
+          </g>
+        </svg>
+      </div>
       <div class="hero-content">
         <h1>Rasta Evo-V Codex</h1>
         <p>
