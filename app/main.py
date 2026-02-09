@@ -112,12 +112,7 @@ async def governance(request: Request):
 @app.get("/codex")
 async def codex(request: Request):
     """The Daily Resonance Codex — the operational manual."""
-    codex_path = BASE_DIR.parent / "Codex.html"
-    try:
-        with open(codex_path, encoding="utf-8") as file:
-            return HTMLResponse(file.read(), media_type="text/html")
-    except FileNotFoundError:
-        return HTMLResponse("Codex not found.", status_code=404)
+    return templates.TemplateResponse("codex.html", {"request": request})
 
 @app.get("/ark")
 async def ark(request: Request):
