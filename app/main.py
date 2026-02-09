@@ -84,6 +84,11 @@ async def curiosity(request: Request):
     """The second gateway. The first contact with the field."""
     return templates.TemplateResponse("curiosity.html", {"request": request})
 
+@app.get("/nuggets")
+async def nuggets(request: Request):
+    """Daily resonance, distilled into quick calibrations."""
+    return templates.TemplateResponse("nuggets.html", {"request": request})
+
 @app.get("/recognition")
 async def recognition(request: Request):
     """The third gateway. The revelation of structure."""
