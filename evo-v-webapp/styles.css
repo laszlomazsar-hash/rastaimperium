@@ -134,6 +134,41 @@ section p {
   color: #334155;
 }
 
+.panel.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.spotlight-card {
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 16px;
+  padding: 1.5rem;
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.04), #ffffff);
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.spotlight-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 36px rgba(15, 23, 42, 0.12);
+}
+
+.spotlight-card .icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.18);
+  color: #d4af37;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.55);
+  font-size: 1.1rem;
+  margin-bottom: 0.85rem;
+}
+
 ul {
   padding-left: 1.25rem;
   margin-bottom: 1rem;
