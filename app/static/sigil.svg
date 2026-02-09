@@ -1,0 +1,12 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sigilGlow" x1="0" y1="0" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d4af37" />
+      <stop offset="1" stop-color="#2e7d32" />
+    </linearGradient>
+  </defs>
+  <circle cx="48" cy="48" r="38" stroke="url(#sigilGlow)" stroke-width="3" />
+  <circle cx="48" cy="48" r="24" stroke="#d4af37" stroke-width="2" />
+  <path d="M48 20L58 42L82 48L58 54L48 76L38 54L14 48L38 42L48 20Z" stroke="#2e7d32" stroke-width="2" fill="none" />
+  <path d="M48 30L54 48L48 66L42 48L48 30Z" fill="#d4af37" opacity="0.85" />
+</svg>
