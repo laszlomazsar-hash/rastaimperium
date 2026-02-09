@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EVO-V Paid Services</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>EVO-V Paid Services</h1>
+      <nav>
+        <a href="index.html">Public</a>
+        <a href="paid.html">Paid</a>
+        <a href="principles.html">Principles</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+
+    <section>
+      <h2>Private Instances</h2>
+      <div class="services">
+        <div class="service">
+          <h3>Hosted Instance (SaaS)</h3>
+          <p>Monthly subscription, fixed compute limits, automated updates.</p>
+          <form id="instance-form">
+            <label for="saas-name">Name / Organization</label>
+            <input id="saas-name" name="saasName" type="text" required />
+            <label for="saas-email">Email</label>
+            <input id="saas-email" name="saasEmail" type="email" required />
+            <label for="saas-type">Instance Type</label>
+            <select id="saas-type" name="instanceType" required>
+              <option value="standard">Standard</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
+            <button type="submit">Request Hosted Instance</button>
+          </form>
+        </div>
+        <div class="service">
+          <h3>Self-hosted License</h3>
+          <p>One-time license + maintenance. Enterprise-friendly.</p>
+          <form id="self-host-form">
+            <label for="self-host-name">Name / Organization</label>
+            <input id="self-host-name" name="selfHostName" type="text" required />
+            <label for="self-host-email">Email</label>
+            <input id="self-host-email" name="selfHostEmail" type="email" required />
+            <button type="submit">Request License</button>
+          </form>
+        </div>
+        <div class="service">
+          <h3>Consultative Services</h3>
+          <ul>
+            <li>System audits</li>
+            <li>Feedback loop design</li>
+            <li>Governance reviews</li>
+            <li>Adaptive risk analysis</li>
+          </ul>
+          <form id="consult-form">
+            <label for="consult-name">Name / Organization</label>
+            <input id="consult-name" name="consultName" type="text" required />
+            <label for="consult-email">Email</label>
+            <input id="consult-email" name="consultEmail" type="email" required />
+            <textarea
+              name="consultRequest"
+              placeholder="Describe your request"
+              required
+            ></textarea>
+            <button type="submit">Request Consultation</button>
+          </form>
+        </div>
+        <div class="service">
+          <h3>Knowledge Products</h3>
+          <p>Codex document, technical book, whitepapers, training material.</p>
+          <a href="#" class="button">Explore Knowledge Products</a>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <p>
+          EVO-V core remains ethically intact. No influence or behavioural
+          manipulation is ever sold.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 EVO-V Infrastructure</p>
+    </footer>
+  </body>
+</html>
