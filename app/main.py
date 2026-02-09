@@ -144,3 +144,8 @@ async def codex_manifest():
 async def ark(request: Request):
     """The ARK Engine — autonomous resonance kernel."""
     return templates.TemplateResponse("ark.html", {"request": request})
+
+@app.get("/evo-v")
+async def evo_v(request: Request):
+    """EVO-V Civilization Kernel — constitutional substrate."""
+    return templates.TemplateResponse("evo-v.html", {"request": request})
