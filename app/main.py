@@ -14,20 +14,17 @@ app = FastAPI(title=settings.PROJECT_NAME)
 
 # --- THE PATH ALIGNMENT ---
 # We find the exact location of this file to prevent "TemplateNotFound" errors
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = Path(BASE_DIR).resolve().parent
-CODEX_PATH = PROJECT_ROOT / "Codex.html"
-MANIFEST_PATH = PROJECT_ROOT / "Manifest.txt"
+BASE_DIR = Path(__file__).resolve().parent
 
 # Mount the Static chamber (for your Red, Gold, and Green CSS)
 app.mount(
     "/static", 
-    StaticFiles(directory=os.path.join(BASE_DIR, "static")), 
+    StaticFiles(directory=str(BASE_DIR / "static")), 
     name="static"
 )
 
 # Setup the Template engine (for your index.html)
-templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # --- THE WISDOM GATES ---
 # Connecting the API routes
@@ -52,7 +49,7 @@ async def shutdown_event():
 async def root(request: Request):
     """Manifest the landing page for the King."""
     try:
-        with open(os.path.join(BASE_DIR, "templates", "index.html"), encoding="utf-8") as file:
+        with open(BASE_DIR / "templates" / "index.html", encoding="utf-8") as file:
             return HTMLResponse(file.read())
     except Exception:
         return HTMLResponse(
@@ -110,7 +107,12 @@ async def governance(request: Request):
 @app.get("/codex")
 async def codex(request: Request):
     """The Daily Resonance Codex — the operational manual."""
-    return templates.TemplateResponse("codex.html", {"request": request})
+    codex_path = BASE_DIR.parent / "Codex.html"
+    try:
+        with open(codex_path, encoding="utf-8") as file:
+            return HTMLResponse(file.read(), media_type="text/html")
+    except FileNotFoundError:
+        return HTMLResponse("Codex not found.", status_code=404)
 
 @app.get("/Codex.html")
 async def codex_document():
