@@ -126,6 +126,20 @@ async def manifest() -> FileResponse:
         raise HTTPException(status_code=404, detail="Manifest not found")
     return FileResponse(MANIFEST_PATH, media_type="text/plain")
 
+@app.get("/Codex.html")
+async def codex_document():
+    """Serve the immutable Codex artifact from a deterministic path."""
+    if CODEX_PATH.exists():
+        return FileResponse(CODEX_PATH, media_type="text/html")
+    return HTMLResponse("<h1>Codex not found.</h1>", status_code=404)
+
+@app.get("/Manifest.txt")
+async def codex_manifest():
+    """Serve the Codex manifestation certificate from a deterministic path."""
+    if MANIFEST_PATH.exists():
+        return FileResponse(MANIFEST_PATH, media_type="text/plain")
+    return HTMLResponse("<h1>Manifest not found.</h1>", status_code=404)
+
 @app.get("/ark")
 async def ark(request: Request):
     """The ARK Engine — autonomous resonance kernel."""
