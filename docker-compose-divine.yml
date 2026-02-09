@@ -1,0 +1,98 @@
+version: "3.8"
+
+services:
+  ark-divine:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-divine
+    image: ark-engine-divine:latest
+    container_name: ark-engine-divine
+    ports:
+      - "8083:8000"
+    environment:
+      - ENVIRONMENT=divine
+      - DB_URL=postgresql://ark:jahbless@postgres-divine:5432/ark_divine
+      - REDIS_URL=redis://redis-divine:6379/1
+      - VIBRATION_ANALYSIS_ENABLED=true
+      - JAH_GUIDANCE_ENABLED=true
+      - SACRED_HOURS_ENABLED=true
+      - MIN_DIVINE_ALIGNMENT=0.6
+    volumes:
+      - ./sacred_texts:/app/sacred_texts
+      - ./divine_wisdom:/app/divine_wisdom
+      - ./prayers:/app/prayers
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - postgres-divine
+      - redis-divine
+    networks:
+      - ark-divine-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/divine/daily-practice"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  postgres-divine:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=ark
+      - POSTGRES_PASSWORD=jahbless
+      - POSTGRES_DB=ark_divine
+    volumes:
+      - postgres_data_divine:/var/lib/postgresql/data
+    networks:
+      - ark-divine-network
+
+  redis-divine:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass jahguide
+    volumes:
+      - redis_data_divine:/data
+    networks:
+      - ark-divine-network
+
+  meditation-service:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./meditation_guides:/app
+    command: python -m http.server 8084
+    ports:
+      - "8084:8084"
+    networks:
+      - ark-divine-network
+
+  sacred-texts-api:
+    image: nginx:alpine
+    volumes:
+      - ./sacred_texts:/usr/share/nginx/html
+    ports:
+      - "8085:80"
+    networks:
+      - ark-divine-network
+
+  divine-timing:
+    image: python:3.11-alpine
+    working_dir: /app
+    volumes:
+      - ./divine_timing:/app
+    command: python divine_timers.py
+    networks:
+      - ark-divine-network
+    depends_on:
+      - ark-divine
+
+networks:
+  ark-divine-network:
+    driver: bridge
+    name: ark-divine-network
+
+volumes:
+  postgres_data_divine:
+  redis_data_divine:
+  sacred_texts:
+    external: true
+  divine_wisdom:
+    external: true

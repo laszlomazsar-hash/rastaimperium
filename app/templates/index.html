@@ -1,107 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Rasta Imperium — Presence</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Rasta Imperium — a sovereign mythic-technical field for Codex, Kernel, ARK Engine, and living governance.">
-  <link rel="stylesheet" href="/static/style.css">
+<meta charset="UTF-8">
+<title>Rasta Imperium | One Love</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --red:#c62828;
+  --gold:#d4af37;
+  --green:#2e7d32;
+  --bg:#0b0b0b;
+  --panel:#111;
+  --border:#222;
+  --text:#eaeaea;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui, monospace;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+header{
+  height:4px;
+  background:linear-gradient(90deg,var(--red),var(--gold),var(--green));
+}
+
+nav{
+  display:flex;
+  justify-content:center;
+  gap:24px;
+  padding:20px;
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap;
+}
+
+nav a{
+  color:#777;
+  text-decoration:none;
+  font-size:.75rem;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+nav a.active,
+nav a:hover{color:var(--gold)}
+
+section{
+  display:block;
+  max-width:900px;
+  margin:0 auto;
+  padding:60px 20px;
+}
+
+
+h1,h2{
+  color:var(--gold);
+  letter-spacing:4px;
+  text-transform:uppercase;
+  font-weight:400;
+}
+
+textarea{
+  width:100%;
+  height:140px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:16px;
+  font-family:inherit;
+}
+
+button{
+  margin-top:16px;
+  padding:10px 28px;
+  background:none;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  cursor:pointer;
+}
+
+button:hover{
+  background:var(--gold);
+  color:#000;
+}
+
+.panel{
+  margin-top:30px;
+  padding:20px;
+  background:var(--panel);
+  border-left:3px solid var(--green);
+}
+
+.muted{
+  opacity:.55;
+  font-size:.9rem;
+  line-height:1.7;
+}
+
+ul{
+  padding-left:20px;
+}
+</style>
 </head>
-<body style="margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #050608; color: #f5f5f5;">
-  <div style="padding: 0.75rem 1.5rem; background: #ffffff; color: #111111; font-size: 0.95rem;">
-    If you can see this text, the landing page HTML is rendering.
+
+<body>
+<header></header>
+
+<main>
+  <div class="hero">
+    <h1>Rasta Imperium</h1>
+    <p class="muted">One Love is respect without fear. The field remains open.</p>
   </div>
-  <header class="site-hero critical-hero" style="padding: 2.5rem 1.5rem 1rem; background: #0c0f1a; color: #f5f5f5;">
-    <p class="site-hero__eyebrow" style="text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.75rem; color: #9bb3ff; margin: 0 0 0.6rem;">Rasta Imperium</p>
-    <h1 class="site-hero__title" style="margin: 0 0 0.75rem; font-size: 2.2rem;">The Presence Gateway</h1>
-    <p class="site-hero__lede" style="margin: 0 0 0.5rem; color: #d6d6d6;">An always-on introduction to the field, even if scripts never load.</p>
-  </header>
-  <main class="page page-presence">
-    <nav class="section-nav">
-      <a href="#home" onclick="return show('home', this, event)">Presence</a>
-      <a href="#gateways" onclick="return show('gateways', this, event)">Gateways</a>
-      <a href="#contact" onclick="return show('contact', this, event)">First Contact</a>
-    </nav>
+</main>
 
-    <section class="hero">
-      <h2>Rasta Imperium</h2>
-      <p class="tagline">A sovereign mythic‑technical field for civilization, code, and covenant.</p>
-      <p class="subline">
-        Codex. EVO‑V Civilization Kernel. ARK Engine.  
-        A living architecture for those who build with lineage, law, and light.
-      </p>
-      <a href="/curiosity" class="btn btn-primary">Enter Through Curiosity</a>
-    </section>
+<nav>
+  <a href="#home" class="active">Home</a>
+  <a href="#revolution">Revolution</a>
+  <a href="#field">Field</a>
+  <a href="#reggae">Reggae</a>
+  <a href="#ethics">Ethics</a>
+</nav>
 
-    <section id="gateways" class="pillars" data-section>
-      <h2>The Four Gateways</h2>
-      <ul class="pillars-list">
-        <li>
-          <h3>Curiosity</h3>
-          <p>The daily resonance gateway. A simple, repeatable contact with the field.</p>
-        </li>
-        <li>
-          <h3>Recognition</h3>
-          <p>The architecture, safety, and governance spine of the Imperium.</p>
-        </li>
-        <li>
-          <h3>Codex</h3>
-          <p>The first economic portal: a mythic‑technical calibration tool for sovereign builders.</p>
-        </li>
-        <li>
-          <h3>ARK Engine</h3>
-          <p>The advanced technical layer for those designing recursive, aligned systems in code and culture.</p>
-        </li>
-      </ul>
-    </section>
+<section id="home">
+  <h2>Home</h2>
+  <p class="muted">
+    One Love is not agreement.<br>
+    It is respect without fear.
+  </p>
+</section>
 
-    <section id="contact" class="cta-secondary" data-section>
-      <h2>Choose Your First Contact</h2>
-      <p>You can enter through practice, understanding, product, or architecture. The field is the same.</p>
-      <p>
-        <a href="/curiosity" class="btn btn-secondary">Curiosity</a>
-        <a href="/recognition" class="btn btn-secondary">Recognition</a>
-        <a href="/codex" class="btn btn-secondary">Codex</a>
-        <a href="/ark" class="btn btn-secondary">ARK Engine</a>
-      </p>
-    </section>
+<section id="revolution">
+  <h2>The Revolution</h2>
 
-  </main>
-  <script>
-    function show(id, el, event) {
-      const evt = event || window.event;
-      if (evt && evt.preventDefault) {
-        evt.preventDefault();
-      }
-      const sections = document.querySelectorAll("[data-section]");
-      if (!sections.length) {
-        return false;
-      }
-      sections.forEach((section) => {
-        section.hidden = section.id !== id;
-      });
-      document.querySelectorAll(".section-nav a").forEach((link) => {
-        link.classList.toggle("is-active", link === el);
-      });
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, "", `#${id}`);
-      }
-      return false;
-    }
+  <p>
+    This space began as a symbolic expression — words, rhythm, and ideas
+    shared digitally.
+  </p>
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const links = document.querySelectorAll(".section-nav a");
-      if (!links.length) {
-        return;
-      }
-      const hash = window.location.hash.replace("#", "");
-      const targetLink = hash
-        ? document.querySelector(`.section-nav a[href="#${hash}"]`)
-        : links[0];
-      if (targetLink) {
-        show(targetLink.getAttribute("href").slice(1), targetLink);
-      }
-    });
-  </script>
+  <p>
+    Over time, it became clear that symbols alone do not change the world.
+    Change happens when values are lived, not displayed.
+  </p>
+
+  <p>
+    This is where symbolism meets reality.
+  </p>
+
+  <p>
+    The revolution spoken of here is not violent, political, or ideological.
+    It does not seek power, followers, or opposition.
+  </p>
+
+  <p>
+    It is a quiet, lived shift:
+  </p>
+
+  <ul class="muted">
+    <li>from confusion to clarity</li>
+    <li>from reaction to responsibility</li>
+    <li>from performance to integrity</li>
+    <li>from consumption to creation</li>
+  </ul>
+
+  <p>
+    Reggae has always carried this message —
+    not by force, but through rhythm, memory, and truth.
+  </p>
+
+  <p class="muted">
+    Nothing here asks you to change who you are.
+    It simply invites reflection on how you live.
+  </p>
+</section>
+
+<section id="field">
+  <h2>The Field</h2>
+  <p class="muted">Input is optional. Silence is valid.</p>
+
+  <textarea id="input" placeholder="Share a thought, or leave it empty…"></textarea>
+  <button onclick="reflect()">Reflect</button>
+
+  <div class="panel">
+    <p><strong>State:</strong> <span id="state">—</span></p>
+    <p><strong>Index:</strong> <span id="index">1.00</span></p>
+    <p id="response" class="muted"></p>
+  </div>
+</section>
+
+<section id="reggae">
+  <h2>Reggae & Wisdom</h2>
+
+  <p>
+    Reggae is rhythm with responsibility.<br>
+    Wisdom is action without spectacle.
+  </p>
+
+  <p>
+    The music does not command change.
+    It creates space for remembrance.
+  </p>
+
+  <p class="muted">
+    This project honors reggae as lived culture —
+    not branding, not performance, not escape.
+  </p>
+</section>
+
+<section id="ethics">
+  <h2>Ethics</h2>
+
+  <p class="muted">
+    This website does not judge, remember, rank, or guide belief.<br>
+    No data is stored. No identity is inferred.<br>
+    The system reflects input and returns to silence.
+  </p>
+
+  <p class="muted">
+    There are no leaders here, no conversions, no authority.
+    Only shared humanity.
+  </p>
+</section>
+
+<script>
+let indexValue = 1.0;
+const inputEl = document.getElementById("input");
+const stateEl = document.getElementById("state");
+const indexEl = document.getElementById("index");
+const responseEl = document.getElementById("response");
+
+function reflect(){
+  const text = inputEl.value.trim();
+
+  if(!text){
+    stateEl.textContent = "SILENCE";
+    responseEl.textContent = "Nothing added. Nothing taken.";
+    return;
+  }
+
+  let h = 1.0;
+  if(/love|peace|truth|respect|unity/i.test(text)) h = 1.1;
+  if(/hate|fear|anger|violence/i.test(text)) h = 0.9;
+
+  indexValue = (indexValue * 0.9) + (h * 0.1);
+  indexValue = Math.min(Math.max(indexValue,0.8),1.2);
+
+  stateEl.textContent =
+    h > 1.05 ? "OPEN" :
+    h < 0.95 ? "TENSE" :
+    "NEUTRAL";
+
+  indexEl.textContent = indexValue.toFixed(2);
+  responseEl.textContent = "The field reflects what was shared.";
+  inputEl.value = "";
+}
+</script>
 </body>
 </html>
+main{
+  max-width:900px;
+  margin:0 auto;
+  padding:40px 20px 0;
+}
+
+.hero{
+  padding:24px 0 10px;
+}
+
+.hero h1{
+  margin:0 0 8px;
+}
+
+.hero p{
+  margin:0;
+}
