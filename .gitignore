@@ -40,6 +40,7 @@ venvi/
 .env.local
 .env.*.local
 .env.divine
+.secrets/
 
 # Logs
 *.log
