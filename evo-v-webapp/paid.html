@@ -9,136 +9,79 @@
   </head>
   <body>
     <header>
-      <div class="hero">
-        <div class="badge">Paid instances · Ethical separation</div>
-        <h1>EVO-V Paid Services</h1>
-        <p>
-          Provision trusted EVO-V infrastructure without influencing adaptive
-          reasoning. Paid access supports secure hosting, monitoring, and
-          consultative expertise.
-        </p>
-        <div class="button-row">
-          <a class="button" href="contact.html">Speak with the team</a>
-          <a class="button-outline" href="index.html">View observatory</a>
-        </div>
-        <nav>
-          <a href="index.html">Public</a>
-          <a href="paid.html">Paid</a>
-          <a href="principles.html">Principles</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-      </div>
+      <h1>EVO-V Paid Services</h1>
+      <nav>
+        <a href="index.html">Public</a>
+        <a href="paid.html">Paid</a>
+        <a href="principles.html">Principles</a>
+        <a href="contact.html">Contact</a>
+      </nav>
     </header>
 
-    <main>
-      <section>
-        <div class="section-title">
-          <h2>Private instance provisioning</h2>
-          <p>
-            Choose hosted or self-hosted options with clear operating boundaries
-            and audit-ready compliance tooling.
-          </p>
+    <section>
+      <h2>Private Instances</h2>
+      <div class="services">
+        <div class="service">
+          <h3>Hosted Instance (SaaS)</h3>
+          <p>Monthly subscription, fixed compute limits, automated updates.</p>
+          <form id="instance-form">
+            <label for="saas-name">Name / Organization</label>
+            <input id="saas-name" type="text" required />
+            <label for="saas-email">Email</label>
+            <input id="saas-email" type="email" required />
+            <label for="saas-type">Instance Type</label>
+            <select id="saas-type" required>
+              <option value="standard">Standard</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
+            <button type="submit">Request Hosted Instance</button>
+          </form>
         </div>
-        <div class="services">
-          <div class="service">
-            <h3>Hosted Instance (SaaS)</h3>
-            <p>Monthly subscription, fixed compute limits, automated updates.</p>
-            <form id="instance-form">
-              <label for="saas-name">Name / Organization</label>
-              <input id="saas-name" type="text" required />
-              <label for="saas-email">Email</label>
-              <input id="saas-email" type="email" required />
-              <label for="saas-type">Instance Type</label>
-              <select id="saas-type" required>
-                <option value="standard">Standard</option>
-                <option value="enterprise">Enterprise</option>
-              </select>
-              <button type="submit">Request Hosted Instance</button>
-              <span class="notice">Provisioning available within 7 days.</span>
-            </form>
-          </div>
-          <div class="service">
-            <h3>Self-hosted License</h3>
-            <p>One-time license + maintenance. Enterprise-friendly.</p>
-            <form id="self-host-form">
-              <label for="self-host-name">Name / Organization</label>
-              <input id="self-host-name" type="text" required />
-              <label for="self-host-email">Email</label>
-              <input id="self-host-email" type="email" required />
-              <button type="submit">Request License</button>
-              <span class="notice">Deployment checklist included.</span>
-            </form>
-          </div>
-          <div class="service">
-            <h3>Consultative Services</h3>
-            <ul>
-              <li>System audits</li>
-              <li>Feedback loop design</li>
-              <li>Governance reviews</li>
-              <li>Adaptive risk analysis</li>
-            </ul>
-            <form id="consult-form">
-              <label for="consult-name">Name / Organization</label>
-              <input id="consult-name" type="text" required />
-              <label for="consult-email">Email</label>
-              <input id="consult-email" type="email" required />
-              <label for="consult-notes">Request Details</label>
-              <textarea id="consult-notes" placeholder="Describe your request" required></textarea>
-              <button type="submit">Request Consultation</button>
-              <span class="notice">Response within 48 hours.</span>
-            </form>
-          </div>
-          <div class="service">
-            <h3>Knowledge Products</h3>
-            <p>Codex document, technical book, whitepapers, training material.</p>
-            <a href="#" class="button">Explore Knowledge Products</a>
-          </div>
+        <div class="service">
+          <h3>Self-hosted License</h3>
+          <p>One-time license + maintenance. Enterprise-friendly.</p>
+          <form id="self-host-form">
+            <label for="self-host-name">Name / Organization</label>
+            <input id="self-host-name" type="text" required />
+            <label for="self-host-email">Email</label>
+            <input id="self-host-email" type="email" required />
+            <button type="submit">Request License</button>
+          </form>
         </div>
+        <div class="service">
+          <h3>Consultative Services</h3>
+          <ul>
+            <li>System audits</li>
+            <li>Feedback loop design</li>
+            <li>Governance reviews</li>
+            <li>Adaptive risk analysis</li>
+          </ul>
+          <form id="consult-form">
+            <label for="consult-name">Name / Organization</label>
+            <input id="consult-name" type="text" required />
+            <label for="consult-email">Email</label>
+            <input id="consult-email" type="email" required />
+            <textarea placeholder="Describe your request" required></textarea>
+            <button type="submit">Request Consultation</button>
+          </form>
+        </div>
+        <div class="service">
+          <h3>Knowledge Products</h3>
+          <p>Codex document, technical book, whitepapers, training material.</p>
+          <a href="#" class="button">Explore Knowledge Products</a>
+        </div>
+      </div>
 
-        <div class="disclaimer">
-          <p>
-            EVO-V core remains ethically intact. No influence or behavioural
-            manipulation is ever sold.
-          </p>
-        </div>
-      </section>
-
-      <section>
-        <div class="section-title">
-          <h2>Ethical separation guarantee</h2>
-          <p>
-            Commercial contracts cover infrastructure, security, and advisory
-            work only. Adaptive reasoning is isolated from billing, sales, or
-            marketing systems.
-          </p>
-        </div>
-        <div class="card-grid">
-          <div class="card">
-            <h3>Zero monetised feedback</h3>
-            <p>
-              Revenue signals never touch evaluation loops or model updates.
-            </p>
-          </div>
-          <div class="card">
-            <h3>Audit visibility</h3>
-            <p>
-              Each paid instance ships with observatory dashboards and audit
-              exports.
-            </p>
-          </div>
-          <div class="card">
-            <h3>Governance by design</h3>
-            <p>
-              Dedicated compliance workflows keep EVO-V aligned to its charter.
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
+      <div class="disclaimer">
+        <p>
+          EVO-V core remains ethically intact. No influence or behavioural
+          manipulation is ever sold.
+        </p>
+      </div>
+    </section>
 
     <footer>
       <p>&copy; 2026 EVO-V Infrastructure</p>
-      <p class="notice">All forms are placeholders for future integration.</p>
     </footer>
   </body>
 </html>
