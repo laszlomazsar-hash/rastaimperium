@@ -1,47 +1,73 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const snapshots = [
-    "Pulse check: Calm solar variance, 3.2% anomaly drift.",
-    "Signal: New ecological scan scheduled for 19:00 UTC.",
-    "Alert: Monitoring for emergent coordination patterns.",
+document.addEventListener('DOMContentLoaded', () => {
+  const snapshots = document.getElementById('live-snapshots');
+  const timeline = document.getElementById('timeline-overview');
+  const kpis = document.getElementById('live-kpis');
+
+  const snapshotItems = [
+    'Tick 001: Core initialized',
+    'Tick 002: Adaptive loop running',
+    'Tick 004: Anomaly guardrails verified',
   ];
 
-  const timeline = [
-    "Week 1: Baseline ecological survey published.",
-    "Week 2: Model alignment audit completed.",
-    "Week 3: Policy recommendations issued to partners.",
+  const timelineItems = [
+    'Tick 001 → 005: Evolution snapshot',
+    'Tick 006 → 010: Adaptive changes',
+    'Tick 011 → 015: Audit heartbeat stable',
   ];
 
-  const snapshotList = document.getElementById("live-snapshots");
-  const timelineList = document.getElementById("timeline-overview");
+  const kpiItems = [
+    { label: 'Uptime', value: '99.98%' },
+    { label: 'Audit hash sync', value: '2.3s' },
+    { label: 'Active nodes', value: '128' },
+    { label: 'Policy drift', value: '0.00%' },
+  ];
 
-  if (snapshotList) {
-    snapshotList.innerHTML = snapshots
+  if (snapshots) {
+    snapshots.innerHTML += `<ul>${snapshotItems
       .map((item) => `<li>${item}</li>`)
-      .join("");
+      .join('')}</ul>`;
   }
 
-  if (timelineList) {
-    timelineList.innerHTML = timeline
-      .map((item) => `<li>${item}</li>`)
-      .join("");
+  if (timeline) {
+    timeline.innerHTML += `<ul class="timeline">${timelineItems
+      .map((item) => {
+        const [range, detail] = item.split(': ');
+        return `<li><span>${range}</span>${detail}</li>`;
+      })
+      .join('')}</ul>`;
   }
 
-  const instanceForm = document.getElementById("instance-form");
-  const consultForm = document.getElementById("consult-form");
-
-  if (instanceForm) {
-    instanceForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      alert("Thanks! We'll reach out with hosted instance details within 48 hours.");
-      instanceForm.reset();
-    });
+  if (kpis) {
+    kpis.innerHTML = kpiItems
+      .map(
+        (kpi) =>
+          `<div class="stat"><strong>${kpi.value}</strong><span>${kpi.label}</span></div>`
+      )
+      .join('');
   }
 
-  if (consultForm) {
-    consultForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      alert("Thanks! We'll respond to your consultation request shortly.");
-      consultForm.reset();
-    });
-  }
+  const formHandlers = [
+    {
+      id: 'instance-form',
+      message: 'Instance request submitted (placeholder). Backend integration pending.',
+    },
+    {
+      id: 'self-host-form',
+      message: 'Self-host request submitted (placeholder). Backend integration pending.',
+    },
+    {
+      id: 'consult-form',
+      message: 'Consultation request submitted (placeholder). Backend integration pending.',
+    },
+  ];
+
+  formHandlers.forEach(({ id, message }) => {
+    const form = document.getElementById(id);
+    if (form) {
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        alert(message);
+      });
+    }
+  });
 });
