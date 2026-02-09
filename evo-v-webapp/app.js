@@ -1,47 +1,30 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const snapshots = [
-    "Pulse check: Calm solar variance, 3.2% anomaly drift.",
-    "Signal: New ecological scan scheduled for 19:00 UTC.",
-    "Alert: Monitoring for emergent coordination patterns.",
-  ];
+document.addEventListener('DOMContentLoaded', () => {
+  const snapshots = document.getElementById('live-snapshots');
+  const timeline = document.getElementById('timeline-overview');
 
-  const timeline = [
-    "Week 1: Baseline ecological survey published.",
-    "Week 2: Model alignment audit completed.",
-    "Week 3: Policy recommendations issued to partners.",
-  ];
-
-  const snapshotList = document.getElementById("live-snapshots");
-  const timelineList = document.getElementById("timeline-overview");
-
-  if (snapshotList) {
-    snapshotList.innerHTML = snapshots
-      .map((item) => `<li>${item}</li>`)
-      .join("");
+  if (snapshots) {
+    snapshots.innerHTML +=
+      '<ul><li>Tick 001: Core initialized</li><li>Tick 002: Adaptive loop running</li></ul>';
   }
 
-  if (timelineList) {
-    timelineList.innerHTML = timeline
-      .map((item) => `<li>${item}</li>`)
-      .join("");
+  if (timeline) {
+    timeline.innerHTML +=
+      '<ul><li>Tick 001 → 005: Evolution snapshot</li><li>Tick 006 → 010: Adaptive changes</li></ul>';
   }
 
-  const instanceForm = document.getElementById("instance-form");
-  const consultForm = document.getElementById("consult-form");
-
+  const instanceForm = document.getElementById('instance-form');
   if (instanceForm) {
-    instanceForm.addEventListener("submit", (event) => {
+    instanceForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      alert("Thanks! We'll reach out with hosted instance details within 48 hours.");
-      instanceForm.reset();
+      alert('Instance request submitted (placeholder). Backend integration pending.');
     });
   }
 
+  const consultForm = document.getElementById('consult-form');
   if (consultForm) {
-    consultForm.addEventListener("submit", (event) => {
+    consultForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      alert("Thanks! We'll respond to your consultation request shortly.");
-      consultForm.reset();
+      alert('Consultation request submitted (placeholder). Backend integration pending.');
     });
   }
 });
