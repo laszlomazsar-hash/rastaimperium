@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rasta Evo-V Codex</title>
+    <meta property="og:title" content="Rasta Evo-V Codex" />
+    <meta
+      property="og:description"
+      content="Trace the evolving intelligence signals shaping stewardship, resilience, and the next-wave ecology of systems."
+    />
+    <meta property="og:image" content="og-image.svg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Rasta Evo-V Codex" />
+    <meta
+      name="twitter:description"
+      content="Trace the evolving intelligence signals shaping stewardship, resilience, and the next-wave ecology of systems."
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #0b1120;
+        color: #e2e8f0;
+        line-height: 1.6;
+      }
+
+      header.hero {
+        position: relative;
+        overflow: hidden;
+        padding: 4.5rem 2.5rem 3.5rem;
+        background: rgba(15, 23, 42, 0.85);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .hero::before,
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: -20% -10% -10% -10%;
+        background: radial-gradient(
+            circle at 20% 20%,
+            rgba(94, 234, 212, 0.35),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 80% 30%,
+            rgba(59, 130, 246, 0.3),
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at 50% 80%,
+            rgba(251, 191, 36, 0.2),
+            transparent 65%
+          );
+        opacity: 0.9;
+        animation: heroPulse 18s ease-in-out infinite;
+        z-index: 0;
+      }
+
+      .hero::after {
+        inset: -30% -20% -20% -20%;
+        background: radial-gradient(
+            circle at 30% 70%,
+            rgba(236, 72, 153, 0.25),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 70% 10%,
+            rgba(14, 165, 233, 0.25),
+            transparent 60%
+          );
+        mix-blend-mode: screen;
+        animation: heroPulse 22s ease-in-out infinite reverse;
+      }
+
+      .sacred-geometry {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 70vw;
+        max-width: 900px;
+        transform: translate(-50%, -50%);
+        opacity: 0.12;
+        mix-blend-mode: screen;
+        pointer-events: none;
+        z-index: 0;
+        animation: spinSlow 70s linear infinite;
+      }
+
+      .sacred-geometry svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      @keyframes heroPulse {
+        0% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        50% {
+          transform: translate3d(2%, -2%, 0) scale(1.05);
+        }
+        100% {
+          transform: translate3d(-1%, 1%, 0) scale(1);
+        }
+      }
+
+      @keyframes spinSlow {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 960px;
+        margin: 0 auto 2.5rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.4rem, 4vw, 3.4rem);
+        margin-bottom: 0.75rem;
+        color: #f8fafc;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 720px;
+        color: #cbd5f5;
+        margin-bottom: 2rem;
+      }
+
+      .cta-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.85rem 1.8rem;
+        border-radius: 999px;
+        font-weight: 600;
+        text-decoration: none;
+        color: #0f172a;
+        background: #5eead4;
+        box-shadow: 0 0 24px rgba(94, 234, 212, 0.6);
+        transition: transform 0.2s ease, box-shadow 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .cta.secondary {
+        background: transparent;
+        color: #e2e8f0;
+        border: 1px solid rgba(226, 232, 240, 0.4);
+        box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+      }
+
+      .cta:hover,
+      .cta:focus {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 0 32px rgba(94, 234, 212, 0.85);
+      }
+
+      .cta.secondary:hover,
+      .cta.secondary:focus {
+        background: rgba(15, 23, 42, 0.7);
+        box-shadow: 0 0 32px rgba(14, 165, 233, 0.7);
+      }
+
+      nav {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      nav a {
+        color: #f8fafc;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.4rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.15);
+        transition: background 0.2s ease;
+      }
+
+      nav a:hover,
+      nav a:focus {
+        background: rgba(148, 163, 184, 0.35);
+      }
+
+      main {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 2.5rem;
+      }
+
+      section {
+        background: #111827;
+        padding: 1.8rem 2rem;
+        border-radius: 20px;
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.4);
+        margin-bottom: 1.5rem;
+      }
+
+      section h2 {
+        margin-bottom: 0.75rem;
+        color: #f8fafc;
+      }
+
+      section p {
+        color: #cbd5f5;
+      }
+
+      .panel {
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        background: rgba(30, 41, 59, 0.6);
+      }
+
+      .tag-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #0f172a;
+        background: #f8fafc;
+      }
+
+      @media (max-width: 720px) {
+        header.hero {
+          padding: 3.5rem 1.5rem 2.5rem;
+        }
+
+        .cta-group {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        nav {
+          justify-content: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="sacred-geometry" aria-hidden="true">
+        <svg viewBox="0 0 800 800" role="img" focusable="false">
+          <g fill="none" stroke="rgba(226, 232, 240, 0.6)" stroke-width="2">
+            <circle cx="400" cy="160" r="120" />
+            <circle cx="520" cy="230" r="120" />
+            <circle cx="520" cy="370" r="120" />
+            <circle cx="400" cy="440" r="120" />
+            <circle cx="280" cy="370" r="120" />
+            <circle cx="280" cy="230" r="120" />
+            <circle cx="400" cy="300" r="200" />
+            <circle cx="400" cy="300" r="300" />
+          </g>
+        </svg>
+      </div>
+      <div class="hero-content">
+        <h1>Rasta Evo-V Codex</h1>
+        <p>
+          Trace the evolving intelligence signals shaping stewardship, resilience,
+          and the next-wave ecology of systems.
+        </p>
+        <div class="cta-group">
+          <a class="cta" href="index.html">Enter Codex</a>
+          <a class="cta secondary" href="principles.html">See the System</a>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html">Observatory</a>
+        <a href="paid.html">Services</a>
+        <a href="principles.html">Principles</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2>Codex Transmission</h2>
+        <p>
+          A focused brief on emergent signal flows, orchestration patterns, and
+          stewardship guardrails tuned for Evo-V operators.
+        </p>
+      </section>
+      <section class="panel">
+        <h2>Artifacts &amp; Seals</h2>
+        <p>
+          Immutable records, audit artifacts, and seals.
+          <a href="manifest.txt">Download Certificate of Manifestation</a>
+        </p>
+        <div class="tag-group">
+          <span class="tag">Immutable</span>
+          <span class="tag">Genesis</span>
+        </div>
+      </section>
+      <section>
+        <h2>Signal Pathways</h2>
+        <p>
+          Navigate the currents between ecology, governance, and AI-guided
+          systems as we map the new harmonics.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
