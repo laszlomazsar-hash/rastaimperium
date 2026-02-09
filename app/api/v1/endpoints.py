@@ -2,9 +2,11 @@ import json
 from fastapi import APIRouter
 from app.core.redis import redis_manager
 from app.ark_engine.api.routers.divine_guidance import router as divine_router
+from app.ark_engine.api.routers.evolution import router as evolution_router
 
 router = APIRouter()
 router.include_router(divine_router, prefix="/divine", tags=["divine"])
+router.include_router(evolution_router, tags=["evolution", "nuggets"])
 
 @router.get("/wisdom")
 async def get_wisdom():
