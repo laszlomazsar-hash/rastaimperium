@@ -26,5 +26,5 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       alert('Consultation request submitted (placeholder). Backend integration pending.');
     });
-  }
+  });
 });
