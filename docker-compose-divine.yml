@@ -9,6 +9,8 @@ services:
     container_name: ark-engine-divine
     ports:
       - "8083:8000"
+    env_file:
+      - .env.divine
     environment:
       - ENVIRONMENT=divine
       - DB_URL=postgresql://ark:${POSTGRES_PASSWORD}@postgres-divine:5432/ark_divine
@@ -36,6 +38,8 @@ services:
 
   postgres-divine:
     image: postgres:15-alpine
+    env_file:
+      - .env.divine
     environment:
       - POSTGRES_USER=ark
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -47,6 +51,8 @@ services:
 
   redis-divine:
     image: redis:7-alpine
+    env_file:
+      - .env.divine
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
     volumes:
       - redis_data_divine:/data
