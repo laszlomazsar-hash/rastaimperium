@@ -1,12 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Rasta Imperium — Presence</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Rasta Imperium — a sovereign mythic-technical field for Codex, Kernel, ARK Engine, and living governance.">
-  <link rel="stylesheet" href="/static/style.css">
+<meta charset="UTF-8">
+<title>Rasta Imperium | One Love</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --red:#c62828;
+  --gold:#d4af37;
+  --green:#2e7d32;
+  --bg:#0b0b0b;
+  --panel:#111;
+  --border:#222;
+  --text:#eaeaea;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui, monospace;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+header{
+  height:4px;
+  background:linear-gradient(90deg,var(--red),var(--gold),var(--green));
+}
+
+nav{
+  display:flex;
+  justify-content:center;
+  gap:24px;
+  padding:20px;
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap;
+}
+
+nav a{
+  color:#777;
+  text-decoration:none;
+  font-size:.75rem;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+nav a.active,
+nav a:hover{color:var(--gold)}
+
+section{
+  display:block;
+  max-width:900px;
+  margin:0 auto;
+  padding:60px 20px;
+}
+
+
+h1,h2{
+  color:var(--gold);
+  letter-spacing:4px;
+  text-transform:uppercase;
+  font-weight:400;
+}
+
+textarea{
+  width:100%;
+  height:140px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:16px;
+  font-family:inherit;
+}
+
+button{
+  margin-top:16px;
+  padding:10px 28px;
+  background:none;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  cursor:pointer;
+}
+
+button:hover{
+  background:var(--gold);
+  color:#000;
+}
+
+.panel{
+  margin-top:30px;
+  padding:20px;
+  background:var(--panel);
+  border-left:3px solid var(--green);
+}
+
+.muted{
+  opacity:.55;
+  font-size:.9rem;
+  line-height:1.7;
+}
+
+ul{
+  padding-left:20px;
+}
+</style>
 </head>
+
 <body>
   <main class="page page-presence">
     <nav class="section-nav">

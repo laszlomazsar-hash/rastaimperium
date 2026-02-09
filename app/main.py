@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.core.config import settings
@@ -46,14 +47,36 @@ async def shutdown_event():
 @app.get("/")
 async def root(request: Request):
     """Manifest the landing page for the King."""
-    return templates.TemplateResponse(
-        "index.html", 
-        {
-            "request": request, 
-            "king": "Laszlo Mazsar",
-            "location": "46 Thomas Street"
-        }
-    )
+    try:
+        with open(os.path.join(BASE_DIR, "templates", "index.html"), encoding="utf-8") as file:
+            return HTMLResponse(file.read())
+    except Exception:
+        return HTMLResponse(
+            """
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>Rasta Imperium — Presence</title>
+              <style>
+                body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                       background: #050608; color: #f5f5f5; }
+                .fallback-hero { padding: 2.5rem 1.5rem; background: #0c0f1a; }
+                .fallback-hero h1 { margin: 0 0 0.75rem; font-size: 2.2rem; }
+                .fallback-hero p { margin: 0 0 0.5rem; color: #d6d6d6; }
+              </style>
+            </head>
+            <body>
+              <header class="fallback-hero">
+                <p>Rasta Imperium</p>
+                <h1>The Presence Gateway</h1>
+                <p>An always-on introduction to the field, even if templates fail to render.</p>
+              </header>
+            </body>
+            </html>
+            """
+        )
 
 @app.get("/curiosity")
 async def curiosity(request: Request):
