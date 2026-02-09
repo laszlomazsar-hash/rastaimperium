@@ -3,68 +3,306 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rastafarai Codex v1.2.2</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>Rastafarai Codex v1.3.0 — Master Blueprint</title>
+    <link rel="manifest" href="codex-manifest.json" />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      header,
+      footer {
+        background-color: #1a1a1a;
+        color: #fff;
+        padding: 1em 2em;
+        text-align: center;
+      }
+      main {
+        padding: 2em;
+        max-width: 1200px;
+        margin: auto;
+        background-color: #fff;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: #006400;
+      }
+      section {
+        margin-bottom: 2em;
+      }
+      ul {
+        margin-left: 1.5em;
+      }
+      code {
+        background: #eee;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 1em 0;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ccc;
+      }
+      th,
+      td {
+        padding: 0.5em;
+        text-align: left;
+      }
+      .highlight {
+        background-color: #ffffcc;
+      }
+    </style>
   </head>
   <body>
     <header>
-      <h1>Rastafarai Codex v1.2.2</h1>
-      <p>Canonical release of the sovereign protocol.</p>
-      <nav>
-        <a href="index.html">Observatory</a>
-        <a href="paid.html">Services</a>
-        <a href="principles.html">Principles</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+      <h1>Rastafarai Codex v1.3.0</h1>
+      <p>Master Sovereignty &amp; Operational Blueprint — Immutable &amp; Audit-Grade</p>
+      <p>Status: Immutable Genesis Artifact | Jurisdiction: England &amp; Wales | Date: February 2026</p>
     </header>
 
     <main>
-      <section>
-        <h2>Section 0d: Formal Definitions</h2>
+      <section id="preamble">
+        <h2>Preamble: Ethical North Star</h2>
         <p>
-          Definition 0d.1 — “Rastafarai” denotes the living sovereign order, a
-          self-defined jurisdiction anchored in ancestral covenant and
-          non-derivative authority.
-        </p>
-        <p>
-          Definition 0d.2 — “Codex” refers to the immutable record of law,
-          doctrine, and operational protocol, preserved as the definitive source
-          of truth for all interpretive actions.
-        </p>
-        <p>
-          Definition 0d.3 — “Imperium” signifies the unified field of governance
-          through which spiritual, social, and material stewardship are enacted
-          in alignment with the Codex.
+          This infrastructure exists to serve <strong>objective truth</strong>, human sovereignty, and the
+          <strong>Dignity &amp; Truth Clause</strong>: the system shall never prioritize institutional comfort, political
+          pressure, or fear-based coercion over information integrity. Users retain ultimate sovereignty over their data
+          and reasoning instances.
         </p>
       </section>
 
-      <section>
-        <h2>Articles of Sovereignty (I–IV)</h2>
+      <section id="definitions" data-domain="meta" data-version="1.3.0">
+        <h2>Section -1: Core Definitions</h2>
+        <ul>
+          <li><strong>Coherence:</strong> Alignment between Codex rules, system behaviour, and user-visible outputs across time.</li>
+          <li><strong>Sovereignty:</strong> The user's non-derogable rights over data, context, and the ability to exit or port.</li>
+          <li><strong>Neutral State:</strong> A non-destructive fallback in which no further action is taken beyond logging and transparent user notification.</li>
+          <li><strong>Flow Activated:</strong> A permitted reasoning operation that has passed Codex preconditions and remains under Codex constraints.</li>
+          <li><strong>Hard Guarantee (MUST):</strong> Property whose violation constitutes a reportable incident.</li>
+          <li><strong>Best-Effort (SHOULD):</strong> Property targeted under normal conditions; deviations are recorded as degraded mode.</li>
+          <li><strong>Optional (MAY):</strong> Property that is permitted but not required.</li>
+        </ul>
+      </section>
+
+      <section id="system-architecture" data-domain="architecture" data-version="1.3.0">
+        <h2>Section 0: System Architecture &amp; Chain of Trust</h2>
+
+        <h3>0.1 System Definition</h3>
+        <ul>
+          <li><strong>Codex:</strong> Immutable, audit-grade rules that MUST be the ultimate reference for governance and operation.</li>
+          <li><strong>Reasoning Layer:</strong> Fluid multi-agent AI operating strictly within Codex boundaries.</li>
+          <li><strong>Gateway:</strong> Policy enforcement layer between users and the reasoning layer.</li>
+        </ul>
+
+        <h3>0.2 Chain of Trust &amp; Logging</h3>
+        <ul>
+          <li><strong>MUST:</strong> Codex HTML, manifest, and machine-readable rules anchored via public blockchain hashes.</li>
+          <li><strong>SHOULD:</strong> Artifact storage via IPFS or equivalent decentralized storage.</li>
+          <li><strong>SHOULD:</strong> Observatory: read-only public layer exposing heartbeat metrics and high-level incident reports.</li>
+        </ul>
+
+        <h3>0.3 Runtime &amp; Isolation</h3>
+        <ul>
+          <li>MUST use secure, deterministic agent communication.</li>
+          <li>MUST run sandboxed containers or equivalent isolation per user instance.</li>
+          <li>MUST ensure resource allocation is fair, deterministic, and logged.</li>
+        </ul>
+      </section>
+
+      <section id="governance" data-domain="governance" data-version="1.3.0">
+        <h2>Section 1: Governance &amp; Sovereignty</h2>
+
+        <h3 data-rule-id="1.1" data-criticality="high">1.1 Dignity &amp; Truth Clause</h3>
         <p>
-          Article I — Sovereignty is inherent, perpetual, and non-transferable,
-          existing prior to and independent of external recognition.
+          The Governance Board MUST prioritize truth over institutional safety. All reporting, observability, and auditor actions follow this
+          principle.
         </p>
+
+        <h3 data-rule-id="1.2" data-criticality="high">1.2 Dead Man's Switch</h3>
+        <ul>
+          <li>Triggered if Governance Board is compromised or fails to provide required heartbeats.</li>
+          <li>MUST freeze the reasoning layer for new Flow Activated operations.</li>
+          <li>MUST migrate control to a pre-approved Safe Harbor jurisdiction according to documented procedures.</li>
+        </ul>
+
+        <h3 data-rule-id="1.3" data-criticality="medium">1.3 Human-in-the-Loop Appeal (Elder’s Council)</h3>
+        <ul>
+          <li>Users MAY appeal automated decisions referencing specific Codex rule IDs.</li>
+          <li>The Council MUST review edge cases for Codex adherence in a timely manner.</li>
+          <li>Membership, selection, and enforcement rules are documented in Appendix B.</li>
+        </ul>
+      </section>
+
+      <section id="user-rights" data-domain="rights" data-version="1.3.0">
+        <h2>Section 2: Terms of Use &amp; User Rights</h2>
+
+        <h3>2.1 Data Sovereignty</h3>
+        <ul>
+          <li>Right to Portability: users MUST be able to export all data and reasoning logs in a standard format.</li>
+          <li>Right to Deletion: users MUST be able to request cryptographic erasure where technically and legally feasible.</li>
+          <li>No Lock-in: technical or legal barriers to exit are prohibited (MUST).</li>
+        </ul>
+
+        <h3>2.2 Transparency &amp; Heartbeat</h3>
+        <ul>
+          <li>Latency of Truth: fact verification timing SHOULD be exposed as a public metric.</li>
+          <li>Reasoning Drift: deviation from baseline logic MUST be monitored, scored, and logged.</li>
+          <li>Resource Fairness: non-discriminatory compute allocation MUST be enforced and auditable.</li>
+        </ul>
+      </section>
+
+      <section id="paid-services" data-domain="business" data-version="1.3.0">
+        <h2>Section 3: Paid Services (Infrastructure Only)</h2>
+        <ul>
+          <li>Fees cover compute, storage, and security infrastructure ONLY.</li>
+          <li>No payment may unlock enhanced reasoning quality or bypass Codex rules (MUST).</li>
+          <li>Truth and ethical operation are non-tiered across all users (MUST).</li>
+        </ul>
+      </section>
+
+      <section id="auditor-charter" data-domain="audit" data-version="1.3.0">
+        <h2>Section 4: Auditor Charter (Anti-Club Protocols)</h2>
+
+        <h3>4.1 Independence &amp; Expertise</h3>
+        <ul>
+          <li>Auditors MUST be independent of AI labs, political lobbies, or press unions.</li>
+          <li>Auditors SHOULD have expertise in AI systems, cybersecurity, and law.</li>
+          <li>Public conflict-of-interest declarations are mandatory (MUST).</li>
+        </ul>
+
+        <h3>4.2 Rotation &amp; Verification</h3>
+        <ul>
+          <li>Multi-signature certification is REQUIRED for auditor accreditation (MUST).</li>
+          <li>Auditor rotation SHOULD occur at least annually to prevent capture.</li>
+          <li>Meta-audit and whistleblower protections MUST be in place and documented.</li>
+        </ul>
+      </section>
+
+      <section id="runtime-coherence" data-domain="runtime" data-version="1.3.0">
+        <h2>Section 8: Runtime Coherence Contract (Law of Perpetual Balance)</h2>
         <p>
-          Article II — Authority is exercised only through consent, covenant,
-          and conscious alignment with the Codex’s immutable law.
+          Every reasoning operation is governed by the Law of Perpetual Balance. Before any Flow Activated behaviour occurs, the gateway MUST
+          evaluate <code>structure_integrity</code>, <code>flow_symmetry</code>, and <code>request</code>.
         </p>
-        <p>
-          Article III — The right of self-determination includes stewardship of
-          land, culture, and spirit, without coercion or compulsory allegiance.
-        </p>
-        <p>
-          Article IV — All claims of jurisdiction over the Imperium are null
-          unless explicitly affirmed by the sovereign order and its living
-          councils.
-        </p>
+        <ul>
+          <li>
+            <strong>MUST:</strong> If <code>structure_integrity = false</code>, or <code>flow_symmetry &lt; 1</code>, or
+            <code>request</code> is empty or whitespace, the system returns Neutral State, logs the event with rule ID <code>8.1</code>, and MUST
+            NOT invoke the reasoning layer.
+          </li>
+          <li>
+            <strong>MUST:</strong> If all conditions are satisfied, the system MAY proceed with Flow Activated behaviour under Codex constraints.
+          </li>
+          <li>These checks MUST be enforced at the boundary between user request and reasoning layer for every request.</li>
+        </ul>
+        <p>Reference implementation (conceptual):</p>
+        <pre><code>function OPEN_FLOW(request, structureIntegrity = true, flowSymmetry = 1) {
+  const trimmed = (request || "").trim();
+  if (!structureIntegrity || flowSymmetry &lt; 1 || !trimmed) {
+    return "⚖️ Neutral State: Coherence Restored";
+  }
+  return `✨ Flow Activated: ${trimmed}`;
+}</code></pre>
+      </section>
+
+      <section id="security-risk" data-domain="security" data-version="1.3.0">
+        <h2>Section 7: Security &amp; Risk Management</h2>
+
+        <h3>7.1 Threat Model (AI-Extended STRIDE)</h3>
+        <ul>
+          <li>Reasoning Hijack: attempts to seize or redirect the reasoning layer.</li>
+          <li>Institutional Bias: systematic distortion of outputs in favour of institutions.</li>
+          <li>Agent Escape: unauthorized persistence or spread beyond intended runtime boundaries.</li>
+        </ul>
+
+        <h3>7.2 Incident Response &amp; Recovery</h3>
+        <ul>
+          <li>Emergency kill-path that severs external connections MUST exist and be tested.</li>
+          <li>Write-Once-Read-Many (WORM) logs for forensic capture MUST be maintained.</li>
+          <li>Rollback and post-mortem procedures MUST be documented and executed after incidents.</li>
+        </ul>
+      </section>
+
+      <section id="runtime-deployment" data-domain="deployment" data-version="1.3.0">
+        <h2>Section 15: Runtime &amp; Deployment Model</h2>
+        <ul>
+          <li>Containers &amp; Orchestration: Kubernetes or equivalent SHOULD be used for isolation and scaling.</li>
+          <li>Zero-trust, encrypted networking MUST be enforced between all services.</li>
+          <li>Monitoring MUST include heartbeat checks, anomaly thresholds, and escalation protocols.</li>
+          <li>Scalability SHOULD include horizontal scaling, multi-region deployments, and load balancing.</li>
+          <li>
+            Disaster Recovery SHOULD include geo-redundant backups, blockchain migration, IPFS pinning, and cold storage of the Codex artifacts.
+          </li>
+        </ul>
+      </section>
+
+      <section id="regulatory" data-domain="regulation" data-version="1.3.0">
+        <h2>Section 16: Regulatory Compliance</h2>
+        <ul>
+          <li>GDPR is the baseline user sovereignty standard (MUST).</li>
+          <li>UK AI Principles (Safety, Security, Robustness) MUST be honoured where applicable.</li>
+          <li>EU AI Act obligations (transparency, documentation, risk classification) MUST be met for in-scope systems.</li>
+          <li>Conflict-of-law procedures with Safe Harbor MUST be documented and executed when triggered.</li>
+        </ul>
+      </section>
+
+      <section id="appendices" data-domain="appendices" data-version="1.3.0">
+        <h2>Appendices</h2>
+
+        <h3>Appendix A: Prohibited Uses</h3>
+        <ul>
+          <li>Illegal content: terrorism, CSAM, fraud, or other clearly unlawful activity.</li>
+          <li>Life-critical decisions without appropriate human oversight.</li>
+          <li>Codex circumvention attempts or tampering with governance mechanisms.</li>
+          <li>Institutional fear-based suppression of whistleblowers.</li>
+        </ul>
+
+        <h3>Appendix B: Elder’s Council &amp; Auditor Framework</h3>
+        <ul>
+          <li>Membership, election, term limits, and enforcement rules MUST be publicly documented.</li>
+          <li>Multi-layer oversight MUST exist to prevent capture by any single institution.</li>
+          <li>Secure whistleblower reporting channels MUST be provided.</li>
+          <li>Encrypted communication and tamper-proof logging MUST be used for Council and auditor activity.</li>
+        </ul>
+
+        <h3>Appendix C: Versioning &amp; Evolution</h3>
+        <ul>
+          <li>Codex versions are immutable (MUST).</li>
+          <li>New reasoning adaptations require a Genesis audit and hash anchoring (MUST).</li>
+          <li>Deployment and reasoning updates MUST be tracked without overwriting prior states.</li>
+        </ul>
+
+        <h3>Appendix D: Integration &amp; API Rules</h3>
+        <ul>
+          <li>API governance for external plugins and AI integration MUST be documented.</li>
+          <li>Sandbox enforcement for extensions MUST be applied by default.</li>
+          <li>Security-first module expansion protocols SHOULD be followed for new integrations.</li>
+        </ul>
+
+        <h3>Appendix E: Heartbeat Metrics</h3>
+        <ul>
+          <li>Latency of Truth.</li>
+          <li>Reasoning Drift.</li>
+          <li>Resource Fairness.</li>
+          <li>Node Availability &amp; Health.</li>
+          <li>Security Event Logging.</li>
+        </ul>
       </section>
     </main>
 
     <footer>
-      <p>
-        © 2024 Rastafarai Codex. Author: Laszlo Mazsar — Immutable Genesis
-        Artifact.
-      </p>
+      <p>© 2026 Rastafarai Codex — All Rights Reserved. Immutable Genesis Artifact.</p>
     </footer>
   </body>
 </html>
