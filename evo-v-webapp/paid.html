@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evo-V Observatory | Paid Services</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Evo-V Observatory</h1>
+      <p>Paid services supporting the mission without blending ethical lines.</p>
+      <nav>
+        <a href="index.html">Observatory</a>
+        <a href="paid.html">Services</a>
+        <a href="principles.html">Principles</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="disclaimer">
+        <strong>Ethical separation notice:</strong>
+        Paid services operate independently from the public observatory stream.
+        We do not sell access to protected data, and paid clients do not influence
+        public reporting priorities.
+      </section>
+
+      <section class="layout-grid two-column">
+        <div>
+          <h2>Hosted Instance</h2>
+          <p>
+            Deploy Evo-V in a managed environment with dedicated monitoring,
+            uptime guarantees, and private dashboards.
+          </p>
+          <form id="instance-form">
+            <div>
+              <label for="instance-name">Organization name</label>
+              <input id="instance-name" name="instance-name" required />
+            </div>
+            <div>
+              <label for="instance-email">Primary contact email</label>
+              <input
+                id="instance-email"
+                name="instance-email"
+                type="email"
+                required
+              />
+            </div>
+            <div>
+              <label for="instance-notes">Deployment notes</label>
+              <textarea id="instance-notes" name="instance-notes"></textarea>
+            </div>
+            <button type="submit">Request hosted instance</button>
+          </form>
+        </div>
+
+        <div>
+          <h2>Self-Hosted License</h2>
+          <p>
+            Install Evo-V on your infrastructure with compliance artifacts and
+            a private license agreement.
+          </p>
+          <form id="license-form">
+            <div>
+              <label for="license-name">Organization name</label>
+              <input id="license-name" name="license-name" required />
+            </div>
+            <div>
+              <label for="license-region">Primary region</label>
+              <input id="license-region" name="license-region" required />
+            </div>
+            <div>
+              <label for="license-goals">Primary goals</label>
+              <textarea id="license-goals" name="license-goals"></textarea>
+            </div>
+            <button class="secondary" type="submit">Request license pack</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="layout-grid two-column">
+        <div>
+          <h2>Consultation & Alignment</h2>
+          <p>
+            Strategy sessions for teams needing governance guidance or model
+            alignment review.
+          </p>
+          <form id="consult-form">
+            <div>
+              <label for="consult-name">Full name</label>
+              <input id="consult-name" name="consult-name" required />
+            </div>
+            <div>
+              <label for="consult-email">Email address</label>
+              <input
+                id="consult-email"
+                name="consult-email"
+                type="email"
+                required
+              />
+            </div>
+            <div>
+              <label for="consult-focus">Focus area</label>
+              <textarea id="consult-focus" name="consult-focus"></textarea>
+            </div>
+            <button type="submit">Book consultation</button>
+          </form>
+        </div>
+
+        <div>
+          <h2>Knowledge Products</h2>
+          <p>
+            Research briefs, readiness audits, and scenario playbooks designed
+            for internal teams.
+          </p>
+          <div class="card-stack">
+            <div>
+              <strong>Signal Readiness Brief</strong>
+              <p>Quarterly briefings tailored to your sector.</p>
+            </div>
+            <div>
+              <strong>Ethics Drill Kit</strong>
+              <p>Facilitated exercises for governance teams.</p>
+            </div>
+            <div>
+              <strong>Scenario Playbooks</strong>
+              <p>Decision support for emergent ecological risks.</p>
+            </div>
+          </div>
+          <a class="button" href="contact.html">Request a custom bundle</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2024 Evo-V Observatory. Paid offerings support public research.</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
