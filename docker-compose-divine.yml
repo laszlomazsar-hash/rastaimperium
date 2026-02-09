@@ -53,9 +53,16 @@ services:
     image: redis:7-alpine
     env_file:
       - .env.divine
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --requirepass
+      - "$$(cat /run/secrets/redis_password)"
     volumes:
       - redis_data_divine:/data
+    secrets:
+      - redis_password
     networks:
       - ark-divine-network
 
@@ -102,3 +109,7 @@ volumes:
     external: true
   divine_wisdom:
     external: true
+
+secrets:
+  redis_password:
+    file: .secrets/redis_password
