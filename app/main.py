@@ -1,7 +1,6 @@
-import os
 from pathlib import Path
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.core.config import settings
@@ -15,6 +14,9 @@ app = FastAPI(title=settings.PROJECT_NAME)
 # --- THE PATH ALIGNMENT ---
 # We find the exact location of this file to prevent "TemplateNotFound" errors
 BASE_DIR = Path(__file__).resolve().parent
+REPO_ROOT = BASE_DIR.parent
+CODEX_PATH = REPO_ROOT / "Codex.html"
+MANIFEST_PATH = REPO_ROOT / "Manifest.txt"
 
 # Mount the Static chamber (for your Red, Gold, and Green CSS)
 app.mount(
@@ -112,7 +114,17 @@ async def governance(request: Request):
 @app.get("/codex")
 async def codex(request: Request):
     """The Daily Resonance Codex — the operational manual."""
+    if CODEX_PATH.exists():
+        return FileResponse(CODEX_PATH, media_type="text/html")
     return templates.TemplateResponse("codex.html", {"request": request})
+
+
+@app.get("/manifest")
+async def manifest() -> FileResponse:
+    """The immutable manifest text."""
+    if not MANIFEST_PATH.exists():
+        raise HTTPException(status_code=404, detail="Manifest not found")
+    return FileResponse(MANIFEST_PATH, media_type="text/plain")
 
 @app.get("/ark")
 async def ark(request: Request):
