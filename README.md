@@ -15,14 +15,14 @@ Powered by FastAPI, Jinja2, and a layered revelation framework.
 https://rastaimperium.com
 
 ## Divine Docker Compose
-When running `docker-compose-divine.yml`, set the following environment variables (Docker Compose reads them from `.env.divine` by default):
+When running `docker-compose-divine.yml`, set the following environment variables (Docker Compose reads them from `.env.divine` by default) and provide a Redis password secret file:
 
 ```
-POSTGRES_PASSWORD=your-local-password
-REDIS_PASSWORD=your-local-password
+POSTGRES_PASSWORD=change-me
+REDIS_PASSWORD=change-me
 ```
 
-You can copy `.env.divine.example` to `.env.divine` and update the values before starting the stack.
+You can copy `.env.divine.example` to `.env.divine` and update the values before starting the stack. Create `.secrets/redis_password` with the same Redis password so the Redis container can load it via Docker secrets.
 
 ## Author
 Laszlo Mazsar — Sovereign Architect of Constitutional AI
