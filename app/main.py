@@ -144,3 +144,9 @@ async def codex_manifest():
 async def ark(request: Request):
     """The ARK Engine — autonomous resonance kernel."""
     return templates.TemplateResponse("ark.html", {"request": request})
+
+
+@app.get("/transmissions")
+async def transmissions(request: Request):
+    """The living archive of Imperium transmissions."""
+    return templates.TemplateResponse("transmissions.html", {"request": request})
