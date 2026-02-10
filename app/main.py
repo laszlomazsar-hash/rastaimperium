@@ -144,3 +144,73 @@ async def codex_manifest():
 async def ark(request: Request):
     """The ARK Engine — autonomous resonance kernel."""
     return templates.TemplateResponse("ark.html", {"request": request})
+
+@app.get("/evo-v")
+async def evo_v(request: Request):
+    """The EVO-V civilization kernel and simulation layer."""
+    return templates.TemplateResponse("evo-v.html", {"request": request})
+
+@app.get("/codex-library")
+async def codex_library(request: Request):
+    """The canonical library of Imperium artifacts."""
+    return templates.TemplateResponse("codex-library.html", {"request": request})
+
+@app.get("/manifestation")
+async def manifestation(request: Request):
+    """Certificates of manifestation and canonical release."""
+    return templates.TemplateResponse("manifestation.html", {"request": request})
+
+@app.get("/store")
+async def store(request: Request):
+    """The Imperium store and offerings."""
+    return templates.TemplateResponse("store.html", {"request": request})
+
+@app.get("/pricing")
+async def pricing(request: Request):
+    """Engagement pathways and pricing tiers."""
+    return templates.TemplateResponse("pricing.html", {"request": request})
+
+@app.get("/about")
+async def about(request: Request):
+    """The Imperium origin story and mission."""
+    return templates.TemplateResponse("about.html", {"request": request})
+
+@app.get("/ethics")
+async def ethics(request: Request):
+    """Ethical safeguards and consent-first principles."""
+    return templates.TemplateResponse("ethics.html", {"request": request})
+
+@app.get("/contact")
+async def contact(request: Request):
+    """Contact the Imperium stewarding council."""
+    return templates.TemplateResponse("contact.html", {"request": request})
+
+@app.get("/community")
+async def community(request: Request):
+    """Community circles and participation pathways."""
+    return templates.TemplateResponse("community.html", {"request": request})
+
+@app.get("/transmissions")
+async def transmissions(request: Request):
+    """Field transmissions and dispatches."""
+    return templates.TemplateResponse("transmissions.html", {"request": request})
+
+@app.get("/sitemap")
+async def sitemap(request: Request):
+    """Navigation map for the Imperium."""
+    return templates.TemplateResponse("sitemap.html", {"request": request})
+
+@app.get("/legal")
+async def legal(request: Request):
+    """Legal framework and policies."""
+    return templates.TemplateResponse("legal.html", {"request": request})
+
+@app.get("/privacy")
+async def privacy(request: Request):
+    """Privacy policy and data stewardship."""
+    return templates.TemplateResponse("privacy.html", {"request": request})
+
+@app.get("/terms")
+async def terms(request: Request):
+    """Terms of use and participation boundaries."""
+    return templates.TemplateResponse("terms.html", {"request": request})
