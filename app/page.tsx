@@ -81,13 +81,6 @@ export default function HomePage() {
   useEffect(() => {
     const endpoint = "codex.monitoring.input";
     const sendIntervalMs = 50;
-    const interactionSequence: Array<{
-      timestamp: number;
-      type: string;
-      target: string;
-      details: Record<string, unknown>;
-    }> = [];
-
     const telemetry = {
       page_load_time_ms: performance.now(),
       scroll_depth_percent: 0,
@@ -102,30 +95,23 @@ export default function HomePage() {
         pillar_card_hovered: null as number | null,
         cta_button_hovered: false,
       },
-      sequence: interactionSequence,
     };
 
     const heroElements = document.querySelectorAll(".hero > *:not(.rasta-border)");
-    const pillarCards = Array.from(document.querySelectorAll<HTMLElement>(".pillar-card"));
-    const ctaButton = document.querySelector<HTMLElement>(".cta-button");
-    const pillarIcons = Array.from(document.querySelectorAll<HTMLElement>(".pillar-icon"));
-    const lionSymbol = document.querySelector<HTMLElement>(".lion-symbol");
+    const pillarCards = document.querySelectorAll<HTMLElement>(".pillar-card");
+    const ctaButton = document.querySelector<HTMLElement>(".cta");
+    const pillarIcons = document.querySelectorAll<HTMLElement>(".pillar-icon");
+    const lionSymbol = document.querySelector<HTMLElement>(".lion");
     const crownTitle = document.querySelector<HTMLElement>(".crown-title");
-
-    const logEvent = (type: string, target: string, details: Record<string, unknown> = {}) => {
-      interactionSequence.push({ timestamp: Date.now(), type, target, details });
-      if (interactionSequence.length > 500) interactionSequence.shift();
-    };
 
     const onScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       telemetry.scroll_depth_percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      logEvent("scroll", "window", { scroll_percent: telemetry.scroll_depth_percent });
 
-      heroElements.forEach((el, index) => {
+      heroElements.forEach((element, index) => {
         const speed = (index + 1) * 0.1;
-        (el as HTMLElement).style.transform = `translateY(${scrollTop * speed}px)`;
+        (element as HTMLElement).style.transform = `translateY(${scrollTop * speed}px)`;
       });
     };
 
@@ -135,74 +121,45 @@ export default function HomePage() {
     const observer = new IntersectionObserver((entries) => {
       telemetry.visible_elements = [];
       entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
         const title = entry.target.querySelector("h3")?.textContent?.trim();
-        const name = entry.target.id || title || "pillar";
-        if (entry.isIntersecting) {
-          telemetry.visible_elements.push(name);
-          logEvent("visible", name, { intersecting: true });
-        } else {
-          logEvent("visible", name, { intersecting: false });
-        }
+        telemetry.visible_elements.push(entry.target.id || title || "pillar");
       });
     }, observerOptions);
 
     pillarCards.forEach((card) => observer.observe(card));
 
-    const cardListeners = pillarCards.flatMap((card, i) => {
-      const name = card.querySelector("h3")?.textContent?.trim() || `pillar-${i + 1}`;
-      const onMouseEnter = () => {
-        telemetry.hover.pillar_card_hovered = i;
-        logEvent("hover", name, { hovered: true });
+    const cardListeners = Array.from(pillarCards).map((card, index) => {
+      const onEnter = () => {
+        telemetry.hover.pillar_card_hovered = index;
       };
-      const onMouseLeave = () => {
+      const onLeave = () => {
         telemetry.hover.pillar_card_hovered = null;
-        logEvent("hover", name, { hovered: false });
       };
-      const onClick = () => logEvent("click", name);
-
-      card.addEventListener("mouseenter", onMouseEnter);
-      card.addEventListener("mouseleave", onMouseLeave);
-      card.addEventListener("click", onClick);
-
-      return [
-        () => card.removeEventListener("mouseenter", onMouseEnter),
-        () => card.removeEventListener("mouseleave", onMouseLeave),
-        () => card.removeEventListener("click", onClick),
-      ];
+      card.addEventListener("mouseenter", onEnter);
+      card.addEventListener("mouseleave", onLeave);
+      return { card, onEnter, onLeave };
     });
 
-    const ctaListeners: Array<() => void> = [];
-    if (ctaButton) {
-      const onMouseEnter = () => {
-        telemetry.hover.cta_button_hovered = true;
-        logEvent("hover", "CTA_BUTTON", { hovered: true });
-      };
-      const onMouseLeave = () => {
-        telemetry.hover.cta_button_hovered = false;
-        logEvent("hover", "CTA_BUTTON", { hovered: false });
-      };
-      const onClick = () => logEvent("click", "CTA_BUTTON");
+    const onCtaEnter = () => {
+      telemetry.hover.cta_button_hovered = true;
+    };
+    const onCtaLeave = () => {
+      telemetry.hover.cta_button_hovered = false;
+    };
 
-      ctaButton.addEventListener("mouseenter", onMouseEnter);
-      ctaButton.addEventListener("mouseleave", onMouseLeave);
-      ctaButton.addEventListener("click", onClick);
+    ctaButton?.addEventListener("mouseenter", onCtaEnter);
+    ctaButton?.addEventListener("mouseleave", onCtaLeave);
 
-      ctaListeners.push(
-        () => ctaButton.removeEventListener("mouseenter", onMouseEnter),
-        () => ctaButton.removeEventListener("mouseleave", onMouseLeave),
-        () => ctaButton.removeEventListener("click", onClick)
-      );
-    }
-
-    const toMatrix = (el: HTMLElement) => {
-      const transform = window.getComputedStyle(el).transform;
+    const parseTransform = (element: HTMLElement) => {
+      const transform = window.getComputedStyle(element).transform;
       return transform && transform !== "none" ? new DOMMatrixReadOnly(transform) : null;
     };
 
-    const getTransformScale = (el: HTMLElement) => toMatrix(el)?.a ?? 1;
-    const getTranslateY = (el: HTMLElement) => toMatrix(el)?.m42 ?? 0;
-    const getRotationDegrees = (el: HTMLElement) => {
-      const matrix = toMatrix(el);
+    const getTransformScale = (element: HTMLElement) => parseTransform(element)?.a ?? 1;
+    const getTranslateY = (element: HTMLElement) => parseTransform(element)?.m42 ?? 0;
+    const getRotationDegrees = (element: HTMLElement) => {
+      const matrix = parseTransform(element);
       if (!matrix) return 0;
       return Math.round(Math.atan2(matrix.b, matrix.a) * (180 / Math.PI));
     };
@@ -210,24 +167,30 @@ export default function HomePage() {
     const sendTelemetry = () => {
       if (lionSymbol) telemetry.animations.lion_pulse_scale = getTransformScale(lionSymbol);
       if (crownTitle) telemetry.animations.crown_float_offset = getTranslateY(crownTitle);
-      telemetry.animations.pillar_icon_rotation = pillarIcons.map((icon) => getRotationDegrees(icon));
+
+      telemetry.animations.pillar_icon_rotation = Array.from(pillarIcons).map((icon) => getRotationDegrees(icon));
       telemetry.animations.cta_button_shimmer_position = ctaButton ? getTranslateY(ctaButton) : 0;
 
       fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(telemetry),
-      }).catch((err) => console.warn("Codex telemetry error:", err));
+        keepalive: true,
+      }).catch((error) => console.warn("Codex telemetry error:", error));
     };
 
-    const intervalId = window.setInterval(sendTelemetry, sendIntervalMs);
+    const telemetryInterval = window.setInterval(sendTelemetry, sendIntervalMs);
 
     return () => {
+      window.clearInterval(telemetryInterval);
       window.removeEventListener("scroll", onScroll);
       observer.disconnect();
-      cardListeners.forEach((remove) => remove());
-      ctaListeners.forEach((remove) => remove());
-      window.clearInterval(intervalId);
+      cardListeners.forEach(({ card, onEnter, onLeave }) => {
+        card.removeEventListener("mouseenter", onEnter);
+        card.removeEventListener("mouseleave", onLeave);
+      });
+      ctaButton?.removeEventListener("mouseenter", onCtaEnter);
+      ctaButton?.removeEventListener("mouseleave", onCtaLeave);
     };
   }, []);
 
