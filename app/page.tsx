@@ -3,6 +3,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { Cinzel, Cormorant_Garamond, Philosopher } from "next/font/google";
 
+declare global {
+  interface Window {
+    telemetry?: {
+      sequence: Array<{
+        type: "hover" | "click" | "scroll";
+        target?: string;
+        _visualized?: boolean;
+      }>;
+    };
+  }
+}
+
 const titleFont = Cinzel({ subsets: ["latin"], weight: ["600", "700"] });
 const subtitleFont = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600"] });
 const bodyFont = Philosopher({ subsets: ["latin"], weight: ["400", "700"] });
@@ -79,8 +91,117 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    const canvas = document.getElementById("neural-canvas") as HTMLCanvasElement | null;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+
+    const colors = {
+      hover: "rgba(0, 150, 57, 0.35)",
+      click: "rgba(227, 30, 36, 0.45)",
+      scroll: "rgba(253, 185, 19, 0.35)",
+    };
+
+    const nodes: Array<{ x: number; y: number; type: keyof typeof colors; life: number }> = [];
+    const maxNodes = 40;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const getCenter = (el: Element) => {
+      const rect = el.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      };
+    };
+
+    const addNode = (x: number, y: number, type: keyof typeof colors) => {
+      nodes.push({ x, y, type, life: 1 });
+      if (nodes.length > maxNodes) nodes.shift();
+    };
+
+    let animationFrame = 0;
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let index = 1; index < nodes.length; index += 1) {
+        const a = nodes[index - 1];
+        const b = nodes[index];
+
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = colors[b.type];
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      nodes.forEach((node) => {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = colors[node.type];
+        ctx.fill();
+        node.life -= 0.02;
+      });
+
+      for (let index = nodes.length - 1; index >= 0; index -= 1) {
+        if (nodes[index].life <= 0) nodes.splice(index, 1);
+      }
+
+      animationFrame = window.requestAnimationFrame(draw);
+    };
+
+    const processTelemetry = () => {
+      const lastEvent = window.telemetry?.sequence.slice(-1)[0];
+      if (!lastEvent || lastEvent._visualized) return;
+      lastEvent._visualized = true;
+
+      let x = window.innerWidth / 2;
+      let y = window.innerHeight / 2;
+
+      if (lastEvent.target) {
+        const element =
+          document.getElementById(lastEvent.target) ||
+          Array.from(document.querySelectorAll("*")).find((entry) => entry.textContent?.trim() === lastEvent.target);
+
+        if (element) {
+          const center = getCenter(element);
+          x = center.x;
+          y = center.y;
+        }
+      }
+
+      addNode(x, y, lastEvent.type);
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    draw();
+
+    const telemetryInterval = window.setInterval(processTelemetry, 120);
+
+    return () => {
+      window.clearInterval(telemetryInterval);
+      window.removeEventListener("resize", resizeCanvas);
+      window.cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
+  useEffect(() => {
     const endpoint = "codex.monitoring.input";
     const sendIntervalMs = 50;
+    window.telemetry = window.telemetry ?? { sequence: [] };
+
+    const pushEvent = (type: "hover" | "click" | "scroll", target?: string) => {
+      if (!window.telemetry) return;
+      window.telemetry.sequence.push({ type, target });
+      if (window.telemetry.sequence.length > 200) {
+        window.telemetry.sequence.shift();
+      }
+    };
+
     const telemetry = {
       page_load_time_ms: performance.now(),
       scroll_depth_percent: 0,
@@ -108,6 +229,7 @@ export default function HomePage() {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       telemetry.scroll_depth_percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      pushEvent("scroll");
 
       heroElements.forEach((element, index) => {
         const speed = (index + 1) * 0.1;
@@ -132,6 +254,7 @@ export default function HomePage() {
     const cardListeners = Array.from(pillarCards).map((card, index) => {
       const onEnter = () => {
         telemetry.hover.pillar_card_hovered = index;
+        pushEvent("hover", card.dataset.pillarId || card.id || "pillar");
       };
       const onLeave = () => {
         telemetry.hover.pillar_card_hovered = null;
@@ -143,13 +266,19 @@ export default function HomePage() {
 
     const onCtaEnter = () => {
       telemetry.hover.cta_button_hovered = true;
+      pushEvent("hover", ctaButton?.textContent?.trim() || "Enter the Pillars");
     };
     const onCtaLeave = () => {
       telemetry.hover.cta_button_hovered = false;
     };
 
+    const onCtaClick = () => {
+      pushEvent("click", ctaButton?.textContent?.trim() || "Enter the Pillars");
+    };
+
     ctaButton?.addEventListener("mouseenter", onCtaEnter);
     ctaButton?.addEventListener("mouseleave", onCtaLeave);
+    ctaButton?.addEventListener("click", onCtaClick);
 
     const parseTransform = (element: HTMLElement) => {
       const transform = window.getComputedStyle(element).transform;
@@ -191,6 +320,7 @@ export default function HomePage() {
       });
       ctaButton?.removeEventListener("mouseenter", onCtaEnter);
       ctaButton?.removeEventListener("mouseleave", onCtaLeave);
+      ctaButton?.removeEventListener("click", onCtaClick);
     };
   }, []);
 
@@ -246,6 +376,8 @@ export default function HomePage() {
         <p>© {year} Rasta Imperium · Jah Conciseness in motion.</p>
         <div className="rasta-stripe footer-stripe" />
       </footer>
+
+      <canvas id="neural-canvas" aria-hidden />
 
       <style jsx>{`
         .page {
@@ -402,6 +534,15 @@ export default function HomePage() {
         .footer-stripe {
           margin-top: 1rem;
           opacity: 0.65;
+        }
+
+        #neural-canvas {
+          position: fixed;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          z-index: 9999;
         }
 
         @keyframes crownShimmer {
