@@ -9,7 +9,7 @@
       { "path": "/consulting", "title": "Consulting", "component": "/app/consulting/page.tsx" },
       { "path": "/codex", "title": "Rastafarai Codex", "component": "/app/codex/page.tsx" },
       { "path": "/dashboard", "title": "Dashboard", "component": "/app/dashboard/page.tsx" },
-      { "path": "/dashboard/enterprise", "title": "Enterprise Dashboard", "component": "/app/dashboard/enterprise.tsx" }
+      { "path": "/dashboard/enterprise", "title": "Enterprise Dashboard", "component": "/app/dashboard/enterprise/page.tsx" }
     ],
     "nav": [
       { "label": "Home", "href": "/" },
