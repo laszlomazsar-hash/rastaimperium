@@ -1,7 +1,7 @@
 # Rasta Imperium Canonical Architecture
 
 ## Version & Ownership
-- Canonical architecture version: `3.5.0`
+- Canonical architecture version: `3.6.0`
 - Status: `active`
 - Source of truth: `docs/ARCHITECTURE_CANONICAL.md`
 - Machine-readable derivative: `config/blueprint-v3.5.json`
