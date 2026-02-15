@@ -19,6 +19,10 @@
     />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <style>
+      :root {
+        --rasta-gold: #d4af37;
+      }
+
       * {
         box-sizing: border-box;
         margin: 0;
@@ -204,6 +208,22 @@
       nav a:hover,
       nav a:focus {
         background: rgba(148, 163, 184, 0.35);
+      }
+
+      .nav a:focus-visible,
+      nav a:focus-visible {
+        outline: 2px solid var(--rasta-gold);
+        outline-offset: 3px;
+        background: rgba(148, 163, 184, 0.22);
+        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.45);
+      }
+
+      .cta-button:focus-visible,
+      .cta:focus-visible {
+        outline: 3px solid var(--rasta-gold);
+        outline-offset: 4px;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.35),
+          0 0 36px rgba(212, 175, 55, 0.55);
       }
 
       main {
