@@ -21,15 +21,15 @@ export default function EnterpriseDashboardPage() {
         <h2>Workspace Isolation & Permissions</h2>
         <ul>
           <li>Workspaces: {blueprint.enterprise.workspaces ? "✅" : "❌"}</li>
-          <li>Isolation mode: {blueprint.enterprise.workspaceModel?.isolation}</li>
-          <li>Role matrix: {blueprint.enterprise.workspaceModel?.roleMatrix.join(", ")}</li>
+          <li>Isolation mode: {blueprint.enterprise.workspaceModel.isolation}</li>
+          <li>Role matrix: {blueprint.enterprise.workspaceModel.roleMatrix.join(", ")}</li>
         </ul>
       </section>
 
       <section>
         <h2>Seat Allocation by Subscription Tier</h2>
         <ul>
-          {blueprint.enterprise.workspaceModel?.seatAllocation.map((seatTier) => (
+          {blueprint.enterprise.workspaceModel.seatAllocation.map((seatTier) => (
             <li key={seatTier.tier}>
               {seatTier.tier}: {seatTier.includedSeats} included seats, £{seatTier.extraSeatPrice} per extra seat
             </li>
@@ -51,8 +51,8 @@ export default function EnterpriseDashboardPage() {
           <p>No enterprise dashboards configured.</p>
         )}
         <p>
-          Consulting report cadence: {blueprint.telemetry?.consultingVisibility.reportCadence} | Linked dashboards:{" "}
-          {blueprint.telemetry?.consultingVisibility.linkedDashboards.join(", ")}
+          Consulting report cadence: {blueprint.telemetry.consultingVisibility.reportCadence} | Linked dashboards:{" "}
+          {blueprint.telemetry.consultingVisibility.linkedDashboards.join(", ")}
         </p>
       </section>
     </main>
