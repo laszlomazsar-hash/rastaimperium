@@ -47,7 +47,7 @@ export default function HomePage() {
           {blueprint.consulting.flagship.name} (£{blueprint.consulting.flagship.price})
         </h3>
         <ul>
-          {blueprint.consulting.flagship.features.map((feature, idx) => (
+          {(blueprint.consulting.flagship.features ?? []).map((feature, idx) => (
             <li key={idx}>{feature}</li>
           ))}
         </ul>
