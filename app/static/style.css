@@ -190,6 +190,37 @@ ul li {
   color: #cfd3ff;
 }
 
+
+.testimonials-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.testimonial-card {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  background: linear-gradient(150deg, rgba(212, 175, 55, 0.12), rgba(9, 13, 24, 0.95));
+}
+
+.testimonial-card blockquote {
+  margin: 0;
+  color: #f8f3de;
+}
+
+.testimonial-card figcaption {
+  margin-top: 0.7rem;
+  color: #dfc46b;
+  font-size: 0.9rem;
+}
+
+.testimonials-note {
+  margin-top: 0.9rem;
+  font-size: 0.95rem;
+}
+
 /* Page-specific tweaks */
 .page-presence .pillars-list li {
   margin-bottom: 0.9rem;
@@ -254,6 +285,10 @@ a:hover {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.2rem 1.5rem;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .page-recognition .pillar-links {
