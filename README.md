@@ -12,6 +12,13 @@ Powered by FastAPI, Jinja2, and a layered revelation framework.
 - `Procfile` — Railway deployment  
 - `requirements.txt` — Python dependencies  
 
+## Version & Source of Truth
+- Canonical architecture artifact: [`docs/ARCHITECTURE_CANONICAL.md`](docs/ARCHITECTURE_CANONICAL.md)
+- Machine-readable derivative: [`config/blueprint-v3.5.json`](config/blueprint-v3.5.json)
+- Validation command: `python scripts/validate_architecture_version.py`
+
+When architecture changes, update the canonical markdown first, then update both `version` and `metadata.architectureVersion` in the JSON derivative, run the validation command, and finally refresh this README section if links/versioning guidance changes.
+
 ## Live Site
 https://rastaimperium.com
 
