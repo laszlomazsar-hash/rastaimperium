@@ -358,6 +358,43 @@ ul{
       }
     });
 
+    function initLionScene(container) {
+      if (!window.THREE) {
+        return;
+      }
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        60,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+      renderer.setPixelRatio(window.devicePixelRatio || 1);
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+
+      camera.position.set(0, 0, 6);
+      renderer.render(scene, camera);
+    }
+
+    function bootstrapLionScene() {
+      const container = document.getElementById('lion-container');
+      if (!container) {
+        return;
+      }
+
+      try {
+        initLionScene(container);
+      } catch (error) {
+        console.error('Lion scene initialization failed:', error);
+      }
+    }
+
+    bootstrapLionScene();
+
     function show(id, el, event) {
       const evt = event || window.event;
       if (evt && evt.preventDefault) {
