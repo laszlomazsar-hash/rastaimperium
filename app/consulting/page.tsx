@@ -127,6 +127,14 @@ export default function ConsultingPage() {
           ))}
         </ul>
       </section>
+
+      <section>
+        <h2>Approved Sales Collateral</h2>
+        <p>Need the latest one-pager, pricing matrix, deck narrative, or objection notes?</p>
+        <p>
+          <a href="/sales-assets">Open the sales assets hub</a>
+        </p>
+      </section>
     </main>
   );
 }
