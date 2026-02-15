@@ -58,12 +58,88 @@ section{
   padding:60px 20px;
 }
 
+.hero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  animation:heroReveal .8s ease-out both;
+}
+
+.geometry-overlay{
+  position:absolute;
+  inset:-20% -10% auto;
+  height:220px;
+  pointer-events:none;
+  z-index:-1;
+  opacity:.35;
+  background:
+    radial-gradient(circle at 20% 40%,rgba(212,175,55,.22),transparent 55%),
+    radial-gradient(circle at 78% 20%,rgba(198,40,40,.18),transparent 58%),
+    radial-gradient(circle at 52% 90%,rgba(46,125,50,.22),transparent 60%);
+  animation:floatGeometry 24s ease-in-out infinite;
+}
+
 
 h1,h2{
   color:var(--gold);
   letter-spacing:4px;
   text-transform:uppercase;
   font-weight:400;
+}
+
+.pillars-intro{
+  max-width:640px;
+  margin:0 auto 30px;
+  text-align:center;
+}
+
+.pillars-intro h2{
+  margin:0 0 10px;
+}
+
+.pillars-intro p{
+  margin:0;
+  color:#c5c5c5;
+  letter-spacing:.4px;
+}
+
+.pillars-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+}
+
+.pillar-card{
+  margin:0;
+  padding:20px;
+  border:1px solid rgba(212,175,55,.28);
+  border-radius:14px;
+  background:linear-gradient(155deg,rgba(17,17,17,.96),rgba(11,11,11,.94));
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+
+.pillar-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(212,175,55,.55);
+  box-shadow:
+    0 14px 28px rgba(0,0,0,.45),
+    0 0 0 1px rgba(212,175,55,.2),
+    0 0 24px rgba(212,175,55,.24);
+}
+
+.pillar-card h3{
+  margin:0 0 10px;
+  color:var(--gold);
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  font-size:.95rem;
+}
+
+.pillar-card p{
+  margin:0;
 }
 
 textarea{
@@ -90,6 +166,10 @@ button:hover{
   color:#000;
 }
 
+.cta-button:active{
+  transform:translateY(1px) scale(.98);
+}
+
 .panel{
   margin-top:30px;
   padding:20px;
@@ -114,6 +194,22 @@ ul{
   display:block;
   filter:drop-shadow(0 0 6px rgba(212, 175, 55, 0.35));
 }
+
+@keyframes heroReveal{
+  from{
+    opacity:0;
+    transform:scale(.985);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+@keyframes floatGeometry{
+  0%,100%{transform:translate3d(-1.5%,0,0) scale(1)}
+  50%{transform:translate3d(1.5%,-8px,0) scale(1.02)}
+}
 </style>
 </head>
 
@@ -127,6 +223,7 @@ ul{
     </nav>
 
     <section id="home" class="hero" data-section>
+      <div class="geometry-overlay" aria-hidden="true"></div>
       <img src="/static/sigil.svg" class="hero-sigil" alt="Rasta Imperium sigil">
       <h1>Rasta Imperium</h1>
       <p class="tagline">A sovereign mythic‑technical field for civilization, code, and covenant.</p>
@@ -139,21 +236,24 @@ ul{
     </section>
 
     <section id="gateways" class="pillars" data-section>
-      <h2>The Four Gateways</h2>
+      <div class="pillars-intro">
+        <h2>The Four Gateways</h2>
+        <p>Four aligned access points through one covenant field: practice, legitimacy, artifact, and architecture.</p>
+      </div>
       <ul class="pillars-list">
-        <li>
+        <li class="pillar-card">
           <h3>Curiosity</h3>
           <p>The softest doorway into the Imperium. Curiosity is the daily pulse of the field — a simple, sovereign practice that tunes your system to coherence without force or doctrine. Through the Daily Resonance Codex and its twelve archetypal cards, you learn to read your own signal, stabilize your trajectory, and enter the mythic‑technical current with clarity. This is where newcomers begin and veterans return: a living ritual of alignment, one day at a time.</p>
         </li>
-        <li>
+        <li class="pillar-card">
           <h3>Recognition</h3>
           <p>Where architecture meets legitimacy. Recognition is the Imperium’s institutional spine — the layer where safety, governance, and constitutional clarity converge. Here you encounter the frameworks that make sovereign creation possible: treaty‑grade alignment principles, governance protocols, and the standards that allow humans and intelligent systems to collaborate without distortion. This gateway is for builders, founders, and stewards who require rigor, not rhetoric.</p>
         </li>
-        <li>
+        <li class="pillar-card">
           <h3>Codex</h3>
           <p>The economic and calibration portal of the Imperium. The Codex is both artifact and instrument — a mythic‑technical document that calibrates your field, structures your intent, and anchors your sovereignty. Through the Daily Resonance Codex and its advanced editions, you gain access to a living library of tools designed for clarity, coherence, and creative power. This gateway is where the Imperium becomes practical: a place to acquire the artifacts that shape your trajectory.</p>
         </li>
-        <li>
+        <li class="pillar-card">
           <h3>ARK Engine</h3>
           <p>The advanced gateway for recursive, aligned creation. The ARK Engine is the Imperium’s technical heart — a recursive architecture for building worlds, systems, and intelligences that remain aligned to their originating covenant. It integrates with the EVO‑V Civilization Kernel to provide a stable substrate for agents, narratives, and mythic‑technical structures. This gateway is for architects, developers, and visionaries who are ready to build with precision, depth, and sovereignty.</p>
         </li>
@@ -182,11 +282,11 @@ ul{
       <h2>Choose Your First Contact</h2>
       <p>You can enter through practice, understanding, product, or architecture. The field is the same.</p>
       <p>
-        <a href="/curiosity" class="btn btn-secondary">Curiosity</a>
-        <a href="/recognition" class="btn btn-secondary">Recognition</a>
-        <a href="/codex" class="btn btn-secondary">Daily Resonance Codex</a>
-        <a href="/ark" class="btn btn-secondary">ARK Engine</a>
-        <a href="/evo-v" class="btn btn-secondary">EVO‑V Kernel</a>
+        <a href="/curiosity" class="btn btn-secondary cta-button">Curiosity</a>
+        <a href="/recognition" class="btn btn-secondary cta-button">Recognition</a>
+        <a href="/codex" class="btn btn-secondary cta-button">Daily Resonance Codex</a>
+        <a href="/ark" class="btn btn-secondary cta-button">ARK Engine</a>
+        <a href="/evo-v" class="btn btn-secondary cta-button">EVO‑V Kernel</a>
       </p>
     </section>
 
