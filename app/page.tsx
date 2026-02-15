@@ -78,20 +78,173 @@ export default function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    const endpoint = "codex.monitoring.input";
+    const sendIntervalMs = 50;
+    const interactionSequence: Array<{
+      timestamp: number;
+      type: string;
+      target: string;
+      details: Record<string, unknown>;
+    }> = [];
+
+    const telemetry = {
+      page_load_time_ms: performance.now(),
+      scroll_depth_percent: 0,
+      visible_elements: [] as string[],
+      animations: {
+        lion_pulse_scale: 1,
+        crown_float_offset: 0,
+        cta_button_shimmer_position: 0,
+        pillar_icon_rotation: [] as number[],
+      },
+      hover: {
+        pillar_card_hovered: null as number | null,
+        cta_button_hovered: false,
+      },
+      sequence: interactionSequence,
+    };
+
+    const heroElements = document.querySelectorAll(".hero > *:not(.rasta-border)");
+    const pillarCards = Array.from(document.querySelectorAll<HTMLElement>(".pillar-card"));
+    const ctaButton = document.querySelector<HTMLElement>(".cta-button");
+    const pillarIcons = Array.from(document.querySelectorAll<HTMLElement>(".pillar-icon"));
+    const lionSymbol = document.querySelector<HTMLElement>(".lion-symbol");
+    const crownTitle = document.querySelector<HTMLElement>(".crown-title");
+
+    const logEvent = (type: string, target: string, details: Record<string, unknown> = {}) => {
+      interactionSequence.push({ timestamp: Date.now(), type, target, details });
+      if (interactionSequence.length > 500) interactionSequence.shift();
+    };
+
+    const onScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      telemetry.scroll_depth_percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      logEvent("scroll", "window", { scroll_percent: telemetry.scroll_depth_percent });
+
+      heroElements.forEach((el, index) => {
+        const speed = (index + 1) * 0.1;
+        (el as HTMLElement).style.transform = `translateY(${scrollTop * speed}px)`;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -100px 0px" };
+    const observer = new IntersectionObserver((entries) => {
+      telemetry.visible_elements = [];
+      entries.forEach((entry) => {
+        const title = entry.target.querySelector("h3")?.textContent?.trim();
+        const name = entry.target.id || title || "pillar";
+        if (entry.isIntersecting) {
+          telemetry.visible_elements.push(name);
+          logEvent("visible", name, { intersecting: true });
+        } else {
+          logEvent("visible", name, { intersecting: false });
+        }
+      });
+    }, observerOptions);
+
+    pillarCards.forEach((card) => observer.observe(card));
+
+    const cardListeners = pillarCards.flatMap((card, i) => {
+      const name = card.querySelector("h3")?.textContent?.trim() || `pillar-${i + 1}`;
+      const onMouseEnter = () => {
+        telemetry.hover.pillar_card_hovered = i;
+        logEvent("hover", name, { hovered: true });
+      };
+      const onMouseLeave = () => {
+        telemetry.hover.pillar_card_hovered = null;
+        logEvent("hover", name, { hovered: false });
+      };
+      const onClick = () => logEvent("click", name);
+
+      card.addEventListener("mouseenter", onMouseEnter);
+      card.addEventListener("mouseleave", onMouseLeave);
+      card.addEventListener("click", onClick);
+
+      return [
+        () => card.removeEventListener("mouseenter", onMouseEnter),
+        () => card.removeEventListener("mouseleave", onMouseLeave),
+        () => card.removeEventListener("click", onClick),
+      ];
+    });
+
+    const ctaListeners: Array<() => void> = [];
+    if (ctaButton) {
+      const onMouseEnter = () => {
+        telemetry.hover.cta_button_hovered = true;
+        logEvent("hover", "CTA_BUTTON", { hovered: true });
+      };
+      const onMouseLeave = () => {
+        telemetry.hover.cta_button_hovered = false;
+        logEvent("hover", "CTA_BUTTON", { hovered: false });
+      };
+      const onClick = () => logEvent("click", "CTA_BUTTON");
+
+      ctaButton.addEventListener("mouseenter", onMouseEnter);
+      ctaButton.addEventListener("mouseleave", onMouseLeave);
+      ctaButton.addEventListener("click", onClick);
+
+      ctaListeners.push(
+        () => ctaButton.removeEventListener("mouseenter", onMouseEnter),
+        () => ctaButton.removeEventListener("mouseleave", onMouseLeave),
+        () => ctaButton.removeEventListener("click", onClick)
+      );
+    }
+
+    const toMatrix = (el: HTMLElement) => {
+      const transform = window.getComputedStyle(el).transform;
+      return transform && transform !== "none" ? new DOMMatrixReadOnly(transform) : null;
+    };
+
+    const getTransformScale = (el: HTMLElement) => toMatrix(el)?.a ?? 1;
+    const getTranslateY = (el: HTMLElement) => toMatrix(el)?.m42 ?? 0;
+    const getRotationDegrees = (el: HTMLElement) => {
+      const matrix = toMatrix(el);
+      if (!matrix) return 0;
+      return Math.round(Math.atan2(matrix.b, matrix.a) * (180 / Math.PI));
+    };
+
+    const sendTelemetry = () => {
+      if (lionSymbol) telemetry.animations.lion_pulse_scale = getTransformScale(lionSymbol);
+      if (crownTitle) telemetry.animations.crown_float_offset = getTranslateY(crownTitle);
+      telemetry.animations.pillar_icon_rotation = pillarIcons.map((icon) => getRotationDegrees(icon));
+      telemetry.animations.cta_button_shimmer_position = ctaButton ? getTranslateY(ctaButton) : 0;
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(telemetry),
+      }).catch((err) => console.warn("Codex telemetry error:", err));
+    };
+
+    const intervalId = window.setInterval(sendTelemetry, sendIntervalMs);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+      cardListeners.forEach((remove) => remove());
+      ctaListeners.forEach((remove) => remove());
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
   const year = useMemo(() => new Date().getFullYear(), []);
 
   return (
     <main className={`${bodyFont.className} page`}>
       <section className="hero">
         <div className="hero-inner">
-          <div className="lion" aria-hidden>
+          <div className="lion lion-symbol" aria-hidden>
             🦁
           </div>
           <h1 className={`${titleFont.className} crown-title`}>Rasta Imperium</h1>
           <p className={`${subtitleFont.className} sacred-subtitle`}>
             Sacred Design System — Living front-end of the Imperium
           </p>
-          <a className="cta" href="#pillars">
+          <a className="cta cta-button" href="#pillars">
             Enter the Pillars
           </a>
           <div className="scroll-indicator" aria-hidden>
