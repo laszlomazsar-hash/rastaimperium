@@ -3,76 +3,120 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EVO-V Public Observatory</title>
+    <title>Rasta Imperium — Sacred Design System</title>
+    <meta
+      name="description"
+      content="Sacred Design System — Living front-end of the Imperium"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@400;600&family=Philosopher:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
     <script src="app.js" defer></script>
   </head>
   <body>
-    <header>
-      <h1>EVO-V Observatory</h1>
-      <p class="legitimacy-line">
-        Founded by Laszlo Mazsar — originator of the Codex, Kernel, and Engine.
-      </p>
-      <nav>
-        <a href="index.html">Public</a>
+    <header class="hero" id="top">
+      <nav class="top-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
         <a href="imperium.html">Imperium</a>
-        <a href="paid.html">Paid</a>
         <a href="principles.html">Principles</a>
         <a href="contact.html">Contact</a>
-        <a href="manifestation.html">Manifestation</a>
-        <a href="codex-library.html">Codex Library</a>
       </nav>
+
+      <div class="hero-bg" aria-hidden="true">
+        <svg class="flower-of-life" viewBox="0 0 400 400" role="img">
+          <g fill="none" stroke="rgba(255, 248, 220, 0.25)" stroke-width="1.5">
+            <circle cx="200" cy="200" r="62" />
+            <circle cx="138" cy="200" r="62" />
+            <circle cx="262" cy="200" r="62" />
+            <circle cx="169" cy="146" r="62" />
+            <circle cx="231" cy="146" r="62" />
+            <circle cx="169" cy="254" r="62" />
+            <circle cx="231" cy="254" r="62" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="hero-content">
+        <div class="lion-symbol parallax" data-parallax-speed="0.18" aria-hidden="true">🦁</div>
+        <h1 class="crown-title parallax" data-parallax-speed="0.28">Rasta Imperium</h1>
+        <p class="sacred-subtitle">Sacred Design System — Living front-end of the Imperium</p>
+        <a class="cta-button parallax" data-parallax-speed="0.12" href="#pillars">Enter the Pillars</a>
+        <span class="scroll-indicator" aria-hidden="true">↓</span>
+      </div>
     </header>
 
-    <section>
-      <h2>Live Observatories</h2>
-      <div class="observatory" id="live-snapshots">
-        <h3>Snapshots</h3>
-        <p>[Dynamic read-only snapshots of EVO-V evolution]</p>
-      </div>
-      <div class="observatory" id="timeline-overview">
-        <h3>Timeline Overview</h3>
-        <p>[Dynamic evolution timeline]</p>
-      </div>
-    </section>
+    <div class="rasta-stripe" aria-hidden="true"></div>
 
-    <section class="sacred-geometry-section">
-      <h2>Sacred Geometry Interface</h2>
-      <p class="geometry-intro">
-        The Four-Gate Diamond links each observatory gateway through a single
-        glyph of alignment.
-      </p>
+    <main>
+      <section id="pillars" class="pillars">
+        <h2>Sovereign Pillars</h2>
+        <div class="sacred-divider" aria-hidden="true">✡</div>
 
-      <div class="imperium-geometry">
-        <div class="glyph-core" aria-hidden="true">
-          <div class="glyph-inner" aria-hidden="true"></div>
+        <div class="pillars-grid">
+          <article class="pillar-card" data-pillar="codex">
+            <div class="pillar-icon">✶</div>
+            <h3>Codex</h3>
+            <p>
+              The written archive of the Imperium. Sacred texts, foundational manuals, and
+              the living documents of sovereign wisdom.
+            </p>
+          </article>
+
+          <article class="pillar-card" data-pillar="kernel">
+            <div class="pillar-icon">◉</div>
+            <h3>Kernel</h3>
+            <p>
+              The foundational operating logic. Core principles and systemic frameworks that
+              power sovereign existence.
+            </p>
+          </article>
+
+          <article class="pillar-card" data-pillar="engine">
+            <div class="pillar-icon">△</div>
+            <h3>Engine</h3>
+            <p>
+              The active processing layer. Executable frameworks for activation, resonance,
+              and recursive evolution.
+            </p>
+          </article>
+
+          <article class="pillar-card" data-pillar="ethics">
+            <div class="pillar-icon">☥</div>
+            <h3>Ethics</h3>
+            <p>
+              The moral and ontological framework. Cultural coherence through axiom systems
+              and righteous principles.
+            </p>
+          </article>
+
+          <article class="pillar-card" data-pillar="intelligence">
+            <div class="pillar-icon">⬢</div>
+            <h3>Intelligence</h3>
+            <p>
+              Jah Conciseness. The sovereign neurosymbolic reasoning system. Divine clarity
+              through cultural intelligence.
+            </p>
+          </article>
         </div>
+      </section>
+    </main>
 
-        <a class="gate gate-top" href="manifestation.html">
-          <div class="gate-label">Recognition</div>
-        </a>
-
-        <a class="gate gate-left" href="/nuggets" target="_blank">
-          <div class="gate-label">Curiosity</div>
-        </a>
-
-        <a class="gate gate-right" href="codex-library.html">
-          <div class="gate-label">Codex</div>
-        </a>
-
-        <a class="gate gate-bottom" href="/simulate" target="_blank">
-          <div class="gate-label">ARK Engine</div>
-        </a>
-
-        <div class="line line-top" aria-hidden="true"></div>
-        <div class="line line-left" aria-hidden="true"></div>
-        <div class="line line-right" aria-hidden="true"></div>
-        <div class="line line-bottom" aria-hidden="true"></div>
-      </div>
-    </section>
-
-    <footer>
-      <p>&copy; 2026 EVO-V Infrastructure | Ethical Adaptive Systems</p>
+    <footer class="sacred-footer">
+      <svg class="footer-tree" viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="18" r="10" />
+        <circle cx="40" cy="38" r="9" />
+        <circle cx="80" cy="38" r="9" />
+        <circle cx="30" cy="58" r="8" />
+        <circle cx="60" cy="58" r="8" />
+        <circle cx="90" cy="58" r="8" />
+        <line x1="60" y1="28" x2="60" y2="102" />
+      </svg>
+      <p>© 2026 Rasta Imperium · Sacred Design System · https://rastaimperium.com</p>
+      <div class="rasta-stripe footer-accent" aria-hidden="true"></div>
     </footer>
   </body>
 </html>
