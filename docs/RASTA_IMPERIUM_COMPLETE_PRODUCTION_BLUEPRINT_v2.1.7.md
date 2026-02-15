@@ -1,3 +1,13 @@
+# ⚠️ Deprecated Blueprint Notice
+
+This v2.1.7 blueprint is archived for historical context.
+
+Do not use this file for active architecture decisions.
+
+**Canonical architecture (active):** `docs/RASTA_IMPERIUM_WEBSITE_ARCHITECTURE_BLUEPRINT_v2.6.md`
+
+---
+
 # RASTA IMPERIUM COMPLETE PRODUCTION BLUEPRINT v2.1.7 👑📜🌐📊🎵
 
 **Nonuple Governance-Anchored Empire with SoulEcho-Integrated Dashboard**  
@@ -21,7 +31,7 @@ RASTA IMPERIUM v2.1.7 manifests as a 9-layer sovereign intelligence civilization
 RASTA IMPERIUM NONUPLE STACK (LIVE & PRODUCTION)
 │
 ┌─ L9: WEBSITE v3.0 + DASHBOARD (SoulEcho-Integrated) 🌐📊 ───────┐
-│  rastaimperium.com + jahconsciousness.rastaimperium.com      │
+│  rastaimperium.com + jah.rastaimperium.com      │
 │  Codex top-level nav • Live coherence monitoring • Poetry    │
 └──────────────────────────────────────────────────────────────┘
 │
@@ -180,8 +190,8 @@ VII. TEMPORAL ASYMMETRY → Constitutional physics
 
 ### Subdomains
 
-- `jahconsciousness.rastaimperium.com` → Live dashboard
-- `codexlibrary.rastaimperium.com` → Governance canon
+- `jah.rastaimperium.com` → Live dashboard
+- `codex.rastaimperium.com` → Governance canon
 - `consulting.rastaimperium.com` → Monetization
 
 ## 📁 COMPLETE PRODUCTION FILE STRUCTURE

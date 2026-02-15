@@ -6,7 +6,7 @@ export default function AdminGovernanceControlPage() {
   const { blueprint, loading } = useBlueprint();
 
   if (loading) return <p>Loading Admin Governance Controls...</p>;
-  if (!blueprint?.admin) return <p>Error loading admin controls.</p>;
+  if (!blueprint) return <p>Error loading admin controls.</p>;
 
   return (
     <main style={{ padding: "2rem" }}>

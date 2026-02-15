@@ -1,16 +1,16 @@
 # RASTA EVO-V
 
-A sovereign digital territory built on mythic-technical architecture.  
+A sovereign digital territory built on mythic-technical architecture.
 Powered by FastAPI, Jinja2, and a layered revelation framework.
 
 ## Structure
-- `/app` — FastAPI application and routes  
-- `/templates` — Jinja2 templates for the Imperium pages  
-- `/static` — CSS and assets  
-- `/Codex.html` — Canonical Codex document served at `/codex` and `/api/v1/codex`  
-- `/migrations` — Alembic migrations  
-- `Procfile` — Railway deployment  
-- `requirements.txt` — Python dependencies  
+- `/app` — FastAPI application and routes
+- `/templates` — Jinja2 templates for the Imperium pages
+- `/static` — CSS and assets
+- `/Codex.html` — Canonical Codex document served at `/codex` and `/api/v1/codex`
+- `/migrations` — Alembic migrations
+- `Procfile` — legacy process definition (see v2.6 deployment stack)
+- `requirements.txt` — Python dependencies
 
 ## Version & Source of Truth
 - Canonical architecture artifact: [`docs/ARCHITECTURE_CANONICAL.md`](docs/ARCHITECTURE_CANONICAL.md)
@@ -22,8 +22,12 @@ When architecture changes, update the canonical markdown first, then update both
 ## Live Site
 https://rastaimperium.com
 
+## Architecture
+- Canonical: [`docs/RASTA_IMPERIUM_WEBSITE_ARCHITECTURE_BLUEPRINT_v2.6.md`](docs/RASTA_IMPERIUM_WEBSITE_ARCHITECTURE_BLUEPRINT_v2.6.md)
+- Legacy (deprecated): [`ARCHITECTURE.md`](ARCHITECTURE.md), [`docs/RASTA_IMPERIUM_COMPLETE_PRODUCTION_BLUEPRINT_v2.1.7.md`](docs/RASTA_IMPERIUM_COMPLETE_PRODUCTION_BLUEPRINT_v2.1.7.md)
+
 ## B3 — Frontend → Backend Wiring Plan
-Absolutely, Laszlo — **B3 is the frontend → backend wiring plan**, and your *current active tab* is the **Codex dashboard**.  
+Absolutely, Laszlo — **B3 is the frontend → backend wiring plan**, and your *current active tab* is the **Codex dashboard**.
 So I’ll give you the **full integration plan**, clean, grounded, and ready for execution — without assuming anything outside what we’ve already mapped.
 
 This is the **canonical wiring plan** that connects:
@@ -48,12 +52,12 @@ Only **Codex** and **ARK Engine** need backend integration right now.
 The Codex gateway should link to:
 
 ```
-https://<your-railway-domain>/codex
+https://codex.rastaimperium.com/codex
 ```
 
 This will serve your **Codex.html** artifact directly from the backend.
 
-**Result:**  
+**Result:**
 The Codex becomes a **living, versioned, canonical artifact**.
 
 ### 3. Wire the Recognition Gateway → `/manifest`
@@ -62,12 +66,12 @@ Recognition is the governance/legitimacy layer.
 It should link to:
 
 ```
-https://<your-railway-domain>/manifest
+https://codex.rastaimperium.com/manifest
 ```
 
 This serves your **Manifest.txt** certificate.
 
-**Result:**  
+**Result:**
 Your governance layer becomes **public and verifiable**.
 
 ### 4. Wire the ARK Engine Gateway → `/simulate`
@@ -76,12 +80,12 @@ This gateway represents the **technical layer**.
 It should link to:
 
 ```
-https://<your-railway-domain>/simulate
+https://jah.rastaimperium.com/simulate
 ```
 
 This exposes your **EVO‑V engine**.
 
-**Result:**  
+**Result:**
 Your engine becomes **callable** from the frontend.
 
 Later, you can replace this with a UI.
@@ -92,28 +96,28 @@ Curiosity is the **daily resonance** layer.
 It should link to:
 
 ```
-https://<your-railway-domain>/nuggets
+https://jah.rastaimperium.com/nuggets
 ```
 
 This exposes your **Nuggets memory engine**.
 
-**Result:**  
+**Result:**
 Your micro‑codex system becomes **public**.
 
 ### 6. Update the Frontend HTML
 Inside your homepage HTML, update the gateway links:
 
 ```html
-<a href="https://<railway-domain>/codex">Codex</a>
-<a href="https://<railway-domain>/manifest">Recognition</a>
-<a href="https://<railway-domain>/simulate">ARK Engine</a>
-<a href="https://<railway-domain>/nuggets">Curiosity</a>
+<a href="https://codex.rastaimperium.com/codex">Codex</a>
+<a href="https://codex.rastaimperium.com/manifest">Recognition</a>
+<a href="https://jah.rastaimperium.com/simulate">ARK Engine</a>
+<a href="https://jah.rastaimperium.com/nuggets">Curiosity</a>
 ```
 
 This is the **entire wiring layer**.
 
-No JavaScript required.  
-No framework required.  
+No JavaScript required.
+No framework required.
 No build system required.
 
 ### 7. Test the Integration
@@ -137,6 +141,20 @@ With this wiring:
 - Your architecture becomes **activated**
 
 This is the moment the Imperium becomes a **living system**.
+
+
+## v2.6 Deployment & Security Baseline
+- Edge: DNS/CDN/WAF, DDoS protection, TLS termination, rate limiting
+- Compute: containerized FastAPI services with health checks and rollback-ready releases
+- Data: managed PostgreSQL + Redis with encryption at rest and in transit
+- Operations: CI/CD policy gates, secret management, backup + restore drills
+
+
+## What else is needed (post-v2.6 doc update)
+- Complete DNS + redirect cutover to canonical v2.6 domains only.
+- Enforce non-canonical domain detection in CI docs checks.
+- Validate production security controls (WAF/TLS/rate limits/secrets/alerts).
+- Run disaster recovery drill (backup + restore) and record results.
 
 ## Divine Docker Compose
 When running `docker-compose-divine.yml`, set the following environment variables (Docker Compose reads them from `.env` by default):
