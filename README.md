@@ -19,6 +19,14 @@ Powered by FastAPI, Jinja2, and a layered revelation framework.
 
 When architecture changes, update the canonical markdown first, then update both `version` and `metadata.architectureVersion` in the JSON derivative, run the validation command, and finally refresh this README section if links/versioning guidance changes.
 
+
+## Sales Assets Module
+- Source-of-truth collateral: [`docs/sales/`](docs/sales/)
+- Web discovery surface: `/consulting` links to `/sales-assets`
+- Export build command: `bash docs/sales/build-exports.sh`
+
+Versioning and update cadence for sales collateral are defined in [`docs/sales/README.md`](docs/sales/README.md).
+
 ## Live Site
 https://rastaimperium.com
 
