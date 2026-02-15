@@ -362,6 +362,13 @@ ul{
       reducedMotionMediaQuery.addListener(applyMotionPreference);
     }
 
+    if (window.THREE && window.THREE.GLTFLoader) {
+      const loader = new window.THREE.GLTFLoader();
+      loader.load("/static/models/lion.glb", () => {
+        // Model is available from the static mount for scenes that use it.
+      });
+    }
+
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", (event) => {
         event.preventDefault();
