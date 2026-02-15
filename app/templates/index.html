@@ -292,6 +292,18 @@ ul{
 
   </main>
   <script>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", (event) => {
+        event.preventDefault();
+        const targetSelector = anchor.getAttribute("href");
+        document.querySelector(targetSelector)?.scrollIntoView({
+          behavior: prefersReducedMotion ? 'auto' : 'smooth'
+        });
+      });
+    });
+
     function show(id, el, event) {
       const evt = event || window.event;
       if (evt && evt.preventDefault) {
