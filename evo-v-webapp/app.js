@@ -15,6 +15,103 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const endpoint = 'codex.monitoring.input';
+  const telemetryRenderState = new WeakSet();
+
+  const setupInteractionOverlay = () => {
+    const overlay = document.createElement('div');
+    overlay.id = 'interaction-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.pointerEvents = 'none';
+    overlay.style.zIndex = '9999';
+
+    const colors = {
+      onScroll: 'rgba(253, 185, 19, 0.3)',
+      onHover: 'rgba(0, 150, 57, 0.5)',
+      onIntersectionChange: 'rgba(0, 150, 57, 0.5)',
+      codex_system: 'rgba(253, 185, 19, 0.25)',
+      onAnimationFrame: 'rgba(227, 30, 36, 0.35)'
+    };
+
+    const drawEvent = (x, y, type) => {
+      const circle = document.createElement('div');
+      circle.style.position = 'absolute';
+      circle.style.left = `${x}px`;
+      circle.style.top = `${y}px`;
+      circle.style.width = '16px';
+      circle.style.height = '16px';
+      circle.style.borderRadius = '50%';
+      circle.style.background = colors[type] || 'rgba(255, 255, 255, 0.65)';
+      circle.style.opacity = '0.7';
+      circle.style.pointerEvents = 'none';
+      circle.style.transition = 'all 1.2s ease-out';
+      overlay.appendChild(circle);
+      setTimeout(() => circle.remove(), 1200);
+    };
+
+    const scrollLine = document.createElement('div');
+    scrollLine.style.position = 'fixed';
+    scrollLine.style.top = '0';
+    scrollLine.style.left = '0';
+    scrollLine.style.height = '4px';
+    scrollLine.style.background = colors.onScroll;
+    scrollLine.style.width = '0%';
+    scrollLine.style.zIndex = '10000';
+    overlay.appendChild(scrollLine);
+
+    const updateScrollLine = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      scrollLine.style.width = `${percent}%`;
+    };
+
+    const getTargetCenter = (payload) => {
+      const target =
+        payload?.pillar_card_hovered ||
+        payload?.pillar_card_index ||
+        (payload?.cta_button_hovered ? 'cta-button' : null);
+
+      if (typeof target === 'number') {
+        const cards = document.querySelectorAll('.pillar-card');
+        const card = cards[target];
+        if (card) {
+          const rect = card.getBoundingClientRect();
+          return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+        }
+      }
+
+      if (target) {
+        const el = document.querySelector(`[data-pillar="${target}"], .${target}`);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+        }
+      }
+
+      return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    };
+
+    document.body.appendChild(overlay);
+    window.addEventListener('scroll', updateScrollLine, { passive: true });
+    updateScrollLine();
+
+    return (packet) => {
+      if (telemetryRenderState.has(packet)) {
+        return;
+      }
+      telemetryRenderState.add(packet);
+
+      const center = getTargetCenter(packet.payload);
+      drawEvent(center.x, center.y, packet.type);
+    };
+  };
+
+  const renderTelemetry = setupInteractionOverlay();
 
   const sendTelemetry = (type, payload) => {
     const packet = {
@@ -26,6 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (eventLog[type]) {
       eventLog[type].push(packet);
     }
+
+    renderTelemetry(packet);
+
     window.codexObservability = {
       metrics,
       eventLog
