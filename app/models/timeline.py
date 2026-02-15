@@ -1,8 +1,8 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy import Column, DateTime, Integer, String, Text
 from sqlalchemy.sql import func
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from app.core.database import Base
+
 
 class TimelineEntry(Base):
     __tablename__ = "timeline_records"

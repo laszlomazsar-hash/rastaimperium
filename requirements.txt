@@ -9,3 +9,6 @@ fpdf>=1.7.2
 matplotlib>=3.8.0
 numpy>=1.26.0
 seaborn>=0.13.0
+sqlalchemy>=2.0.0
+alembic>=1.13.0
+email-validator>=2.1.0
