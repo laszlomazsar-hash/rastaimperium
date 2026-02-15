@@ -15,7 +15,7 @@ export default function EnterpriseDashboardPage() {
   return (
     <main style={{ padding: "2rem" }}>
       <h1>🏢 Enterprise Dashboard</h1>
-      <p>Enterprise-specific governance and platform metrics.</p>
+      <p>Workspace-isolated governance metrics with seat allocation and subscription tier policy.</p>
 
       <section>
         <h2>Enterprise Capabilities</h2>
@@ -29,6 +29,7 @@ export default function EnterpriseDashboardPage() {
             Calls {blueprint.enterprise.usageBilling.apiCalls ? "✅" : "❌"}, Seats{" "}
             {blueprint.enterprise.usageBilling.seats ? "✅" : "❌"}
           </li>
+          <li>Multi-seat allocation: ✅</li>
         </ul>
       </section>
 
