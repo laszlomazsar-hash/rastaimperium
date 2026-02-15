@@ -1,7 +1,12 @@
 {
-  "version": "v3.5",
+  "version": "3.5.0",
   "title": "Rasta Imperium — Constitutional AI Governance",
   "description": "A codex-driven governance platform with dashboards, consulting, enterprise workspaces, and subscription revenue.",
+  "metadata": {
+    "architectureVersion": "3.5.0",
+    "sourceOfTruth": "docs/ARCHITECTURE_CANONICAL.md",
+    "artifactRole": "machine-readable-derivative"
+  },
   "website": {
     "domain": "rastaimperium.com",
     "pages": [
