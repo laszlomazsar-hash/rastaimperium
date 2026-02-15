@@ -8,7 +8,8 @@ class Settings(BaseSettings):
     REDIS_PORT: int = 6379
     REDIS_DB: int = 0
     REDIS_PASSWORD: str | None = None
-    SHOW_DOCS: bool = True 
+    SHOW_DOCS: bool = True
+    ADMIN_API_TOKEN: str | None = None
 
     @field_validator("REDIS_URL", mode="after")
     def assemble_redis_url(cls, value, info):
