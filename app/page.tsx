@@ -91,6 +91,116 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    const heatCanvas = document.createElement("canvas");
+    heatCanvas.id = "heatmap-canvas";
+    Object.assign(heatCanvas.style, {
+      position: "fixed",
+      inset: "0",
+      pointerEvents: "none",
+      zIndex: "9998",
+    });
+
+    document.body.appendChild(heatCanvas);
+
+    const ctx = heatCanvas.getContext("2d");
+    if (!ctx) {
+      heatCanvas.remove();
+      return;
+    }
+
+    const resize = () => {
+      heatCanvas.width = window.innerWidth;
+      heatCanvas.height = window.innerHeight;
+    };
+
+    const getCenter = (el: Element) => {
+      const rect = el.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      };
+    };
+
+    const heatPoints: Array<{ x: number; y: number; life: number }> = [];
+    const addHeat = (x: number, y: number) => heatPoints.push({ x, y, life: 1 });
+
+    const resolveEventPosition = (target?: string) => {
+      if (!target) {
+        return {
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+        };
+      }
+
+      const element =
+        document.getElementById(target) ||
+        Array.from(document.querySelectorAll("*")).find((entry) => entry.textContent?.trim() === target);
+
+      if (!element) {
+        return {
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+        };
+      }
+
+      return getCenter(element);
+    };
+
+    let animationFrame = 0;
+    const drawHeat = () => {
+      ctx.clearRect(0, 0, heatCanvas.width, heatCanvas.height);
+
+      heatPoints.forEach((point) => {
+        const radius = 60;
+        const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius);
+        gradient.addColorStop(0, `rgba(253,185,19,${0.28 * point.life})`);
+        gradient.addColorStop(1, "rgba(253,185,19,0)");
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        point.life -= 0.01;
+      });
+
+      for (let index = heatPoints.length - 1; index >= 0; index -= 1) {
+        if (heatPoints[index].life <= 0) heatPoints.splice(index, 1);
+      }
+
+      animationFrame = window.requestAnimationFrame(drawHeat);
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    drawHeat();
+
+    let lastProcessedIndex = 0;
+    const telemetryInterval = window.setInterval(() => {
+      const sequence = window.telemetry?.sequence;
+      if (!sequence || sequence.length === 0) return;
+
+      if (sequence.length < lastProcessedIndex) {
+        lastProcessedIndex = 0;
+      }
+
+      for (let index = lastProcessedIndex; index < sequence.length; index += 1) {
+        const point = resolveEventPosition(sequence[index].target);
+        addHeat(point.x, point.y);
+      }
+
+      lastProcessedIndex = sequence.length;
+    }, 120);
+
+    return () => {
+      window.clearInterval(telemetryInterval);
+      window.removeEventListener("resize", resize);
+      window.cancelAnimationFrame(animationFrame);
+      heatCanvas.remove();
+    };
+  }, []);
+
+  useEffect(() => {
     const canvas = document.getElementById("neural-canvas") as HTMLCanvasElement | null;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
