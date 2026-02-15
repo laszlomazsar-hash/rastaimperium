@@ -2,24 +2,40 @@
 
 import { useEffect, useState } from "react";
 
-type RealtimeMetric = {
+export type RealtimeAlert = {
+  id: string;
+  message: string;
+  severity: "ok" | "warn" | "error";
+  source: "coherence-monitor" | "operator" | "system";
+  createdAt: string;
+};
+
+export interface RealtimeMetricsSnapshot {
   activeUsers: number;
   websocketLatencyMs: number;
   coherence: number;
   alerts: string[];
+  alertFeed: RealtimeAlert[];
+  coherenceHistory: number[];
   updatedAt: string;
-};
+}
 
-const initialMetric: RealtimeMetric = {
+const initialMetric: RealtimeMetricsSnapshot = {
   activeUsers: 18,
   websocketLatencyMs: 64,
   coherence: 97.2,
   alerts: ["No active deviations"],
+  alertFeed: [],
+  coherenceHistory: [96.8, 97.0, 97.1, 97.2],
   updatedAt: new Date().toISOString(),
 };
 
-export function useRealtimeMetrics() {
-  const [metric, setMetric] = useState<RealtimeMetric>(initialMetric);
+/**
+ * Temporary adapter until realtime WebSocket / API integration lands.
+ * Keeps a stable interface expected by dashboard presentation components.
+ */
+export function useRealtimeMetrics(): RealtimeMetricsSnapshot {
+  const [metric, setMetric] = useState<RealtimeMetricsSnapshot>(initialMetric);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,6 +50,19 @@ export function useRealtimeMetrics() {
           websocketLatencyMs: latency,
           coherence,
           alerts,
+          alertFeed:
+            coherence < 96.4
+              ? [
+                  {
+                    id: `${Date.now()}`,
+                    message: "Layer deviation detected — review trace",
+                    severity: "warn",
+                    source: "coherence-monitor",
+                    createdAt: new Date().toISOString(),
+                  },
+                ]
+              : [],
+          coherenceHistory: [...previous.coherenceHistory.slice(-11), coherence],
           updatedAt: new Date().toISOString(),
         };
       });

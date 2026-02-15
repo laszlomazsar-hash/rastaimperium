@@ -4,8 +4,19 @@ import { useMemo } from "react";
 
 import { AlertWidget } from "../components/AlertWidget";
 import { CodexCompliance } from "../components/CodexCompliance";
+import {
+  CardGrid,
+  DashboardShell,
+  LineChart,
+  PanelCard,
+  StatCard,
+  StatusChip,
+  Timeline,
+  TrendRow,
+} from "../components/DashboardLayout";
 import { useBlueprint } from "../../hooks/useBlueprint";
 import { useRealtimeMetrics } from "../../hooks/useRealtimeMetrics";
+import { mapCoherenceTrend, mapLayerCoherenceSeries, mapMutationTimeline, mapSeverity } from "./viewModels";
 
 const DASHBOARD_LAYER_COUNT = 9;
 const LAYER_JITTER_PATTERN = [-0.3, 0.3] as const;
@@ -39,83 +50,92 @@ export default function Dashboard() {
   if (loading) return <p>Loading Dashboard...</p>;
   if (!blueprint) return <p>Error loading blueprint.</p>;
 
+  const coherenceTrend = mapCoherenceTrend(realtime);
+  const coherenceBars = mapLayerCoherenceSeries(blueprint);
+  const mutationTimeline = mapMutationTimeline(blueprint);
+
   return (
-    <main style={{ padding: "2rem", display: "grid", gap: "1rem" }}>
+    <DashboardShell>
       <h1>🌐 SoulEcho Dashboard</h1>
-      <p>Real-time governance metrics with subscription-gated and enterprise widgets.</p>
+      <p>Modern governance command center with cards, trend rows, and chart-driven insights.</p>
 
-      <section>
-        <h2>Real-time Metrics</h2>
-        <p>
-          Transport: {blueprint.platform.realtimeMetrics.transport} | Public demo access: {blueprint.platform.realtimeMetrics.publicDemoAccess ? "✅" : "❌"}
-        </p>
-        <ul>
-          <li>Active users: {realtime.activeUsers}</li>
-          <li>WebSocket latency: {realtime.websocketLatencyMs}ms</li>
-          <li>Global coherence: {realtime.coherence}%</li>
-          <li>Alerts: {alertSummary}</li>
-          <li>Updated: {new Date(realtime.updatedAt).toLocaleTimeString()}</li>
-        </ul>
-      </section>
+      <CardGrid>
+        <StatCard label="Active Users" value={String(realtime.activeUsers)} detail={`Updated ${new Date(realtime.updatedAt).toLocaleTimeString()}`} />
+        <StatCard label="WebSocket Latency" value={`${realtime.websocketLatencyMs}ms`} detail={`Transport: ${blueprint.platform.realtimeMetrics.transport}`} />
+        <StatCard label="Global Coherence" value={`${realtime.coherence}%`} detail={alertSummary} />
+        <StatCard
+          label="Demo Access"
+          value={blueprint.platform.realtimeMetrics.publicDemoAccess ? "Enabled" : "Disabled"}
+          detail="Public demonstration endpoint"
+        />
+      </CardGrid>
 
-      <section>
-        <h2>Layer Coherence (L1-L9)</h2>
-        <ul>
-          {blueprint.platform.layerCoherenceScores.map((layer) => (
-            <li key={layer.layer}>
-              L{layer.layer} {layer.name}: {layer.score}%
-            </li>
-          ))}
-        </ul>
-      </section>
+      <CardGrid>
+        <PanelCard title="Realtime Trends" subtitle="Rolling coherence trend and operating health.">
+          <LineChart data={coherenceTrend} />
+          <TrendRow label="Alert stream" value={alerts.length ? `${alerts.length} events` : "clear"} direction={alerts.length ? "down" : "up"} />
+          <TrendRow label="Feed freshness" value={new Date(realtime.updatedAt).toLocaleTimeString()} direction="neutral" />
+        </PanelCard>
 
-      <section>
-        <h2>Mutation Log / EVO-V Events</h2>
-        <ul>
-          {blueprint.platform.mutationLog.map((event) => (
-            <li key={event.id}>
-              {event.timestamp} — {event.event} ({event.actor}) [{event.status}]
-            </li>
-          ))}
-        </ul>
-      </section>
+        <div>
+          <div style={{ marginBottom: "0.75rem", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+            <StatusChip label="Stable" status="ok" />
+            <StatusChip label="Watch" status="warn" />
+          </div>
+          <CodexCompliance coverage={coverage} compact />
+        </div>
+      </CardGrid>
 
-      <section>
-        <h2>Data & Governance (Articles II-V)</h2>
-        <ul>
-          <li>Trace coverage (Article II): {blueprint.telemetry.governance.articleIITraceCoverage}%</li>
-          <li>
-            SHA256 verification trail (Article IV):{" "}
-            {blueprint.telemetry.governance.articleIVSha256Verification ? "✅" : "❌"}
-          </li>
-          <li>Interruptibility drills (Article III): {blueprint.telemetry.governance.articleIIIDrills}</li>
-          <li>Human-in-loop flow tests (Article V): {blueprint.telemetry.governance.articleVInterruptibility}</li>
-        </ul>
-      </section>
+      <CardGrid>
+        <PanelCard title="Layer Coherence Distribution" subtitle="Blueprint-defined per-layer scores.">
+          <div style={{ display: "grid", gap: "0.4rem" }}>
+            {coherenceBars.map((layer) => (
+              <TrendRow key={layer.label} label={layer.label} value={`${layer.value}%`} direction={layer.value >= 95 ? "up" : "down"} />
+            ))}
+          </div>
+        </PanelCard>
 
-      <section>
-        <h2>Subscription Plans</h2>
-        <ul>
-          {blueprint.stripe.subscriptionPlans.map((plan) => (
-            <li key={plan.name}>
-              {plan.name} — £{plan.price} / {plan.recurring}
-            </li>
-          ))}
-        </ul>
-        <p>
-          Feature gating: dashboard widgets {blueprint.stripe.featureAccess.dashboardWidgets ? "✅" : "❌"} |
-          Codex templates {blueprint.stripe.featureAccess.codexTemplates ? "✅" : "❌"}
-        </p>
-        <p>Usage billing meters: {blueprint.stripe.usageBillingMeters.join(", ")}</p>
-        <p>
-          Webhook chain verified: {blueprint.stripe.productionReadiness.webhookToDbSync ? "✅" : "❌"} |
-          Email receipts: {blueprint.stripe.productionReadiness.emailReceiptChain ? "✅" : "❌"} |
-          Customer portal live: {blueprint.stripe.productionReadiness.customerPortalLive ? "✅" : "❌"}
-        </p>
-      </section>
+        <PanelCard title="Mutation Log Timeline" subtitle="EVO-V events displayed chronologically.">
+          <Timeline entries={mutationTimeline} />
+        </PanelCard>
+      </CardGrid>
 
-      <CodexCompliance coverage={coverage} />
-      <AlertWidget alerts={alerts} />
-    </main>
+      <CardGrid>
+        <PanelCard title="Data & Governance" subtitle="Articles II-V implementation status.">
+          <div style={{ display: "grid", gap: "0.45rem" }}>
+            <TrendRow label="Article II Trace Coverage" value={`${blueprint.telemetry.governance.articleIITraceCoverage}%`} direction="up" />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span>Article IV SHA256 Trail</span>
+              <StatusChip label={blueprint.telemetry.governance.articleIVSha256Verification ? "Verified" : "Missing"} status={blueprint.telemetry.governance.articleIVSha256Verification ? "ok" : "error"} />
+            </div>
+            <TrendRow label="Article III Drills" value={blueprint.telemetry.governance.articleIIIDrills} direction="neutral" />
+            <TrendRow label="Article V Interruptibility" value={blueprint.telemetry.governance.articleVInterruptibility} direction="neutral" />
+          </div>
+        </PanelCard>
+
+        <PanelCard title="Subscription & Billing" subtitle="Plan catalog and production readiness flags.">
+          <div style={{ display: "grid", gap: "0.4rem" }}>
+            {blueprint.stripe.subscriptionPlans.map((plan) => (
+              <TrendRow key={plan.name} label={plan.name} value={`£${plan.price}/${plan.recurring}`} direction="neutral" />
+            ))}
+            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+              <StatusChip label="Dashboard Widgets" status={blueprint.stripe.featureAccess.dashboardWidgets ? "ok" : "error"} />
+              <StatusChip label="Codex Templates" status={blueprint.stripe.featureAccess.codexTemplates ? "ok" : "error"} />
+            </div>
+          </div>
+        </PanelCard>
+      </CardGrid>
+
+      <CardGrid>
+        <AlertWidget alerts={alerts} compact />
+        <PanelCard title="Mutation Status Summary" subtitle="Current mutation states from system log.">
+          <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+            {blueprint.platform.mutationLog.map((event) => (
+              <StatusChip key={event.id} label={`${event.event}`} status={mapSeverity(event.status)} />
+            ))}
+          </div>
+        </PanelCard>
+      </CardGrid>
+    </DashboardShell>
   );
 }
