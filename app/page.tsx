@@ -200,14 +200,14 @@ export default function HomePage() {
     <main className={`${bodyFont.className} page`}>
       <section className="hero">
         <div className="hero-inner">
-          <div className="lion" aria-hidden>
+          <div className="lion lion-symbol" aria-hidden>
             🦁
           </div>
           <h1 className={`${titleFont.className} crown-title`}>Rasta Imperium</h1>
           <p className={`${subtitleFont.className} sacred-subtitle`}>
             Sacred Design System — Living front-end of the Imperium
           </p>
-          <a className="cta" href="#pillars">
+          <a className="cta cta-button" href="#pillars">
             Enter the Pillars
           </a>
           <div className="scroll-indicator" aria-hidden>
