@@ -16,14 +16,18 @@ export default function CodexPage() {
       </p>
 
       <section>
-        <h2>Articles</h2>
+        <h2>Dynamic Article Templates</h2>
         <ul>
           {blueprint.codex.map((article) => (
             <li key={article.article}>
               <strong>
-                Article {article.article} — {article.title}:
+                Article {article.article} — {article.title} ({article.templateType}):
               </strong>{" "}
               {article.description}
+              <br />
+              Cross-links: {article.linksTo?.join(", ")}
+              <br />
+              Revisions: {article.revisionHistory?.map((revision) => `${revision.version} (${revision.updatedAt})`).join(" → ")}
             </li>
           ))}
         </ul>

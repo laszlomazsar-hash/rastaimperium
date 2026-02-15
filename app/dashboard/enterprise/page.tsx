@@ -15,26 +15,30 @@ export default function EnterpriseDashboardPage() {
   return (
     <main style={{ padding: "2rem" }}>
       <h1>🏢 Enterprise Dashboard</h1>
-      <p>Workspace-isolated governance metrics with seat allocation and subscription tier policy.</p>
+      <p>Enterprise-specific governance and workspace telemetry.</p>
 
       <section>
-        <h2>Enterprise Capabilities</h2>
+        <h2>Workspace Isolation & Permissions</h2>
         <ul>
           <li>Workspaces: {blueprint.enterprise.workspaces ? "✅" : "❌"}</li>
-          <li>
-            Subscription-Gated Access: {blueprint.enterprise.subscriptionGated ? "✅" : "❌"}
-          </li>
-          <li>
-            Usage Billing: Tokens {blueprint.enterprise.usageBilling.tokens ? "✅" : "❌"}, API
-            Calls {blueprint.enterprise.usageBilling.apiCalls ? "✅" : "❌"}, Seats{" "}
-            {blueprint.enterprise.usageBilling.seats ? "✅" : "❌"}
-          </li>
-          <li>Multi-seat allocation: ✅</li>
+          <li>Isolation mode: {blueprint.enterprise.workspaceModel?.isolation}</li>
+          <li>Role matrix: {blueprint.enterprise.workspaceModel?.roleMatrix.join(", ")}</li>
         </ul>
       </section>
 
       <section>
-        <h2>Enterprise Dashboards</h2>
+        <h2>Seat Allocation by Subscription Tier</h2>
+        <ul>
+          {blueprint.enterprise.workspaceModel?.seatAllocation.map((seatTier) => (
+            <li key={seatTier.tier}>
+              {seatTier.tier}: {seatTier.includedSeats} included seats, £{seatTier.extraSeatPrice} per extra seat
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Enterprise Dashboards + Consulting Visibility</h2>
         {enterpriseDashboards.length > 0 ? (
           <ul>
             {enterpriseDashboards.map((dashboard) => (
@@ -46,6 +50,10 @@ export default function EnterpriseDashboardPage() {
         ) : (
           <p>No enterprise dashboards configured.</p>
         )}
+        <p>
+          Consulting report cadence: {blueprint.telemetry?.consultingVisibility.reportCadence} | Linked dashboards:{" "}
+          {blueprint.telemetry?.consultingVisibility.linkedDashboards.join(", ")}
+        </p>
       </section>
     </main>
   );
