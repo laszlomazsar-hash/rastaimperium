@@ -8,7 +8,9 @@ type Blueprint = {
   governanceStack: { layer: number; name: string; description: string }[];
   codex: { article: string; title: string; description: string }[];
   consulting: {
-    flagship: { name: string; price: number; features: string[] };
+    flagship: { name: string; price: number; features?: string[]; duration?: string };
+    midTier?: { name: string; price: number; features?: string[]; duration?: string }[];
+    workshops?: { name: string; price: number; features?: string[]; duration?: string }[];
   };
   stripe: {
     subscriptionPlans: { name: string; price: number; recurring: string }[];
