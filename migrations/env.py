@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..'
 
 from app.core.database import Base
 from app.models.timeline import TimelineEntry
+from app.models.lead import Lead
 # ----------------------------
 
 config = context.config

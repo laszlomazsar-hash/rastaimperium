@@ -288,6 +288,20 @@ ul{
         <a href="/ark" class="btn btn-secondary cta-button">ARK Engine</a>
         <a href="/evo-v" class="btn btn-secondary cta-button">EVO‑V Kernel</a>
       </p>
+      <form id="acquisition-lead-form" style="margin-top:1.5rem;display:grid;gap:.6rem;max-width:560px;">
+        <input type="text" name="full_name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <select name="interest" required>
+          <option value="">Select primary interest</option>
+          <option value="curiosity">Curiosity practice</option>
+          <option value="recognition">Recognition advisory</option>
+          <option value="codex">Codex artifacts</option>
+          <option value="ark">ARK/EVO-V architecture</option>
+        </select>
+        <label><input type="checkbox" name="consent" required> I agree to be contacted.</label>
+        <button type="submit">Join the Lead Pipeline</button>
+        <p id="acquisition-lead-status" aria-live="polite"></p>
+      </form>
     </section>
 
   </main>
@@ -302,6 +316,46 @@ ul{
           behavior: prefersReducedMotion ? 'auto' : 'smooth'
         });
       });
+    });
+
+
+    const acquisitionForm = document.getElementById("acquisition-lead-form");
+    const acquisitionStatus = document.getElementById("acquisition-lead-status");
+
+    acquisitionForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      acquisitionStatus.textContent = "Submitting...";
+      const formData = new FormData(acquisitionForm);
+      const interest = formData.get("interest");
+
+      const payload = {
+        full_name: formData.get("full_name"),
+        email: formData.get("email"),
+        source_page: "index",
+        consent: Boolean(formData.get("consent")),
+        qualification_metadata: {
+          funnel_stage: "acquisition",
+          interest
+        }
+      };
+
+      try {
+        const response = await fetch("/api/v1/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          acquisitionStatus.textContent = data.detail || "Could not join the pipeline. Please try again.";
+          return;
+        }
+
+        acquisitionStatus.textContent = "You're in. We will follow up with your selected pathway.";
+        acquisitionForm.reset();
+      } catch (error) {
+        acquisitionStatus.textContent = "Network issue while submitting. Please retry.";
+      }
     });
 
     function show(id, el, event) {

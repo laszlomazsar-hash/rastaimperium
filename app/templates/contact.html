@@ -96,5 +96,47 @@
     </section>
 
   </main>
+  <script>
+    const contactForm = document.getElementById("contact-lead-form");
+    const contactStatus = document.getElementById("contact-lead-status");
+
+    contactForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      contactStatus.textContent = "Submitting your request...";
+      const formData = new FormData(contactForm);
+
+      const payload = {
+        full_name: formData.get("full_name"),
+        email: formData.get("email"),
+        company: formData.get("company") || null,
+        message: formData.get("message") || null,
+        source_page: "contact",
+        consent: Boolean(formData.get("consent")),
+        qualification_metadata: {
+          channel: "contact_form",
+          intent: "direct_inquiry"
+        }
+      };
+
+      try {
+        const response = await fetch("/api/v1/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          contactStatus.textContent = data.detail || "We couldn't submit your request. Please try again.";
+          return;
+        }
+
+        contactStatus.textContent = "Thank you. Your request is in the pipeline and we'll contact you shortly.";
+        contactForm.reset();
+      } catch (error) {
+        contactStatus.textContent = "Network issue. Please retry in a moment.";
+      }
+    });
+  </script>
 </body>
 </html>
