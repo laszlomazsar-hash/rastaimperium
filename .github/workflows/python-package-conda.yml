@@ -19,9 +19,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
-    - name: Enforce canonical architecture domain references
+    - name: Validate architecture artifact versions
       run: |
-        python tools/check_canonical_domains.py
+        python scripts/validate_architecture_version.py
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names

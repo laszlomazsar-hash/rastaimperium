@@ -254,6 +254,40 @@
         background: #f8fafc;
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        .sacred-background,
+        .hero::before,
+        .hero::after,
+        .sacred-geometry,
+        .crown-title,
+        .shimmer,
+        [class*="shimmer"] {
+          animation: none !important;
+          animation-duration: 0.01ms !important;
+        }
+
+        .pillar-card,
+        .cta-button,
+        .nav a,
+        .cta,
+        nav a {
+          animation: none !important;
+          transition-duration: 0.01ms !important;
+          transition-delay: 0ms !important;
+        }
+
+        .pillar-card:hover,
+        .cta-button:hover,
+        .cta:hover,
+        .cta:focus,
+        .nav a:hover,
+        .nav a:focus,
+        nav a:hover,
+        nav a:focus {
+          transform: none !important;
+        }
+      }
+
       @media (max-width: 720px) {
         header.hero {
           padding: 3.5rem 1.5rem 2.5rem;
