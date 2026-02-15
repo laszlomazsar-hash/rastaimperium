@@ -190,35 +190,35 @@ ul li {
   color: #cfd3ff;
 }
 
-.offerings-grid {
+
+.testimonials-grid {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
 }
 
-.store-card,
-.quote-card {
-  background: rgba(15, 18, 30, 0.9);
-  border-radius: 12px;
-  padding: 1.2rem 1.1rem;
-  border: 1px solid #22263a;
-}
-
-.store-card .btn {
-  margin-right: 0.5rem;
-}
-
-.quotes-grid {
-  display: grid;
-  gap: 0.8rem;
-  margin-top: 1rem;
-}
-
-.quote-card {
+.testimonial-card {
   margin: 0;
-  color: #e3e5ff;
-  font-style: italic;
-  border-left: 3px solid #7f5af0;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  background: linear-gradient(150deg, rgba(212, 175, 55, 0.12), rgba(9, 13, 24, 0.95));
+}
+
+.testimonial-card blockquote {
+  margin: 0;
+  color: #f8f3de;
+}
+
+.testimonial-card figcaption {
+  margin-top: 0.7rem;
+  color: #dfc46b;
+  font-size: 0.9rem;
+}
+
+.testimonials-note {
+  margin-top: 0.9rem;
+  font-size: 0.95rem;
 }
 
 /* Page-specific tweaks */
@@ -287,8 +287,7 @@ a:hover {
     gap: 1.2rem 1.5rem;
   }
 
-  .offerings-grid,
-  .quotes-grid {
+  .testimonials-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
