@@ -12,42 +12,87 @@
 
     <section class="hero">
       <h1>Contact</h1>
-      <p class="tagline">Direct lines. Clear response.</p>
+      <p class="tagline">Enterprise intake, structured from day one.</p>
       <p class="subline">
-        Reach out for partnerships, engagement pathways, or specific questions
-        about the Codex, EVO-V, or ARK Engine.
+        Use the enterprise intake pathway for strategic AI programs, governance diagnostics,
+        and proposal requests.
       </p>
     </section>
 
     <section class="value">
-      <h2>Primary Contact</h2>
-      <p>Email is the fastest way to reach the Imperium stewarding council.</p>
-      <a href="mailto:laszlo@rastaimperium.com" class="btn btn-primary">Email the Council</a>
-    </section>
-
-    <section class="pillars">
-      <h2>Inquiry Paths</h2>
+      <h2>Enterprise Use Cases</h2>
       <div class="pillars">
         <article>
-          <h3>Partnerships</h3>
-          <p>Strategic alliances, co-creation, and enterprise integration.</p>
+          <h3>AI Governance Program Design</h3>
+          <p>Define policy, approval controls, and executive oversight for AI deployment.</p>
         </article>
         <article>
-          <h3>Media & Research</h3>
-          <p>Press kits, interviews, and academic collaboration.</p>
+          <h3>Risk & Compliance Readiness</h3>
+          <p>Map controls for regulated sectors with legal, security, and procurement alignment.</p>
         </article>
         <article>
-          <h3>Community Support</h3>
-          <p>Guidance for members navigating the Codex or transmissions.</p>
+          <h3>Transformation Delivery</h3>
+          <p>Build a phased implementation roadmap tied to measurable operating outcomes.</p>
         </article>
       </div>
     </section>
 
+    <section class="cta-primary">
+      <h2>Submit Enterprise Intake</h2>
+      <p>We route submissions directly to the acquisition and delivery team.</p>
+      <form action="/enterprise/intake/submit" method="post" class="enterprise-intake-form">
+        <label for="name">Full Name</label>
+        <input id="name" name="name" type="text" required>
+
+        <label for="email">Work Email</label>
+        <input id="email" name="email" type="email" required>
+
+        <label for="company">Company Name</label>
+        <input id="company" name="company" type="text" required>
+
+        <label for="company_size">Company Size</label>
+        <select id="company_size" name="company_size" required>
+          <option value="">Select one</option>
+          <option value="1-50">1-50 employees</option>
+          <option value="51-250">51-250 employees</option>
+          <option value="251-1000">251-1000 employees</option>
+          <option value="1000+">1000+ employees</option>
+        </select>
+
+        <label for="ai_use_case">Primary AI Use-Case</label>
+        <textarea id="ai_use_case" name="ai_use_case" rows="3" required></textarea>
+
+        <label for="timeline">Target Timeline</label>
+        <select id="timeline" name="timeline" required>
+          <option value="">Select one</option>
+          <option value="0-3 months">0-3 months</option>
+          <option value="3-6 months">3-6 months</option>
+          <option value="6-12 months">6-12 months</option>
+          <option value="12+ months">12+ months</option>
+        </select>
+
+        <label for="budget_band">Budget Band</label>
+        <select id="budget_band" name="budget_band" required>
+          <option value="">Select one</option>
+          <option value="under-50k">Under £50K</option>
+          <option value="50k-150k">£50K-£150K</option>
+          <option value="150k-500k">£150K-£500K</option>
+          <option value="500k+">£500K+</option>
+        </select>
+
+        <label for="notes">Program Notes</label>
+        <textarea id="notes" name="notes" rows="4"></textarea>
+
+        <button type="submit" class="btn btn-primary">Send Enterprise Intake</button>
+      </form>
+    </section>
+
     <section class="cta-secondary">
-      <h2>Prefer a Structured Path?</h2>
-      <p>Review pricing tiers or explore the community channels first.</p>
+      <h2>Navigate the Enterprise Funnel</h2>
+      <p>Start with overview materials, then continue to qualification.</p>
+      <a href="/enterprise" class="btn btn-secondary">Enterprise Overview</a>
+      <a href="/enterprise/intake" class="btn btn-secondary">Dedicated Intake Page</a>
       <a href="/pricing" class="btn btn-secondary">View Pricing</a>
-      <a href="/community" class="btn btn-secondary">Explore Community</a>
     </section>
 
   </main>
