@@ -6,241 +6,308 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root{
-  --red:#c62828;
-  --gold:#d4af37;
-  --green:#2e7d32;
-  --bg:#0b0b0b;
-  --panel:#111;
-  --border:#222;
-  --text:#eaeaea;
+:root {
+  --red: #c62828;
+  --gold: #d4af37;
+  --green: #2e7d32;
+  --bg: #070907;
+  --panel: #111311;
+  --border: #272b27;
+  --text: #ece8dc;
 }
 
-*{box-sizing:border-box}
+* { box-sizing: border-box; }
 
-body{
-  margin:0;
-  font-family:system-ui, monospace;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  background: radial-gradient(circle at 50% -20%, #203322 0%, #090b09 45%, #040504 100%);
+  color: var(--text);
+  line-height: 1.7;
 }
 
-header{
-  height:4px;
-  background:linear-gradient(90deg,var(--red),var(--gold),var(--green));
+header {
+  height: 4px;
+  background: linear-gradient(90deg, var(--red), var(--gold), var(--green));
 }
 
-nav{
-  display:flex;
-  justify-content:center;
-  gap:24px;
-  padding:20px;
-  border-bottom:1px solid var(--border);
-  flex-wrap:wrap;
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
 }
 
-nav a{
-  color:#777;
-  text-decoration:none;
-  font-size:.75rem;
-  letter-spacing:3px;
-  text-transform:uppercase;
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 18px 0 24px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
 }
 
-nav a.active,
-nav a:hover{color:var(--gold)}
-
-section{
-  display:block;
-  max-width:900px;
-  margin:0 auto;
-  padding:60px 20px;
+nav a {
+  color: #b7b7b0;
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
-.hero{
-  position:relative;
-  isolation:isolate;
-  overflow:hidden;
-  --overlay-shift:0%;
-  animation:heroReveal .8s ease-out both;
+nav a:hover { color: var(--gold); }
+
+section {
+  padding: 72px 0;
 }
 
-.geometry-overlay{
-  position:absolute;
-  inset:-20% -10% auto;
-  height:220px;
-  pointer-events:none;
-  z-index:-1;
-  opacity:.35;
+h1, h2, h3 {
+  margin: 0 0 14px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+p { margin: 0 0 14px; }
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 36px;
+  align-items: center;
+}
+
+.hero-copy { max-width: 640px; }
+
+.hero-kicker {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #d4bb7f;
+  font-size: .82rem;
+  margin-bottom: 10px;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.1;
+}
+
+.hero-subhead {
+  font-size: clamp(1.02rem, 2vw, 1.35rem);
+  color: #ddd3b9;
+}
+
+.hero-visual {
+  min-height: 380px;
+  border: 1px solid rgba(212, 175, 55, .22);
+  border-radius: 22px;
   background:
-    radial-gradient(circle at 20% 40%,rgba(212,175,55,.22),transparent 55%),
-    radial-gradient(circle at 78% 20%,rgba(198,40,40,.18),transparent 58%),
-    radial-gradient(circle at 52% 90%,rgba(46,125,50,.22),transparent 60%);
-  transform:translateX(var(--overlay-shift));
-  animation:floatGeometry 24s ease-in-out infinite;
+    radial-gradient(circle at 70% 18%, rgba(255, 223, 143, .26), transparent 40%),
+    radial-gradient(circle at 64% 28%, rgba(255, 224, 158, .14), transparent 36%),
+    linear-gradient(155deg, #1a301f 0%, #0f1b12 48%, #090909 100%);
+  box-shadow: 0 28px 50px rgba(0,0,0,.45);
+  position: relative;
+  overflow: hidden;
 }
 
-
-h1,h2{
-  color:var(--gold);
-  letter-spacing:4px;
-  text-transform:uppercase;
-  font-weight:400;
+.hero-visual::before {
+  content: "🦁";
+  position: absolute;
+  font-size: clamp(6rem, 14vw, 9rem);
+  right: 16%;
+  top: 28%;
+  opacity: .88;
+  filter: drop-shadow(0 0 18px rgba(255,208,115,.35));
 }
 
-.pillars-intro{
-  max-width:640px;
-  margin:0 auto 30px;
-  text-align:center;
+.hero-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 225, 150, .1) 52%, transparent 74%);
 }
 
-.pillars-intro h2{
-  margin:0 0 10px;
+.btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
 }
 
-.pillars-intro p{
-  margin:0;
-  color:#c5c5c5;
-  letter-spacing:.4px;
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid rgba(212,175,55,.6);
+  padding: 11px 18px;
 }
 
-.pillars-list{
-  list-style:none;
-  padding:0;
-  margin:0;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
+.btn-primary {
+  background: linear-gradient(115deg, #f0db9f, #d4af37, #bea03a);
+  color: #111;
+  border: 0;
+  font-weight: 600;
 }
 
-.pillar-card{
-  margin:0;
-  padding:20px;
-  border:1px solid rgba(212,175,55,.28);
-  border-radius:14px;
-  background:linear-gradient(155deg,rgba(17,17,17,.96),rgba(11,11,11,.94));
-  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+.btn-secondary {
+  color: #e5d7ae;
+  background: rgba(26, 38, 24, .45);
 }
 
-.pillar-card:hover{
-  transform:translateY(-6px);
-  border-color:rgba(212,175,55,.55);
-  box-shadow:
-    0 14px 28px rgba(0,0,0,.45),
-    0 0 0 1px rgba(212,175,55,.2),
-    0 0 24px rgba(212,175,55,.24);
+.card {
+  background: linear-gradient(150deg, rgba(17,19,17,.96), rgba(9,10,9,.92));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 26px;
 }
 
-.pillar-card h3{
-  margin:0 0 10px;
-  color:var(--gold);
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  font-size:.95rem;
+.list-links {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  gap: 10px;
 }
 
-.pillar-card p{
-  margin:0;
+.list-links a { color: #e8dcae; }
+
+.pillars-intro {
+  margin-bottom: 24px;
+  max-width: 720px;
 }
 
-textarea{
-  width:100%;
-  height:140px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:16px;
-  font-family:inherit;
+.pillars-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 16px;
 }
 
-button{
-  margin-top:16px;
-  padding:10px 28px;
-  background:none;
-  border:1px solid var(--gold);
-  color:var(--gold);
-  cursor:pointer;
+.pillar-card {
+  padding: 22px;
+  border: 1px solid rgba(212,175,55,.25);
+  border-radius: 14px;
+  background: linear-gradient(150deg, rgba(17,17,17,.96), rgba(10,10,10,.94));
 }
 
-button:hover{
-  background:var(--gold);
-  color:#000;
+.small-note {
+  margin-top: 18px;
+  color: #c9c3af;
+  font-size: .95rem;
 }
 
-.cta-button:active{
-  transform:translateY(1px) scale(.98);
+.founder {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  align-items: start;
 }
 
-.panel{
-  margin-top:30px;
-  padding:20px;
-  background:var(--panel);
-  border-left:3px solid var(--green);
+.founder-photo {
+  border-radius: 16px;
+  border: 1px solid rgba(212,175,55,.34);
+  min-height: 260px;
+  background:
+    radial-gradient(circle at 60% 24%, rgba(255,221,137,.36), transparent 32%),
+    linear-gradient(165deg, #223426, #121a13 58%, #080808);
+  display: grid;
+  place-items: center;
+  color: #ffe9a7;
+  font-size: .9rem;
+  text-align: center;
+  padding: 18px;
 }
 
-.muted{
-  opacity:.55;
-  font-size:.9rem;
-  line-height:1.7;
+.imperium-map li { margin-bottom: 8px; }
+.imperium-map a { color: #e8dcae; }
+
+form {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: .7rem;
+  max-width: 520px;
 }
 
-ul{
-  padding-left:20px;
+input, button {
+  border-radius: 10px;
+  border: 1px solid #40443f;
+  padding: 12px 14px;
+  font: inherit;
 }
 
-.hero-sigil{
-  width:56px;
-  height:56px;
-  margin:0 0 16px;
-  display:block;
-  filter:drop-shadow(0 0 6px rgba(212, 175, 55, 0.35));
+input {
+  background: #111;
+  color: #f1f1ea;
 }
 
-@keyframes heroReveal{
-  from{
-    opacity:0;
-    transform:scale(.985);
+button {
+  background: linear-gradient(115deg, #f0db9f, #d4af37, #bea03a);
+  color: #111;
+  border: 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.muted { color: #a9a79c; font-size: .92rem; }
+
+@media (max-width: 860px) {
+  .hero,
+  .founder {
+    grid-template-columns: 1fr;
   }
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
-}
 
-@keyframes floatGeometry{
-  0%,100%{transform:translate3d(-1.5%,0,0) scale(1)}
-  50%{transform:translate3d(1.5%,-8px,0) scale(1.02)}
+  .hero-visual { min-height: 300px; }
 }
 </style>
 </head>
 
 <body>
-  <main class="page page-presence">
-    <nav class="section-nav">
-      <a href="#home" onclick="return show('home', this, event)">Presence</a>
-      <a href="#gateways" onclick="return show('gateways', this, event)">Gateways</a>
-      <a href="#map" onclick="return show('map', this, event)">Imperium Map</a>
-      <a href="#contact" onclick="return show('contact', this, event)">First Contact</a>
+  <header></header>
+  <main>
+    <nav>
+      <a href="#home">Presence</a>
+      <a href="#welcome">Welcome</a>
+      <a href="#gateways">Gateways</a>
+      <a href="#founder">Founder</a>
+      <a href="#map">Imperium Map</a>
+      <a href="#contact">First Contact</a>
     </nav>
 
-    <section id="home" class="hero" data-section>
-      <div class="geometry-overlay" aria-hidden="true"></div>
-      <img src="/static/sigil.svg" class="hero-sigil" alt="Rasta Imperium sigil">
-      <h1>Rasta Imperium</h1>
-      <p class="tagline">A sovereign mythic‑technical field for civilization, code, and covenant.</p>
-      <p class="subline">
-        Codex. EVO‑V Civilization Kernel. ARK Engine.
-        A living architecture for those who build with lineage, law, and light.
-      </p>
-      <p class="muted">Founded by Laszlo Mazsar.</p>
-      <a href="/curiosity" class="btn btn-primary" aria-label="Enter Through Curiosity and navigate to the Curiosity gateway">Enter Through Curiosity</a>
+    <section id="home" class="hero">
+      <div class="hero-copy">
+        <p class="hero-kicker">One Love.</p>
+        <h1>Rasta Imperium<br>A Living Digital Civilization</h1>
+        <p class="hero-subhead">Where ancient dread wisdom meets tomorrow’s symbolic intelligence.<br>A sovereign space for thinkers, creators, and builders who refuse mediocrity and crave true alignment.</p>
+        <p>Founded by Laszlo Mazsar.<br>This is the digital home of a mythic-technical field: part philosophy, part practice, part architecture for the next civilization.<br>Whether you are just curious, seeking daily tools, or ready to build at empire scale — there is a clear path here for you.</p>
+        <div class="btn-row">
+          <a href="/curiosity" class="btn btn-primary">Start Here →</a>
+          <a href="#gateways" class="btn btn-secondary">Meet the Four Gateways ↓</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true"></div>
     </section>
 
-    <section id="gateways" class="pillars" data-section>
+    <section id="welcome" class="card">
+      <h2>First time here? Welcome, family.</h2>
+      <p>You have entered sovereign territory.<br>Rasta Imperium is a living ecosystem where:</p>
+      <ul>
+        <li>Ancient resonance meets causal intelligence</li>
+        <li>Daily practice meets high-level architecture</li>
+        <li>Individual sovereignty meets collective coherence</li>
+      </ul>
+      <p>This is the place where dreadlocks and causal graphs are not opposites — they are the same divine order expressed in two languages.<br>Choose how you want to enter:</p>
+      <ul class="list-links">
+        <li>I’m curious and want to begin simply → <a href="/curiosity">Start the 30-day Daily Resonance Practice</a></li>
+        <li>I want to understand the full vision → <a href="#gateways">Read the Four Gateways</a></li>
+        <li>I want tools and codices → <a href="/codex-library">Visit the Codex Library</a></li>
+        <li>I’m ready for deeper work → <a href="/store">See offerings in the Store</a></li>
+      </ul>
+    </section>
+
+    <section id="gateways">
       <div class="pillars-intro">
         <h2>The Four Gateways</h2>
-        <p>Four aligned access points through one covenant field: practice, legitimacy, artifact, and architecture.</p>
+        <p>Four aligned access points through one covenant field</p>
       </div>
       <ul class="pillars-list">
         <li class="pillar-card">
@@ -260,11 +327,20 @@ ul{
           <p>The advanced gateway for recursive, aligned creation. The ARK Engine is the Imperium’s technical heart — a recursive architecture for building worlds, systems, and intelligences that remain aligned to their originating covenant. It integrates with the EVO‑V Civilization Kernel to provide a stable substrate for agents, narratives, and mythic‑technical structures. This gateway is for architects, developers, and visionaries who are ready to build with precision, depth, and sovereignty.</p>
         </li>
       </ul>
+      <p class="small-note">Curiosity is the recommended first step for most people.<br>It is the softest, cleanest on-ramp into the field.</p>
     </section>
 
-    <section id="map" class="pillars" data-section>
+    <section id="founder" class="card founder">
+      <div class="founder-photo">[Photo placeholder — regal, direct, warm portrait]</div>
+      <div>
+        <h2>Laszlo Mazsar — Founder of the Rasta Imperium</h2>
+        <p>I built this because the world is dying for a third path:<br>One that does not force you to choose between spirit and reason, between roots and future, between poetry and power.<br>Here the Lion of Judah is not a symbol from the past.<br>It is an operating system for tomorrow.<br>If that frequency lands in your chest, you are already home.</p>
+      </div>
+    </section>
+
+    <section id="map">
       <h2>Imperium Map</h2>
-      <ul class="pillars-list">
+      <ul class="imperium-map">
         <li><a href="/evo-v">EVO-V Kernel</a> — simulation layer and evolutionary intelligence.</li>
         <li><a href="/codex-library">Codex Library</a> — canonical artifacts and transmissions.</li>
         <li><a href="/manifestation">Manifestation</a> — certificates of release and lineage.</li>
@@ -280,106 +356,21 @@ ul{
       </ul>
     </section>
 
-    <section id="contact" class="cta-secondary" data-section>
-      <h2>Choose Your First Contact</h2>
-      <p>You can enter through practice, understanding, product, or architecture. The field is the same.</p>
-      <p>
-        <a href="/curiosity" class="btn btn-secondary cta-button">Curiosity</a>
-        <a href="/recognition" class="btn btn-secondary cta-button">Recognition</a>
-        <a href="/codex" class="btn btn-secondary cta-button">Daily Resonance Codex</a>
-        <a href="/ark" class="btn btn-secondary cta-button">ARK Engine</a>
-        <a href="/evo-v" class="btn btn-secondary cta-button">EVO‑V Kernel</a>
-      </p>
-      <form id="acquisition-lead-form" style="margin-top:1.5rem;display:grid;gap:.6rem;max-width:560px;">
-        <input type="text" name="full_name" placeholder="Your name" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <select name="interest" required>
-          <option value="">Select primary interest</option>
-          <option value="curiosity">Curiosity practice</option>
-          <option value="recognition">Recognition advisory</option>
-          <option value="codex">Codex artifacts</option>
-          <option value="ark">ARK/EVO-V architecture</option>
-        </select>
-        <label><input type="checkbox" name="consent" required> I agree to be contacted.</label>
-        <button type="submit">Join the Lead Pipeline</button>
+    <section id="contact" class="card">
+      <h2>Ready to move?</h2>
+      <p>You can enter through practice, understanding, artifact, or architecture.<br>The field is the same.</p>
+      <p><a href="/transmissions" class="btn btn-primary">Join the Imperium Transmissions</a></p>
+      <p class="muted">Low-frequency, high-signal dispatches only — new codices, tool releases, and field movements. Never spam.</p>
+      <form id="acquisition-lead-form">
+        <input type="email" name="email" placeholder="Your sovereign email" required>
+        <button type="submit">I Claim My Place</button>
         <p id="acquisition-lead-status" aria-live="polite"></p>
       </form>
     </section>
 
   </main>
+
   <script>
-    const reducedMotionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let prefersReducedMotion = reducedMotionMediaQuery.matches;
-
-    const heroSigil = document.querySelector('.hero-sigil');
-    let heroAnimationFrameId = null;
-
-    function stopHeroSigilAnimation() {
-      if (heroAnimationFrameId !== null) {
-        cancelAnimationFrame(heroAnimationFrameId);
-        heroAnimationFrameId = null;
-      }
-    }
-
-    function startHeroSigilAnimation() {
-      if (!heroSigil || prefersReducedMotion) {
-        return;
-      }
-
-      const start = performance.now();
-      const rotateSpeed = 0.03;
-      const bobAmplitude = 4;
-
-      const step = (now) => {
-        const elapsed = now - start;
-        const bobOffset = Math.sin(elapsed * 0.003) * bobAmplitude;
-        const rotation = elapsed * rotateSpeed;
-        heroSigil.style.transform = `translateY(${bobOffset}px) rotate(${rotation}deg)`;
-        heroAnimationFrameId = requestAnimationFrame(step);
-      };
-
-      heroAnimationFrameId = requestAnimationFrame(step);
-    }
-
-    function applyMotionPreference() {
-      prefersReducedMotion = reducedMotionMediaQuery.matches;
-      stopHeroSigilAnimation();
-
-      if (heroSigil) {
-        if (prefersReducedMotion) {
-          heroSigil.style.transform = 'translateY(0) rotate(0deg)';
-        } else {
-          startHeroSigilAnimation();
-        }
-      }
-    }
-
-    applyMotionPreference();
-
-    if (typeof reducedMotionMediaQuery.addEventListener === 'function') {
-      reducedMotionMediaQuery.addEventListener('change', applyMotionPreference);
-    } else if (typeof reducedMotionMediaQuery.addListener === 'function') {
-      reducedMotionMediaQuery.addListener(applyMotionPreference);
-    }
-
-    if (window.THREE && window.THREE.GLTFLoader) {
-      const loader = new window.THREE.GLTFLoader();
-      loader.load("/static/models/lion.glb", () => {
-        // Model is available from the static mount for scenes that use it.
-      });
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener("click", (event) => {
-        event.preventDefault();
-        const targetSelector = anchor.getAttribute("href");
-        document.querySelector(targetSelector)?.scrollIntoView({
-          behavior: prefersReducedMotion ? 'auto' : 'smooth'
-        });
-      });
-    });
-
-
     const acquisitionForm = document.getElementById("acquisition-lead-form");
     const acquisitionStatus = document.getElementById("acquisition-lead-status");
 
@@ -387,16 +378,15 @@ ul{
       event.preventDefault();
       acquisitionStatus.textContent = "Submitting...";
       const formData = new FormData(acquisitionForm);
-      const interest = formData.get("interest");
 
       const payload = {
-        full_name: formData.get("full_name"),
+        full_name: "Imperium Transmission Subscriber",
         email: formData.get("email"),
         source_page: "index",
-        consent: Boolean(formData.get("consent")),
+        consent: true,
         qualification_metadata: {
           funnel_stage: "acquisition",
-          interest
+          interest: "transmissions"
         }
       };
 
@@ -408,81 +398,16 @@ ul{
         });
         const data = await response.json();
         if (!response.ok) {
-          acquisitionStatus.textContent = data.detail || "Could not join the pipeline. Please try again.";
+          acquisitionStatus.textContent = data.detail || "Could not join transmissions. Please try again.";
           return;
         }
 
-        acquisitionStatus.textContent = "You're in. We will follow up with your selected pathway.";
+        acquisitionStatus.textContent = "You're in. Welcome to Imperium Transmissions.";
         acquisitionForm.reset();
       } catch (error) {
         acquisitionStatus.textContent = "Network issue while submitting. Please retry.";
       }
     });
-
-    function initLionScene(container) {
-      if (!window.THREE) {
-        return;
-      }
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        60,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        1000
-      );
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-
-      renderer.setPixelRatio(window.devicePixelRatio || 1);
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      container.appendChild(renderer.domElement);
-
-      camera.position.set(0, 0, 6);
-      renderer.render(scene, camera);
-    }
-
-    function bootstrapLionScene() {
-      const container = document.getElementById('lion-container');
-      if (!container) {
-        return;
-      }
-
-      try {
-        initLionScene(container);
-      } catch (error) {
-        console.error('Lion scene initialization failed:', error);
-      }
-    }
-
-    bootstrapLionScene();
-
-    function show(id, el, event) {
-      const evt = event || window.event;
-      if (evt && evt.preventDefault) {
-        evt.preventDefault();
-      }
-      const sections = document.querySelectorAll("[data-section]");
-      if (!sections.length) {
-        return false;
-      }
-      sections.forEach((section) => {
-        section.hidden = section.id !== id;
-      });
-      if (id === "home") {
-        startHomeRendering();
-      } else {
-        stopHomeRendering();
-      }
-      document.querySelectorAll(".section-nav a").forEach((link) => {
-        link.classList.toggle("is-active", link === el);
-      });
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, "", `#${id}`);
-      }
-      return false;
-    }
-
-    startHomeRendering();
   </script>
 </body>
 </html>
