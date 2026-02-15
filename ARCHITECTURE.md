@@ -1,3 +1,13 @@
+# ⚠️ Deprecated Architecture Notice
+
+This document is maintained as a historical reference only.
+
+Do not use this file for active architecture decisions.
+
+**Canonical architecture (active):** `docs/RASTA_IMPERIUM_WEBSITE_ARCHITECTURE_BLUEPRINT_v2.6.md`
+
+---
+
 # C — Complete System Architecture Map
 ## The full-stack blueprint of the Imperium as it exists now
 
@@ -33,7 +43,7 @@ This is the source of truth for your entire system.
 
 ---
 
-## 3. Backend Layer (FastAPI on Railway)
+## 3. Backend Layer (FastAPI Services on v2.6 Stack)
 This is the living system that powers the Imperium.
 
 It exposes four canonical routes:
@@ -170,14 +180,14 @@ They are wrapped by the backend and surfaced through the UI.
 ---
 
 ## 9. Deployment Layer
-Railway handles:
+The v2.6 deployment layer handles:
 
-- Build
-- Deploy
-- Environment
-- Routing
+- Edge DNS/CDN/WAF + TLS
+- Containerized application deploys with health checks
+- Managed PostgreSQL and Redis
+- CI/CD policy gates and rollback controls
 
-This layer ensures the Imperium is alive on the web.
+This layer ensures the Imperium is alive on the web with defense-in-depth controls.
 
 ---
 
