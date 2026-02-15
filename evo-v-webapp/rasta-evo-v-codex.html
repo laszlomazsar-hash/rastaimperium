@@ -91,12 +91,24 @@
         left: 50%;
         width: 70vw;
         max-width: 900px;
-        transform: translate(-50%, -50%);
         opacity: 0.12;
         mix-blend-mode: screen;
         pointer-events: none;
         z-index: 0;
         animation: spinSlow 70s linear infinite;
+      }
+
+      .sacred-geometry-parallax {
+        --base-transform: translate(-50%, -50%);
+        --parallax-y: 0px;
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .sacred-geometry-parallax.is-parallax-fallback {
+        transform: var(--base-transform) translateY(var(--parallax-y));
       }
 
       .sacred-geometry svg {
@@ -326,19 +338,21 @@
   </head>
   <body>
     <header class="hero">
-      <div class="sacred-geometry" aria-hidden="true">
-        <svg viewBox="0 0 800 800" role="img" focusable="false">
-          <g fill="none" stroke="rgba(226, 232, 240, 0.6)" stroke-width="2">
-            <circle cx="400" cy="160" r="120" />
-            <circle cx="520" cy="230" r="120" />
-            <circle cx="520" cy="370" r="120" />
-            <circle cx="400" cy="440" r="120" />
-            <circle cx="280" cy="370" r="120" />
-            <circle cx="280" cy="230" r="120" />
-            <circle cx="400" cy="300" r="200" />
-            <circle cx="400" cy="300" r="300" />
-          </g>
-        </svg>
+      <div class="sacred-geometry-parallax" aria-hidden="true" data-parallax-speed="0.2">
+        <div class="sacred-geometry">
+          <svg viewBox="0 0 800 800" role="img" focusable="false">
+            <g fill="none" stroke="rgba(226, 232, 240, 0.6)" stroke-width="2">
+              <circle cx="400" cy="160" r="120" />
+              <circle cx="520" cy="230" r="120" />
+              <circle cx="520" cy="370" r="120" />
+              <circle cx="400" cy="440" r="120" />
+              <circle cx="280" cy="370" r="120" />
+              <circle cx="280" cy="230" r="120" />
+              <circle cx="400" cy="300" r="200" />
+              <circle cx="400" cy="300" r="300" />
+            </g>
+          </svg>
+        </div>
       </div>
       <div class="hero-content">
         <h1>Rasta Evo-V Codex</h1>
@@ -386,5 +400,35 @@
         </p>
       </section>
     </main>
+    <script>
+      (() => {
+        const parallaxElements = document.querySelectorAll("[data-parallax-speed]");
+        if (!parallaxElements.length) {
+          return;
+        }
+
+        const supportsTranslate =
+          typeof CSS !== "undefined" && CSS.supports("translate", "0 1px");
+
+        const updateParallax = () => {
+          const scrolled = window.scrollY || window.pageYOffset || 0;
+          parallaxElements.forEach((el) => {
+            const speed = Number(el.dataset.parallaxSpeed) || 0;
+            const yOffset = `${scrolled * speed}px`;
+
+            if (supportsTranslate) {
+              el.style.translate = `0 ${yOffset}`;
+              return;
+            }
+
+            el.classList.add("is-parallax-fallback");
+            el.style.setProperty("--parallax-y", yOffset);
+          });
+        };
+
+        updateParallax();
+        window.addEventListener("scroll", updateParallax, { passive: true });
+      })();
+    </script>
   </body>
 </html>
