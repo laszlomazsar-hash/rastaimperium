@@ -1,6 +1,6 @@
 from pathlib import Path
 from fastapi import FastAPI, Form, HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.core.config import settings
@@ -199,8 +199,8 @@ async def store(request: Request):
 
 @app.get("/pricing")
 async def pricing(request: Request):
-    """Engagement pathways and pricing tiers."""
-    return templates.TemplateResponse("pricing.html", {"request": request})
+    """Legacy pricing route now unified under /store."""
+    return RedirectResponse(url="/store", status_code=301)
 
 @app.get("/about")
 async def about(request: Request):
