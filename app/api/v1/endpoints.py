@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 from fastapi.responses import FileResponse
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -10,7 +10,9 @@ from app.ark_engine.api.routers.divine_guidance import router as divine_router
 from app.ark_engine.api.routers.evolution import router as evolution_router
 from app.ark_engine.core.field_controller import IFieldController, seed_the_ark
 from app.ark_engine.evo_v_nextgen import EvolutionaryCulturalOptimizer
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.monitoring import monitoring_state
 from app.core.redis import redis_manager
 from app.models.lead import Lead
 from app.schemas.lead import (
@@ -25,6 +27,12 @@ from app.schemas.lead import (
 router = APIRouter()
 router.include_router(divine_router, prefix="/divine", tags=["divine"])
 router.include_router(evolution_router, tags=["evolution", "nuggets"])
+
+
+def require_admin_token(x_admin_token: str | None = Header(default=None)) -> None:
+    configured_token = getattr(settings, "ADMIN_API_TOKEN", None)
+    if configured_token and x_admin_token != configured_token:
+        raise HTTPException(status_code=401, detail="Invalid admin token")
 
 
 @router.get("/wisdom")
@@ -140,8 +148,40 @@ def get_lead_pipeline(db: Session = Depends(get_db)):
     ]
 
 
+@router.get("/admin/leads", response_model=list[LeadResponse], dependencies=[Depends(require_admin_token)])
+def list_leads(
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=100, ge=1, le=500),
+    db: Session = Depends(get_db),
+):
+    return db.query(Lead).order_by(Lead.created_at.desc()).offset(skip).limit(limit).all()
+
+
+@router.get("/admin/leads/{lead_id}", response_model=LeadResponse, dependencies=[Depends(require_admin_token)])
+def get_lead_by_id(lead_id: int, db: Session = Depends(get_db)):
+    lead = db.query(Lead).filter(Lead.id == lead_id).first()
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found.")
+    return lead
+
+
+@router.delete("/admin/leads/{lead_id}", dependencies=[Depends(require_admin_token)])
+def delete_lead(lead_id: int, confirm: bool = Query(default=False), db: Session = Depends(get_db)):
+    if not confirm:
+        raise HTTPException(status_code=400, detail="confirm=true is required to delete lead records")
+
+    lead = db.query(Lead).filter(Lead.id == lead_id).first()
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found.")
+
+    db.delete(lead)
+    db.commit()
+    return {"ok": True, "deleted_id": lead_id}
+
+
 @router.post("/webhooks/payments")
 def payment_webhook(event: PaymentWebhookEvent, db: Session = Depends(get_db)):
+    monitoring_state.mark_webhook(event.event_type)
     lead_query = db.query(Lead)
     if event.customer_id:
         lead_query = lead_query.filter(Lead.subscription_customer_id == event.customer_id)

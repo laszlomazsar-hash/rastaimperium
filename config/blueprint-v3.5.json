@@ -1,9 +1,9 @@
 {
-  "version": "3.5.0",
+  "version": "3.6.0",
   "title": "Rasta Imperium \u2014 Constitutional AI Governance",
   "description": "A codex-driven governance platform with dashboards, consulting, enterprise workspaces, and subscription revenue.",
   "metadata": {
-    "architectureVersion": "3.5.0",
+    "architectureVersion": "3.6.0",
     "sourceOfTruth": "docs/ARCHITECTURE_CANONICAL.md",
     "artifactRole": "machine-readable-derivative"
   },
@@ -604,6 +604,32 @@
       "codexDownloads": 247,
       "workshopSeats": 47,
       "coherence": "97.2%"
+    }
+  },
+  "blueprintCoverage": {
+    "enterprise": {
+      "functional": true,
+      "verification": "workspace + intake + subscription gating"
+    },
+    "dashboard": {
+      "functional": true,
+      "verification": "realtime metrics + trend cards"
+    },
+    "codex": {
+      "functional": true,
+      "verification": "articles I-VII and compliance links active"
+    },
+    "checkout": {
+      "functional": true,
+      "verification": "Stripe checkout + receipts + portal"
+    },
+    "admin": {
+      "functional": true,
+      "verification": "secure lead CRUD + governance controls"
+    },
+    "observability": {
+      "functional": true,
+      "verification": "health, readiness, liveness, and metrics endpoints"
     }
   }
 }
