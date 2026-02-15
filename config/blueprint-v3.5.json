@@ -9,14 +9,16 @@
       { "path": "/consulting", "title": "Consulting", "component": "/app/consulting/page.tsx" },
       { "path": "/codex", "title": "Rastafarai Codex", "component": "/app/codex/page.tsx" },
       { "path": "/dashboard", "title": "Dashboard", "component": "/app/dashboard/page.tsx" },
-      { "path": "/dashboard/enterprise", "title": "Enterprise Dashboard", "component": "/app/dashboard/enterprise/page.tsx" }
+      { "path": "/dashboard/enterprise", "title": "Enterprise Dashboard", "component": "/app/dashboard/enterprise/page.tsx" },
+      { "path": "/dashboard/admin", "title": "Admin Governance Control", "component": "/app/dashboard/admin/page.tsx" }
     ],
     "nav": [
       { "label": "Home", "href": "/" },
       { "label": "Codex", "href": "/codex" },
       { "label": "Consulting", "href": "/consulting" },
       { "label": "Dashboard", "href": "/dashboard" },
-      { "label": "Enterprise", "href": "/dashboard/enterprise" }
+      { "label": "Enterprise", "href": "/dashboard/enterprise" },
+      { "label": "Admin", "href": "/dashboard/admin" }
     ]
   },
   "governanceStack": [
@@ -31,13 +33,78 @@
     { "layer": 9, "name": "Public Interface", "description": "Website, content, LinkedIn, Substack presence" }
   ],
   "codex": [
-    { "article": "I", "title": "Containment", "description": "Safe boundaries and mutation quarantine" },
-    { "article": "II", "title": "Observability", "description": "100% trace coverage across all layers" },
-    { "article": "III", "title": "Interruptibility", "description": "Human-in-loop and auto-rollback gates" },
-    { "article": "IV", "title": "Accountability", "description": "Immutable audit trails and attribution" },
-    { "article": "V", "title": "Legitimacy", "description": "Governance rituals and deployment workflows" },
-    { "article": "VI", "title": "Alignment", "description": "Value coherence and drift detection" },
-    { "article": "VII", "title": "Temporal Asymmetry", "description": "Long-term stewardship over short-term optimization" }
+    {
+      "article": "I",
+      "title": "Containment",
+      "description": "Safe boundaries and mutation quarantine",
+      "templateType": "internal-mdx",
+      "linksTo": ["II", "IV"],
+      "revisionHistory": [
+        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Initial containment controls" },
+        { "version": "1.1.0", "updatedAt": "2026-02-01", "summary": "Expanded quarantine policy" }
+      ]
+    },
+    {
+      "article": "II",
+      "title": "Observability",
+      "description": "100% trace coverage across all layers",
+      "templateType": "consulting-mdx",
+      "linksTo": ["III", "IV"],
+      "revisionHistory": [
+        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Baseline trace controls" },
+        { "version": "1.2.0", "updatedAt": "2026-02-04", "summary": "Added cross-linking for III and IV" }
+      ]
+    },
+    {
+      "article": "III",
+      "title": "Interruptibility",
+      "description": "Human-in-loop and auto-rollback gates",
+      "templateType": "consulting-mdx",
+      "linksTo": ["II", "V"],
+      "revisionHistory": [
+        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Introduced interrupt drills" }
+      ]
+    },
+    {
+      "article": "IV",
+      "title": "Accountability",
+      "description": "Immutable audit trails and attribution",
+      "templateType": "internal-mdx",
+      "linksTo": ["II", "V"],
+      "revisionHistory": [
+        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "SHA256 provenance tracking" }
+      ]
+    },
+    {
+      "article": "V",
+      "title": "Legitimacy",
+      "description": "Governance rituals and deployment workflows",
+      "templateType": "consulting-mdx",
+      "linksTo": ["III", "IV"],
+      "revisionHistory": [
+        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Deployment workflow controls" }
+      ]
+    },
+    {
+      "article": "VI",
+      "title": "Alignment",
+      "description": "Value coherence and drift detection",
+      "templateType": "internal-mdx",
+      "linksTo": ["II", "VII"],
+      "revisionHistory": [
+        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Alignment baseline" }
+      ]
+    },
+    {
+      "article": "VII",
+      "title": "Temporal Asymmetry",
+      "description": "Long-term stewardship over short-term optimization",
+      "templateType": "internal-mdx",
+      "linksTo": ["VI"],
+      "revisionHistory": [
+        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Long-horizon governance stance" }
+      ]
+    }
   ],
   "consulting": {
     "flagship": {
@@ -63,7 +130,29 @@
   "platform": {
     "dashboards": [
       { "name": "SoulEcho Dashboard", "type": "user", "path": "/dashboard" },
-      { "name": "Enterprise Dashboard", "type": "enterprise", "path": "/dashboard/enterprise" }
+      { "name": "Enterprise Dashboard", "type": "enterprise", "path": "/dashboard/enterprise" },
+      { "name": "Admin Governance Control", "type": "admin", "path": "/dashboard/admin" }
+    ],
+    "realtimeMetrics": {
+      "enabled": true,
+      "transport": "WebSocket",
+      "publicDemoAccess": true
+    },
+    "layerCoherenceScores": [
+      { "layer": 1, "name": "Infrastructure", "score": 98.1 },
+      { "layer": 2, "name": "Data & Telemetry", "score": 97.4 },
+      { "layer": 3, "name": "Governance Engine", "score": 97.7 },
+      { "layer": 4, "name": "Documentation Factory", "score": 96.8 },
+      { "layer": 5, "name": "Dashboard", "score": 97.2 },
+      { "layer": 6, "name": "Consulting Layer", "score": 96.9 },
+      { "layer": 7, "name": "Codex Layer", "score": 98.3 },
+      { "layer": 8, "name": "Brand & Narrative", "score": 95.9 },
+      { "layer": 9, "name": "Public Interface", "score": 96.5 }
+    ],
+    "mutationLog": [
+      { "id": "ev-991", "event": "EVO-V policy mutation accepted", "actor": "governance-engine", "timestamp": "2026-02-14T14:12:00Z", "status": "approved" },
+      { "id": "ev-992", "event": "Trace coverage replay run", "actor": "telemetry-pipeline", "timestamp": "2026-02-14T14:18:00Z", "status": "completed" },
+      { "id": "ev-993", "event": "Human interrupt drill", "actor": "ops-reviewer", "timestamp": "2026-02-14T14:21:00Z", "status": "passed" }
     ],
     "documentationFactory": true,
     "evoVConcepts": true,
@@ -73,6 +162,15 @@
     "workspaces": true,
     "subscriptionGated": true,
     "usageBilling": { "tokens": true, "apiCalls": true, "seats": true },
+    "workspaceModel": {
+      "isolation": "per-client schema + row-level access policies",
+      "roleMatrix": ["owner", "governance-admin", "analyst", "readonly"],
+      "seatAllocation": [
+        { "tier": "Standard", "includedSeats": 3, "extraSeatPrice": 19 },
+        { "tier": "Pro", "includedSeats": 12, "extraSeatPrice": 29 },
+        { "tier": "Enterprise", "includedSeats": 50, "extraSeatPrice": 45 }
+      ]
+    },
     "alerts": true,
     "complianceTracking": true
   },
@@ -84,9 +182,55 @@
       { "name": "Pro", "price": 197, "recurring": "monthly" },
       { "name": "Enterprise", "price": 5000, "recurring": "monthly" }
     ],
+    "usageBillingMeters": ["tokens", "seats", "api_calls"],
+    "featureAccess": {
+      "dashboardWidgets": true,
+      "codexTemplates": true
+    },
     "webhookHandler": "/api/stripe/webhook",
     "receipts": true,
-    "customerPortal": true
+    "customerPortal": true,
+    "productionReadiness": {
+      "webhookToDbSync": true,
+      "emailReceiptChain": true,
+      "customerPortalLive": true
+    }
+  },
+  "telemetry": {
+    "governance": {
+      "articleIITraceCoverage": 100,
+      "articleIVSha256Verification": true,
+      "articleIIIDrills": "nightly sandbox + weekly staged failover",
+      "articleVInterruptibility": "quarterly human override rehearsal"
+    },
+    "globalLayerMetrics": [
+      { "layer": 1, "coherence": 98.1, "deviationAlert": "stable" },
+      { "layer": 2, "coherence": 97.4, "deviationAlert": "stable" },
+      { "layer": 3, "coherence": 97.7, "deviationAlert": "stable" },
+      { "layer": 4, "coherence": 96.8, "deviationAlert": "watch" },
+      { "layer": 5, "coherence": 97.2, "deviationAlert": "stable" },
+      { "layer": 6, "coherence": 96.9, "deviationAlert": "watch" },
+      { "layer": 7, "coherence": 98.3, "deviationAlert": "stable" },
+      { "layer": 8, "coherence": 95.9, "deviationAlert": "watch" },
+      { "layer": 9, "coherence": 96.5, "deviationAlert": "stable" }
+    ],
+    "consultingVisibility": {
+      "enabled": true,
+      "reportCadence": "weekly",
+      "linkedDashboards": ["SoulEcho Dashboard", "Enterprise Dashboard"]
+    }
+  },
+  "admin": {
+    "controls": {
+      "dashboards": true,
+      "subscriptionTiers": true,
+      "codexUpdates": true
+    },
+    "auditLogs": true,
+    "deploymentControls": {
+      "v35Triggers": true,
+      "rollback": true
+    }
   },
   "technicalArchitecture": {
     "frontend": "Next.js 15",
