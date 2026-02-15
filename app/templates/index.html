@@ -306,7 +306,59 @@ ul{
 
   </main>
   <script>
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reducedMotionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let prefersReducedMotion = reducedMotionMediaQuery.matches;
+
+    const heroSigil = document.querySelector('.hero-sigil');
+    let heroAnimationFrameId = null;
+
+    function stopHeroSigilAnimation() {
+      if (heroAnimationFrameId !== null) {
+        cancelAnimationFrame(heroAnimationFrameId);
+        heroAnimationFrameId = null;
+      }
+    }
+
+    function startHeroSigilAnimation() {
+      if (!heroSigil || prefersReducedMotion) {
+        return;
+      }
+
+      const start = performance.now();
+      const rotateSpeed = 0.03;
+      const bobAmplitude = 4;
+
+      const step = (now) => {
+        const elapsed = now - start;
+        const bobOffset = Math.sin(elapsed * 0.003) * bobAmplitude;
+        const rotation = elapsed * rotateSpeed;
+        heroSigil.style.transform = `translateY(${bobOffset}px) rotate(${rotation}deg)`;
+        heroAnimationFrameId = requestAnimationFrame(step);
+      };
+
+      heroAnimationFrameId = requestAnimationFrame(step);
+    }
+
+    function applyMotionPreference() {
+      prefersReducedMotion = reducedMotionMediaQuery.matches;
+      stopHeroSigilAnimation();
+
+      if (heroSigil) {
+        if (prefersReducedMotion) {
+          heroSigil.style.transform = 'translateY(0) rotate(0deg)';
+        } else {
+          startHeroSigilAnimation();
+        }
+      }
+    }
+
+    applyMotionPreference();
+
+    if (typeof reducedMotionMediaQuery.addEventListener === 'function') {
+      reducedMotionMediaQuery.addEventListener('change', applyMotionPreference);
+    } else if (typeof reducedMotionMediaQuery.addListener === 'function') {
+      reducedMotionMediaQuery.addListener(applyMotionPreference);
+    }
 
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", (event) => {
