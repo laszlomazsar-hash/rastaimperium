@@ -308,6 +308,13 @@ ul{
   <script>
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    if (window.THREE && window.THREE.GLTFLoader) {
+      const loader = new window.THREE.GLTFLoader();
+      loader.load("/static/models/lion.glb", () => {
+        // Model is available from the static mount for scenes that use it.
+      });
+    }
+
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", (event) => {
         event.preventDefault();
