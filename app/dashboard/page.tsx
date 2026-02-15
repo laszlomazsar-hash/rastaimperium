@@ -1,43 +1,40 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { AlertWidget } from "../components/AlertWidget";
-import { CoherenceMeter } from "../components/CoherenceMeter";
 import { CodexCompliance } from "../components/CodexCompliance";
 import { useBlueprint } from "../../hooks/useBlueprint";
 import { useRealtimeMetrics } from "../../hooks/useRealtimeMetrics";
 
-type LayerMetric = { layer: number; coherence: number };
+const DASHBOARD_LAYER_COUNT = 9;
+const LAYER_JITTER_PATTERN = [-0.3, 0.3] as const;
 
-type StreamPayload = {
-  livityScore: number;
-  vibrationScore: number;
-  mutationEvent: string;
-  layers: LayerMetric[];
+type CoverageNode = {
+  layer: string;
+  coverage: number;
 };
 
-function nextPayload(seed: number): StreamPayload {
-  const layers = Array.from({ length: 9 }, (_, idx) => {
-    const layer = idx + 1;
-    const baseline = 92 + ((seed + layer) % 6);
-    return { layer, coherence: Math.min(100, baseline + (layer % 2 === 0 ? 0.4 : -0.4)) };
+function buildCoverageFromRealtime(coherence: number): CoverageNode[] {
+  const boundedCoherence = Math.min(100, Math.max(0, coherence));
+
+  return Array.from({ length: DASHBOARD_LAYER_COUNT }, (_, index) => {
+    const layer = index + 1;
+    const jitter = LAYER_JITTER_PATTERN[layer % 2];
+
+    return {
+      layer: `L${layer}`,
+      coverage: Number(Math.min(100, Math.max(0, boundedCoherence + jitter)).toFixed(2)),
+    };
   });
-
-  const livityScore = Number((layers.reduce((acc, item) => acc + item.coherence, 0) / layers.length).toFixed(2));
-  const vibrationScore = Number((livityScore + ((seed % 5) - 2) * 0.5).toFixed(2));
-
-  return {
-    livityScore,
-    vibrationScore,
-    mutationEvent: `EVO-V mutation event #${seed}`,
-    layers,
-  };
 }
 
 export default function Dashboard() {
   const { blueprint, loading } = useBlueprint();
   const realtime = useRealtimeMetrics();
+  const alerts = realtime.alerts ?? [];
+  const alertSummary = alerts.length ? alerts.join(", ") : "No active deviations";
+  const coverage = useMemo(() => buildCoverageFromRealtime(realtime.coherence), [realtime.coherence]);
 
   if (loading) return <p>Loading Dashboard...</p>;
   if (!blueprint) return <p>Error loading blueprint.</p>;
@@ -57,7 +54,7 @@ export default function Dashboard() {
           <li>Active users: {realtime.activeUsers}</li>
           <li>WebSocket latency: {realtime.websocketLatencyMs}ms</li>
           <li>Global coherence: {realtime.coherence}%</li>
-          <li>Alerts: {realtime.alerts.join(", ")}</li>
+          <li>Alerts: {alertSummary}</li>
           <li>Updated: {new Date(realtime.updatedAt).toLocaleTimeString()}</li>
         </ul>
       </section>
@@ -118,9 +115,7 @@ export default function Dashboard() {
         </p>
       </section>
 
-      <CodexCompliance
-        coverage={stream.layers.map((layer) => ({ layer: `L${layer.layer}`, coverage: Number(layer.coherence.toFixed(2)) }))}
-      />
+      <CodexCompliance coverage={coverage} />
       <AlertWidget alerts={alerts} />
     </main>
   );
