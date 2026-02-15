@@ -308,7 +308,59 @@ ul{
 
   </main>
   <script>
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reducedMotionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let prefersReducedMotion = reducedMotionMediaQuery.matches;
+
+    const heroSigil = document.querySelector('.hero-sigil');
+    let heroAnimationFrameId = null;
+
+    function stopHeroSigilAnimation() {
+      if (heroAnimationFrameId !== null) {
+        cancelAnimationFrame(heroAnimationFrameId);
+        heroAnimationFrameId = null;
+      }
+    }
+
+    function startHeroSigilAnimation() {
+      if (!heroSigil || prefersReducedMotion) {
+        return;
+      }
+
+      const start = performance.now();
+      const rotateSpeed = 0.03;
+      const bobAmplitude = 4;
+
+      const step = (now) => {
+        const elapsed = now - start;
+        const bobOffset = Math.sin(elapsed * 0.003) * bobAmplitude;
+        const rotation = elapsed * rotateSpeed;
+        heroSigil.style.transform = `translateY(${bobOffset}px) rotate(${rotation}deg)`;
+        heroAnimationFrameId = requestAnimationFrame(step);
+      };
+
+      heroAnimationFrameId = requestAnimationFrame(step);
+    }
+
+    function applyMotionPreference() {
+      prefersReducedMotion = reducedMotionMediaQuery.matches;
+      stopHeroSigilAnimation();
+
+      if (heroSigil) {
+        if (prefersReducedMotion) {
+          heroSigil.style.transform = 'translateY(0) rotate(0deg)';
+        } else {
+          startHeroSigilAnimation();
+        }
+      }
+    }
+
+    applyMotionPreference();
+
+    if (typeof reducedMotionMediaQuery.addEventListener === 'function') {
+      reducedMotionMediaQuery.addEventListener('change', applyMotionPreference);
+    } else if (typeof reducedMotionMediaQuery.addListener === 'function') {
+      reducedMotionMediaQuery.addListener(applyMotionPreference);
+    }
 
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", (event) => {
@@ -360,43 +412,42 @@ ul{
       }
     });
 
-    const homeSection = document.getElementById("home");
-    let rafId = null;
-
-    function renderHomeOverlay() {
-      if (!homeSection || homeSection.hidden || document.hidden) {
-        rafId = null;
+    function initLionScene(container) {
+      if (!window.THREE) {
         return;
       }
-      const time = performance.now() * 0.001;
-      homeSection.style.setProperty("--overlay-shift", `${Math.sin(time) * 2}%`);
-      rafId = window.requestAnimationFrame(renderHomeOverlay);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        60,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+      renderer.setPixelRatio(window.devicePixelRatio || 1);
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+
+      camera.position.set(0, 0, 6);
+      renderer.render(scene, camera);
     }
 
-    function startHomeRendering() {
-      if (rafId !== null || !homeSection || homeSection.hidden || document.hidden) {
+    function bootstrapLionScene() {
+      const container = document.getElementById('lion-container');
+      if (!container) {
         return;
       }
-      rafId = window.requestAnimationFrame(renderHomeOverlay);
+
+      try {
+        initLionScene(container);
+      } catch (error) {
+        console.error('Lion scene initialization failed:', error);
+      }
     }
 
-    function stopHomeRendering() {
-      if (rafId === null) {
-        return;
-      }
-      window.cancelAnimationFrame(rafId);
-      rafId = null;
-    }
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        stopHomeRendering();
-        return;
-      }
-      if (homeSection && !homeSection.hidden) {
-        startHomeRendering();
-      }
-    });
+    bootstrapLionScene();
 
     function show(id, el, event) {
       const evt = event || window.event;
