@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  CardGrid,
+  DashboardShell,
+  PanelCard,
+  StatCard,
+  StatusChip,
+  TrendRow,
+} from "../../components/DashboardLayout";
 import { useBlueprint } from "../../../hooks/useBlueprint";
 
 const funnelStages = [
@@ -42,124 +50,52 @@ export default function EnterpriseDashboardPage() {
   const governanceHealth = 89;
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "Arial, sans-serif", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1>🏢 SoulEcho Enterprise Dashboard</h1>
-      <p>Acquisition-to-governance performance view for enterprise programs.</p>
+    <DashboardShell>
+      <h1>🏢 Enterprise Dashboard</h1>
+      <p>Enterprise governance telemetry using the shared card and status system.</p>
 
-      <section
-        style={{
-          display: "grid",
-          gap: "0.8rem",
-          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-          margin: "1.5rem 0",
-        }}
-      >
-        <div style={{ padding: "1rem", border: "1px solid #e5e7eb", borderRadius: "10px" }}>
-          <p style={{ margin: 0, fontSize: "0.85rem" }}>Governance Health Meter</p>
-          <h2 style={{ margin: "0.4rem 0" }}>{governanceHealth}/100</h2>
-          <progress max={100} value={governanceHealth} style={{ width: "100%" }} />
-        </div>
-        <div style={{ padding: "1rem", border: "1px solid #e5e7eb", borderRadius: "10px" }}>
-          <p style={{ margin: 0, fontSize: "0.85rem" }}>Lead → SQL Conversion</p>
-          <h2 style={{ margin: "0.4rem 0" }}>{toSql}%</h2>
-          <p style={{ margin: 0 }}>CPL: £238</p>
-        </div>
-        <div style={{ padding: "1rem", border: "1px solid #e5e7eb", borderRadius: "10px" }}>
-          <p style={{ margin: 0, fontSize: "0.85rem" }}>SQL → Closed Rate</p>
-          <h2 style={{ margin: "0.4rem 0" }}>{toClosed}%</h2>
-          <p style={{ margin: 0 }}>CAC: £3,980</p>
-        </div>
-        <div style={{ padding: "1rem", border: "1px solid #e5e7eb", borderRadius: "10px" }}>
-          <p style={{ margin: 0, fontSize: "0.85rem" }}>Avg Monthly Token Usage</p>
-          <h2 style={{ margin: "0.4rem 0" }}>82k</h2>
-          <p style={{ margin: 0 }}>+11% QoQ</p>
-        </div>
-      </section>
+      <CardGrid>
+        <StatCard label="Isolation Mode" value={blueprint.enterprise.workspaceModel.isolation} />
+        <StatCard label="Workspace Feature" value={blueprint.enterprise.workspaces ? "Enabled" : "Disabled"} />
+        <StatCard label="Role Count" value={String(blueprint.enterprise.workspaceModel.roleMatrix.length)} detail="Role matrix entries" />
+      </CardGrid>
 
-      <section style={{ marginBottom: "1.5rem" }}>
-        <h2>Funnel KPIs</h2>
-        <ul>
-          {funnelStages.map((stage) => (
-            <li key={stage.label}>
-              {stage.label}: {stage.value}
-            </li>
+      <CardGrid>
+        <PanelCard title="Workspace Isolation & Permissions" subtitle="Role matrix and workspace controls.">
+          <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", marginBottom: "0.5rem" }}>
+            <StatusChip label="Workspaces" status={blueprint.enterprise.workspaces ? "ok" : "error"} />
+            <StatusChip label="Subscription Gated" status={blueprint.enterprise.subscriptionGated ? "ok" : "warn"} />
+          </div>
+          {blueprint.enterprise.workspaceModel.roleMatrix.map((role) => (
+            <TrendRow key={role} label="Role" value={role} direction="neutral" />
           ))}
-        </ul>
-      </section>
+        </PanelCard>
 
-      <section style={{ marginBottom: "1.5rem" }}>
-        <h2>Token Usage Trends</h2>
-        <svg viewBox="0 0 320 120" style={{ width: "100%", maxWidth: "700px", border: "1px solid #e5e7eb", borderRadius: "8px" }}>
-          <polyline
-            fill="none"
-            stroke="#2563eb"
-            strokeWidth="3"
-            points={tokenUsage
-              .map((point, i) => `${i * 28 + 6},${115 - point}`)
-              .join(" ")}
-          />
-        </svg>
-      </section>
-
-      <section style={{ marginBottom: "1.5rem" }}>
-        <h2>Compliance Radar (Patrol Articles I–VII)</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "0.5rem", maxWidth: "700px" }}>
-          {complianceRadar.map((item) => (
-            <div key={item.article} style={{ border: "1px solid #e5e7eb", borderRadius: "8px", padding: "0.6rem" }}>
-              <strong>Article {item.article}</strong>
-              <p style={{ margin: "0.2rem 0 0" }}>{item.score}/100</p>
-            </div>
+        <PanelCard title="Seat Allocation by Tier" subtitle="Included seats and extra seat pricing.">
+          {blueprint.enterprise.workspaceModel.seatAllocation.map((seatTier) => (
+            <TrendRow
+              key={seatTier.tier}
+              label={seatTier.tier}
+              value={`${seatTier.includedSeats} seats · £${seatTier.extraSeatPrice} extra`}
+              direction="neutral"
+            />
           ))}
-        </div>
-      </section>
+        </PanelCard>
+      </CardGrid>
 
-      <section style={{ marginBottom: "1.5rem" }}>
-        <h2>Enterprise Pulse</h2>
-        <table style={{ borderCollapse: "collapse", width: "100%", maxWidth: "800px" }}>
-          <thead>
-            <tr>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #d1d5db", padding: "0.5rem" }}>Workspace</th>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #d1d5db", padding: "0.5rem" }}>Health</th>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #d1d5db", padding: "0.5rem" }}>Risk</th>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #d1d5db", padding: "0.5rem" }}>CPL</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workspacePulse.map((workspace) => (
-              <tr key={workspace.workspace}>
-                <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>{workspace.workspace}</td>
-                <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>{workspace.health}/100</td>
-                <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>{workspace.risk}</td>
-                <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>{workspace.cpl}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      <section>
-        <h2>Workspace Isolation & Permissions</h2>
-        <ul>
-          <li>Workspaces: {blueprint.enterprise.workspaces ? "✅" : "❌"}</li>
-          <li>Isolation mode: {blueprint.enterprise.workspaceModel.isolation}</li>
-          <li>Role matrix: {blueprint.enterprise.workspaceModel.roleMatrix.join(", ")}</li>
-        </ul>
-        <p>
-          Consulting report cadence: {blueprint.telemetry.consultingVisibility.reportCadence} | Linked dashboards:{" "}
-          {blueprint.telemetry.consultingVisibility.linkedDashboards.join(", ")}
-        </p>
+      <PanelCard title="Enterprise Dashboards + Consulting Visibility" subtitle="Configured dashboards and advisory cadence.">
         {enterpriseDashboards.length > 0 ? (
-          <ul>
-            {enterpriseDashboards.map((dashboard) => (
-              <li key={dashboard.name}>
-                {dashboard.name} — Path: {dashboard.path}
-              </li>
-            ))}
-          </ul>
+          enterpriseDashboards.map((dashboard) => (
+            <TrendRow key={dashboard.name} label={dashboard.name} value={dashboard.path} direction="neutral" />
+          ))
         ) : (
           <p>No enterprise dashboards configured.</p>
         )}
-      </section>
-    </main>
+        <div style={{ marginTop: "0.65rem" }}>
+          <TrendRow label="Consulting cadence" value={blueprint.telemetry.consultingVisibility.reportCadence} direction="neutral" />
+          <TrendRow label="Linked dashboards" value={blueprint.telemetry.consultingVisibility.linkedDashboards.join(", ")} direction="neutral" />
+        </div>
+      </PanelCard>
+    </DashboardShell>
   );
 }

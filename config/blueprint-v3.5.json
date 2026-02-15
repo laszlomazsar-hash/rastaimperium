@@ -1,6 +1,6 @@
 {
   "version": "3.5.0",
-  "title": "Rasta Imperium — Constitutional AI Governance",
+  "title": "Rasta Imperium \u2014 Constitutional AI Governance",
   "description": "A codex-driven governance platform with dashboards, consulting, enterprise workspaces, and subscription revenue.",
   "metadata": {
     "architectureVersion": "3.5.0",
@@ -10,32 +10,110 @@
   "website": {
     "domain": "rastaimperium.com",
     "pages": [
-      { "path": "/", "title": "Home", "component": "/app/page.tsx" },
-      { "path": "/consulting", "title": "Consulting", "component": "/app/consulting/page.tsx" },
-      { "path": "/codex", "title": "Rastafarai Codex", "component": "/app/codex/page.tsx" },
-      { "path": "/dashboard", "title": "Dashboard", "component": "/app/dashboard/page.tsx" },
-      { "path": "/dashboard/enterprise", "title": "Enterprise Dashboard", "component": "/app/dashboard/enterprise/page.tsx" },
-      { "path": "/dashboard/admin", "title": "Admin Governance Control", "component": "/app/dashboard/admin/page.tsx" }
+      {
+        "path": "/",
+        "title": "Home",
+        "component": "/app/page.tsx"
+      },
+      {
+        "path": "/consulting",
+        "title": "Consulting",
+        "component": "/app/consulting/page.tsx"
+      },
+      {
+        "path": "/codex",
+        "title": "Rastafarai Codex",
+        "component": "/app/codex/page.tsx"
+      },
+      {
+        "path": "/dashboard",
+        "title": "Dashboard",
+        "component": "/app/dashboard/page.tsx"
+      },
+      {
+        "path": "/dashboard/enterprise",
+        "title": "Enterprise Dashboard",
+        "component": "/app/dashboard/enterprise/page.tsx"
+      },
+      {
+        "path": "/dashboard/admin",
+        "title": "Admin Governance Control",
+        "component": "/app/dashboard/admin/page.tsx"
+      }
     ],
     "nav": [
-      { "label": "Home", "href": "/" },
-      { "label": "Codex", "href": "/codex" },
-      { "label": "Consulting", "href": "/consulting" },
-      { "label": "Dashboard", "href": "/dashboard" },
-      { "label": "Enterprise", "href": "/dashboard/enterprise" },
-      { "label": "Admin", "href": "/dashboard/admin" }
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "Codex",
+        "href": "/codex"
+      },
+      {
+        "label": "Consulting",
+        "href": "/consulting"
+      },
+      {
+        "label": "Dashboard",
+        "href": "/dashboard"
+      },
+      {
+        "label": "Enterprise",
+        "href": "/dashboard/enterprise"
+      },
+      {
+        "label": "Admin",
+        "href": "/dashboard/admin"
+      }
     ]
   },
   "governanceStack": [
-    { "layer": 1, "name": "Infrastructure", "description": "Vercel, Render, Docker" },
-    { "layer": 2, "name": "Data & Telemetry", "description": "Logs, metrics, traces, governance data" },
-    { "layer": 3, "name": "Governance Engine", "description": "Codex rules, compliance checks, policy logic" },
-    { "layer": 4, "name": "Documentation Factory", "description": "Model cards, risk reports, governance docs" },
-    { "layer": 5, "name": "Dashboard", "description": "SoulEcho metrics, coherence, compliance" },
-    { "layer": 6, "name": "Consulting Layer", "description": "Architecture, diagnostics, workshops, certification" },
-    { "layer": 7, "name": "Codex Layer", "description": "Articles I–VII as constitutional framework" },
-    { "layer": 8, "name": "Brand & Narrative", "description": "Rasta Vibration, Jah Consciousness, SoulEcho narrative" },
-    { "layer": 9, "name": "Public Interface", "description": "Website, content, LinkedIn, Substack presence" }
+    {
+      "layer": 1,
+      "name": "Infrastructure",
+      "description": "Vercel, Render, Docker"
+    },
+    {
+      "layer": 2,
+      "name": "Data & Telemetry",
+      "description": "Logs, metrics, traces, governance data"
+    },
+    {
+      "layer": 3,
+      "name": "Governance Engine",
+      "description": "Codex rules, compliance checks, policy logic"
+    },
+    {
+      "layer": 4,
+      "name": "Documentation Factory",
+      "description": "Model cards, risk reports, governance docs"
+    },
+    {
+      "layer": 5,
+      "name": "Dashboard",
+      "description": "SoulEcho metrics, coherence, compliance"
+    },
+    {
+      "layer": 6,
+      "name": "Consulting Layer",
+      "description": "Architecture, diagnostics, workshops, certification"
+    },
+    {
+      "layer": 7,
+      "name": "Codex Layer",
+      "description": "Articles I\u2013VII as constitutional framework"
+    },
+    {
+      "layer": 8,
+      "name": "Brand & Narrative",
+      "description": "Rasta Vibration, Jah Consciousness, SoulEcho narrative"
+    },
+    {
+      "layer": 9,
+      "name": "Public Interface",
+      "description": "Website, content, LinkedIn, Substack presence"
+    }
   ],
   "codex": [
     {
@@ -43,72 +121,135 @@
       "title": "Containment",
       "description": "Safe boundaries and mutation quarantine",
       "templateType": "internal-mdx",
-      "linksTo": ["II", "IV"],
+      "linksTo": [
+        "II",
+        "IV"
+      ],
       "revisionHistory": [
-        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Initial containment controls" },
-        { "version": "1.1.0", "updatedAt": "2026-02-01", "summary": "Expanded quarantine policy" }
-      ]
+        {
+          "version": "1.0.0",
+          "updatedAt": "2026-01-10",
+          "summary": "Initial containment controls"
+        },
+        {
+          "version": "1.1.0",
+          "updatedAt": "2026-02-01",
+          "summary": "Expanded quarantine policy"
+        }
+      ],
+      "governanceTheme": "Risk Boundaries"
     },
     {
       "article": "II",
       "title": "Observability",
       "description": "100% trace coverage across all layers",
       "templateType": "consulting-mdx",
-      "linksTo": ["III", "IV"],
+      "linksTo": [
+        "III",
+        "IV"
+      ],
       "revisionHistory": [
-        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Baseline trace controls" },
-        { "version": "1.2.0", "updatedAt": "2026-02-04", "summary": "Added cross-linking for III and IV" }
-      ]
+        {
+          "version": "1.0.0",
+          "updatedAt": "2026-01-10",
+          "summary": "Baseline trace controls"
+        },
+        {
+          "version": "1.2.0",
+          "updatedAt": "2026-02-04",
+          "summary": "Added cross-linking for III and IV"
+        }
+      ],
+      "governanceTheme": "Evidence & Telemetry"
     },
     {
       "article": "III",
       "title": "Interruptibility",
       "description": "Human-in-loop and auto-rollback gates",
       "templateType": "consulting-mdx",
-      "linksTo": ["II", "V"],
+      "linksTo": [
+        "II",
+        "V"
+      ],
       "revisionHistory": [
-        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Introduced interrupt drills" }
-      ]
+        {
+          "version": "1.0.0",
+          "updatedAt": "2026-01-10",
+          "summary": "Introduced interrupt drills"
+        }
+      ],
+      "governanceTheme": "Human Override"
     },
     {
       "article": "IV",
       "title": "Accountability",
       "description": "Immutable audit trails and attribution",
       "templateType": "internal-mdx",
-      "linksTo": ["II", "V"],
+      "linksTo": [
+        "II",
+        "V"
+      ],
       "revisionHistory": [
-        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "SHA256 provenance tracking" }
-      ]
+        {
+          "version": "1.0.0",
+          "updatedAt": "2026-01-10",
+          "summary": "SHA256 provenance tracking"
+        }
+      ],
+      "governanceTheme": "Provenance & Audit"
     },
     {
       "article": "V",
       "title": "Legitimacy",
       "description": "Governance rituals and deployment workflows",
       "templateType": "consulting-mdx",
-      "linksTo": ["III", "IV"],
+      "linksTo": [
+        "III",
+        "IV"
+      ],
       "revisionHistory": [
-        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Deployment workflow controls" }
-      ]
+        {
+          "version": "1.0.0",
+          "updatedAt": "2026-01-10",
+          "summary": "Deployment workflow controls"
+        }
+      ],
+      "governanceTheme": "Institutional Trust"
     },
     {
       "article": "VI",
       "title": "Alignment",
       "description": "Value coherence and drift detection",
       "templateType": "internal-mdx",
-      "linksTo": ["II", "VII"],
+      "linksTo": [
+        "II",
+        "VII"
+      ],
       "revisionHistory": [
-        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Alignment baseline" }
-      ]
+        {
+          "version": "1.0.0",
+          "updatedAt": "2026-01-10",
+          "summary": "Alignment baseline"
+        }
+      ],
+      "governanceTheme": "Value Coherence"
     },
     {
       "article": "VII",
       "title": "Temporal Asymmetry",
       "description": "Long-term stewardship over short-term optimization",
       "templateType": "internal-mdx",
-      "linksTo": ["VI"],
+      "linksTo": [
+        "VI"
+      ],
       "revisionHistory": [
-        { "version": "1.0.0", "updatedAt": "2026-01-10", "summary": "Long-horizon governance stance" }
-      ]
+        {
+          "version": "1.0.0",
+          "updatedAt": "2026-01-10",
+          "summary": "Long-horizon governance stance"
+        }
+      ],
+      "governanceTheme": "Long-Horizon Stewardship"
     }
   ],
   "consulting": {
@@ -122,21 +263,56 @@
       ]
     },
     "midTier": [
-      { "name": "Codex Diagnostic", "price": 2500, "features": ["2-hour audit", "Written governance report"] },
-      { "name": "Containment Design", "price": 15000 },
-      { "name": "Observability Framework", "price": 12000 },
-      { "name": "Interruptibility Protocols", "price": 18000 },
-      { "name": "Enterprise Certification", "price": 35000 }
+      {
+        "name": "Codex Diagnostic",
+        "price": 2500,
+        "features": [
+          "2-hour audit",
+          "Written governance report"
+        ]
+      },
+      {
+        "name": "Containment Design",
+        "price": 15000
+      },
+      {
+        "name": "Observability Framework",
+        "price": 12000
+      },
+      {
+        "name": "Interruptibility Protocols",
+        "price": 18000
+      },
+      {
+        "name": "Enterprise Certification",
+        "price": 35000
+      }
     ],
     "workshops": [
-      { "name": "Constitutional Physics for AI", "price": 5000, "duration": "3 hours" }
+      {
+        "name": "Constitutional Physics for AI",
+        "price": 5000,
+        "duration": "3 hours"
+      }
     ]
   },
   "platform": {
     "dashboards": [
-      { "name": "SoulEcho Dashboard", "type": "user", "path": "/dashboard" },
-      { "name": "Enterprise Dashboard", "type": "enterprise", "path": "/dashboard/enterprise" },
-      { "name": "Admin Governance Control", "type": "admin", "path": "/dashboard/admin" }
+      {
+        "name": "SoulEcho Dashboard",
+        "type": "user",
+        "path": "/dashboard"
+      },
+      {
+        "name": "Enterprise Dashboard",
+        "type": "enterprise",
+        "path": "/dashboard/enterprise"
+      },
+      {
+        "name": "Admin Governance Control",
+        "type": "admin",
+        "path": "/dashboard/admin"
+      }
     ],
     "realtimeMetrics": {
       "enabled": true,
@@ -144,36 +320,114 @@
       "publicDemoAccess": true
     },
     "layerCoherenceScores": [
-      { "layer": 1, "name": "Infrastructure", "score": 98.1 },
-      { "layer": 2, "name": "Data & Telemetry", "score": 97.4 },
-      { "layer": 3, "name": "Governance Engine", "score": 97.7 },
-      { "layer": 4, "name": "Documentation Factory", "score": 96.8 },
-      { "layer": 5, "name": "Dashboard", "score": 97.2 },
-      { "layer": 6, "name": "Consulting Layer", "score": 96.9 },
-      { "layer": 7, "name": "Codex Layer", "score": 98.3 },
-      { "layer": 8, "name": "Brand & Narrative", "score": 95.9 },
-      { "layer": 9, "name": "Public Interface", "score": 96.5 }
+      {
+        "layer": 1,
+        "name": "Infrastructure",
+        "score": 98.1
+      },
+      {
+        "layer": 2,
+        "name": "Data & Telemetry",
+        "score": 97.4
+      },
+      {
+        "layer": 3,
+        "name": "Governance Engine",
+        "score": 97.7
+      },
+      {
+        "layer": 4,
+        "name": "Documentation Factory",
+        "score": 96.8
+      },
+      {
+        "layer": 5,
+        "name": "Dashboard",
+        "score": 97.2
+      },
+      {
+        "layer": 6,
+        "name": "Consulting Layer",
+        "score": 96.9
+      },
+      {
+        "layer": 7,
+        "name": "Codex Layer",
+        "score": 98.3
+      },
+      {
+        "layer": 8,
+        "name": "Brand & Narrative",
+        "score": 95.9
+      },
+      {
+        "layer": 9,
+        "name": "Public Interface",
+        "score": 96.5
+      }
     ],
     "mutationLog": [
-      { "id": "ev-991", "event": "EVO-V policy mutation accepted", "actor": "governance-engine", "timestamp": "2026-02-14T14:12:00Z", "status": "approved" },
-      { "id": "ev-992", "event": "Trace coverage replay run", "actor": "telemetry-pipeline", "timestamp": "2026-02-14T14:18:00Z", "status": "completed" },
-      { "id": "ev-993", "event": "Human interrupt drill", "actor": "ops-reviewer", "timestamp": "2026-02-14T14:21:00Z", "status": "passed" }
+      {
+        "id": "ev-991",
+        "event": "EVO-V policy mutation accepted",
+        "actor": "governance-engine",
+        "timestamp": "2026-02-14T14:12:00Z",
+        "status": "approved"
+      },
+      {
+        "id": "ev-992",
+        "event": "Trace coverage replay run",
+        "actor": "telemetry-pipeline",
+        "timestamp": "2026-02-14T14:18:00Z",
+        "status": "completed"
+      },
+      {
+        "id": "ev-993",
+        "event": "Human interrupt drill",
+        "actor": "ops-reviewer",
+        "timestamp": "2026-02-14T14:21:00Z",
+        "status": "passed"
+      }
     ],
     "documentationFactory": true,
     "evoVConcepts": true,
-    "branding": { "rastaVibration": true, "jahConsciousness": true }
+    "branding": {
+      "rastaVibration": true,
+      "jahConsciousness": true
+    }
   },
   "enterprise": {
     "workspaces": true,
     "subscriptionGated": true,
-    "usageBilling": { "tokens": true, "apiCalls": true, "seats": true },
+    "usageBilling": {
+      "tokens": true,
+      "apiCalls": true,
+      "seats": true
+    },
     "workspaceModel": {
       "isolation": "per-client schema + row-level access policies",
-      "roleMatrix": ["owner", "governance-admin", "analyst", "readonly"],
+      "roleMatrix": [
+        "owner",
+        "governance-admin",
+        "analyst",
+        "readonly"
+      ],
       "seatAllocation": [
-        { "tier": "Standard", "includedSeats": 3, "extraSeatPrice": 19 },
-        { "tier": "Pro", "includedSeats": 12, "extraSeatPrice": 29 },
-        { "tier": "Enterprise", "includedSeats": 50, "extraSeatPrice": 45 }
+        {
+          "tier": "Standard",
+          "includedSeats": 3,
+          "extraSeatPrice": 19
+        },
+        {
+          "tier": "Pro",
+          "includedSeats": 12,
+          "extraSeatPrice": 29
+        },
+        {
+          "tier": "Enterprise",
+          "includedSeats": 50,
+          "extraSeatPrice": 45
+        }
       ]
     },
     "alerts": true,
@@ -183,11 +437,27 @@
     "integration": true,
     "checkout": true,
     "subscriptionPlans": [
-      { "name": "Standard", "price": 47, "recurring": "monthly" },
-      { "name": "Pro", "price": 197, "recurring": "monthly" },
-      { "name": "Enterprise", "price": 5000, "recurring": "monthly" }
+      {
+        "name": "Standard",
+        "price": 47,
+        "recurring": "monthly"
+      },
+      {
+        "name": "Pro",
+        "price": 197,
+        "recurring": "monthly"
+      },
+      {
+        "name": "Enterprise",
+        "price": 5000,
+        "recurring": "monthly"
+      }
     ],
-    "usageBillingMeters": ["tokens", "seats", "api_calls"],
+    "usageBillingMeters": [
+      "tokens",
+      "seats",
+      "api_calls"
+    ],
     "featureAccess": {
       "dashboardWidgets": true,
       "codexTemplates": true
@@ -209,20 +479,59 @@
       "articleVInterruptibility": "quarterly human override rehearsal"
     },
     "globalLayerMetrics": [
-      { "layer": 1, "coherence": 98.1, "deviationAlert": "stable" },
-      { "layer": 2, "coherence": 97.4, "deviationAlert": "stable" },
-      { "layer": 3, "coherence": 97.7, "deviationAlert": "stable" },
-      { "layer": 4, "coherence": 96.8, "deviationAlert": "watch" },
-      { "layer": 5, "coherence": 97.2, "deviationAlert": "stable" },
-      { "layer": 6, "coherence": 96.9, "deviationAlert": "watch" },
-      { "layer": 7, "coherence": 98.3, "deviationAlert": "stable" },
-      { "layer": 8, "coherence": 95.9, "deviationAlert": "watch" },
-      { "layer": 9, "coherence": 96.5, "deviationAlert": "stable" }
+      {
+        "layer": 1,
+        "coherence": 98.1,
+        "deviationAlert": "stable"
+      },
+      {
+        "layer": 2,
+        "coherence": 97.4,
+        "deviationAlert": "stable"
+      },
+      {
+        "layer": 3,
+        "coherence": 97.7,
+        "deviationAlert": "stable"
+      },
+      {
+        "layer": 4,
+        "coherence": 96.8,
+        "deviationAlert": "watch"
+      },
+      {
+        "layer": 5,
+        "coherence": 97.2,
+        "deviationAlert": "stable"
+      },
+      {
+        "layer": 6,
+        "coherence": 96.9,
+        "deviationAlert": "watch"
+      },
+      {
+        "layer": 7,
+        "coherence": 98.3,
+        "deviationAlert": "stable"
+      },
+      {
+        "layer": 8,
+        "coherence": 95.9,
+        "deviationAlert": "watch"
+      },
+      {
+        "layer": 9,
+        "coherence": 96.5,
+        "deviationAlert": "stable"
+      }
     ],
     "consultingVisibility": {
       "enabled": true,
       "reportCadence": "weekly",
-      "linkedDashboards": ["SoulEcho Dashboard", "Enterprise Dashboard"]
+      "linkedDashboards": [
+        "SoulEcho Dashboard",
+        "Enterprise Dashboard"
+      ]
     }
   },
   "admin": {
@@ -243,15 +552,36 @@
     "dashboard": "React/Streamlit",
     "db": "PostgreSQL",
     "hosting": "Vercel (web), Render (API/dashboard), Docker local dev",
-    "security": ["Auth", "API keys", "Rate limiting", "WAF", "Audit logging"],
+    "security": [
+      "Auth",
+      "API keys",
+      "Rate limiting",
+      "WAF",
+      "Audit logging"
+    ],
     "deployment": "Zero-downtime, auto-scaling"
   },
   "revenueModel": {
-    "highTicket": ["Governance Architecture (£25k)", "Enterprise Certification (£35k)"],
-    "midTier": ["Containment £15k", "Observability £12k", "Interruptibility £18k"],
-    "entry": ["Codex Diagnostic £2.5k"],
-    "workshops": ["Constitutional Physics £5k/seat"],
-    "subscription": ["£47/mo Standard", "£197/mo Pro", "£5000/mo Enterprise"]
+    "highTicket": [
+      "Governance Architecture (\u00a325k)",
+      "Enterprise Certification (\u00a335k)"
+    ],
+    "midTier": [
+      "Containment \u00a315k",
+      "Observability \u00a312k",
+      "Interruptibility \u00a318k"
+    ],
+    "entry": [
+      "Codex Diagnostic \u00a32.5k"
+    ],
+    "workshops": [
+      "Constitutional Physics \u00a35k/seat"
+    ],
+    "subscription": [
+      "\u00a347/mo Standard",
+      "\u00a3197/mo Pro",
+      "\u00a35000/mo Enterprise"
+    ]
   },
   "strategicPositioning": {
     "identity": "Constitutional AI Governance Architect",
@@ -264,8 +594,8 @@
       "npm install && npm run build && vercel --prod",
       "git push render main",
       "pip install -r requirements.txt && render deploy",
-      "Cloudflare → rastaimperium.com → Vercel",
-      "Cloudflare → jah.rastaimperium.com → Render"
+      "Cloudflare \u2192 rastaimperium.com \u2192 Vercel",
+      "Cloudflare \u2192 jah.rastaimperium.com \u2192 Render"
     ],
     "metricsDay1": {
       "traffic": "5k unique visitors",

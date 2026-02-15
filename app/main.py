@@ -1,6 +1,6 @@
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi import FastAPI, Form, HTTPException, Request
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.core.config import settings
@@ -214,3 +214,36 @@ async def privacy(request: Request):
 async def terms(request: Request):
     """Terms of use and participation boundaries."""
     return templates.TemplateResponse("terms.html", {"request": request})
+
+
+@app.post("/enterprise/intake/submit")
+async def enterprise_intake_submit(
+    name: str = Form(...),
+    email: str = Form(...),
+    company: str = Form(...),
+    company_size: str = Form(...),
+    ai_use_case: str = Form(...),
+    timeline: str = Form(...),
+    budget_band: str = Form(...),
+    notes: str = Form(""),
+):
+    """Capture enterprise qualification details and acknowledge receipt."""
+    payload = {
+        "name": name.strip(),
+        "email": email.strip(),
+        "company": company.strip(),
+        "company_size": company_size.strip(),
+        "ai_use_case": ai_use_case.strip(),
+        "timeline": timeline.strip(),
+        "budget_band": budget_band.strip(),
+        "notes": notes.strip(),
+    }
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "status": "received",
+            "message": "Enterprise intake submitted successfully.",
+            "submission": payload,
+        },
+    )

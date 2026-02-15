@@ -13,6 +13,7 @@ export interface CodexArticle {
   title: string;
   description: string;
   templateType?: string;
+  governanceTheme?: string;
   linksTo?: string[];
   revisionHistory?: {
     version: string;

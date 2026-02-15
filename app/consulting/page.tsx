@@ -2,42 +2,36 @@
 
 import { useBlueprint } from "../../hooks/useBlueprint";
 
-const enterpriseBenefits = [
-  "Accelerate time-to-compliance with policy-aware AI workflows",
-  "Reduce governance risk with enforceable guardrails and audit trails",
-  "Increase observability across token usage, model behavior, and workspace controls",
-];
-
-const roleUseCases = [
+const enterpriseCtas = [
   {
-    role: "CTO / Head of AI Governance",
-    outcomes: ["Blueprint-aligned AI strategy", "Cross-workspace oversight", "Board-ready reporting"],
+    title: "Discovery Call",
+    description: "Align business objectives, compliance requirements, and stakeholder ownership.",
+    href: "/enterprise/intake?track=discovery",
   },
   {
-    role: "Compliance / Risk Leads",
-    outcomes: ["Policy mapping against Patrol Articles I–VII", "Continuous audit evidence", "Data residency controls"],
+    title: "AI Diagnostics",
+    description: "Receive an executive-level readiness review across governance, controls, and delivery.",
+    href: "/enterprise/intake?track=diagnostic",
   },
   {
-    role: "Engineering Leadership",
-    outcomes: ["Guardrails in delivery pipelines", "Telemetry for incidents and quality", "Lower rework and escalation costs"],
+    title: "Proposal Request",
+    description: "Start a scoped commercial proposal tied to outcomes, risk posture, and timeline.",
+    href: "/enterprise/intake?track=proposal",
   },
 ];
 
-const faqs = [
+const proofCards = [
   {
-    question: "How do you handle enterprise security and compliance requirements?",
-    answer:
-      "We implement controls for governance policy enforcement, evidence retention, and model interaction monitoring with auditable reporting.",
+    heading: "Case Study: Regulated Enterprise",
+    text: "Implemented policy-backed AI delivery with audit-ready controls across three business units.",
   },
   {
-    question: "Can you support data residency and isolated enterprise workspaces?",
-    answer:
-      "Yes. Workspace isolation, scoped permissions, and regional data handling options can be configured for enterprise requirements.",
+    heading: "Governance Outcome",
+    text: "Created a decision framework linking executive approvals, model risk tiers, and launch gates.",
   },
   {
-    question: "What SLAs do you provide for enterprise engagements?",
-    answer:
-      "Enterprise programs include defined reporting cadence, response commitments, and delivery governance with executive checkpoints.",
+    heading: "Compliance Positioning",
+    text: "Mapped delivery controls to SOC 2, ISO 27001, and internal legal review workflows.",
   },
 ];
 
@@ -73,86 +67,46 @@ export default function ConsultingPage() {
         </button>
       </section>
 
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Core Benefits for Enterprise Teams</h2>
-        <ul>
-          {enterpriseBenefits.map((benefit) => (
-            <li key={benefit} style={{ marginBottom: "0.45rem" }}>
-              {benefit}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Use Cases by Role</h2>
-        {roleUseCases.map((useCase) => (
-          <article key={useCase.role} style={{ marginBottom: "1rem" }}>
-            <h3>{useCase.role}</h3>
-            <ul>
-              {useCase.outcomes.map((outcome) => (
-                <li key={`${useCase.role}-${outcome}`}>{outcome}</li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </section>
-
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Enterprise Trust Signals</h2>
+      <section style={{ marginTop: "2rem" }}>
+        <h2>Enterprise Acquisition Path</h2>
         <p>
-          Trusted by governance-forward teams across consulting, legal-tech, and enterprise operations. SOC-aligned controls,
-          policy traceability, and transparent audit workflows included.
+          For enterprise buyers, move directly into our structured funnel for discovery, diagnostics,
+          and proposal planning.
         </p>
-        <ul>
-          <li>Governance assessment turnaround: under 14 days</li>
-          <li>Policy-to-implementation mapping: Patrol Articles I–VII</li>
-          <li>Monthly executive governance review cadence</li>
-        </ul>
+        <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+          {enterpriseCtas.map((cta) => (
+            <a key={cta.title} href={cta.href} style={{ border: "1px solid #d0d0d0", borderRadius: "10px", padding: "1rem", textDecoration: "none" }}>
+              <h3>{cta.title}</h3>
+              <p>{cta.description}</p>
+            </a>
+          ))}
+        </div>
       </section>
 
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Pricing & ROI Snapshot</h2>
-        <table style={{ borderCollapse: "collapse", width: "100%" }}>
-          <thead>
-            <tr>
-              <th style={{ borderBottom: "1px solid #d1d5db", textAlign: "left", padding: "0.5rem" }}>Model</th>
-              <th style={{ borderBottom: "1px solid #d1d5db", textAlign: "left", padding: "0.5rem" }}>Estimated Annual Cost</th>
-              <th style={{ borderBottom: "1px solid #d1d5db", textAlign: "left", padding: "0.5rem" }}>Governance Coverage</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>Reactive consulting only</td>
-              <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>£180k+</td>
-              <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>Fragmented / post-incident</td>
-            </tr>
-            <tr>
-              <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>Rasta Imperium program</td>
-              <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>£120k–£150k</td>
-              <td style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>Proactive, continuous, auditable</td>
-            </tr>
-          </tbody>
-        </table>
+      <section style={{ marginTop: "2rem" }}>
+        <h2>Proof & Trust Signals</h2>
+        <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+          {proofCards.map((card) => (
+            <article key={card.heading} style={{ border: "1px solid #d0d0d0", borderRadius: "10px", padding: "1rem" }}>
+              <h3>{card.heading}</h3>
+              <p>{card.text}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Discovery Form (Progressive Qualification)</h2>
-        <ol>
-          <li>Company profile and AI governance maturity</li>
-          <li>Compliance scope, data residency, and risk priorities</li>
-          <li>Timeline, stakeholders, and CRM routing (HubSpot / Salesforce)</li>
-        </ol>
-      </section>
-
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>FAQ for Enterprise Concerns</h2>
-        {faqs.map((faq) => (
-          <article key={faq.question} style={{ marginBottom: "0.8rem" }}>
-            <h3 style={{ marginBottom: "0.2rem" }}>{faq.question}</h3>
-            <p style={{ margin: 0 }}>{faq.answer}</p>
-          </article>
-        ))}
+      <section>
+        <h2>Flagship Service</h2>
+        <h3>
+          {flagship.name} (£{flagship.price})
+        </h3>
+        {Array.isArray(flagship.features) && flagship.features.length > 0 && (
+          <ul>
+            {flagship.features.map((feature) => (
+              <li key={feature}>{feature}</li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section>
@@ -205,6 +159,14 @@ export default function ConsultingPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section>
+        <h2>Approved Sales Collateral</h2>
+        <p>Need the latest one-pager, pricing matrix, deck narrative, or objection notes?</p>
+        <p>
+          <a href="/sales-assets">Open the sales assets hub</a>
+        </p>
       </section>
     </main>
   );
