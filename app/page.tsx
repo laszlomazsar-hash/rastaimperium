@@ -78,6 +78,122 @@ export default function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    const endpoint = "codex.monitoring.input";
+    const sendIntervalMs = 50;
+    const telemetry = {
+      page_load_time_ms: performance.now(),
+      scroll_depth_percent: 0,
+      visible_elements: [] as string[],
+      animations: {
+        lion_pulse_scale: 1,
+        crown_float_offset: 0,
+        cta_button_shimmer_position: 0,
+        pillar_icon_rotation: [] as number[],
+      },
+      hover: {
+        pillar_card_hovered: null as number | null,
+        cta_button_hovered: false,
+      },
+    };
+
+    const heroElements = document.querySelectorAll(".hero > *:not(.rasta-border)");
+    const pillarCards = document.querySelectorAll<HTMLElement>(".pillar-card");
+    const ctaButton = document.querySelector<HTMLElement>(".cta");
+    const pillarIcons = document.querySelectorAll<HTMLElement>(".pillar-icon");
+    const lionSymbol = document.querySelector<HTMLElement>(".lion");
+    const crownTitle = document.querySelector<HTMLElement>(".crown-title");
+
+    const onScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      telemetry.scroll_depth_percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+      heroElements.forEach((element, index) => {
+        const speed = (index + 1) * 0.1;
+        (element as HTMLElement).style.transform = `translateY(${scrollTop * speed}px)`;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -100px 0px" };
+    const observer = new IntersectionObserver((entries) => {
+      telemetry.visible_elements = [];
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const title = entry.target.querySelector("h3")?.textContent?.trim();
+        telemetry.visible_elements.push(entry.target.id || title || "pillar");
+      });
+    }, observerOptions);
+
+    pillarCards.forEach((card) => observer.observe(card));
+
+    const cardListeners = Array.from(pillarCards).map((card, index) => {
+      const onEnter = () => {
+        telemetry.hover.pillar_card_hovered = index;
+      };
+      const onLeave = () => {
+        telemetry.hover.pillar_card_hovered = null;
+      };
+      card.addEventListener("mouseenter", onEnter);
+      card.addEventListener("mouseleave", onLeave);
+      return { card, onEnter, onLeave };
+    });
+
+    const onCtaEnter = () => {
+      telemetry.hover.cta_button_hovered = true;
+    };
+    const onCtaLeave = () => {
+      telemetry.hover.cta_button_hovered = false;
+    };
+
+    ctaButton?.addEventListener("mouseenter", onCtaEnter);
+    ctaButton?.addEventListener("mouseleave", onCtaLeave);
+
+    const parseTransform = (element: HTMLElement) => {
+      const transform = window.getComputedStyle(element).transform;
+      return transform && transform !== "none" ? new DOMMatrixReadOnly(transform) : null;
+    };
+
+    const getTransformScale = (element: HTMLElement) => parseTransform(element)?.a ?? 1;
+    const getTranslateY = (element: HTMLElement) => parseTransform(element)?.m42 ?? 0;
+    const getRotationDegrees = (element: HTMLElement) => {
+      const matrix = parseTransform(element);
+      if (!matrix) return 0;
+      return Math.round(Math.atan2(matrix.b, matrix.a) * (180 / Math.PI));
+    };
+
+    const sendTelemetry = () => {
+      if (lionSymbol) telemetry.animations.lion_pulse_scale = getTransformScale(lionSymbol);
+      if (crownTitle) telemetry.animations.crown_float_offset = getTranslateY(crownTitle);
+
+      telemetry.animations.pillar_icon_rotation = Array.from(pillarIcons).map((icon) => getRotationDegrees(icon));
+      telemetry.animations.cta_button_shimmer_position = ctaButton ? getTranslateY(ctaButton) : 0;
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(telemetry),
+        keepalive: true,
+      }).catch((error) => console.warn("Codex telemetry error:", error));
+    };
+
+    const telemetryInterval = window.setInterval(sendTelemetry, sendIntervalMs);
+
+    return () => {
+      window.clearInterval(telemetryInterval);
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+      cardListeners.forEach(({ card, onEnter, onLeave }) => {
+        card.removeEventListener("mouseenter", onEnter);
+        card.removeEventListener("mouseleave", onLeave);
+      });
+      ctaButton?.removeEventListener("mouseenter", onCtaEnter);
+      ctaButton?.removeEventListener("mouseleave", onCtaLeave);
+    };
+  }, []);
+
   const year = useMemo(() => new Date().getFullYear(), []);
 
   return (
