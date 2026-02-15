@@ -43,12 +43,18 @@ async def startup_event():
         monitoring_state.mark_redis_connected()
     except Exception as e:
         monitoring_state.mark_redis_error(e)
-        print(f"Waiting for Redis frequency: {e}")
+        print(f"Redis connection failed: {e}")
+    else:
+        print("Redis connection OK.")
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Safely rest the connections when the kingdom sleeps."""
-    await redis_manager.disconnect()
+    try:
+        await redis_manager.disconnect()
+        print("Redis disconnected cleanly.")
+    except Exception as e:
+        print(f"Error during Redis disconnect: {e}")
 
 
 @app.get("/healthz")
