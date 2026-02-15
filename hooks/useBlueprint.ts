@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 type Blueprint = {
   title: string;
   description: string;
+  website: {
+    domain: string;
+    pages: { path: string; title: string; component: string }[];
+    nav: { label: string; href: string }[];
+  };
   governanceStack: { layer: number; name: string; description: string }[];
   codex: { article: string; title: string; description: string }[];
   consulting: {
@@ -22,6 +27,18 @@ type Blueprint = {
     workspaces: boolean;
     subscriptionGated: boolean;
     usageBilling: { tokens: boolean; apiCalls: boolean; seats: boolean };
+  };
+  productionReadiness?: {
+    complete?: boolean;
+    deployCommands?: string[];
+    metricsDay1?: {
+      traffic?: string;
+      consultingLeads?: number;
+      dashboardConnections?: number;
+      codexDownloads?: number;
+      workshopSeats?: number;
+      coherence?: string;
+    };
   };
 };
 
