@@ -1,0 +1,128 @@
+{
+  "name": "rastaimperium-backend",
+  "version": "3.6.0",
+  "description": "Rasta Imperium backend API manifest for Codex AI agents — includes routes, monitoring, and blueprint coverage.",
+  "servers": [
+    {
+      "url": "https://api.rastaimperium.com/api/v1",
+      "type": "REST",
+      "description": "Primary REST API server"
+    }
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/healthz",
+      "name": "Health Check",
+      "description": "Returns basic application health and startup status"
+    },
+    {
+      "method": "GET",
+      "path": "/live",
+      "name": "Liveness Probe",
+      "description": "Returns a simple living status for readiness/live checks"
+    },
+    {
+      "method": "GET",
+      "path": "/ready",
+      "name": "Readiness Probe",
+      "description": "Returns readiness status (503 when not ready)"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "name": "Metrics Endpoint",
+      "description": "Prometheus-formatted observability metrics for ingestion"
+    },
+    {
+      "method": "POST",
+      "path": "/enterprise/intake/submit",
+      "name": "Enterprise Intake",
+      "description": "Submits enterprise lead qualification form data"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/leads",
+      "name": "List Leads",
+      "description": "Admin retrieves all captured leads"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/leads/{lead_id}",
+      "name": "Get Lead",
+      "description": "Retrieve a specific lead details by ID"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/admin/leads/{lead_id}",
+      "name": "Delete Lead",
+      "description": "Admin deletes a lead when confirmed"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/webhooks/payments",
+      "name": "Stripe Webhook",
+      "description": "Handle subscription and payment events from Stripe"
+    }
+  ],
+  "monitoring": {
+    "counters": {
+      "enterprise_intake_submissions": "Total enterprise intake form submissions",
+      "webhook_events_processed": "Total outgoing/incoming webhook events processed",
+      "subscription_sync_events": "Total subscription sync events",
+      "payment_failures": "Total failed payment events"
+    },
+    "health_check_endpoints": ["/healthz", "/live", "/ready"],
+    "metrics_endpoint": "/metrics"
+  },
+  "blueprintCoverage": {
+    "enterprise": {
+      "functional": true,
+      "verification": "workspace + intake + subscription gating"
+    },
+    "dashboard": {
+      "functional": true,
+      "verification": "realtime metrics + trend cards"
+    },
+    "codex": {
+      "functional": true,
+      "verification": "articles I–VII and compliance links active"
+    },
+    "checkout": {
+      "functional": true,
+      "verification": "Stripe checkout + receipts + portal"
+    },
+    "admin": {
+      "functional": true,
+      "verification": "secure lead CRUD + governance controls"
+    },
+    "observability": {
+      "functional": true,
+      "verification": "health, readiness, liveness, and metrics endpoints"
+    }
+  },
+  "schemas": {
+    "Lead": {
+      "type": "object",
+      "properties": {
+        "name": "string",
+        "email": "string",
+        "company": "string",
+        "company_size": "string",
+        "ai_use_case": "string",
+        "timeline": "string",
+        "budget_band": "string",
+        "notes": "string"
+      },
+      "required": ["name", "email", "company"]
+    },
+    "MonitoringPayload": {
+      "type": "object",
+      "properties": {
+        "status": "string",
+        "startup_completed_at": "string",
+        "redis_connected": "boolean"
+      }
+    }
+  }
+}
