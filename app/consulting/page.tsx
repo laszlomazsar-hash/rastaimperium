@@ -44,9 +44,28 @@ export default function ConsultingPage() {
   const { flagship, midTier = [], workshops = [] } = blueprint.consulting;
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h1>Consulting & Workshops</h1>
-      <p>{blueprint.description}</p>
+    <main style={{ padding: "2rem", fontFamily: "Arial, sans-serif", maxWidth: "1100px", margin: "0 auto" }}>
+      <section style={{ marginBottom: "2.5rem" }}>
+        <p style={{ textTransform: "uppercase", fontWeight: 700, color: "#0f766e" }}>Enterprise AI Governance</p>
+        <h1 style={{ marginBottom: "0.75rem" }}>Launch compliant AI systems faster with measurable enterprise outcomes.</h1>
+        <p style={{ marginBottom: "1rem", lineHeight: 1.5 }}>
+          Move from fragmented experimentation to board-ready AI governance in weeks, with consulting, telemetry, and policy frameworks
+          designed for regulated enterprise teams.
+        </p>
+        <button
+          style={{
+            backgroundColor: "#111827",
+            color: "#fff",
+            border: "none",
+            padding: "0.75rem 1.1rem",
+            borderRadius: "8px",
+            fontWeight: 600,
+            cursor: "pointer",
+          }}
+        >
+          Book Enterprise Demo
+        </button>
+      </section>
 
       <section style={{ marginTop: "2rem" }}>
         <h2>Enterprise Acquisition Path</h2>
@@ -91,7 +110,23 @@ export default function ConsultingPage() {
       </section>
 
       <section>
-        <h2>Mid-Tier Services</h2>
+        <h2>Consulting & Workshops</h2>
+        <p>{blueprint.description}</p>
+
+        <article>
+          <h3>
+            {flagship.name} (£{flagship.price})
+          </h3>
+          {Array.isArray(flagship.features) && flagship.features.length > 0 && (
+            <ul>
+              {flagship.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+          )}
+        </article>
+
+        <h3>Mid-Tier Services</h3>
         <ul>
           {midTier.map((service) => (
             <li key={service.name}>
@@ -107,10 +142,8 @@ export default function ConsultingPage() {
             </li>
           ))}
         </ul>
-      </section>
 
-      <section>
-        <h2>Workshops</h2>
+        <h3>Workshops</h3>
         <ul>
           {workshops.map((workshop) => (
             <li key={workshop.name}>

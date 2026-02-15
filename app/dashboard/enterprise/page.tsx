@@ -10,6 +10,30 @@ import {
 } from "../../components/DashboardLayout";
 import { useBlueprint } from "../../../hooks/useBlueprint";
 
+const funnelStages = [
+  { label: "New Leads", value: 1240 },
+  { label: "SQL", value: 320 },
+  { label: "Closed Consulting", value: 68 },
+];
+
+const tokenUsage = [40, 56, 62, 58, 77, 84, 73, 88, 91, 95, 92, 108];
+
+const complianceRadar = [
+  { article: "I", score: 92 },
+  { article: "II", score: 84 },
+  { article: "III", score: 88 },
+  { article: "IV", score: 74 },
+  { article: "V", score: 79 },
+  { article: "VI", score: 86 },
+  { article: "VII", score: 90 },
+];
+
+const workspacePulse = [
+  { workspace: "Global Governance", health: 93, risk: "Low", cpl: "£214" },
+  { workspace: "Financial Services", health: 87, risk: "Medium", cpl: "£251" },
+  { workspace: "Public Sector", health: 90, risk: "Low", cpl: "£226" },
+];
+
 export default function EnterpriseDashboardPage() {
   const { blueprint, loading } = useBlueprint();
 
@@ -19,6 +43,11 @@ export default function EnterpriseDashboardPage() {
   const enterpriseDashboards = blueprint.platform.dashboards.filter(
     (dashboard) => dashboard.type === "enterprise",
   );
+
+  const totalFunnel = funnelStages[0].value;
+  const toSql = Math.round((funnelStages[1].value / totalFunnel) * 100);
+  const toClosed = Math.round((funnelStages[2].value / funnelStages[1].value) * 100);
+  const governanceHealth = 89;
 
   return (
     <DashboardShell>
