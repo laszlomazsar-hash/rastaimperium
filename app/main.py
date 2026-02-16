@@ -113,6 +113,12 @@ async def root(request: Request):
             """
         )
 
+
+@app.get("/start-here")
+async def start_here(request: Request):
+    """Orientation page for first-time visitors."""
+    return templates.TemplateResponse("start-here.html", {"request": request})
+
 @app.get("/curiosity")
 async def curiosity(request: Request):
     """The second gateway. The first contact with the field."""
