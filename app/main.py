@@ -238,12 +238,6 @@ async def transmissions(request: Request):
 
 
 
-@app.get("/start-here")
-async def start_here(request: Request):
-    """Orientation page for first-time visitors."""
-    return templates.TemplateResponse("start-here.html", {"request": request})
-
-
 @app.get("/welcome")
 async def welcome_alias() -> RedirectResponse:
     """Compatibility alias for the orientation page."""
