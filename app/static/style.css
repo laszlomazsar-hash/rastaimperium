@@ -353,3 +353,67 @@ a:hover {
   color: #f5f5f5;
   padding: 0.6rem 0.7rem;
 }
+
+/* Vocabulary tooltip component */
+.term {
+  position: relative;
+  color: var(--rasta-gold);
+  border-bottom: 2px dotted var(--rasta-gold);
+  cursor: help;
+  transition: all 0.2s ease;
+}
+
+.term:hover,
+.term:focus-visible {
+  color: #c49f2f;
+  border-bottom-color: #c49f2f;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: #ffffff;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  width: min(320px, 85vw);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.term:hover .tooltip,
+.term:focus-visible .tooltip,
+.term.active .tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-12px);
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #ffffff;
+}
+
+.tooltip-term {
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a3a2e;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.tooltip-definition {
+  font-size: 0.9rem;
+  color: #5a5a5a;
+  line-height: 1.5;
+}
