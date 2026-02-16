@@ -207,6 +207,11 @@ async def about(request: Request):
     """The Imperium origin story and mission."""
     return templates.TemplateResponse("about.html", {"request": request})
 
+@app.get("/jah")
+async def jah(request: Request):
+    """Jah Conciseness product homepage."""
+    return templates.TemplateResponse("jah.html", {"request": request})
+
 @app.get("/ethics")
 async def ethics(request: Request):
     """Ethical safeguards and consent-first principles."""

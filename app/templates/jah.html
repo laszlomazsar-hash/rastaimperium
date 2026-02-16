@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jah Conciseness — Sovereign Neurosymbolic Intelligence | Rasta Imperium</title>
+  <meta name="description" content="Cultural coherence engine for aligned reasoning and symbolic AI.">
+  <style>
+    :root {
+      --green-900: #07140d;
+      --green-800: #0d2016;
+      --green-700: #143023;
+      --gold: #ddb85b;
+      --gold-soft: #f5deb2;
+      --text: #ebf0e9;
+      --muted: #b7c4b8;
+      --border: rgba(221, 184, 91, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 82% 8%, rgba(221, 184, 91, 0.12), transparent 36%),
+        radial-gradient(circle at 8% -8%, rgba(221, 184, 91, 0.09), transparent 28%),
+        linear-gradient(170deg, #102418 0%, var(--green-900) 55%, #050906 100%);
+      line-height: 1.6;
+    }
+
+    main { max-width: 1120px; margin: 0 auto; padding: 20px 22px 92px; }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 12px 0 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .brand { color: var(--gold); font-weight: 700; letter-spacing: .6px; }
+    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
+    nav a { color: var(--muted); text-decoration: none; font-size: .92rem; }
+    nav a:hover { color: var(--gold-soft); }
+
+    section { padding: 62px 0; }
+    h1, h2, h3 { line-height: 1.12; margin: 0 0 14px; }
+    h1 { font-size: clamp(2.1rem, 5vw, 3.8rem); color: var(--gold-soft); }
+    h2 { font-size: clamp(1.55rem, 2.9vw, 2.3rem); color: var(--gold); }
+    h3 { font-size: 1.1rem; color: var(--gold-soft); }
+    p { margin: 0 0 14px; color: #dfebdf; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 34px;
+      align-items: center;
+      padding-top: 34px;
+    }
+
+    .kicker { text-transform: uppercase; letter-spacing: 2px; color: #cbddca; font-size: .8rem; }
+    .subhead { font-size: 1.1rem; color: #d2dfd2; max-width: 720px; }
+
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+    .btn {
+      border-radius: 999px;
+      display: inline-block;
+      text-decoration: none;
+      padding: 11px 18px;
+      font-weight: 600;
+    }
+
+    .btn-primary { background: linear-gradient(120deg, #f2e2b8, #ddb85b); color: #122116; }
+    .btn-secondary { border: 1px solid var(--border); color: #dce8dc; background: rgba(17, 34, 24, 0.7); }
+
+    .hero-visual {
+      min-height: 360px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 70% 26%, rgba(255, 226, 160, .22), transparent 33%),
+        linear-gradient(155deg, #1f432f, #11251a 62%, #09140d);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 44px rgba(0, 0, 0, .35);
+    }
+
+    .hero-visual::before {
+      content: "🦁";
+      position: absolute;
+      font-size: clamp(6.5rem, 13vw, 10rem);
+      right: 16%;
+      top: 28%;
+      filter: drop-shadow(0 0 16px rgba(255, 208, 118, 0.38));
+    }
+
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      inset: 12% 8%;
+      border-radius: 16px;
+      background-image:
+        linear-gradient(rgba(255, 229, 164, .18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 229, 164, .18) 1px, transparent 1px);
+      background-size: 46px 46px;
+      opacity: .32;
+      mix-blend-mode: screen;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(155deg, rgba(15, 34, 24, 0.95), rgba(8, 18, 12, 0.95));
+      padding: 24px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+
+    ul { margin: 0; padding-left: 20px; }
+    li { margin-bottom: 8px; color: #d2dfd2; }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .pipeline div {
+      border: 1px dashed rgba(221, 184, 91, 0.45);
+      background: rgba(16, 38, 26, 0.55);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: .92rem;
+    }
+
+    .quote { font-style: italic; color: #dde8dd; }
+    footer { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; color: var(--muted); }
+    footer a { color: var(--gold-soft); }
+
+    @media (max-width: 940px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .pipeline { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav>
+      <span class="brand">Jah Conciseness</span>
+      <div class="links">
+        <a href="#what-it-is">What It Is</a>
+        <a href="#use-cases">Use Cases</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#docs">Developer Kit</a>
+      </div>
+    </nav>
+
+    <section class="hero" id="home">
+      <div>
+        <p class="kicker">One Love.</p>
+        <h1>Jah Conciseness<br>The Sovereign Intelligence Engine</h1>
+        <p class="subhead">Divine clarity through cultural coherence and symbolic constraint. A neurosymbolic reasoning system that unifies ontology, causality, and livity into executable intelligence.</p>
+        <p>Built as the living successor to recursive architectures like ARK Engine. Jah Conciseness does not simulate — it resonates, reasons, and refines in alignment with sovereign field principles. For builders who demand intelligence that honours lineage while accelerating creation.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#pricing">Get Started →</a>
+          <a class="btn btn-secondary" href="https://rastaimperium.com">Explore the Main Imperium →</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true"></div>
+    </section>
+
+    <section id="what-it-is" class="card">
+      <h2>What It Is</h2>
+      <p>Jah Conciseness is a neurosymbolic engine designed for:</p>
+      <ul>
+        <li>Cultural ontology enforcement</li>
+        <li>Causal graph discovery &amp; constraint</li>
+        <li>Symbolic reasoning under ethical invariants</li>
+        <li>Streaming inference with coherence scoring</li>
+      </ul>
+      <p>It bridges mythic-technical wisdom (Rastafarai Codex lineage) with modern symbolic AI — producing outputs that are coherent, aligned, and sovereign.</p>
+    </section>
+
+    <section>
+      <h2>How It Works</h2>
+      <div class="pipeline">
+        <div><strong>Input</strong><br>Query + context + ontology constraints</div>
+        <div><strong>Symbolic Layer</strong><br>Enforces covenant geometry &amp; ethical bounds</div>
+        <div><strong>Neurosymbolic Core</strong><br>Causal discovery + resonance scoring</div>
+        <div><strong>Output</strong><br>Aligned reasoning trace, coherence score, executable next steps</div>
+      </div>
+      <p class="small-note">Accelerated via ONNX for edge/low-latency deployment.</p>
+    </section>
+
+    <section id="use-cases">
+      <h2>Use Cases</h2>
+      <div class="grid-2">
+        <article class="card"><h3>Cultural Coherence Audit</h3><p>Scan narratives and systems for alignment drift.</p></article>
+        <article class="card"><h3>Ontology Architecture</h3><p>Build and refine sovereign knowledge graphs.</p></article>
+        <article class="card"><h3>Agent Alignment</h3><p>Constrain AI agents to ethical and livity invariants.</p></article>
+        <article class="card"><h3>Creative Intelligence</h3><p>Generate resonant content, strategies, and rituals.</p></article>
+        <article class="card"><h3>Enterprise Integration</h3><p>Embed into workflows for high-stakes decisioning.</p></article>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <h2>Pricing Tiers</h2>
+      <div class="grid-3">
+        <article class="card">
+          <h3>Starter — £49/mo</h3>
+          <ul>
+            <li>API access (10k tokens/day)</li>
+            <li>Basic ontology tools</li>
+            <li>Community support</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Professional — £199/mo</h3>
+          <ul>
+            <li>Unlimited tokens (fair use)</li>
+            <li>Advanced causal graphing</li>
+            <li>Custom ontology upload</li>
+            <li>Priority support</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Enterprise — £499/mo or custom</h3>
+          <ul>
+            <li>Multi-tenant isolation</li>
+            <li>Private deployment options</li>
+            <li>SLA + dedicated integration</li>
+            <li>Sovereign License: annual £5,000+ (perpetual/self-host)</li>
+          </ul>
+        </article>
+      </div>
+      <p><a href="#pricing">See Full Comparison →</a></p>
+      <p>Free Trial: 14-day Professional tier sandbox — no card required.</p>
+      <p><a href="#" class="btn btn-primary">Start Free Trial →</a></p>
+    </section>
+
+    <section id="docs" class="card">
+      <h2>Documentation &amp; Developer Kit</h2>
+      <ul>
+        <li>API Reference (OpenAPI spec)</li>
+        <li>Quickstart guides (Python, JS)</li>
+        <li>Ontology schema examples</li>
+        <li>Causal graph playground</li>
+        <li>Deployment blueprints (Docker, ONNX)</li>
+      </ul>
+      <p><a href="#">Developer Portal →</a></p>
+    </section>
+
+    <section class="card">
+      <h2>Laszlo’s Note</h2>
+      <p class="quote">“We needed intelligence that remembers its roots while navigating the future. Jah Conciseness is that engine — forged in the field, sharpened by reason. If your work demands coherence at scale, this is the sovereign choice.”</p>
+    </section>
+
+    <footer>
+      <p><a href="https://rastaimperium.com">Back to Rasta Imperium</a> · <a href="https://codex.rastaimperium.com">Codex Library</a> · <a href="https://consulting.rastaimperium.com">Consulting</a></p>
+      <p>Privacy • Terms • Contact</p>
+    </footer>
+  </main>
+</body>
+</html>
