@@ -1,3 +1,13 @@
+/* Rastafari canonical palette (v1.5 symbolism layer) */
+:root {
+  --rasta-green: #0f5d2f;
+  --rasta-green-deep: #06351b;
+  --rasta-gold: #d4af37;
+  --rasta-red: #8b0000;
+  --rasta-black: #000000;
+  --rasta-white: #ffffff;
+}
+
 /* Base reset */
 * {
   margin: 0;
@@ -11,7 +21,9 @@ html, body {
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #050608;
+  background:
+    radial-gradient(circle at 14% -8%, rgba(212, 175, 55, 0.12), transparent 30%),
+    linear-gradient(165deg, var(--rasta-green) 0%, var(--rasta-green-deep) 45%, var(--rasta-black) 100%);
   color: #f5f5f5;
   line-height: 1.6;
 }
@@ -51,6 +63,7 @@ main.page {
 h1, h2, h3 {
   font-weight: 600;
   letter-spacing: 0.04em;
+  font-family: "Times New Roman", Georgia, serif;
 }
 
 h1 {
@@ -71,6 +84,7 @@ h3 {
 p {
   margin-bottom: 1rem;
   color: #d6d6d6;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .tagline {
@@ -120,7 +134,7 @@ ul li {
 .codex-list li,
 .reasons li {
   padding-left: 0.75rem;
-  border-left: 2px solid #2f3b5f;
+  border-left: 2px solid rgba(212, 175, 55, 0.65);
 }
 
 /* Buttons */
@@ -138,13 +152,14 @@ ul li {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7f5af0, #2cb67d);
-  color: #050608;
+  background: linear-gradient(135deg, #ffd700, #d4af37, #b8860b);
+  color: #111;
 }
 
 .btn-secondary {
-  border: 1px solid #7f5af0;
-  color: #f5f5f5;
+  border: 1px solid rgba(212, 175, 55, 0.65);
+  color: #f7edcb;
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .btn:hover {
@@ -165,16 +180,16 @@ ul li {
   gap: 0.35rem;
   padding: 1.2rem 1.4rem;
   border-radius: 16px;
-  border: 1px solid rgba(127, 90, 240, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.42);
   text-decoration: none;
-  background: radial-gradient(circle at top, rgba(127, 90, 240, 0.2), rgba(15, 18, 30, 0.95));
+  background: radial-gradient(circle at top, rgba(212, 175, 55, 0.18), rgba(9, 14, 11, 0.95));
   box-shadow: 0 12px 30px rgba(7, 9, 16, 0.35);
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .gateway.ark-gateway:hover {
   transform: translateY(-2px);
-  border-color: rgba(127, 90, 240, 0.8);
+  border-color: rgba(212, 175, 55, 0.85);
   box-shadow: 0 16px 36px rgba(7, 9, 16, 0.45);
 }
 
@@ -187,7 +202,7 @@ ul li {
 
 .gateway-subtitle {
   font-size: 0.95rem;
-  color: #cfd3ff;
+  color: #e7dfba;
 }
 
 
@@ -202,7 +217,9 @@ ul li {
   padding: 1rem 1.1rem;
   border-radius: 12px;
   border: 1px solid rgba(212, 175, 55, 0.45);
-  background: linear-gradient(150deg, rgba(212, 175, 55, 0.12), rgba(9, 13, 24, 0.95));
+  background:
+    linear-gradient(90deg, rgba(139, 0, 0, 0.28) 0%, rgba(212, 175, 55, 0.18) 45%, rgba(15, 93, 47, 0.22) 100%),
+    linear-gradient(150deg, rgba(9, 13, 24, 0.95), rgba(2, 4, 3, 0.95));
 }
 
 .testimonial-card blockquote {
@@ -229,10 +246,27 @@ ul li {
 .page-curiosity .artifact,
 .page-nuggets .artifact,
 .page-codex .contents {
-  background: rgba(15, 18, 30, 0.9);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.08), transparent 30%),
+    radial-gradient(circle at 100% 100%, rgba(139, 0, 0, 0.08), transparent 36%),
+    rgba(15, 18, 30, 0.9);
   border-radius: 12px;
   padding: 1.5rem 1.4rem;
-  border: 1px solid #22263a;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+
+.page-curiosity .artifact {
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.15), 0 0 22px rgba(0, 0, 0, 0.2);
+}
+
+.page-codex-library #shelves {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(212, 175, 55, 0.08), transparent 28%),
+    repeating-radial-gradient(circle at 80% 24%, rgba(15, 93, 47, 0.16) 0 6px, transparent 6px 15px),
+    rgba(7, 9, 8, 0.72);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 16px;
+  padding: 1.3rem;
 }
 
 .curiosity-gateway {
@@ -256,7 +290,7 @@ ul li {
 
 /* Links */
 a {
-  color: #7f5af0;
+  color: #f3d979;
 }
 
 a:hover {
