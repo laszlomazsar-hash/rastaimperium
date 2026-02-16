@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Here - Rasta Imperium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --deep-green: #1A3A2E;
+            --soft-cream: #FAF7F2;
+            --text-primary: #2C2C2C;
+            --text-secondary: #5A5A5A;
+            --accent-teal: #2E7D7D;
+            --light-gold: rgba(212, 175, 55, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Karla', sans-serif;
+            background: var(--soft-cream);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(250, 247, 242, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--deep-green);
+            text-decoration: none;
+        }
+
+        .nav-back {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-back:hover {
+            color: var(--primary-gold);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--deep-green) 0%, #2E5D4E 100%);
+            padding: 4rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--soft-cream);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(250, 247, 242, 0.9);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 5%;
+        }
+
+        .welcome {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .welcome h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--deep-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .explanation-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            margin: 3rem auto;
+            max-width: 900px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .explanation-box h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            color: var(--deep-green);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .explanation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .explanation-item {
+            text-align: center;
+        }
+
+        .explanation-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .explanation-item h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--deep-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .explanation-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .path-section {
+            margin: 4rem 0;
+        }
+
+        .path-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.25rem;
+            color: var(--deep-green);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .path-intro {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        .path-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2.5rem;
+        }
+
+        .path-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-color: var(--primary-gold);
+        }
+
+        .path-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .path-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--deep-green);
+            margin-bottom: 0.75rem;
+        }
+
+        .path-label {
+            display: inline-block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary-gold);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .path-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .path-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .path-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .path-features li:before {
+            content: "✓ ";
+            color: var(--primary-gold);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .path-cta {
+            color: var(--primary-gold);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .path-card:hover .path-cta {
+            gap: 0.75rem;
+        }
+
+        .recommended {
+            position: relative;
+        }
+
+        .recommended::before {
+            content: "Recommended Start";
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: var(--primary-gold);
+            color: var(--deep-green);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
+
+        .faq-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            margin-top: 4rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .faq-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--deep-green);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .faq-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            color: var(--deep-green);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .help-section {
+            background: linear-gradient(135deg, var(--light-gold) 0%, rgba(212, 175, 55, 0.05) 100%);
+            padding: 3rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .help-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            color: var(--deep-green);
+            margin-bottom: 1rem;
+        }
+
+        .help-section p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary-gold);
+            color: var(--deep-green);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #C49F2F;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--deep-green);
+            border: 2px solid var(--deep-green);
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--deep-green);
+            color: var(--soft-cream);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .path-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .recommended::before {
+                position: static;
+                display: block;
+                margin-bottom: 1rem;
+            }
+
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .fade-in-delay-4 { animation-delay: 0.4s; opacity: 0; }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="/" class="nav-logo">
+        <span>⬡</span>
+        <span>Rasta Imperium</span>
+    </a>
+    <a href="/" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="hero">
+    <div class="hero-content">
+        <h1>Welcome. Start Here.</h1>
+        <p class="hero-subtitle">
+            If this is your first visit, this page will orient you to what Rasta Imperium is, who it's for, and where you should begin.
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="welcome fade-in">
+        <h2>First Time Here?</h2>
+        <p class="welcome-text">
+            You've arrived at something that might feel unfamiliar. That's intentional. Rasta Imperium doesn't fit neatly into existing categories—it's not quite a blog, not quite a product, and not quite a philosophy. It's all three, woven together.
+        </p>
+        <p class="welcome-text">
+            If you're feeling a bit disoriented, that's normal. This page exists to give you solid ground.
+        </p>
+    </div>
+
+    <div class="explanation-box fade-in">
+        <h3>What Is Rasta Imperium?</h3>
+        <p style="text-align: center; color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.8;">
+            Rasta Imperium is a <strong>philosophical and creative ecosystem</strong> built around consciousness, alignment, symbolic systems, and the intersection of ancient wisdom with modern technology.
+        </p>
+
+        <div class="explanation-grid">
+            <div class="explanation-item">
+                <div class="explanation-icon">📚</div>
+                <h4>A Library</h4>
+                <p>Books, essays, and transmissions exploring mythic frameworks, civilization design, and consciousness.</p>
+            </div>
+
+            <div class="explanation-item">
+                <div class="explanation-icon">🛠️</div>
+                <h4>A Toolbox</h4>
+                <p>Practical instruments like the Daily Resonance Codex for personal alignment and clarity.</p>
+            </div>
+
+            <div class="explanation-item">
+                <div class="explanation-icon">🌐</div>
+                <h4>A Field</h4>
+                <p>A living space for thinkers, builders, and explorers to engage with coherent frameworks.</p>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1); color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+            Think of it as a <strong>creative laboratory</strong> where you can explore big ideas through structured practices, read visionary writing, and access tools designed to help you think more clearly and create more intentionally.
+        </p>
+    </div>
+
+    <div class="path-section">
+        <h2>Choose Your Starting Path</h2>
+        <p class="path-intro">
+            Different people enter the Imperium for different reasons. Pick the path that resonates with where you are right now.
+        </p>
+
+        <div class="path-grid">
+            <a href="/curiosity" class="path-card recommended fade-in fade-in-delay-1">
+                <span class="path-icon">🧭</span>
+                <span class="path-label">Easiest Entry Point</span>
+                <h3>I'm Curious</h3>
+                <p class="path-description">
+                    You're interested but not sure what this is yet. You want to explore gently without commitment.
+                </p>
+                <ul class="path-features">
+                    <li>Start with the Daily Resonance practice</li>
+                    <li>Low-barrier, contemplative entry</li>
+                    <li>No prerequisites or background needed</li>
+                    <li>Builds intuition for the system</li>
+                </ul>
+                <span class="path-cta">Begin with Curiosity →</span>
+            </a>
+
+            <a href="/recognition" class="path-card fade-in fade-in-delay-2">
+                <span class="path-icon">⚖️</span>
+                <span class="path-label">For Builders</span>
+                <h3>I Need Structure</h3>
+                <p class="path-description">
+                    You're a founder, creator, or architect. You need governance frameworks and alignment principles.
+                </p>
+                <ul class="path-features">
+                    <li>Constitutional clarity & legitimacy</li>
+                    <li>Treaty-grade alignment protocols</li>
+                    <li>Institutional spine for sovereignty</li>
+                    <li>For serious builders</li>
+                </ul>
+                <span class="path-cta">Explore Recognition →</span>
+            </a>
+
+            <a href="/codex" class="path-card fade-in fade-in-delay-3">
+                <span class="path-icon">📖</span>
+                <span class="path-label">For Practitioners</span>
+                <h3>I Want Tools</h3>
+                <p class="path-description">
+                    You want practical artifacts. Books, card decks, calibration instruments—things you can use immediately.
+                </p>
+                <ul class="path-features">
+                    <li>Daily Resonance Codex (card system)</li>
+                    <li>Philosophical writings & guides</li>
+                    <li>Calibration & alignment tools</li>
+                    <li>Immediately actionable</li>
+                </ul>
+                <span class="path-cta">Browse the Codex →</span>
+            </a>
+
+            <a href="/map" class="path-card fade-in fade-in-delay-4">
+                <span class="path-icon">🗺️</span>
+                <span class="path-label">For Explorers</span>
+                <h3>Just Browsing</h3>
+                <p class="path-description">
+                    You prefer to wander. You want to see the full landscape and discover on your own terms.
+                </p>
+                <ul class="path-features">
+                    <li>Complete site navigation</li>
+                    <li>All pages & offerings visible</li>
+                    <li>Self-directed exploration</li>
+                    <li>No guided path</li>
+                </ul>
+                <span class="path-cta">View Full Map →</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="faq-section fade-in">
+        <h2>Common Questions</h2>
+
+        <div class="faq-item">
+            <div class="faq-question">Who is this for?</div>
+            <div class="faq-answer">
+                Rasta Imperium is for thinkers, creators, builders, and explorers who are interested in consciousness, alignment, symbolic systems, and frameworks for living intentionally. If you're drawn to philosophy, systems thinking, mythic structures, or the intersection of ancient wisdom and modern technology, you'll likely find something valuable here.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Is this a religion or spiritual practice?</div>
+            <div class="faq-answer">
+                No. Rasta Imperium is a philosophical and creative project. While it engages with symbolic and mythic frameworks, it's not a belief system, religion, or spiritual movement. Think of it more like a design studio for consciousness and civilization architecture.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Do I need to buy something?</div>
+            <div class="faq-answer">
+                No. Much of the content is freely accessible. The Codex and certain tools are available for purchase, but you can explore, read, and engage without any financial commitment. Start where you are.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">What's the "Daily Resonance Codex"?</div>
+            <div class="faq-answer">
+                It's a card-based system (12 archetypal cards) designed to help you tune into coherence and clarity each day. It's the softest entry point into the Imperium—a simple daily practice that helps you read your own signal and stabilize your trajectory. No doctrine, no force, just a reflective tool.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Who is Laszlo Mazsar?</div>
+            <div class="faq-answer">
+                Laszlo Mazsar is the founder of Rasta Imperium. He's a philosopher, systems architect, and explorer of mythic-technical frameworks. His work focuses on consciousness, alignment, and the design of civilizational infrastructure for the digital age. You can learn more about him on the <a href="/about" style="color: var(--primary-gold); text-decoration: none;">About page</a>.
+            </div>
+        </div>
+    </div>
+
+    <div class="help-section fade-in">
+        <h3>Still Not Sure Where to Start?</h3>
+        <p>
+            That's completely fine. The easiest path is to begin with <strong>Curiosity</strong>—the daily practice that introduces you to the field without requiring any background knowledge. Or, if you prefer direct contact, reach out to the council.
+        </p>
+        <a href="/curiosity" class="btn btn-primary">Start with Curiosity</a>
+        <a href="/contact" class="btn btn-secondary">Contact Us</a>
+    </div>
+</div>
+
+</body>
+</html>
