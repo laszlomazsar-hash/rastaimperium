@@ -2,157 +2,172 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Codex — Rasta Imperium</title>
+  <title>Daily Resonance Codex | Rasta Imperium</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CODEX — the economic and calibration portal of the Imperium.">
-  <link rel="stylesheet" href="/static/style.css">
+  <meta name="description" content="Daily Resonance Codex: 12 archetypes for sovereign clarity. Choose your tier and begin your daily alignment practice.">
+  <style>
+    :root {
+      --bg: #050705;
+      --panel: #0f130f;
+      --panel-alt: #141a14;
+      --border: #2a332a;
+      --gold: #d4af37;
+      --text: #ece8dc;
+      --muted: #c7c1ad;
+      --green: #1f4f35;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      background: radial-gradient(circle at 50% -20%, rgba(212, 175, 55, 0.16) 0%, transparent 42%), var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 70px; }
+    .hero, .section {
+      background: linear-gradient(150deg, rgba(15,19,15,.96), rgba(8,9,8,.95));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    h1, h2, h3 { margin: 0 0 10px; font-family: "Times New Roman", Georgia, serif; color: var(--gold); }
+    h1 { font-size: clamp(2rem, 4vw, 3rem); }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+    .btn {
+      display: inline-block; text-decoration: none; border-radius: 8px;
+      padding: .8rem 1.2rem; border: 1px solid transparent; font-weight: 600;
+    }
+    .btn-primary { background: var(--gold); color: #1a2f1f; }
+    .btn-secondary { background: transparent; border-color: #7b6a2f; color: #f0deb0; }
+    .archetype-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel-alt);
+      padding: 12px;
+    }
+    .card-image {
+      width: 100%;
+      height: 120px;
+      border-radius: 10px;
+      border: 1px dashed #816f32;
+      display: grid;
+      place-items: center;
+      margin-bottom: 10px;
+      color: #e9d38d;
+      background: linear-gradient(160deg, rgba(212,175,55,.12), rgba(31,79,53,.18));
+      font-size: .92rem;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+    th { background: #172117; color: #f0d98e; }
+    .checkout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+    .checkout { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: #121712; }
+    .checkout strong { color: #f2dd9b; }
+    .newsletter {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: #101510;
+      margin-top: 8px;
+    }
+    .newsletter input[type="email"] {
+      width: 100%;
+      max-width: 360px;
+      padding: .65rem .7rem;
+      border: 1px solid #424d42;
+      border-radius: 8px;
+      margin-right: 8px;
+      background: #070a07;
+      color: var(--text);
+    }
+    .small { font-size: .9rem; }
+  </style>
 </head>
 <body>
-  <main class="page page-codex">
-
+  <main>
     <section class="hero">
-      <h1>CODEX</h1>
-      <p class="tagline">The artifact layer of the Imperium.</p>
-      <p class="subline">
-        A Codex is not a book, a guide, or a philosophy.
-        It is a mythic-technical instrument — a structured field that calibrates your system,
-        clarifies your trajectory, and anchors your sovereignty.
-      </p>
-    </section>
-
-    <section class="contents">
-      <p>
-        Codices are the Imperium’s economic backbone because they are its most portable form of power.
-        They carry the architecture, the lineage, and the signal of the field in a format that can be
-        used daily, taught communally, or integrated into larger systems.
-      </p>
-      <p>A Codex is a covenant in written form.</p>
-    </section>
-
-    <section>
-      <h2>What a Codex Is</h2>
-      <ul class="codex-list">
-        <li>A calibration tool</li>
-        <li>A field-shaping artifact</li>
-        <li>A sovereign alignment system</li>
-        <li>A portable architecture</li>
-        <li>A living document that evolves with the practitioner</li>
-      </ul>
-      <p>It is not consumed. It is activated.</p>
-      <p>Every Codex in the Imperium is built with the same principles:</p>
-      <ul class="codex-list">
-        <li>Clarity over complexity</li>
-        <li>Signal over noise</li>
-        <li>Sovereignty over dependency</li>
-        <li>Architecture over aesthetics</li>
-      </ul>
-      <p>A Codex is a tool for those who build, lead, or align.</p>
-    </section>
-
-    <section>
-      <h2>The Daily Resonance Codex</h2>
-      <p>Your entry-level calibration system.</p>
-      <p>
-        The Daily Resonance Codex is the Imperium’s most accessible artifact — a 40-page
-        mythic-technical guide to daily alignment, built around the twelve archetypal cards of
-        the Curiosity gateway.
-      </p>
-      <p>It includes:</p>
-      <ul class="codex-list">
-        <li>Full explanations of all twelve cards</li>
-        <li>The 30-day alignment cycle</li>
-        <li>Ritual instructions</li>
-        <li>Field mechanics</li>
-        <li>A usage checklist</li>
-        <li>A case study</li>
-        <li>Twelve printable PNG cards</li>
-        <li>A Notion dashboard for tracking</li>
-      </ul>
-      <p>This is the cleanest way to begin working with the Imperium’s architecture.</p>
-      <p><strong>→ Purchase the Daily Resonance Codex</strong></p>
-      <p>(Standard £29 / Pilot £19 for first 50)</p>
-    </section>
-
-    <section>
-      <h2>Bundles</h2>
-      <p>For deeper practitioners and builders.</p>
-      <h3>Daily Resonance Codex — Pro Edition</h3>
-      <p>Includes everything in the Standard version, plus:</p>
-      <ul class="codex-list">
-        <li>Advanced field mechanics</li>
-        <li>Multi-card sequencing</li>
-        <li>Group facilitation protocols</li>
-        <li>Teaching rights for workshops</li>
-        <li>Extended case studies</li>
-        <li>A 60-day alignment cycle</li>
-      </ul>
-      <p>This is for practitioners who want to teach, lead, or facilitate.</p>
-    </section>
-
-
-    <section>
-      <h2>Voices from the Shelves</h2>
-      <div class="testimonials-grid">
-        <figure class="testimonial-card">
-          <blockquote>“The Rastafarai Codex landed like constitutional law for my soul. Reading it felt like remembering something ancient and applying it now.”</blockquote>
-          <figcaption>— E. (Steward, full read completed)</figcaption>
-        </figure>
-        <figure class="testimonial-card">
-          <blockquote>“Manifestation Certificates aren’t paper — they’re anchors. Claiming one shifted how I hold space in the world.”</blockquote>
-          <figcaption>— N.</figcaption>
-        </figure>
-        <figure class="testimonial-card">
-          <blockquote>“Transmissions arrive exactly when needed. Each drop refines the signal. Lifetime value is already incalculable.”</blockquote>
-          <figcaption>— V. (Subscriber since launch)</figcaption>
-        </figure>
+      <h1>Daily Resonance Codex: 12 Archetypes for Sovereign Clarity.</h1>
+      <p>Your primary tool/store gateway. Draw one card daily, decode your current pattern, and act from clarity instead of noise.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#buy">Buy the Codex</a>
+        <a class="btn btn-secondary" href="/transmissions">Join Transmissions</a>
       </div>
-      <p class="testimonials-note">These artifacts are transmission vessels. The feedback confirms: they deliver.</p>
-    </section>
-    <section>
-      <h2>The Codex Library</h2>
-      <p>A growing mythic-technical canon.</p>
-      <p>The Imperium contains a full library of codices, including:</p>
-      <ul class="codex-list">
-        <li><strong>Esoteric Codex Trilogy</strong> (sealed)</li>
-        <li><strong>Cosmic Seed Vault Codex</strong> (Parts I–IV)</li>
-        <li><strong>Chronicles of Terra</strong></li>
-        <li><strong>Rasta Roots</strong></li>
-        <li><strong>Forensic Cosmology</strong></li>
-      </ul>
-      <p>These are deep-layer artifacts — some sealed, some restricted, some available through specific pathways.</p>
-      <p>The Codex Library is the Imperium’s mythic archive.</p>
     </section>
 
-    <section>
-      <h2>Why the Codex Matters</h2>
-      <p>Because clarity is a sovereign resource.</p>
-      <p>A Codex gives you:</p>
-      <ul class="codex-list">
-        <li>A stable internal architecture</li>
-        <li>A clean decision-making framework</li>
-        <li>A daily alignment system</li>
-        <li>A mythic-technical lens</li>
-        <li>A way to build without distortion</li>
-      </ul>
-      <p>Codices are not passive reading. They are active instruments.</p>
+    <section class="section">
+      <h2>The 12 Archetypal Cards</h2>
+      <p>Use placeholders below until final artwork is uploaded. Each card includes one guiding question and one aligned action.</p>
+      <div class="archetype-grid">
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Warrior</h3><p>Move with disciplined courage toward the difficult truth.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Sage</h3><p>Step back, observe patterns, and choose the cleanest principle.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Builder</h3><p>Convert insight into structure that others can reliably use.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Healer</h3><p>Repair breaks in trust, pace, and personal coherence.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Oracle</h3><p>Read the subtle signals before they become loud events.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Sovereign</h3><p>Own your decision authority without outsourcing your center.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Alchemist</h3><p>Transform friction into fuel through conscious reframing.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Guardian</h3><p>Protect boundaries, standards, and the integrity of the field.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Visionary</h3><p>See long arcs clearly and align next steps with destiny.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Magician</h3><p>Bridge symbol and system so intention manifests in form.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Lover</h3><p>Choose what deepens connection, beauty, and living devotion.</p></article>
+        <article class="card"><div class="card-image">Card Placeholder</div><h3>Pioneer</h3><p>Take first steps into unknown terrain with grounded audacity.</p></article>
+      </div>
     </section>
 
-    <section class="value">
-      <h2>Codex Library</h2>
-      <p>Explore related artifacts, certificates, and transmissions.</p>
-      <a href="/codex-library" class="btn btn-secondary">Open the Library</a>
-      <a href="/manifestation" class="btn btn-secondary">View Manifestation</a>
-      <a href="/transmissions" class="btn btn-secondary">Read Transmissions</a>
+    <section class="section" id="buy">
+      <h2>Choose Your Tier</h2>
+      <table aria-label="Codex pricing tiers">
+        <thead>
+          <tr><th>Tier</th><th>Price</th><th>Includes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Digital PDF</td><td>£7</td><td>Download + instructions.</td></tr>
+          <tr><td>Print Deck</td><td>£47</td><td>Shipped worldwide.</td></tr>
+          <tr><td>Advanced</td><td>£97</td><td>PDF + video guide + lineage cert.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="checkout-grid">
+        <article class="checkout">
+          <h3>Digital PDF</h3>
+          <p><strong>Gumroad</strong> checkout placeholder:</p>
+          <a class="btn btn-primary" href="https://gumroad.com" target="_blank" rel="noopener">Buy on Gumroad</a>
+        </article>
+        <article class="checkout">
+          <h3>Print Deck</h3>
+          <p><strong>Stripe</strong> checkout placeholder:</p>
+          <a class="btn btn-primary" href="https://buy.stripe.com" target="_blank" rel="noopener">Buy with Stripe</a>
+        </article>
+        <article class="checkout">
+          <h3>Advanced</h3>
+          <p>Hybrid package checkout placeholder:</p>
+          <a class="btn btn-primary" href="https://buy.stripe.com" target="_blank" rel="noopener">Buy Advanced</a>
+        </article>
+      </div>
     </section>
 
-    <section class="cta-secondary">
-      <h2>Begin With the Daily Resonance Codex</h2>
-      <p>If you want to enter the Imperium through clarity, structure, and daily alignment, this is your first artifact.</p>
-      <p><strong>→ Get the Codex</strong></p>
-      <p><strong>→ Begin the 30-day cycle</strong></p>
-      <p><strong>→ Enter the field through calibration</strong></p>
+    <section class="section">
+      <h2>Join Transmissions for updates.</h2>
+      <p>Receive launch announcements, archetype drops, and upgrades to the Daily Resonance practice.</p>
+      <div class="newsletter">
+        <p class="small"><strong>Mailchimp embed placeholder</strong> (replace `action` with your audience form endpoint):</p>
+        <form action="https://example.us1.list-manage.com/subscribe/post" method="post" target="_blank" rel="noopener">
+          <label for="mce-EMAIL">Email address</label><br>
+          <input id="mce-EMAIL" type="email" name="EMAIL" required placeholder="you@example.com">
+          <button class="btn btn-secondary" type="submit">Join Transmissions</button>
+        </form>
+      </div>
     </section>
-
   </main>
 </body>
 </html>

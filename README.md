@@ -25,6 +25,9 @@ When architecture changes, update the canonical markdown first, then update both
 - Web discovery surface: `/consulting` links to `/sales-assets`
 - Export build command: `bash docs/sales/build-exports.sh`
 
+## AI-Assisted QA Planning
+- Implementation plan: [`docs/operations/CODEX_AGENT_QA_IMPLEMENTATION_PLAN.md`](docs/operations/CODEX_AGENT_QA_IMPLEMENTATION_PLAN.md)
+
 Versioning and update cadence for sales collateral are defined in [`docs/sales/README.md`](docs/sales/README.md).
 
 ## Live Site
