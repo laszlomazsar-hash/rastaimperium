@@ -151,9 +151,7 @@ async def governance(request: Request):
 
 @app.get("/codex")
 async def codex(request: Request):
-    """The Daily Resonance Codex — the operational manual."""
-    if CODEX_PATH.exists():
-        return FileResponse(CODEX_PATH, media_type="text/html")
+    """The Daily Resonance Codex storefront and archetype gateway."""
     return templates.TemplateResponse("codex.html", {"request": request})
 
 
@@ -199,14 +197,14 @@ async def manifestation(request: Request):
     return templates.TemplateResponse("manifestation.html", {"request": request})
 
 @app.get("/store")
-async def store(request: Request):
-    """The Imperium store and offerings."""
-    return templates.TemplateResponse("store.html", {"request": request})
+async def store() -> RedirectResponse:
+    """Legacy store route redirected to the unified Codex storefront."""
+    return RedirectResponse(url="/codex", status_code=301)
 
 @app.get("/pricing")
-async def pricing(request: Request):
-    """Legacy pricing route now unified under /store."""
-    return RedirectResponse(url="/store", status_code=301)
+async def pricing() -> RedirectResponse:
+    """Legacy pricing route now unified under /codex."""
+    return RedirectResponse(url="/codex", status_code=301)
 
 @app.get("/about")
 async def about(request: Request):

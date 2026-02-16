@@ -239,6 +239,25 @@ p { margin: 0 0 14px; }
   gap: 16px;
 }
 
+.codex-teaser { margin-top: 24px; }
+
+.teaser-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.teaser-grid span {
+  border: 1px dashed rgba(212, 175, 55, 0.35);
+  border-radius: 8px;
+  padding: 10px 8px;
+  text-align: center;
+  color: #f1dc9d;
+  background: rgba(212, 175, 55, 0.08);
+  font-size: 0.9rem;
+}
+
 .pillar-card {
   padding: 22px;
   border: 1px solid rgba(212,175,55,.25);
@@ -409,6 +428,8 @@ footer {
   }
 
   .hero-visual { min-height: 300px; }
+
+  .teaser-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 768px) {
@@ -451,7 +472,7 @@ footer {
         <div class="btn-row">
           <a href="/start-here" class="btn btn-primary" data-track="hero_start_here">Start Here →</a>
           <a href="#map" class="btn btn-secondary" data-track="hero_explore_map">Explore the Map</a>
-          <a href="/codex-library" class="btn btn-tertiary" data-track="hero_browse_tools">Browse Tools</a>
+          <a href="/codex" class="btn btn-tertiary" data-track="hero_browse_tools">Codex Library</a>
         </div>
       </header>
       <div class="hero-visual" aria-hidden="true"><span class="lion-mark">Conquering Lion Field</span></div>
@@ -469,8 +490,8 @@ footer {
       <ul class="list-links">
         <li>I’m curious and want to begin simply → <a href="/curiosity">Start the 30-day Daily Resonance Practice</a></li>
         <li>I want to understand the full vision → <a href="#gateways">Read the Four Gateways</a></li>
-        <li>I want tools and codices → <a href="/codex-library">Visit the Codex Library</a></li>
-        <li>I’m ready for deeper work → <a href="/store">See offerings in the Store</a></li>
+        <li>I want tools and codices → <a href="/codex">Visit the Codex Library</a></li>
+        <li>I’m ready for deeper work → <a href="/codex">See offerings in the Store</a></li>
       </ul>
     </section>
 
@@ -528,6 +549,17 @@ footer {
             to provide a stable substrate for agents, narratives, and mythic‑technical structures.</p>
         </li>
       </ul>
+      <div class="codex-teaser card" aria-label="Daily Resonance Codex teaser">
+        <h3>Codex Library Preview</h3>
+        <p>12 archetypal cards now available through the Daily Resonance Codex.</p>
+        <div class="teaser-grid" role="img" aria-label="Twelve archetype card placeholders">
+          <span>Warrior</span><span>Sage</span><span>Builder</span><span>Healer</span>
+          <span>Oracle</span><span>Sovereign</span><span>Alchemist</span><span>Guardian</span>
+          <span>Visionary</span><span>Magician</span><span>Lover</span><span>Pioneer</span>
+        </div>
+        <p><a class="btn btn-secondary" href="/codex">Open Codex Library</a></p>
+      </div>
+
       <p class="small-note">Curiosity is the recommended first step for most people.<br>It is the softest, cleanest on-ramp into the field.<br>Conquering through coherence, the Lion prevails.</p>
     </section>
 
@@ -543,10 +575,10 @@ footer {
       <h2>Imperium Map</h2>
       <ul class="imperium-map">
         <li><a href="/evo-v">EVO-V Kernel</a> — simulation layer and evolutionary intelligence.</li>
-        <li><a href="/codex-library">Codex Library</a> — canonical artifacts and transmissions.</li>
+        <li><a href="/codex">Codex Library</a> — primary tool/store gateway and archetype deck access.</li>
         <li><a href="/manifestation">Manifestation</a> — certificates of release and lineage.</li>
-        <li><a href="/store">Store</a> — aligned offerings, access, bundles, and tiers.</li>
-        <li><a href="/store">Pricing</a> — unified into the Store for one purchase path.</li>
+        <li><a href="/codex">Store</a> — unified pricing and codex purchase pathways.</li>
+        <li><a href="/codex">Pricing</a> — unified under Codex for one purchase path.</li>
         <li><a href="/about">About</a> — origin story and mission.</li>
         <li><a href="/ethics">Ethics</a> — safeguards and consent protocols.</li>
         <li><a href="/community">Community</a> — circles of witnesses and builders.</li>
