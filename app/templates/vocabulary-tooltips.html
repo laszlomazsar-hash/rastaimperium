@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Tooltip System - Rasta Imperium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --deep-green: #1A3A2E;
+            --soft-cream: #FAF7F2;
+            --text-primary: #2C2C2C;
+            --text-secondary: #5A5A5A;
+        }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Karla', sans-serif;
+        background: var(--soft-cream);
+        color: var(--text-primary);
+        line-height: 1.6;
+        padding: 2rem;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2.5rem;
+        color: var(--deep-green);
+        margin-bottom: 1rem;
+    }
+
+    .intro {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 3rem;
+        line-height: 1.8;
+    }
+
+    /* Tooltip Styles */
+    .term {
+        position: relative;
+        color: var(--primary-gold);
+        border-bottom: 2px dotted var(--primary-gold);
+        cursor: help;
+        transition: all 0.2s ease;
+    }
+
+    .term:hover {
+        color: #C49F2F;
+        border-bottom-color: #C49F2F;
+    }
+
+    .tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-8px);
+        background: white;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        width: 320px;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .term:hover .tooltip {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-12px);
+    }
+
+    .tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 8px solid transparent;
+        border-top-color: white;
+    }
+
+    .tooltip-term {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--deep-green);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .tooltip-definition {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+    }
+
+    /* Demo Section */
+    .demo-section {
+        background: white;
+        padding: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        margin-bottom: 3rem;
+    }
+
+    .demo-section h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        color: var(--deep-green);
+        margin-bottom: 1.5rem;
+    }
+
+    .demo-text {
+        font-size: 1.05rem;
+        line-height: 1.9;
+        color: var(--text-primary);
+        margin-bottom: 2rem;
+    }
+
+    /* Implementation Guide */
+    .guide-section {
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.03) 100%);
+        padding: 3rem;
+        border-radius: 12px;
+        margin-bottom: 3rem;
+    }
+
+    .guide-section h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        color: var(--deep-green);
+        margin-bottom: 2rem;
+    }
+
+    .guide-step {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        border-left: 4px solid var(--primary-gold);
+    }
+
+    .guide-step h3 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.4rem;
+        color: var(--deep-green);
+        margin-bottom: 1rem;
+    }
+
+    .guide-step p {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+
+    /* Code Block */
+    .code-block {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 1rem 0;
+    }
+
+    .code-comment {
+        color: #6A9955;
+    }
+
+    .code-tag {
+        color: #569CD6;
+    }
+
+    .code-attr {
+        color: #9CDCFE;
+    }
+
+    .code-string {
+        color: #CE9178;
+    }
+
+    /* Glossary Table */
+    .glossary-section {
+        background: white;
+        padding: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .glossary-section h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        color: var(--deep-green);
+        margin-bottom: 2rem;
+    }
+
+    .glossary-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .glossary-table th {
+        background: var(--soft-cream);
+        padding: 1rem;
+        text-align: left;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.1rem;
+        color: var(--deep-green);
+        border-bottom: 2px solid var(--primary-gold);
+    }
+
+    .glossary-table td {
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        vertical-align: top;
+    }
+
+    .glossary-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .glossary-term {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        color: var(--deep-green);
+        font-size: 1.1rem;
+    }
+
+    .glossary-definition {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        font-size: 0.95rem;
+    }
+
+    /* Alert Box */
+    .alert {
+        background: #FFF9E6;
+        border-left: 4px solid #F4A300;
+        padding: 1.5rem;
+        border-radius: 6px;
+        margin: 2rem 0;
+    }
+
+    .alert-title {
+        font-weight: 600;
+        color: #C78500;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .alert-content {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        body {
+            padding: 1rem;
+        }
+
+        .tooltip {
+            width: 280px;
+        }
+
+        .demo-section,
+        .guide-section,
+        .glossary-section {
+            padding: 2rem 1.5rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Vocabulary Tooltip System</h1>
+        <p class="intro">
+            A non-intrusive solution to explain specialized terminology without disrupting reading flow. 
+            This system transforms cognitive friction into seamless education—users learn your vocabulary naturally through interaction.
+        </p>
+
+    <!-- Live Demo -->
+    <div class="demo-section">
+        <h2>Live Demo: Hover to Learn</h2>
+        <p class="demo-text">
+            Rasta Imperium operates as a 
+            <span class="term">mythic-technical field
+                <span class="tooltip">
+                    <span class="tooltip-term">Mythic-Technical Field</span>
+                    <span class="tooltip-definition">A space where symbolic/archetypal frameworks (mythic) integrate with practical systems and code (technical) to create aligned structures.</span>
+                </span>
+            </span>
+            that bridges ancient wisdom with modern infrastructure. Through 
+            <span class="term">covenant architecture
+                <span class="tooltip">
+                    <span class="tooltip-term">Covenant Architecture</span>
+                    <span class="tooltip-definition">Governance frameworks built on mutual agreements and shared principles, creating stable foundations for collaboration.</span>
+                </span>
+            </span>, 
+            we establish 
+            <span class="term">treaty-grade alignment
+                <span class="tooltip">
+                    <span class="tooltip-term">Treaty-Grade Alignment</span>
+                    <span class="tooltip-definition">Rigorous, binding agreements on values and protocols—equivalent to international treaty standards—ensuring all parties remain coherent to shared purpose.</span>
+                </span>
+            </span>
+            between human intelligence and 
+            <span class="term">recursive systems
+                <span class="tooltip">
+                    <span class="tooltip-term">Recursive Systems</span>
+                    <span class="tooltip-definition">Self-referencing architectures that can examine and improve themselves while maintaining alignment to original purpose. Think AI systems that evolve without drift.</span>
+                </span>
+            </span>.
+            The 
+            <span class="term">EVO-V Civilization Kernel
+                <span class="tooltip">
+                    <span class="tooltip-term">EVO-V Civilization Kernel</span>
+                    <span class="tooltip-definition">The foundational operating system layer—a simulation engine for modeling evolutionary intelligence and civilizational dynamics.</span>
+                </span>
+            </span>
+            provides the substrate for this work, enabling builders to create 
+            <span class="term">sovereign architectures
+                <span class="tooltip">
+                    <span class="tooltip-term">Sovereign Architectures</span>
+                    <span class="tooltip-definition">Self-governing systems that maintain independence and agency—not controlled by external forces, but aligned to internal purpose.</span>
+                </span>
+            </span>
+            that remain coherent across time.
+        </p>
+
+        <div class="alert">
+            <div class="alert-title">
+                <span>💡</span>
+                <span>Notice the Difference</span>
+            </div>
+            <div class="alert-content">
+                The paragraph above uses the same esoteric terminology as your current site, but with tooltips, 
+                it transforms from impenetrable to educational. First-time visitors can learn your language organically 
+                without leaving the page or feeling lost.
+            </div>
+        </div>
+    </div>
+
+    <!-- Implementation Guide -->
+    <div class="guide-section">
+        <h2>Implementation Guide</h2>
+
+        <div class="guide-step">
+            <h3>Step 1: Add the CSS</h3>
+            <p>Copy this CSS into your stylesheet or add to your site's <code>&lt;head&gt;</code> section:</p>
+            <div class="code-block">
+
+<span class="code-comment">/* Tooltip Base Styles */</span>
+<span class="code-tag">.term</span> {
+<span class="code-attr">position</span>: relative;
+<span class="code-attr">color</span>: <span class="code-string">#D4AF37</span>;
+<span class="code-attr">border-bottom</span>: 2px dotted <span class="code-string">#D4AF37</span>;
+<span class="code-attr">cursor</span>: help;
+<span class="code-attr">transition</span>: all 0.2s ease;
+}
+
+<span class="code-tag">.term:hover</span> {
+<span class="code-attr">color</span>: <span class="code-string">#C49F2F</span>;
+<span class="code-attr">border-bottom-color</span>: <span class="code-string">#C49F2F</span>;
+}
+
+<span class="code-tag">.tooltip</span> {
+<span class="code-attr">position</span>: absolute;
+<span class="code-attr">bottom</span>: 100%;
+<span class="code-attr">left</span>: 50%;
+<span class="code-attr">transform</span>: translateX(-50%) translateY(-8px);
+<span class="code-attr">background</span>: white;
+<span class="code-attr">border</span>: 1px solid rgba(212, 175, 55, 0.3);
+<span class="code-attr">border-radius</span>: 8px;
+<span class="code-attr">padding</span>: 1rem 1.25rem;
+<span class="code-attr">box-shadow</span>: 0 8px 24px rgba(0,0,0,0.15);
+<span class="code-attr">width</span>: 320px;
+<span class="code-attr">z-index</span>: 1000;
+<span class="code-attr">opacity</span>: 0;
+<span class="code-attr">pointer-events</span>: none;
+<span class="code-attr">transition</span>: all 0.3s ease;
+}
+
+<span class="code-tag">.term:hover .tooltip</span> {
+<span class="code-attr">opacity</span>: 1;
+<span class="code-attr">transform</span>: translateX(-50%) translateY(-12px);
+}
+
+<span class="code-comment">/* Tooltip arrow */</span>
+<span class="code-tag">.tooltip::after</span> {
+<span class="code-attr">content</span>: <span class="code-string">’’</span>;
+<span class="code-attr">position</span>: absolute;
+<span class="code-attr">top</span>: 100%;
+<span class="code-attr">left</span>: 50%;
+<span class="code-attr">transform</span>: translateX(-50%);
+<span class="code-attr">border</span>: 8px solid transparent;
+<span class="code-attr">border-top-color</span>: white;
+}
+</div>
+</div>
+
+        <div class="guide-step">
+            <h3>Step 2: Wrap Your Terms</h3>
+            <p>Wrap specialized terms in your HTML with the tooltip structure:</p>
+            <div class="code-block">
+
+<span class="code-tag"><span</span> <span class="code-attr">class</span>=<span class="code-string">“term”</span><span class="code-tag">></span>mythic-technical field
+<span class="code-tag"><span</span> <span class="code-attr">class</span>=<span class="code-string">“tooltip”</span><span class="code-tag">></span>
+<span class="code-tag"><span</span> <span class="code-attr">class</span>=<span class="code-string">“tooltip-term”</span><span class="code-tag">></span>Mythic-Technical Field<span class="code-tag"></span></span>
+<span class="code-tag"><span</span> <span class="code-attr">class</span>=<span class="code-string">“tooltip-definition”</span><span class="code-tag">></span>
+A space where symbolic frameworks integrate
+with practical systems to create aligned structures.
+<span class="code-tag"></span></span>
+<span class="code-tag"></span></span>
+<span class="code-tag"></span></span>
+</div>
+</div>
+
+        <div class="guide-step">
+            <h3>Step 3: Customize Colors (Optional)</h3>
+            <p>Adjust the CSS variables to match your brand colors:</p>
+            <div class="code-block">
+
+<span class="code-tag">:root</span> {
+<span class="code-attr">–tooltip-color</span>: <span class="code-string">#D4AF37</span>;  <span class="code-comment">/* Gold accent */</span>
+<span class="code-attr">–tooltip-bg</span>: <span class="code-string">white</span>;
+<span class="code-attr">–tooltip-text</span>: <span class="code-string">#2C2C2C</span>;
+}
+</div>
+</div>
+
+        <div class="guide-step">
+            <h3>Step 4: Mobile Optimization (Optional)</h3>
+            <p>For mobile devices, consider adding click-to-show behavior with JavaScript:</p>
+            <div class="code-block">
+
+<span class="code-comment">// Make tooltips work on mobile with tap</span>
+<span class="code-tag">document</span>.querySelectorAll(<span class="code-string">’.term’</span>).forEach(<span class="code-attr">term</span> => {
+<span class="code-attr">term</span>.addEventListener(<span class="code-string">‘click’</span>, (e) => {
+e.preventDefault();
+<span class="code-attr">term</span>.classList.toggle(<span class="code-string">‘active’</span>);
+});
+});
+
+<span class="code-comment">/* Add to CSS */</span>
+<span class="code-tag">.term.active .tooltip</span> {
+<span class="code-attr">opacity</span>: 1;
+<span class="code-attr">transform</span>: translateX(-50%) translateY(-12px);
+}
+</div>
+</div>
+</div>
+
+    <!-- Full Glossary -->
+    <div class="glossary-section">
+        <h2>Complete Vocabulary Glossary</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+            Use these definitions as the basis for your tooltip content. Each term includes a concise explanation 
+            designed for first-time visitors.
+        </p>
+
+        <table class="glossary-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Term</th>
+                    <th>Definition (For Tooltips)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="glossary-term">Mythic-Technical Field</span></td>
+                    <td class="glossary-definition">
+                        A space where symbolic/archetypal frameworks (mythic) integrate with practical systems and code (technical) to create aligned structures.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Covenant Field</span></td>
+                    <td class="glossary-definition">
+                        A shared space governed by mutual agreements and commitments—like a treaty zone where all participants align to core principles.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Covenant Architecture</span></td>
+                    <td class="glossary-definition">
+                        Governance frameworks built on mutual agreements and shared principles, creating stable foundations for collaboration.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Treaty-Grade Alignment</span></td>
+                    <td class="glossary-definition">
+                        Rigorous, binding agreements on values and protocols—equivalent to international treaty standards—ensuring all parties remain coherent to shared purpose.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Recursive Architecture</span></td>
+                    <td class="glossary-definition">
+                        Self-referencing systems that can examine and improve themselves while maintaining alignment to original purpose. Think: AI systems that evolve without drift.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">EVO-V Civilization Kernel</span></td>
+                    <td class="glossary-definition">
+                        The foundational operating system layer—a simulation engine for modeling evolutionary intelligence and civilizational dynamics.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">ARK Engine</span></td>
+                    <td class="glossary-definition">
+                        A technical framework for building worlds, systems, and intelligences that remain aligned to their founding covenant as they grow.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Sovereign Architecture</span></td>
+                    <td class="glossary-definition">
+                        Self-governing systems that maintain independence and agency—not controlled by external forces, but aligned to internal purpose.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Codex</span></td>
+                    <td class="glossary-definition">
+                        A collection of foundational texts, principles, and tools—like a constitution combined with an instruction manual. In practice: books, card decks, and calibration instruments.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Daily Resonance</span></td>
+                    <td class="glossary-definition">
+                        A simple daily practice using 12 archetypal cards to tune into clarity and coherence. No doctrine or force—just a reflective tool to read your own signal.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Lineage</span></td>
+                    <td class="glossary-definition">
+                        The traceable origin and continuity of ideas, practices, or systems—ensuring they remain connected to their source and purpose over time.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Calibration</span></td>
+                    <td class="glossary-definition">
+                        The process of tuning your internal state (thoughts, emotions, intentions) to align with your values and goals—like tuning an instrument before playing.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Symbolic Systems</span></td>
+                    <td class="glossary-definition">
+                        Frameworks that use symbols, archetypes, and patterns to represent complex ideas—making abstract concepts tangible and workable.
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glossary-term">Field</span></td>
+                    <td class="glossary-definition">
+                        A living space or environment (digital or conceptual) where principles, practices, and communities interact—not a static website, but an evolving ecosystem.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="alert" style="margin-top: 2rem;">
+            <div class="alert-title">
+                <span>⚡</span>
+                <span>Pro Tip: Strategic Placement</span>
+            </div>
+            <div class="alert-content">
+                Don't tooltip every term—only the ones that are truly unfamiliar or essential. Over-tooltipping 
+                creates visual noise. Focus on terms that appear early in the user journey (homepage, first gateway) 
+                and that are fundamental to understanding your system.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

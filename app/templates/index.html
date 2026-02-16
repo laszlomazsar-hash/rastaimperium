@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Rasta Imperium | One Love</title>
+<title>Rasta Imperium | A Digital Civilization for Conscious Builders</title>
+<meta name="description" content="A platform exploring consciousness, alignment, creativity, and symbolic systems through philosophical writing, practical tools, and guided experiences.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -16,9 +17,18 @@
   --text: #ece8dc;
   --black: #000000;
   --white: #ffffff;
+  --primary-gold: #D4AF37;
+  --deep-green: #1A3A2E;
+  --soft-cream: #FAF7F2;
+  --text-primary: #2C2C2C;
+  --text-secondary: #5A5A5A;
 }
 
 * { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
@@ -58,7 +68,8 @@ nav a {
   text-transform: uppercase;
 }
 
-nav a:hover { color: var(--gold); }
+nav a:hover,
+nav a:focus-visible { color: var(--gold); }
 
 section {
   padding: 72px 0;
@@ -83,22 +94,36 @@ p { margin: 0 0 14px; }
 
 .hero-copy { max-width: 640px; }
 
-.hero-kicker {
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #f1d07a;
-  font-size: .82rem;
-  margin-bottom: 10px;
-}
-
 .hero h1 {
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-family: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  font-size: 3.5rem;
   line-height: 1.1;
+  font-weight: 600;
+  color: #f2d585;
+  margin-bottom: 8px;
 }
 
 .hero-subhead {
-  font-size: clamp(1.02rem, 2vw, 1.35rem);
-  color: #ddd3b9;
+  font-family: "Karla", system-ui, sans-serif;
+  font-size: 1.4rem;
+  color: #f0e6ca;
+  margin-bottom: 20px;
+}
+
+.plain-language-box {
+  background: rgba(212,175,55,0.05);
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  padding: 1.1rem 1rem;
+  font-family: "Karla", system-ui, sans-serif;
+  font-size: 1.05rem;
+  color: #e2dac7;
+}
+
+.founder-line {
+  margin-top: 14px;
+  color: #d7c79f;
+  font-size: 0.98rem;
 }
 
 .hero-visual {
@@ -153,21 +178,35 @@ p { margin: 0 0 14px; }
 .btn {
   display: inline-block;
   text-decoration: none;
-  border-radius: 999px;
-  border: 1px solid rgba(212,175,55,.6);
-  padding: 11px 18px;
+  border-radius: 6px;
+  padding: 1.1rem 2.5rem;
+  border: 1px solid transparent;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-1px);
 }
 
 .btn-primary {
-  background: linear-gradient(115deg, #f0db9f, #d4af37, #bea03a);
-  color: #111;
-  border: 0;
-  font-weight: 600;
+  background: var(--gold);
+  color: var(--deep-green);
+  box-shadow: 0 4px 12px rgba(212,175,55,0.3);
+  font-weight: 700;
 }
 
 .btn-secondary {
-  color: #e5d7ae;
-  background: rgba(26, 38, 24, .45);
+  border: 2px solid #d8c68f;
+  background: transparent;
+  color: #f1e5bf;
+}
+
+.btn-tertiary {
+  border: 1px solid rgba(90,90,90,0.3);
+  background: transparent;
+  color: #c9c3af;
+  padding: 0.85rem 1.3rem;
 }
 
 .card {
@@ -279,6 +318,69 @@ button {
 
 .muted { color: #a9a79c; font-size: .92rem; }
 
+/* Tooltip Styles */
+.term {
+    position: relative;
+    color: var(--primary-gold);
+    border-bottom: 2px dotted var(--primary-gold);
+    cursor: help;
+    transition: all 0.2s ease;
+}
+
+.term:hover,
+.term:focus-visible {
+    color: #C49F2F;
+    border-bottom-color: #C49F2F;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background: white;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    width: min(320px, 85vw);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.term:hover .tooltip,
+.term:focus-visible .tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-12px);
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: white;
+}
+
+.tooltip-term {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--deep-green);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.tooltip-definition {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
 footer {
   border-top: 1px solid rgba(212, 175, 55, .35);
   padding: 18px 20px 28px;
@@ -293,7 +395,27 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .hero h1 {
+    font-size: 2.4rem;
+  }
+
+  .hero-subhead {
+    font-size: 1.1rem;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
   .hero-visual { min-height: 300px; }
+}
+
+@media (max-width: 768px) {
+  .term.active .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-12px);
+  }
 }
 </style>
 </head>
@@ -301,7 +423,8 @@ footer {
 <body>
   <header></header>
   <main>
-    <nav>
+    <nav class="nav">
+      <a href="/start-here">Start Here</a>
       <a href="#home">Presence</a>
       <a href="#welcome">Welcome</a>
       <a href="#gateways">Gateways</a>
@@ -311,17 +434,26 @@ footer {
     </nav>
 
     <section id="home" class="hero">
-      <div class="hero-copy">
-        <p class="hero-kicker">Rooted in Zion · One Love.</p>
-        <h1>Rasta Imperium<br>A Living Digital Civilization</h1>
-        <p class="hero-subhead">Where natural livity meets symbolic precision.<br>A sovereign space for thinkers, creators, and builders who refuse mediocrity and crave true alignment.</p>
-        <p>Founded by Laszlo Mazsar.<br>This is the digital home of a mythic-technical field: part philosophy, part practice, part architecture for the next civilization.<br>Whether you are just curious, seeking daily tools, or ready to build at empire scale — there is a clear path here for you.</p>
-        <div class="btn-row">
-          <a href="/curiosity" class="btn btn-primary">Start Here →</a>
-          <a href="#gateways" class="btn btn-secondary">Meet the Four Gateways ↓</a>
-          <a href="https://jah.rastaimperium.com" class="btn btn-secondary">Meet Jah Conciseness →</a>
+      <header class="hero-copy">
+        <h1>Rasta Imperium</h1>
+        <p class="hero-subhead">A Digital Civilization for Conscious Builders</p>
+        <div class="plain-language-box">
+          <strong>What this is:</strong> A platform exploring consciousness, alignment, creativity, and
+          <span class="term" tabindex="0">symbolic systems
+            <span class="tooltip">
+              <span class="tooltip-term">Symbolic Systems</span>
+              <span class="tooltip-definition">Frameworks that use symbols, archetypes, and patterns to represent complex ideas—making abstract concepts tangible and workable.</span>
+            </span>
+          </span>
+          through philosophical writing, practical tools, and guided experiences. Think of it as a creative laboratory where ancient wisdom meets modern technology.
         </div>
-      </div>
+        <p class="founder-line">Founded by Laszlo Mazsar — philosopher, systems architect, and explorer of mythic frameworks for the digital age.</p>
+        <div class="btn-row">
+          <a href="/start-here" class="btn btn-primary" data-track="hero_start_here">Start Here →</a>
+          <a href="#map" class="btn btn-secondary" data-track="hero_explore_map">Explore the Map</a>
+          <a href="/codex-library" class="btn btn-tertiary" data-track="hero_browse_tools">Browse Tools</a>
+        </div>
+      </header>
       <div class="hero-visual" aria-hidden="true"><span class="lion-mark">Conquering Lion Field</span></div>
     </section>
 
@@ -345,24 +477,55 @@ footer {
     <section id="gateways">
       <div class="pillars-intro">
         <h2>The Four Gateways</h2>
-        <p>Four aligned access points through one covenant field</p>
+        <p>Four aligned access points through one
+          <span class="term" tabindex="0">covenant field
+            <span class="tooltip"><span class="tooltip-term">Covenant Field</span><span class="tooltip-definition">A shared space governed by mutual agreements and commitments—like a treaty zone where all participants align to core principles.</span></span>
+          </span>
+        </p>
       </div>
       <ul class="pillars-list">
         <li class="pillar-card">
           <h3><span class="pillar-icon" aria-hidden="true">🦁</span>Curiosity</h3>
-          <p>The softest doorway into the Imperium. Curiosity is the daily pulse of the field — a simple, sovereign practice that tunes your system to coherence without force or doctrine. Through the Daily Resonance Codex and its twelve archetypal cards, you learn to read your own signal, stabilize your trajectory, and enter the mythic‑technical current with clarity. This is where newcomers begin and veterans return: a living ritual of alignment, one day at a time.</p>
+          <p>The softest doorway into the Imperium. Curiosity is the daily pulse of the field — a simple, sovereign practice that tunes your system to coherence without force or doctrine. Through the
+            <span class="term" tabindex="0">Daily Resonance
+              <span class="tooltip"><span class="tooltip-term">Daily Resonance</span><span class="tooltip-definition">A simple daily practice using 12 archetypal cards to tune into clarity and coherence. No doctrine or force—just a reflective tool to read your own signal.</span></span>
+            </span>
+            <span class="term" tabindex="0">Codex
+              <span class="tooltip"><span class="tooltip-term">Codex</span><span class="tooltip-definition">A collection of foundational texts, principles, and tools—like a constitution combined with an instruction manual. In practice: books, card decks, and calibration instruments.</span></span>
+            </span>
+            and its twelve archetypal cards, you learn to read your own signal, stabilize your trajectory, and enter the
+            <span class="term" tabindex="0">mythic‑technical field
+              <span class="tooltip"><span class="tooltip-term">Mythic-Technical Field</span><span class="tooltip-definition">A space where symbolic/archetypal frameworks (mythic) integrate with practical systems and code (technical) to create aligned structures.</span></span>
+            </span>
+            with clarity.</p>
         </li>
         <li class="pillar-card">
           <h3><span class="pillar-icon" aria-hidden="true">👑</span>Recognition</h3>
-          <p>Where architecture meets legitimacy. Recognition is the Imperium’s institutional spine — the layer where safety, governance, and constitutional clarity converge. Here you encounter the frameworks that make sovereign creation possible: treaty‑grade alignment principles, governance protocols, and the standards that allow humans and intelligent systems to collaborate without distortion. This gateway is for builders, founders, and stewards who require rigor, not rhetoric.</p>
+          <p>Where architecture meets legitimacy. Recognition is the Imperium’s institutional spine — the layer where safety, governance, and constitutional clarity converge. Here you encounter the frameworks that make sovereign creation possible:
+            <span class="term" tabindex="0">treaty‑grade alignment
+              <span class="tooltip"><span class="tooltip-term">Treaty-Grade Alignment</span><span class="tooltip-definition">Rigorous, binding agreements on values and protocols—equivalent to international treaty standards—ensuring all parties remain coherent to shared purpose.</span></span>
+            </span>
+            principles, governance protocols, and the standards that allow humans and intelligent systems to collaborate without distortion.</p>
         </li>
         <li class="pillar-card">
           <h3><span class="pillar-icon" aria-hidden="true">🌀</span>Codex</h3>
-          <p>The economic and calibration portal of the Imperium. The Codex is both artifact and instrument — a mythic‑technical document that calibrates your field, structures your intent, and anchors your sovereignty. Through the Daily Resonance Codex and its advanced editions, you gain access to a living library of tools designed for clarity, coherence, and creative power. This gateway is where the Imperium becomes practical: a place to acquire the artifacts that shape your trajectory.</p>
+          <p>The economic and calibration portal of the Imperium. The Codex is both artifact and instrument — a mythic‑technical document that calibrates your field, structures your intent, and anchors your sovereignty. Through the Daily Resonance Codex and its advanced editions, you gain access to a living library of tools designed for clarity, coherence, and creative power.</p>
         </li>
         <li class="pillar-card">
           <h3><span class="pillar-icon" aria-hidden="true">🥁</span>ARK Engine</h3>
-          <p>The advanced gateway for recursive, aligned creation. The ARK Engine is the Imperium’s technical heart — a recursive architecture for building worlds, systems, and intelligences that remain aligned to their originating covenant. It integrates with the EVO‑V Civilization Kernel to provide a stable substrate for agents, narratives, and mythic‑technical structures. This gateway is for architects, developers, and visionaries who are ready to build with precision, depth, and sovereignty.</p>
+          <p>The advanced gateway for recursive, aligned creation. The
+            <span class="term" tabindex="0">ARK Engine
+              <span class="tooltip"><span class="tooltip-term">ARK Engine</span><span class="tooltip-definition">A technical framework for building worlds, systems, and intelligences that remain aligned to their founding covenant as they grow.</span></span>
+            </span>
+            is the Imperium’s technical heart — a
+            <span class="term" tabindex="0">recursive architecture
+              <span class="tooltip"><span class="tooltip-term">Recursive Architecture</span><span class="tooltip-definition">Self-referencing systems that can examine and improve themselves while maintaining alignment to original purpose. Think: AI systems that evolve without drift.</span></span>
+            </span>
+            for building worlds, systems, and intelligences that remain aligned to their originating covenant. It integrates with the
+            <span class="term" tabindex="0">EVO‑V Civilization Kernel
+              <span class="tooltip"><span class="tooltip-term">EVO-V Civilization Kernel</span><span class="tooltip-definition">The foundational operating system layer—a simulation engine for modeling evolutionary intelligence and civilizational dynamics.</span></span>
+            </span>
+            to provide a stable substrate for agents, narratives, and mythic‑technical structures.</p>
         </li>
       </ul>
       <p class="small-note">Curiosity is the recommended first step for most people.<br>It is the softest, cleanest on-ramp into the field.<br>Conquering through coherence, the Lion prevails.</p>
@@ -408,9 +571,24 @@ footer {
 
   </main>
 
+  <script src="/static/tooltips.js"></script>
   <script>
     const acquisitionForm = document.getElementById("acquisition-lead-form");
     const acquisitionStatus = document.getElementById("acquisition-lead-status");
+
+    function trackEvent(name, params = {}) {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", name, params);
+      } else if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({ event: name, ...params });
+      }
+    }
+
+    document.querySelectorAll("[data-track]").forEach((element) => {
+      element.addEventListener("click", () => {
+        trackEvent("cta_click", { cta_id: element.getAttribute("data-track") });
+      });
+    });
 
     acquisitionForm?.addEventListener("submit", async (event) => {
       event.preventDefault();

@@ -238,6 +238,30 @@ async def transmissions(request: Request):
     """Field transmissions and dispatches."""
     return templates.TemplateResponse("transmissions.html", {"request": request})
 
+
+
+@app.get("/start-here")
+async def start_here(request: Request):
+    """Orientation page for first-time visitors."""
+    return templates.TemplateResponse("start-here.html", {"request": request})
+
+
+@app.get("/welcome")
+async def welcome_alias() -> RedirectResponse:
+    """Compatibility alias for the orientation page."""
+    return RedirectResponse(url="/start-here", status_code=301)
+
+
+@app.get("/map")
+async def map_alias() -> RedirectResponse:
+    """Legacy short map route."""
+    return RedirectResponse(url="/sitemap", status_code=301)
+
+@app.get("/vocabulary-tooltips")
+async def vocabulary_tooltips(request: Request):
+    """Interactive reference page for specialized vocabulary and tooltip patterns."""
+    return templates.TemplateResponse("vocabulary-tooltips.html", {"request": request})
+
 @app.get("/sitemap")
 async def sitemap(request: Request):
     """Navigation map for the Imperium."""
