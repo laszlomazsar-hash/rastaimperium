@@ -7,13 +7,15 @@
 
 <style>
 :root {
-  --red: #c62828;
+  --red: #8b0000;
   --gold: #d4af37;
-  --green: #2e7d32;
-  --bg: #070907;
+  --green: #0f5d2f;
+  --bg: #050705;
   --panel: #111311;
   --border: #272b27;
   --text: #ece8dc;
+  --black: #000000;
+  --white: #ffffff;
 }
 
 * { box-sizing: border-box; }
@@ -21,7 +23,9 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, sans-serif;
-  background: radial-gradient(circle at 50% -20%, #203322 0%, #090b09 45%, #040504 100%);
+  background:
+    radial-gradient(circle at 50% -20%, rgba(212, 175, 55, 0.2) 0%, transparent 40%),
+    linear-gradient(165deg, #145e32 0%, #0a1d12 46%, #000000 100%);
   color: var(--text);
   line-height: 1.7;
 }
@@ -65,6 +69,7 @@ h1, h2, h3 {
   color: var(--gold);
   letter-spacing: 1px;
   font-weight: 500;
+  font-family: "Times New Roman", Georgia, serif;
 }
 
 p { margin: 0 0 14px; }
@@ -81,7 +86,7 @@ p { margin: 0 0 14px; }
 .hero-kicker {
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #d4bb7f;
+  color: #f1d07a;
   font-size: .82rem;
   margin-bottom: 10px;
 }
@@ -101,21 +106,21 @@ p { margin: 0 0 14px; }
   border: 1px solid rgba(212, 175, 55, .22);
   border-radius: 22px;
   background:
-    radial-gradient(circle at 70% 18%, rgba(255, 223, 143, .26), transparent 40%),
-    radial-gradient(circle at 64% 28%, rgba(255, 224, 158, .14), transparent 36%),
-    linear-gradient(155deg, #1a301f 0%, #0f1b12 48%, #090909 100%);
+    radial-gradient(circle at 70% 18%, rgba(255, 223, 143, .3), transparent 40%),
+    radial-gradient(circle at 64% 28%, rgba(255, 224, 158, .16), transparent 36%),
+    linear-gradient(155deg, #174726 0%, #0d2616 48%, #090909 100%);
   box-shadow: 0 28px 50px rgba(0,0,0,.45);
   position: relative;
   overflow: hidden;
 }
 
 .hero-visual::before {
-  content: "🦁";
+  content: "♌";
   position: absolute;
   font-size: clamp(6rem, 14vw, 9rem);
   right: 16%;
   top: 28%;
-  opacity: .88;
+  opacity: .92;
   filter: drop-shadow(0 0 18px rgba(255,208,115,.35));
 }
 
@@ -123,7 +128,19 @@ p { margin: 0 0 14px; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(115deg, transparent 35%, rgba(255, 225, 150, .1) 52%, transparent 74%);
+  background:
+    linear-gradient(115deg, transparent 35%, rgba(255, 225, 150, .12) 52%, transparent 74%),
+    repeating-linear-gradient(90deg, transparent 0 18px, rgba(212, 175, 55, 0.08) 18px 20px);
+}
+
+.hero-visual .lion-mark {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-size: .8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f8db88;
 }
 
 .btn-row {
@@ -190,6 +207,18 @@ p { margin: 0 0 14px; }
   background: linear-gradient(150deg, rgba(17,17,17,.96), rgba(10,10,10,.94));
 }
 
+.pillar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  margin-right: 10px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+}
+
 .small-note {
   margin-top: 18px;
   color: #c9c3af;
@@ -250,6 +279,14 @@ button {
 
 .muted { color: #a9a79c; font-size: .92rem; }
 
+footer {
+  border-top: 1px solid rgba(212, 175, 55, .35);
+  padding: 18px 20px 28px;
+  text-align: center;
+  color: #d5c79a;
+  background: linear-gradient(90deg, rgba(139, 0, 0, .2), rgba(212, 175, 55, .15), rgba(15, 93, 47, .22));
+}
+
 @media (max-width: 860px) {
   .hero,
   .founder {
@@ -275,9 +312,9 @@ button {
 
     <section id="home" class="hero">
       <div class="hero-copy">
-        <p class="hero-kicker">One Love.</p>
+        <p class="hero-kicker">Rooted in Zion · One Love.</p>
         <h1>Rasta Imperium<br>A Living Digital Civilization</h1>
-        <p class="hero-subhead">Where ancient dread wisdom meets tomorrow’s symbolic intelligence.<br>A sovereign space for thinkers, creators, and builders who refuse mediocrity and crave true alignment.</p>
+        <p class="hero-subhead">Where natural livity meets symbolic precision.<br>A sovereign space for thinkers, creators, and builders who refuse mediocrity and crave true alignment.</p>
         <p>Founded by Laszlo Mazsar.<br>This is the digital home of a mythic-technical field: part philosophy, part practice, part architecture for the next civilization.<br>Whether you are just curious, seeking daily tools, or ready to build at empire scale — there is a clear path here for you.</p>
         <div class="btn-row">
           <a href="/curiosity" class="btn btn-primary">Start Here →</a>
@@ -285,7 +322,7 @@ button {
           <a href="https://jah.rastaimperium.com" class="btn btn-secondary">Meet Jah Conciseness →</a>
         </div>
       </div>
-      <div class="hero-visual" aria-hidden="true"></div>
+      <div class="hero-visual" aria-hidden="true"><span class="lion-mark">Conquering Lion Field</span></div>
     </section>
 
     <section id="welcome" class="card">
@@ -312,30 +349,30 @@ button {
       </div>
       <ul class="pillars-list">
         <li class="pillar-card">
-          <h3>Curiosity</h3>
+          <h3><span class="pillar-icon" aria-hidden="true">🦁</span>Curiosity</h3>
           <p>The softest doorway into the Imperium. Curiosity is the daily pulse of the field — a simple, sovereign practice that tunes your system to coherence without force or doctrine. Through the Daily Resonance Codex and its twelve archetypal cards, you learn to read your own signal, stabilize your trajectory, and enter the mythic‑technical current with clarity. This is where newcomers begin and veterans return: a living ritual of alignment, one day at a time.</p>
         </li>
         <li class="pillar-card">
-          <h3>Recognition</h3>
+          <h3><span class="pillar-icon" aria-hidden="true">👑</span>Recognition</h3>
           <p>Where architecture meets legitimacy. Recognition is the Imperium’s institutional spine — the layer where safety, governance, and constitutional clarity converge. Here you encounter the frameworks that make sovereign creation possible: treaty‑grade alignment principles, governance protocols, and the standards that allow humans and intelligent systems to collaborate without distortion. This gateway is for builders, founders, and stewards who require rigor, not rhetoric.</p>
         </li>
         <li class="pillar-card">
-          <h3>Codex</h3>
+          <h3><span class="pillar-icon" aria-hidden="true">🌀</span>Codex</h3>
           <p>The economic and calibration portal of the Imperium. The Codex is both artifact and instrument — a mythic‑technical document that calibrates your field, structures your intent, and anchors your sovereignty. Through the Daily Resonance Codex and its advanced editions, you gain access to a living library of tools designed for clarity, coherence, and creative power. This gateway is where the Imperium becomes practical: a place to acquire the artifacts that shape your trajectory.</p>
         </li>
         <li class="pillar-card">
-          <h3>ARK Engine</h3>
+          <h3><span class="pillar-icon" aria-hidden="true">🥁</span>ARK Engine</h3>
           <p>The advanced gateway for recursive, aligned creation. The ARK Engine is the Imperium’s technical heart — a recursive architecture for building worlds, systems, and intelligences that remain aligned to their originating covenant. It integrates with the EVO‑V Civilization Kernel to provide a stable substrate for agents, narratives, and mythic‑technical structures. This gateway is for architects, developers, and visionaries who are ready to build with precision, depth, and sovereignty.</p>
         </li>
       </ul>
-      <p class="small-note">Curiosity is the recommended first step for most people.<br>It is the softest, cleanest on-ramp into the field.</p>
+      <p class="small-note">Curiosity is the recommended first step for most people.<br>It is the softest, cleanest on-ramp into the field.<br>Conquering through coherence, the Lion prevails.</p>
     </section>
 
     <section id="founder" class="card founder">
       <div class="founder-photo">[Photo placeholder — regal, direct, warm portrait]</div>
       <div>
         <h2>Laszlo Mazsar — Founder of the Rasta Imperium</h2>
-        <p>I built this because the world is dying for a third path:<br>One that does not force you to choose between spirit and reason, between roots and future, between poetry and power.<br>Here the Lion of Judah is not a symbol from the past.<br>It is an operating system for tomorrow.<br>If that frequency lands in your chest, you are already home.</p>
+        <p>I built this because the world is dying for a third path:<br>One that does not force you to choose between spirit and reason, between roots and future, between poetry and power.<br>Here the Lion of Judah is not a symbol from the past.<br>It is an operating system for tomorrow.<br>Natural livity, pure signal, precise architecture.<br>If that frequency lands in your chest, you are already home.</p>
       </div>
     </section>
 
@@ -359,7 +396,7 @@ button {
 
     <section id="contact" class="card">
       <h2>Ready to move?</h2>
-      <p>You can enter through practice, understanding, artifact, or architecture.<br>The field is the same.</p>
+      <p>You can enter through practice, understanding, artifact, or architecture.<br>The field is the same — rooted in Zion and calibrated for clarity.</p>
       <p><a href="/transmissions" class="btn btn-primary">Join the Imperium Transmissions</a></p>
       <p class="muted">Low-frequency, high-signal dispatches only — new codices, tool releases, and field movements. Never spam.</p>
       <form id="acquisition-lead-form">
@@ -410,5 +447,8 @@ button {
       }
     });
   </script>
+  <footer>
+    <p>🦁 The Lion of Judah Prevails · The Lion prevails.</p>
+  </footer>
 </body>
 </html>
