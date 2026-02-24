@@ -58,3 +58,8 @@ dump.rdb
 # (keep versions/ folder)
 migrations/__pycache__/
 migrations/versions/__pycache__/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
