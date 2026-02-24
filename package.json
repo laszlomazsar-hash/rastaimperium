@@ -1,4 +1,15 @@
 {
+  "name": "rastaimperium",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "export": "next build",
+    "deploy": "next build && touch out/.nojekyll"
+  },
+  "dependencies": {
+    "next": "14.2.5",
   "name": "rastaimperium-main-domain",
   "version": "1.1.0",
   "private": true,
@@ -15,6 +26,9 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "autoprefixer": "10.4.19",
+    "postcss": "8.4.39",
+    "tailwindcss": "3.4.7"
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
