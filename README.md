@@ -38,12 +38,58 @@ npm run deploy
 
 `deploy` currently performs a production build + static export. Publish the `out/` directory to GitHub Pages for `rastaimperium.github.io`.
 
-## Hugging Face Spaces wiring
+## Namecheap DNS Setup (Custom Domain → HF Spaces Frontend)
 
-When deploying frontend and backend as separate Spaces, point the frontend to your backend Space URL:
+Use these exact steps to route `rastaimperium.com` from Namecheap to the frontend space.
+
+### 1) Log in to Namecheap
+1. Go to `https://www.namecheap.com`.
+2. Sign in to your Namecheap account.
+3. Open **Manage Domains** from your dashboard.
+4. Select `rastaimperium.com`.
+
+### 2) Open DNS settings
+1. Open the **Domain** tab.
+2. Click **Manage DNS** / **Advanced DNS**.
+
+### 3) Add the CNAME record
+In the DNS Records section, add:
+
+| Field | Value |
+|-------|-------|
+| Type | `CNAME` |
+| Host | `@` (or blank if Namecheap defaults to root) |
+| Value / Points to | `codebylaszlo-rastaimperium.hf.space` |
+| TTL | `3600` (or default) |
+
+Save the record (checkmark icon in Namecheap UI).
+
+### 4) Verify propagation
+1. Wait **5–15 minutes**.
+2. Open `https://rastaimperium.com`.
+3. Confirm the frontend loads.
+
+### Troubleshooting
+If not live after ~15 minutes:
+- Confirm the record value is exactly `codebylaszlo-rastaimperium.hf.space`.
+- Check Namecheap record status for pending propagation.
+- Flush local DNS cache if needed:
 
 ```bash
-NEXT_PUBLIC_API_URL=https://codebylaszlo-rastaimperium-backend.hf.space
+# macOS
+sudo dscacheutil -flushcache
+
+# Windows (PowerShell as admin)
+ipconfig /flushdns
+
+# Linux
+sudo systemctl restart systemd-resolved
 ```
 
-Then redeploy the frontend Space. If `NEXT_PUBLIC_API_URL` is not set, the app falls back to same-origin API routes.
+### Final checklist
+- [ ] CNAME added at Namecheap
+- [ ] Waited 5–15 minutes for propagation
+- [ ] `https://rastaimperium.com` loads frontend
+- [ ] Backend health check passes:
+      `https://codebylaszlo-rastaimperium-backend.hf.space/healthz`
+- [ ] Frontend calls API endpoints successfully
