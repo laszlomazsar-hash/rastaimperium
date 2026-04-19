@@ -33,10 +33,18 @@ Build output is generated in `out/` via `next.config.ts` static export settings.
 
 ## One-command deploy
 ```bash
-npm run deploy
+NEXT_PUBLIC_API_URL="https://codebylaszlo-rastaimperium-backend.hf.space" npm run deploy
 ```
 
-`deploy` currently performs a production build + static export. Publish the `out/` directory to GitHub Pages for `rastaimperium.github.io`.
+`deploy` now performs a real publication step: it validates `NEXT_PUBLIC_API_URL`, runs `next build` (static export to `out/`), then publishes `out/` to the `gh-pages` branch via the `gh-pages` CLI.
+
+### Required environment variables
+- `NEXT_PUBLIC_API_URL` (**required**): public backend API base URL used at build time.
+
+### Optional environment variables
+- `NEXT_PUBLIC_BASE_PATH` (optional, default: `/rastaimperium`): set this to match your GitHub Pages target path.
+  - Use `/rastaimperium` for project Pages URLs like `https://<owner>.github.io/rastaimperium`.
+  - Use an empty string (`""`) when serving from a custom domain root.
 
 ## Namecheap DNS Setup (Custom Domain → HF Spaces Frontend)
 

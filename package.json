@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "next build"
+    "deploy": "bash scripts/deploy-pages.sh"
   },
   "dependencies": {
     "next": "15.0.4",
