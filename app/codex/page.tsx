@@ -1,26 +1,13 @@
 import Link from "next/link";
 import { loadCodexBlueprint } from "./data";
 
-type SearchParams = {
-  template?: string;
-  theme?: string;
-};
-
-export default async function CodexPage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
+export default async function CodexPage() {
   const blueprint = await loadCodexBlueprint();
-  const resolvedSearchParams = (await searchParams) ?? {};
-
-  const templateFilter = resolvedSearchParams.template;
-  const themeFilter = resolvedSearchParams.theme;
 
   const templateTypes = Array.from(new Set(blueprint.codex.map((article) => article.templateType).filter(Boolean))) as string[];
   const governanceThemes = Array.from(new Set(blueprint.codex.map((article) => article.governanceTheme).filter(Boolean))) as string[];
 
-  const filteredArticles = blueprint.codex.filter((article) => {
-    const matchesTemplate = !templateFilter || article.templateType === templateFilter;
-    const matchesTheme = !themeFilter || article.governanceTheme === themeFilter;
-    return matchesTemplate && matchesTheme;
-  });
+  const filteredArticles = blueprint.codex;
 
   return (
     <main style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
@@ -28,34 +15,6 @@ export default async function CodexPage({ searchParams }: { searchParams?: Promi
       <p>
         <strong>{blueprint.title}</strong> — {blueprint.description}
       </p>
-
-      <section>
-        <h2>Filter by template type</h2>
-        <p>
-          <Link href="/codex">All</Link>
-          {templateTypes.map((templateType) => (
-            <span key={templateType} style={{ marginLeft: "1rem" }}>
-              <Link href={`/codex?template=${encodeURIComponent(templateType)}${themeFilter ? `&theme=${encodeURIComponent(themeFilter)}` : ""}`}>
-                {templateType}
-              </Link>
-            </span>
-          ))}
-        </p>
-      </section>
-
-      <section>
-        <h2>Filter by governance theme</h2>
-        <p>
-          <Link href="/codex">All</Link>
-          {governanceThemes.map((theme) => (
-            <span key={theme} style={{ marginLeft: "1rem" }}>
-              <Link href={`/codex?theme=${encodeURIComponent(theme)}${templateFilter ? `&template=${encodeURIComponent(templateFilter)}` : ""}`}>
-                {theme}
-              </Link>
-            </span>
-          ))}
-        </p>
-      </section>
 
       <section>
         <h2>Codex Articles</h2>
@@ -85,7 +44,7 @@ export default async function CodexPage({ searchParams }: { searchParams?: Promi
                   ? article.revisionHistory.map((revision, index) => (
                       <span key={revision.version}>
                         {index > 0 ? " → " : ""}
-                        <Link href={`/codex/${article.article}?revision=${encodeURIComponent(revision.version)}`}>
+                        <Link href={`/codex/${article.article}`}>
                           {revision.version}
                         </Link>
                       </span>

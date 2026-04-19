@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { findArticle, getCanonicalSource, loadArticleBody, loadCodexBlueprint } from "../data";
 
+export async function generateStaticParams() {
+  const blueprint = await loadCodexBlueprint();
+  return blueprint.codex.map((article) => ({
+    article: article.article,
+  }));
+}
+
 type Params = {
   article: string;
 };
@@ -11,13 +18,10 @@ type SearchParams = {
 
 export default async function CodexArticlePage({
   params,
-  searchParams,
 }: {
   params: Promise<Params>;
-  searchParams?: Promise<SearchParams>;
 }) {
   const { article: articleParam } = await params;
-  const resolvedSearchParams = (await searchParams) ?? {};
 
   const blueprint = await loadCodexBlueprint();
   const article = findArticle(blueprint, articleParam);
@@ -39,7 +43,6 @@ export default async function CodexArticlePage({
   }
 
   const body = await loadArticleBody(article.article);
-  const selectedRevision = article.revisionHistory?.find((revision) => revision.version === resolvedSearchParams.revision);
   const latestRevision = article.revisionHistory?.[article.revisionHistory.length - 1];
 
   return (
@@ -59,7 +62,7 @@ export default async function CodexArticlePage({
           <li>Governance theme: {article.governanceTheme ?? "unassigned"}</li>
           <li>Canonical source: {getCanonicalSource(blueprint)}</li>
           <li>Blueprint version: {blueprint.version}</li>
-          <li>Rendered revision: {(selectedRevision ?? latestRevision)?.version ?? "n/a"}</li>
+          <li>Rendered revision: {latestRevision?.version ?? "n/a"}</li>
         </ul>
       </section>
 

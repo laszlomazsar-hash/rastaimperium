@@ -32,7 +32,7 @@ pre {
 }
 
 .panel {
-  @apply border border-gold/30 rounded-xl bg-green/20;
+  @apply border border-[#B8860B]/30 rounded-xl bg-[#1A3A2A]/20;
 }
 
 .container-page {
