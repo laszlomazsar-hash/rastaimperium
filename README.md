@@ -37,3 +37,13 @@ npm run deploy
 ```
 
 `deploy` currently performs a production build + static export. Publish the `out/` directory to GitHub Pages for `rastaimperium.github.io`.
+
+## Hugging Face Spaces wiring
+
+When deploying frontend and backend as separate Spaces, point the frontend to your backend Space URL:
+
+```bash
+NEXT_PUBLIC_API_URL=https://codebylaszlo-rastaimperium-backend.hf.space
+```
+
+Then redeploy the frontend Space. If `NEXT_PUBLIC_API_URL` is not set, the app falls back to same-origin API routes.
