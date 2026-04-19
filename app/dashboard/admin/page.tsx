@@ -9,6 +9,7 @@ import {
   StatusChip,
 } from "../../components/DashboardLayout";
 import { useBlueprint } from "../../../hooks/useBlueprint";
+import { apiUrl } from "../../utils/api";
 
 type PipelineStatus = {
   status: "new" | "qualified" | "discovery_booked" | "proposal_sent" | "won" | "lost";
@@ -25,7 +26,7 @@ export default function AdminGovernanceControlPage() {
 
     const loadPipeline = async () => {
       try {
-        const response = await fetch("/api/v1/admin/leads/pipeline");
+        const response = await fetch(apiUrl("/api/v1/admin/leads/pipeline"));
         const data = (await response.json()) as PipelineStatus[] | { detail?: string };
 
         if (!response.ok) {

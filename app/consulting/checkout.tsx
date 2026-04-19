@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { apiUrl } from "../utils/api";
 
 const plans = [
   { name: "Entry", price: "£47/mo" },
@@ -33,7 +34,7 @@ export default function ConsultingCheckout() {
     try {
       setIsSubmitting(true);
       setStatusMessage("Submitting your checkout request...");
-      const response = await fetch("/api/v1/leads", {
+      const response = await fetch(apiUrl("/api/v1/leads"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
