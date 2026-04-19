@@ -38,6 +38,42 @@ npm run deploy
 
 `deploy` currently performs a production build + static export. Publish the `out/` directory to GitHub Pages for `rastaimperium.github.io`.
 
+## Render Backend Configuration (Required)
+
+When deploying the backend service on Render, configure the database connection explicitly so production does **not** fall back to local SQLite.
+
+### 1) Set `DATABASE_URL` in Render service settings
+1. Open your Render backend service.
+2. Go to **Environment**.
+3. Add `DATABASE_URL` as an environment secret (do not hardcode this in source files).
+
+### 2) Use the Supabase Postgres connection string
+1. In Supabase, open your project.
+2. Go to **Project Settings → Database**.
+3. Copy the Postgres connection string.
+4. Paste that value into Render as `DATABASE_URL`.
+
+### 3) Never commit credentials to `.env` files
+- Keep real credentials in Render/Supabase secrets management.
+- Do **not** commit production secrets to `.env` files tracked by git.
+
+### 4) Post-deploy verification checklist
+After each deploy, verify both app health and database-backed behavior:
+
+1. **Health check**
+   - `GET /healthz`
+2. **Database-backed endpoint check**
+   - `GET /api/v1/leads` (or another endpoint that requires DB access)
+
+Example:
+```bash
+curl -fsS https://<your-render-service>/healthz
+curl -fsS https://<your-render-service>/api/v1/leads
+```
+
+> Important backend note: `app/core/database.py` uses `os.getenv("DATABASE_URL", "sqlite:///./app.db")`.  
+> If `DATABASE_URL` is missing in Render, the app will silently use SQLite (`./app.db`) instead of Supabase Postgres.
+
 ## Namecheap DNS Setup (Custom Domain → HF Spaces Frontend)
 
 Use these exact steps to route `rastaimperium.com` from Namecheap to the frontend space.
