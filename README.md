@@ -31,6 +31,16 @@ npm run build
 
 Build output is generated in `out/` via `next.config.ts` static export settings.
 
+## Build-time API configuration (GitHub Pages)
+
+Set `NEXT_PUBLIC_API_URL` during the static build to your Render backend URL (for example `https://your-render-service.onrender.com`).
+
+> Guard: if `NEXT_PUBLIC_API_URL` is unset, the static frontend falls back to relative API paths (e.g. `/api/v1/...`). On GitHub Pages this points to the Pages origin and API calls will fail unless you proxy them.
+
+Key API callers already route through `apiUrl("/api/v1/...")`:
+- `app/consulting/checkout.tsx` (lead submission)
+- `app/dashboard/admin/page.tsx` (admin pipeline fetch)
+
 ## One-command deploy
 ```bash
 NEXT_PUBLIC_API_URL="https://codebylaszlo-rastaimperium-backend.hf.space" npm run deploy
