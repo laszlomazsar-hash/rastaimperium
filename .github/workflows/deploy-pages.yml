@@ -25,15 +25,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build static export
         env:
           NEXT_PUBLIC_API_URL: https://your-render-service.onrender.com
-        run: npm run build
+        run: pnpm run build
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
