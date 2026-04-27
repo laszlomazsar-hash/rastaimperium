@@ -28,66 +28,47 @@ def test_rollback_trigger_when_trace_drops() -> None:
     assert engine.should_trigger_rollback() is True
 
 
-def _dataset_snapshot() -> DatasetSnapshot:
-    return DatasetSnapshot(
-        format_version=DATASET_SNAPSHOT_FORMAT_VERSION,
-        dataset_id="calibration-ds-2026-04-27",
-        created_at="2026-04-27T00:00:00+00:00",
-        source_uri="s3://imperium/calibration/snapshots/2026-04-27.jsonl",
-        rows=[{"id": "1", "signal": 0.91}, {"id": "2", "signal": 0.88}],
-    )
-
-
-def test_lineage_verification_checks_signature_hash_and_schema() -> None:
-    trust_root = build_trust_root({"k-2026-q2": "super-secret"})
-    record = create_lineage_record(
-        calibration_id="calib-001",
-        dataset_snapshot=_dataset_snapshot(),
-        artifact_versions={"model": "v3.6.0", "prompt_pack": "2026.04.27"},
-        key_id="k-2026-q2",
-        secret="super-secret",
-    )
-
-    verify_lineage_record(record, trust_root)
-    assert record.schema_version == LINEAGE_SCHEMA_VERSION
-
-
-def test_lineage_verification_fails_on_schema_drift() -> None:
-    trust_root = build_trust_root({"k-2026-q2": "super-secret"})
-    record = create_lineage_record(
-        calibration_id="calib-001",
-        dataset_snapshot=_dataset_snapshot(),
-        artifact_versions={"model": "v3.6.0"},
-        key_id="k-2026-q2",
-        secret="super-secret",
-    )
-
-    drifted = record.__class__(**{**record.__dict__, "schema_version": "0.9.0"})
-    with pytest.raises(LineageVerificationError, match="Unsupported lineage schema version"):
-        verify_lineage_record(drifted, trust_root)
-
-
-def test_replay_requires_exact_lineage_artifact_versions() -> None:
-    trust_root = build_trust_root({"k-2026-q2": "super-secret"})
-    record = create_lineage_record(
-        calibration_id="calib-001",
-        dataset_snapshot=_dataset_snapshot(),
-        artifact_versions={"model": "v3.6.0", "prompt_pack": "2026.04.27"},
-        key_id="k-2026-q2",
-        secret="super-secret",
-    )
+def test_override_precedence_manual_controls_predicates() -> None:
     engine = ComplianceEngine()
+    metrics = {"min_trace_coverage": 70.0, "error_rate_pct": 12.0, "p95_latency_ms": 3_200.0}
 
-    with pytest.raises(CalibrationReplayError, match="exact lineage artifact versions"):
-        engine.replay_calibration(
-            lineage_record=record,
-            runtime_artifact_versions={"model": "v3.6.1", "prompt_pack": "2026.04.27"},
-            trust_root=trust_root,
-        )
+    assert engine.evaluate_override_state(metrics, manual_override="force_off") is False
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_OFF"
 
-    replay_result = engine.replay_calibration(
-        lineage_record=record,
-        runtime_artifact_versions={"model": "v3.6.0", "prompt_pack": "2026.04.27"},
-        trust_root=trust_root,
+    assert engine.evaluate_override_state(metrics, manual_override="force_on") is True
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_ON_APPLIED"
+
+
+def test_override_recovery_path_obeys_min_hold_and_cooldown() -> None:
+    engine = ComplianceEngine(override_cooldown_ticks=1, override_min_hold_ticks=3)
+    emergency = {"min_trace_coverage": 72.0, "error_rate_pct": 0.0, "p95_latency_ms": 0.0}
+    recovered = {"min_trace_coverage": 96.0, "error_rate_pct": 0.1, "p95_latency_ms": 120.0}
+
+    assert engine.evaluate_override_state(emergency) is True
+
+    # Min-hold blocks immediate recovery.
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    # Recovery is applied once min-hold has elapsed.
+    assert engine.evaluate_override_state(recovered) is False
+    assert engine.override_history[-1]["reason_code"] == "PREDICATE_CLEAR_APPLIED"
+
+
+def test_predicate_inputs_are_bounded_in_override_log() -> None:
+    engine = ComplianceEngine()
+    engine.evaluate_override_state(
+        {
+            "min_trace_coverage": -12.0,
+            "error_rate_pct": 155.0,
+            "p95_latency_ms": 999_999.0,
+        }
     )
-    assert replay_result["status"] == "replayed"
+
+    inputs = engine.override_history[-1]["predicate_inputs"]
+    assert inputs["min_trace_coverage"] == 0.0
+    assert inputs["error_rate_pct"] == 100.0
+    assert inputs["p95_latency_ms"] == 60_000.0

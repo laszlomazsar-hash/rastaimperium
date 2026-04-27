@@ -3,15 +3,25 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Dict, List, Mapping
+from typing import Any, Dict, List, Protocol
 
 
-LINEAGE_SCHEMA_VERSION = "1.0.0"
-DATASET_SNAPSHOT_FORMAT_VERSION = "1.0.0"
-SIGNATURE_SCHEME = "HMAC-SHA256"
-KEY_ROTATION_POLICY_DAYS = 90
+class TopologyOperation(Protocol):
+    """Pure topology operation.
+
+    Implementations must be side-effect free and return a new candidate topology
+    based on the provided input topology.
+    """
+
+    def apply(self, topology: Dict[str, Any]) -> Dict[str, Any]:
+        """Return a new topology candidate."""
+
+
+class TopologyValidationError(ValueError):
+    """Raised when a candidate topology violates integrity or policy bounds."""
 
 
 @dataclass
@@ -24,175 +34,30 @@ class AuditRecord:
     digest: str
 
 
-@dataclass(frozen=True)
-class KeyDescriptor:
-    key_id: str
-    status: str
-    valid_from: str
-    valid_until: str
-
-
-@dataclass(frozen=True)
-class TrustRoot:
-    """Trust root definition for lineage verification.
-
-    - Signature scheme: HMAC-SHA256.
-    - Key rotation policy: rotate active signing keys every 90 days.
-    - Trust root: key descriptors + secret material keyed by key_id.
-    """
-
-    root_id: str
-    scheme: str
-    rotation_days: int
-    key_descriptors: Mapping[str, KeyDescriptor]
-    key_ring: Mapping[str, str]
-
-
-@dataclass(frozen=True)
-class DatasetSnapshot:
-    format_version: str
-    dataset_id: str
-    created_at: str
-    rows: List[Mapping[str, object]]
-    source_uri: str
-
-    def canonical_payload(self) -> Dict[str, object]:
-        """Snapshot format + deterministic hashing payload."""
-
-        return {
-            "format_version": self.format_version,
-            "dataset_id": self.dataset_id,
-            "created_at": self.created_at,
-            "source_uri": self.source_uri,
-            "rows": [dict(row) for row in self.rows],
-        }
-
-    def content_hash(self) -> str:
-        encoded = json.dumps(
-            self.canonical_payload(),
-            sort_keys=True,
-            separators=(",", ":"),
-            ensure_ascii=True,
-        ).encode("utf-8")
-        return hashlib.sha256(encoded).hexdigest()
-
-
-@dataclass(frozen=True)
-class CalibrationLineageRecord:
-    schema_version: str
-    calibration_id: str
-    dataset_snapshot: DatasetSnapshot
-    dataset_hash: str
-    artifact_versions: Mapping[str, str]
-    signed_at: str
-    key_id: str
-    signature: str
-
-    def signing_payload(self) -> Dict[str, object]:
-        return {
-            "schema_version": self.schema_version,
-            "calibration_id": self.calibration_id,
-            "dataset_snapshot": self.dataset_snapshot.canonical_payload(),
-            "dataset_hash": self.dataset_hash,
-            "artifact_versions": dict(self.artifact_versions),
-            "signed_at": self.signed_at,
-            "key_id": self.key_id,
-        }
-
-
-class LineageVerificationError(ValueError):
-    pass
-
-
-class CalibrationReplayError(ValueError):
-    pass
-
-
-def build_trust_root(key_ring: Mapping[str, str], root_id: str = "rastaimperium-codex-root") -> TrustRoot:
-    descriptors = {
-        key_id: KeyDescriptor(
-            key_id=key_id,
-            status="active",
-            valid_from=datetime.now(timezone.utc).date().isoformat(),
-            valid_until="",
-        )
-        for key_id in key_ring
-    }
-    return TrustRoot(
-        root_id=root_id,
-        scheme=SIGNATURE_SCHEME,
-        rotation_days=KEY_ROTATION_POLICY_DAYS,
-        key_descriptors=descriptors,
-        key_ring=dict(key_ring),
-    )
-
-
-def _canonical_json(payload: Mapping[str, object]) -> bytes:
-    return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
-
-
-def sign_lineage_payload(payload: Mapping[str, object], secret: str) -> str:
-    return hmac.new(secret.encode("utf-8"), _canonical_json(payload), hashlib.sha256).hexdigest()
-
-
-def create_lineage_record(
-    calibration_id: str,
-    dataset_snapshot: DatasetSnapshot,
-    artifact_versions: Mapping[str, str],
-    key_id: str,
-    secret: str,
-) -> CalibrationLineageRecord:
-    dataset_hash = dataset_snapshot.content_hash()
-    record = CalibrationLineageRecord(
-        schema_version=LINEAGE_SCHEMA_VERSION,
-        calibration_id=calibration_id,
-        dataset_snapshot=dataset_snapshot,
-        dataset_hash=dataset_hash,
-        artifact_versions=dict(artifact_versions),
-        signed_at=datetime.now(timezone.utc).isoformat(),
-        key_id=key_id,
-        signature="",
-    )
-    signature = sign_lineage_payload(record.signing_payload(), secret)
-    return CalibrationLineageRecord(**{**record.__dict__, "signature": signature})
-
-
-def verify_lineage_record(record: CalibrationLineageRecord, trust_root: TrustRoot) -> None:
-    """Load-time verification: signature + hash + schema version."""
-
-    if record.schema_version != LINEAGE_SCHEMA_VERSION:
-        raise LineageVerificationError(
-            f"Unsupported lineage schema version {record.schema_version}; expected {LINEAGE_SCHEMA_VERSION}."
-        )
-
-    if record.dataset_snapshot.format_version != DATASET_SNAPSHOT_FORMAT_VERSION:
-        raise LineageVerificationError(
-            "Unsupported dataset snapshot format "
-            f"{record.dataset_snapshot.format_version}; expected {DATASET_SNAPSHOT_FORMAT_VERSION}."
-        )
-
-    expected_hash = record.dataset_snapshot.content_hash()
-    if expected_hash != record.dataset_hash:
-        raise LineageVerificationError("Dataset hash mismatch in lineage record.")
-
-    if trust_root.scheme != SIGNATURE_SCHEME:
-        raise LineageVerificationError(f"Unsupported trust root scheme: {trust_root.scheme}.")
-
-    secret = trust_root.key_ring.get(record.key_id)
-    if not secret:
-        raise LineageVerificationError(f"Unknown key id: {record.key_id}.")
-
-    expected_signature = sign_lineage_payload(record.signing_payload(), secret)
-    if not hmac.compare_digest(record.signature, expected_signature):
-        raise LineageVerificationError("Lineage signature verification failed.")
+@dataclass
+class CalibrationMetadata:
+    threshold_version: str
+    calibrated_at: str
+    dataset_scope: str
+    baseline_window: str
+    policy_limit: float
+    latest_residual_drift: float
+    recalibration_required: bool
 
 
 class ComplianceEngine:
     """Article II-IV observability + audit logging + rollback triggers."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, override_cooldown_ticks: int = 2, override_min_hold_ticks: int = 3) -> None:
         self._audit_log: List[AuditRecord] = []
         self._trace_coverage: Dict[str, float] = {f"L{i}": 100.0 for i in range(1, 10)}
+        self._override_active = False
+        self._override_history: List[Dict[str, object]] = []
+        self._override_tick = 0
+        self._last_transition_tick = -10**9
+        self._override_engaged_tick: int | None = None
+        self._override_cooldown_ticks = max(0, override_cooldown_ticks)
+        self._override_min_hold_ticks = max(0, override_min_hold_ticks)
 
     def append_audit_record(self, actor: str, action: str, article: str, metadata: Dict[str, object]) -> AuditRecord:
         timestamp = datetime.now(timezone.utc).isoformat()
@@ -214,8 +79,221 @@ class ComplianceEngine:
     def trace_coverage_graph(self) -> List[Dict[str, float]]:
         return [{"layer": layer, "coverage": value} for layer, value in sorted(self._trace_coverage.items())]
 
+    @staticmethod
+    def _bound_metric(value: float, *, lower: float, upper: float) -> float:
+        return max(lower, min(upper, value))
+
+    def _evaluate_emergency_predicates(self, metrics: Dict[str, float]) -> Dict[str, bool]:
+        min_trace_coverage = self._bound_metric(metrics.get("min_trace_coverage", 100.0), lower=0.0, upper=100.0)
+        error_rate_pct = self._bound_metric(metrics.get("error_rate_pct", 0.0), lower=0.0, upper=100.0)
+        p95_latency_ms = self._bound_metric(metrics.get("p95_latency_ms", 0.0), lower=0.0, upper=60_000.0)
+
+        return {
+            "trace_coverage_breach": min_trace_coverage < 80.0,
+            "error_rate_breach": error_rate_pct > 5.0,
+            "latency_breach": p95_latency_ms > 2_500.0,
+        }
+
+    def evaluate_override_state(self, metrics: Dict[str, float], manual_override: str | None = None) -> bool:
+        """
+        Evaluate emergency rollback override with anti-toggle controls.
+
+        manual_override values:
+          - ``force_on``: force emergency override on
+          - ``force_off``: force emergency override off
+          - None: rely on predicate evaluation
+        """
+        self._override_tick += 1
+
+        bounded_inputs = {
+            "min_trace_coverage": self._bound_metric(metrics.get("min_trace_coverage", 100.0), lower=0.0, upper=100.0),
+            "error_rate_pct": self._bound_metric(metrics.get("error_rate_pct", 0.0), lower=0.0, upper=100.0),
+            "p95_latency_ms": self._bound_metric(metrics.get("p95_latency_ms", 0.0), lower=0.0, upper=60_000.0),
+        }
+        predicates = self._evaluate_emergency_predicates(bounded_inputs)
+        predicate_triggered = any(predicates.values())
+
+        reason_code = "PREDICATE_CLEAR"
+        desired_state = predicate_triggered
+        if manual_override == "force_on":
+            desired_state = True
+            reason_code = "MANUAL_FORCE_ON"
+        elif manual_override == "force_off":
+            desired_state = False
+            reason_code = "MANUAL_FORCE_OFF"
+        elif predicate_triggered:
+            reason_code = "PREDICATE_TRIGGERED"
+
+        elapsed_from_transition = self._override_tick - self._last_transition_tick
+        transitioned = False
+        if desired_state != self._override_active:
+            if elapsed_from_transition < self._override_cooldown_ticks:
+                reason_code = "COOLDOWN_SUPPRESSED"
+            elif self._override_active and desired_state is False:
+                held_ticks = self._override_tick - (self._override_engaged_tick or self._override_tick)
+                if held_ticks < self._override_min_hold_ticks:
+                    reason_code = "MIN_HOLD_SUPPRESSED"
+                else:
+                    self._override_active = False
+                    self._last_transition_tick = self._override_tick
+                    transitioned = True
+                    reason_code = f"{reason_code}_APPLIED"
+            else:
+                self._override_active = desired_state
+                self._last_transition_tick = self._override_tick
+                transitioned = True
+                if self._override_active:
+                    self._override_engaged_tick = self._override_tick
+                else:
+                    self._override_engaged_tick = None
+                reason_code = f"{reason_code}_APPLIED"
+
+        self._override_history.append(
+            {
+                "tick": self._override_tick,
+                "override_active": self._override_active,
+                "manual_override": manual_override,
+                "reason_code": reason_code,
+                "transitioned": transitioned,
+                "predicate_inputs": bounded_inputs,
+                "predicates": predicates,
+            }
+        )
+        return self._override_active
+
     def should_trigger_rollback(self) -> bool:
-        return any(v < 80.0 for v in self._trace_coverage.values())
+        return self.evaluate_override_state(
+            metrics={
+                "min_trace_coverage": min(self._trace_coverage.values(), default=100.0),
+                "error_rate_pct": 0.0,
+                "p95_latency_ms": 0.0,
+            }
+        )
+
+    def set_topology_policy_bounds(
+        self,
+        *,
+        min_nodes: int | None = None,
+        max_nodes: int | None = None,
+        max_edges: int | None = None,
+        max_degree: int | None = None,
+    ) -> None:
+        updates = {
+            "min_nodes": min_nodes,
+            "max_nodes": max_nodes,
+            "max_edges": max_edges,
+            "max_degree": max_degree,
+        }
+        for key, value in updates.items():
+            if value is not None:
+                if value < 0:
+                    raise ValueError(f"{key} cannot be negative")
+                self._topology_policy_bounds[key] = value
+
+    def apply_topology_operations(self, ops: List[TopologyOperation]) -> Dict[str, Any]:
+        """Apply topology operations transactionally with a single atomic commit.
+
+        1. Create immutable pre-state snapshot.
+        2. Build full candidate topology in memory via pure operations.
+        3. Validate candidate (ids, cardinality, policy bounds).
+        4. Commit once by replacing the registry reference.
+        """
+
+        pre_state_snapshot = deepcopy(self._topology_registry)
+        candidate = pre_state_snapshot
+
+        for op in ops:
+            candidate = op.apply(candidate)
+
+        self._validate_candidate_topology(candidate)
+
+        committed = deepcopy(candidate)
+        self._topology_registry = committed
+        return deepcopy(committed)
+
+    def _validate_candidate_topology(self, candidate: Dict[str, Any]) -> None:
+        nodes = candidate.get("nodes", [])
+        edges = candidate.get("edges", [])
+
+        if not isinstance(nodes, list) or not isinstance(edges, list):
+            raise TopologyValidationError("Topology must contain list-valued 'nodes' and 'edges'.")
+
+        node_ids = [node.get("id") for node in nodes if isinstance(node, dict)]
+        if len(node_ids) != len(nodes) or any(node_id is None for node_id in node_ids):
+            raise TopologyValidationError("Every node must be a dict containing a non-null 'id'.")
+        if len(set(node_ids)) != len(node_ids):
+            raise TopologyValidationError("Node IDs must be unique.")
+
+        node_set = set(node_ids)
+        degree_map = {node_id: 0 for node_id in node_ids}
+
+        for edge in edges:
+            if not isinstance(edge, dict):
+                raise TopologyValidationError("Every edge must be a dict.")
+            source = edge.get("source")
+            target = edge.get("target")
+            if source not in node_set or target not in node_set:
+                raise TopologyValidationError("All edges must reference existing node IDs.")
+            degree_map[source] += 1
+            degree_map[target] += 1
+
+        bounds = self._topology_policy_bounds
+        if len(nodes) < bounds["min_nodes"]:
+            raise TopologyValidationError("Node count is below policy minimum.")
+        if len(nodes) > bounds["max_nodes"]:
+            raise TopologyValidationError("Node count exceeds policy maximum.")
+        if len(edges) > bounds["max_edges"]:
+            raise TopologyValidationError("Edge count exceeds policy maximum.")
+        if any(deg > bounds["max_degree"] for deg in degree_map.values()):
+            raise TopologyValidationError("Node degree exceeds policy maximum.")
+
+    def calibrate_proxy_thresholds(self, dataset_scope: str, baseline_window: str, policy_limit: float) -> CalibrationMetadata:
+        self._proxy_threshold_metadata = self._build_calibration_metadata(
+            dataset_scope=dataset_scope,
+            baseline_window=baseline_window,
+            policy_limit=policy_limit,
+            latest_residual_drift=0.0,
+            recalibration_required=False,
+        )
+        return self._proxy_threshold_metadata
+
+    def evaluate_proxy_residual_drift(self, residual_drift: float) -> bool:
+        limit = self._proxy_threshold_metadata.policy_limit
+        recalibration_required = residual_drift > limit
+        self._proxy_threshold_metadata.latest_residual_drift = residual_drift
+        self._proxy_threshold_metadata.recalibration_required = recalibration_required
+        return recalibration_required
+
+    def calibration_status(self) -> Dict[str, object]:
+        metadata = self._proxy_threshold_metadata
+        return {
+            "threshold_version": metadata.threshold_version,
+            "calibrated_at": metadata.calibrated_at,
+            "dataset_scope": metadata.dataset_scope,
+            "baseline_window": metadata.baseline_window,
+            "policy_limit": metadata.policy_limit,
+            "latest_residual_drift": metadata.latest_residual_drift,
+            "recalibration_required": metadata.recalibration_required,
+        }
+
+    def _build_calibration_metadata(
+        self,
+        dataset_scope: str,
+        baseline_window: str,
+        policy_limit: float,
+        latest_residual_drift: float,
+        recalibration_required: bool,
+    ) -> CalibrationMetadata:
+        self._calibration_counter += 1
+        return CalibrationMetadata(
+            threshold_version=f"proxy-v{self._calibration_counter}",
+            calibrated_at=datetime.now(timezone.utc).isoformat(),
+            dataset_scope=dataset_scope,
+            baseline_window=baseline_window,
+            policy_limit=policy_limit,
+            latest_residual_drift=latest_residual_drift,
+            recalibration_required=recalibration_required,
+        )
 
     def replay_calibration(
         self,
@@ -245,3 +323,7 @@ class ComplianceEngine:
     @property
     def audit_log(self) -> List[AuditRecord]:
         return list(self._audit_log)
+
+    @property
+    def override_history(self) -> List[Dict[str, object]]:
+        return list(self._override_history)
