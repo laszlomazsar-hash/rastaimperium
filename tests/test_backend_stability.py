@@ -51,6 +51,27 @@ def test_blueprint_v36_coverage_layers_are_functional() -> None:
     assert all(layer["functional"] is True for layer in coverage.values())
 
 
+def test_probe_rules_validate_required_keys_not_full_body_matches() -> None:
+    manifest = json.loads(Path("config/rastaimperium-backend-v3.6.0.json").read_text())
+    rules = manifest["monitoring"]["probe_rules"]
+
+    assert rules["contract_version_policy"]["version_field"] == "schema_version"
+    assert rules["contract_version_policy"]["major_version"] == 1
+    assert "additive fields only" in rules["contract_version_policy"]["compatibility"]
+
+    endpoint_rules = rules["endpoints"]
+    assert endpoint_rules["/health"]["required_keys"] == ["schema_version", "status"]
+    assert endpoint_rules["/state"]["required_keys"] == [
+        "schema_version",
+        "rollback_ready",
+        "trace_coverage",
+    ]
+    assert endpoint_rules["/epistemic"]["required_keys"] == [
+        "schema_version",
+        "audit_log_entries",
+        "trace_layers_monitored",
+    ]
+    assert "do not full-body match" in rules["matching_strategy"]
 def test_compromise_state_payload_has_duration_and_restart_reason() -> None:
     state = MonitoringState()
     state.enter_compromise("temporary redis split", recoverable=True)
