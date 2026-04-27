@@ -13,6 +13,11 @@ All architecture summaries, blueprints, and generated representations must match
 ## Derived Artifacts
 - `config/blueprint-v3.5.json` (machine-readable blueprint used by tooling/integrations)
 
+## Canonical Snapshot Determinism
+- Canonical snapshot bytes MUST be derived from canonical row content only.
+- Runtime ingestion/source order MUST NOT affect canonical snapshot bytes.
+- If rows are exact duplicates, snapshot format MUST encode multiplicity explicitly (for example, `{row, count}`), instead of relying on positional duplicates.
+
 ## Update Workflow
 When architecture changes, update files in this exact order:
 
