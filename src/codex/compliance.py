@@ -61,19 +61,66 @@ class ComplianceEngine:
         self._override_cooldown_ticks = max(0, override_cooldown_ticks)
         self._override_min_hold_ticks = max(0, override_min_hold_ticks)
 
-    def append_audit_record(self, actor: str, action: str, article: str, metadata: Dict[str, object]) -> AuditRecord:
+    def append_audit_record(
+        self,
+        actor: str,
+        action: str,
+        article: str,
+        metadata: Dict[str, object],
+        policy_profile: Optional[str] = None,
+    ) -> AuditRecord:
         timestamp = datetime.now(timezone.utc).isoformat()
+        metadata_copy = dict(metadata)
+        if policy_profile is not None:
+            metadata_copy["policy_profile"] = policy_profile
+            metadata_copy["probe_config"] = self.probe_config_artifact(policy_profile)
         payload = {
             "actor": actor,
             "action": action,
             "article": article,
-            "metadata": metadata,
+            "metadata": metadata_copy,
             "timestamp": timestamp,
         }
         digest = hashlib.sha256(dumps_canonical(payload).encode("utf-8")).hexdigest()
         record = AuditRecord(**payload, digest=digest)
         self._audit_log.append(record)
         return record
+
+    def probe_config_artifact(self, profile: str) -> Dict[str, object]:
+        config = self._certified_profiles[profile]
+        return {
+            "version": config.version,
+            "scheme": config.scheme,
+            "h_policy": {
+                "base_h": config.step_policy.base_h,
+                "scale": config.step_policy.scale,
+                "min_h": config.step_policy.min_h,
+                "max_h": config.step_policy.max_h,
+            },
+        }
+
+    def approximate_subgradient(
+        self,
+        fn: Callable[[float], float],
+        x: float,
+        profile: str = "strict",
+        *,
+        lower_bound: Optional[float] = None,
+        upper_bound: Optional[float] = None,
+    ) -> float:
+        config = self._certified_profiles[profile]
+        h = config.step_policy.compute_h(x)
+
+        left_ok = lower_bound is None or (x - h) >= lower_bound
+        right_ok = upper_bound is None or (x + h) <= upper_bound
+
+        if config.scheme == "central" and left_ok and right_ok:
+            return (fn(x + h) - fn(x - h)) / (2.0 * h)
+        if right_ok:
+            return (fn(x + h) - fn(x)) / h
+        if left_ok:
+            return (fn(x) - fn(x - h)) / h
+        return 0.0
 
     def set_trace_coverage(self, layer: str, coverage: float) -> None:
         self._trace_coverage[layer] = max(0.0, min(100.0, coverage))
