@@ -1,4 +1,12 @@
-from src.soulecho.metrics import StabilityMonitor, StabilityPolicy, anomaly_alerts, global_coherence
+from src.soulecho.metrics import (
+    ENERGY_SCHEMA_VERSION,
+    anomaly_alerts,
+    compute_energy_breakdown,
+    global_coherence,
+    normalized_drift_i,
+    normalized_variance_i,
+)
+from src.soulecho.v2 import SoulEchoStreamEngine
 
 
 def test_global_coherence_average() -> None:
@@ -10,33 +18,23 @@ def test_anomaly_alerts_below_threshold() -> None:
     assert alerts == ["L2 deviated to 79%"]
 
 
-def test_stability_monitor_triggers_corrective_mode_after_consecutive_violations() -> None:
-    policy = StabilityPolicy(
-        horizon_length=3,
-        consecutive_violations=2,
-        expected_trend_bounds={"E": (-0.05, 0.05), "H": (-0.05, 0.05), "L": (-0.05, 0.05)},
-    )
-    monitor = StabilityMonitor(policy=policy)
+def test_energy_formula_components_and_ranges() -> None:
+    breakdown = compute_energy_breakdown(actual_scores=[90.0, 95.0], predicted_scores=[88.0, 96.0])
 
-    monitor.observe(E=0.40, H=0.50, L=0.55, observed_at="2026-01-01T00:00:00+00:00")
-    assert monitor.corrective_mode is False
-
-    first_violation = monitor.observe(E=0.55, H=0.50, L=0.55, observed_at="2026-01-01T00:01:00+00:00")
-    assert first_violation["violating_metrics"] == ["E"]
-    assert first_violation["corrective_mode"] is False
-
-    second_violation = monitor.observe(E=0.70, H=0.50, L=0.55, observed_at="2026-01-01T00:02:00+00:00")
-    assert second_violation["violating_metrics"] == ["E"]
-    assert second_violation["corrective_mode"] is True
-    assert monitor.corrective_mode is True
+    assert breakdown.schema_version == ENERGY_SCHEMA_VERSION
+    assert 0.0 <= normalized_drift_i(90.0, 88.0) <= 1.0
+    assert 0.0 <= normalized_variance_i(90.0, 92.5) <= 1.0
+    assert 0.0 <= breakdown.drift_avg <= 1.0
+    assert 0.0 <= breakdown.variance_avg <= 1.0
+    assert 0.0 <= breakdown.energy_score <= 1.0
 
 
-def test_stability_monitor_replay_log_records_evaluations() -> None:
-    monitor = StabilityMonitor(policy=StabilityPolicy(horizon_length=2, consecutive_violations=1))
-    monitor.observe(E=0.10, H=0.10, L=0.10, observed_at="2026-01-01T00:00:00+00:00")
-    monitor.observe(E=0.30, H=0.10, L=0.10, observed_at="2026-01-01T00:01:00+00:00")
+def test_soulecho_stream_is_deterministic_across_deployments() -> None:
+    first = SoulEchoStreamEngine().next_snapshot()
+    second = SoulEchoStreamEngine().next_snapshot()
 
-    logs = monitor.replay_log()
-    assert len(logs) == 2
-    assert logs[-1]["samples_available"] == 2
-    assert logs[-1]["window_samples"][-1]["observed_at"] == "2026-01-01T00:01:00+00:00"
+    assert [metric.coherence for metric in first.layer_metrics] == [
+        metric.coherence for metric in second.layer_metrics
+    ]
+    assert first.energy_schema_version == ENERGY_SCHEMA_VERSION
+    assert first.energy_components == second.energy_components
