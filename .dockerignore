@@ -1,11 +1,42 @@
-# Ignore monorepo files by default; include only HF deployment bridge inputs.
+# VCS and metadata
+.git
+.gitignore
+.gitattributes
+
+# Dependencies / caches
+node_modules
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.mypy_cache
+.cache
+
+# Project areas not needed for evo-v image
+app/
+docs/
+tests/
+examples/
+public/
+evo-v-webapp/
+evo-v-living-code/
+config/
+migrations/
+hooks/
+src/
+
+# Local/dev files
+.env*
+*.log
+*.md
+
+# Default deny all, then allow only evo-v runtime paths
 *
-
-# Keep bridge metadata.
-!Dockerfile
-!.dockerignore
-
-# Keep EVO-V runtime source needed by the root Dockerfile.
+!evo-v/
 !evo-v/requirements.txt
 !evo-v/app/
 !evo-v/app/**
+!evo-v/bootstrap.sh
+!evo-v/scripts/
+!evo-v/scripts/**
