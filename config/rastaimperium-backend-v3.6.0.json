@@ -75,6 +75,43 @@
     "health_check_endpoints": ["/healthz", "/live", "/ready"],
     "metrics_endpoint": "/metrics"
   },
+  "reproducibilityPolicy": {
+    "defaultProfileTier": "numeric-tolerance",
+    "profileTiers": {
+      "bitwise": {
+        "executionGuarantee": "Identical bytes across replay runs.",
+        "requiredEnvironmentConstraints": [
+          "container_digest_pinned=true",
+          "cpu_arch=x86_64",
+          "deterministic_kernels=enabled",
+          "rng_seed=fixed"
+        ]
+      },
+      "numeric-tolerance": {
+        "executionGuarantee": "Numerically stable replay within bounded floating-point drift.",
+        "requiredEnvironmentConstraints": [
+          "container_digest_pinned=true",
+          "cpu_arch=x86_64|arm64",
+          "precision=fp32_or_fp64",
+          "rng_seed=fixed"
+        ]
+      },
+      "statistical": {
+        "executionGuarantee": "Distributional equivalence across replay cohorts.",
+        "requiredEnvironmentConstraints": [
+          "container_digest_pinned=recommended",
+          "rng_seed=tracked",
+          "sample_size_min=30"
+        ]
+      }
+    },
+    "claims": {
+      "mpc_reproducibility": {
+        "boundProfileTier": "numeric-tolerance",
+        "statement": "MPC reproducibility is guaranteed only at the configured profile tier and associated environment constraints."
+      }
+    }
+  },
   "blueprintCoverage": {
     "enterprise": {
       "functional": true,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 
-from src.codex.compliance import ComplianceEngine
+from src.codex.compliance import ComplianceEngine, ReplayResult
 
 app = FastAPI(title="ARK Safety Governance")
 engine = ComplianceEngine()
@@ -15,7 +15,18 @@ def health() -> dict[str, str]:
 
 @app.get("/telemetry/coverage")
 def telemetry_coverage() -> dict[str, object]:
-    return {"coverage": engine.trace_coverage_graph(), "rollback_ready": engine.should_trigger_rollback()}
+    return {
+        "coverage": engine.trace_coverage_graph(),
+        "rollback_ready": engine.should_trigger_rollback(),
+        "diagnostics": engine.runtime_diagnostics(),
+    }
+
+
+@app.post("/telemetry/replay-check")
+def replay_check(hash_match: bool, max_abs_error: float, p_value: float) -> dict[str, object]:
+    return engine.evaluate_replay_acceptance(
+        ReplayResult(hash_match=hash_match, max_abs_error=max_abs_error, p_value=p_value)
+    )
 
 
 @app.post("/telemetry/rollback")
