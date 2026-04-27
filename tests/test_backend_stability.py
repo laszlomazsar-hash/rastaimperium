@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from app.core.monitoring import MonitoringState
+from app.core.monitoring import StabilityPolicy, stability_trend
 from src.admin.payment_sync import complete_payment_sync
 from src.payment.stripe_webhook_handler import BillingUsage, calculate_usage_cost, plan_catalog
 from src.soulecho.dashboard import SoulEchoDashboardService
@@ -47,3 +48,34 @@ def test_blueprint_v36_coverage_layers_are_functional() -> None:
     coverage = blueprint["blueprintCoverage"]
     assert set(coverage.keys()) == expected_layers
     assert all(layer["functional"] is True for layer in coverage.values())
+
+
+def test_stability_trend_metadata_and_epistemic_diagnostic_outputs() -> None:
+    state = MonitoringState()
+    trend = state.assess_stability([0.7, 0.75, 0.8, 0.81, 0.83], policy=StabilityPolicy(mode="short", short_window=3))
+
+    assert trend.slope == 0.015
+    assert trend.mode_used == "short"
+    assert trend.window_used == 3
+
+    epistemic = state.epistemic_payload()
+    latest = epistemic["latest_stability_assessment"]
+    assert latest is not None
+    assert latest["mode_used"] == "short"
+    assert latest["window_used"] == 3
+
+    diagnostic = state.diagnostic_payload()
+    assert "epistemic" in diagnostic
+    assert diagnostic["epistemic"]["latest_stability_assessment"]["mode_used"] == "short"
+
+
+def test_stability_trend_mode_selection_is_deterministic_for_policy_settings() -> None:
+    samples = [0.88, 0.9, 0.91, 0.89, 0.92, 0.93, 0.94, 0.95, 0.96]
+    auto_policy = StabilityPolicy(mode="auto", short_window=3, long_window=6, min_points_for_long=6)
+
+    first = stability_trend(samples, auto_policy)
+    second = stability_trend(samples, auto_policy)
+    assert first.mode_used == "long"
+    assert second.mode_used == "long"
+    assert first.window_used == 6
+    assert second.window_used == 6

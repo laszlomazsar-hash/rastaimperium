@@ -78,6 +78,16 @@ async def ready() -> JSONResponse:
 async def metrics() -> HTMLResponse:
     return HTMLResponse(content=monitoring_state.prometheus(), media_type="text/plain; version=0.0.4")
 
+
+@app.get("/epistemic")
+async def epistemic() -> JSONResponse:
+    return JSONResponse(status_code=200, content=monitoring_state.epistemic_payload())
+
+
+@app.get("/diagnostic")
+async def diagnostic() -> JSONResponse:
+    return JSONResponse(status_code=200, content=monitoring_state.diagnostic_payload())
+
 # --- THE VISUAL GATEWAY ---
 @app.get("/")
 async def root(request: Request):
