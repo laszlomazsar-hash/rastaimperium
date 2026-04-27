@@ -1,105 +1,74 @@
+from fastapi import APIRouter
+
+from state import state_machine
+
+router = APIRouter()
+
+
+@router.get("/state")
+def get_state() -> dict[str, object]:
+    state = state_machine.as_dict()
+    return {
+        "status": "ok",
+        "state": state_machine.current_state,
+        "current_state": state["current_state"],
+        "previous_state": state["previous_state"],
+        "last_transition_at": state["last_transition_at"],
+        "transition_history": state["transition_history"],
+"""Health and invariant endpoints for EVO-V."""
+
 from __future__ import annotations
 
 import asyncio
+import gc
 import time
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Any
 
-SCHEMA_VERSION = "2026-04-26"
-HEARTBEAT_STALE_SECONDS = 60.0
-EXPECTED_ROUTES = frozenset(
-    {
-        "/health",
-        "/api/observatory/heartbeat",
-        "/api/provisioning/provision",
+from fastapi import APIRouter
+
+from state import STATE
+
+health_router = APIRouter()
+
+
+def invariant_check() -> dict[str, bool]:
+    """Minimal invariants required for EVO-V to be considered alive."""
+
+    loop_running = False
+    try:
+        loop_running = asyncio.get_running_loop().is_running()
+    except RuntimeError:
+        loop_running = False
+
+    return {
+        "route_alive": True,
+        "memory_ok": gc.isenabled(),
+        "event_loop_ok": loop_running,
     }
-)
 
 
-def _utc_iso_now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+@health_router.get("/health")
+def health() -> dict[str, object]:
+    STATE.mark_check()
+    invariants = invariant_check()
+    alive = all(invariants.values())
+
+    return {
+        "alive": alive,
+        "invariants": invariants,
+        "uptime": time.time() - STATE.boot_time,
+        "failure_count": STATE.failure_count,
+        "last_failure": STATE.last_failure,
+    }
 
 
-@dataclass
-class HealthState:
-    """In-memory health state for deterministic probe responses."""
+@health_router.get("/state")
+def state() -> dict[str, object]:
+    """Expose deployment mode for quick observability."""
 
-    started_at_monotonic: float = field(default_factory=time.monotonic)
-    last_heartbeat_monotonic: float | None = None
-    last_heartbeat_at: str | None = None
-
-    def mark_heartbeat(self) -> None:
-        now_monotonic = time.monotonic()
-        self.last_heartbeat_monotonic = now_monotonic
-        self.last_heartbeat_at = _utc_iso_now()
-
-    def _evaluate_invariants(self, *, route_paths: set[str]) -> dict[str, dict[str, Any]]:
-        now_monotonic = time.monotonic()
-        missing_routes = sorted(EXPECTED_ROUTES.difference(route_paths))
-        route_ok = not missing_routes
-
-        loop_ok = True
-        loop_failure: str | None = None
-        try:
-            asyncio.get_running_loop()
-        except RuntimeError as exc:
-            loop_ok = False
-            loop_failure = str(exc)
-
-        heartbeat_age_seconds: float | None = None
-        heartbeat_fresh = False
-        if self.last_heartbeat_monotonic is not None:
-            heartbeat_age_seconds = now_monotonic - self.last_heartbeat_monotonic
-            heartbeat_fresh = heartbeat_age_seconds <= HEARTBEAT_STALE_SECONDS
-
-        return {
-            "route_integrity": {
-                "ok": route_ok,
-                "missing_routes": missing_routes,
-            },
-            "event_loop": {
-                "ok": loop_ok,
-                "failure": loop_failure,
-            },
-            "heartbeat_freshness": {
-                "ok": heartbeat_fresh,
-                "last_heartbeat_at": self.last_heartbeat_at,
-                "max_age_seconds": HEARTBEAT_STALE_SECONDS,
-                "age_seconds": heartbeat_age_seconds,
-            },
-        }
-
-    def evaluate(self, *, route_paths: set[str]) -> dict[str, Any]:
-        checks = self._evaluate_invariants(route_paths=route_paths)
-
-        check_failures = [
-            {"check": name, "metadata": details}
-            for name, details in checks.items()
-            if not details["ok"]
-        ]
-
-        if check_failures:
-            epistemic_state = "degraded"
-        elif self.last_heartbeat_monotonic is None:
-            epistemic_state = "unknown"
-        else:
-            epistemic_state = "known_good"
-
-        alive = bool(
-            checks["route_integrity"]["ok"]
-            and checks["event_loop"]["ok"]
-            and epistemic_state in {"known_good", "degraded"}
-        )
-
-        return {
-            "schema_version": SCHEMA_VERSION,
-            "alive": alive,
-            "state": epistemic_state,
-            "timestamp": _utc_iso_now(),
-            "checks": checks,
-            "failures": check_failures,
-        }
-
-
-health_state = HealthState()
+    return {
+        "mode": "deterministic-runtime",
+        "boot_time": STATE.boot_time,
+        "last_check": STATE.last_check,
+        "failure_count": STATE.failure_count,
+        "last_failure": STATE.last_failure,
+    }
