@@ -1,4 +1,16 @@
-from src.codex.compliance import ComplianceEngine
+import pytest
+
+from src.codex.compliance import (
+    CalibrationReplayError,
+    ComplianceEngine,
+    DATASET_SNAPSHOT_FORMAT_VERSION,
+    DatasetSnapshot,
+    LINEAGE_SCHEMA_VERSION,
+    LineageVerificationError,
+    build_trust_root,
+    create_lineage_record,
+    verify_lineage_record,
+)
 
 
 def test_audit_record_uses_sha256_digest() -> None:
@@ -16,42 +28,47 @@ def test_rollback_trigger_when_trace_drops() -> None:
     assert engine.should_trigger_rollback() is True
 
 
-def test_subgradient_step_size_policy_is_stable() -> None:
+def test_override_precedence_manual_controls_predicates() -> None:
     engine = ComplianceEngine()
+    metrics = {"min_trace_coverage": 70.0, "error_rate_pct": 12.0, "p95_latency_ms": 3_200.0}
 
-    approx_small = engine.approximate_subgradient(lambda x: x * x, 1.0, profile="strict")
-    approx_large = engine.approximate_subgradient(lambda x: x * x, 1_000.0, profile="strict")
+    assert engine.evaluate_override_state(metrics, manual_override="force_off") is False
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_OFF"
 
-    assert abs(approx_small - 2.0) < 5e-3
-    assert abs(approx_large - 2_000.0) < 1.0
+    assert engine.evaluate_override_state(metrics, manual_override="force_on") is True
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_ON_APPLIED"
 
 
-def test_subgradient_deterministic_fallback_near_constraint() -> None:
+def test_override_recovery_path_obeys_min_hold_and_cooldown() -> None:
+    engine = ComplianceEngine(override_cooldown_ticks=1, override_min_hold_ticks=3)
+    emergency = {"min_trace_coverage": 72.0, "error_rate_pct": 0.0, "p95_latency_ms": 0.0}
+    recovered = {"min_trace_coverage": 96.0, "error_rate_pct": 0.1, "p95_latency_ms": 120.0}
+
+    assert engine.evaluate_override_state(emergency) is True
+
+    # Min-hold blocks immediate recovery.
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    # Recovery is applied once min-hold has elapsed.
+    assert engine.evaluate_override_state(recovered) is False
+    assert engine.override_history[-1]["reason_code"] == "PREDICATE_CLEAR_APPLIED"
+
+
+def test_predicate_inputs_are_bounded_in_override_log() -> None:
     engine = ComplianceEngine()
-
-    bounded_grad = engine.approximate_subgradient(lambda x: x * x, 0.0, upper_bound=0.0)
-    forward_grad = engine.approximate_subgradient(lambda x: x * x, 0.0, profile="strict")
-
-    assert abs(bounded_grad + 1e-4) < 1e-8
-    assert forward_grad == 0.0
-
-
-def test_probe_config_versioned_and_reproducible_across_certified_profiles() -> None:
-    engine = ComplianceEngine()
-
-    strict_probe = engine.probe_config_artifact("strict")
-    balanced_probe = engine.probe_config_artifact("balanced")
-
-    assert strict_probe["version"] == "subgradient_probe/v1"
-    assert strict_probe == balanced_probe
-
-    record = engine.append_audit_record(
-        actor="auditor",
-        action="certification_check",
-        article="IV",
-        metadata={"run": "smoke"},
-        policy_profile="strict",
+    engine.evaluate_override_state(
+        {
+            "min_trace_coverage": -12.0,
+            "error_rate_pct": 155.0,
+            "p95_latency_ms": 999_999.0,
+        }
     )
-    assert record.metadata["policy_profile"] == "strict"
-    assert "probe_config" in record.metadata
-    assert record.metadata["probe_config"]["version"] == "subgradient_probe/v1"
+
+    inputs = engine.override_history[-1]["predicate_inputs"]
+    assert inputs["min_trace_coverage"] == 0.0
+    assert inputs["error_rate_pct"] == 100.0
+    assert inputs["p95_latency_ms"] == 60_000.0
