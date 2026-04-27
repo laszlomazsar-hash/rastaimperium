@@ -47,3 +47,48 @@ def test_blueprint_v36_coverage_layers_are_functional() -> None:
     coverage = blueprint["blueprintCoverage"]
     assert set(coverage.keys()) == expected_layers
     assert all(layer["functional"] is True for layer in coverage.values())
+
+
+def test_asymptotic_label_calibration_status_is_exposed_in_observability_payload() -> None:
+    state = MonitoringState()
+    probabilities = [0.1, 0.2, 0.25, 0.3, 0.4, 0.6, 0.65, 0.75, 0.8, 0.9] * 6
+    labels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1] * 6
+
+    calibration = state.record_calibration_dataset(
+        probabilities,
+        labels,
+        dataset_scope="rolling_30d_asymptotic_labels",
+        update_cadence="daily",
+    )
+
+    assert calibration["method"] == "empirical_reliability_bins"
+    assert calibration["status"] == "healthy"
+    assert calibration["calibrated_at"] is not None
+    assert calibration["ece"] is not None
+    assert calibration["dataset_scope"]["name"] == "rolling_30d_asymptotic_labels"
+    assert calibration["dataset_scope"]["update_cadence"] == "daily"
+
+    health = state.health_payload()
+    assert "calibration" in health
+    assert health["calibration"]["status"] == "healthy"
+    assert health["calibration"]["calibrated_at"] is not None
+    assert health["calibration"]["ece"] is not None
+
+
+def test_asymptotic_label_calibration_drift_triggers_recalibration() -> None:
+    state = MonitoringState()
+    baseline_probs = [0.05, 0.15, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8, 0.9, 0.95] * 6
+    baseline_labels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1] * 6
+    state.record_calibration_dataset(
+        baseline_probs,
+        baseline_labels,
+        dataset_scope="rolling_30d_asymptotic_labels",
+        update_cadence="daily",
+    )
+
+    drift_probs = [0.9] * 60
+    drift_labels = [0] * 60
+    drift = state.monitor_calibration_drift(drift_probs, drift_labels)
+
+    assert drift["status"] == "recalibration_required"
+    assert "recalibration_trigger" in drift

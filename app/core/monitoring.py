@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
+from app.core.calibration import AsymptoticLabelCalibrator
+
 
 def _utc_iso_now() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -22,6 +24,7 @@ class MonitoringState:
     redis_connected: bool = False
     redis_error: str | None = None
     health_notes: list[str] = field(default_factory=list)
+    asymptotic_label_calibrator: AsymptoticLabelCalibrator = field(default_factory=AsymptoticLabelCalibrator)
 
     def mark_startup(self) -> None:
         self.app_started = True
@@ -50,13 +53,33 @@ class MonitoringState:
         if event_type == "invoice.payment_failed":
             self.payment_failures += 1
 
+    def record_calibration_dataset(
+        self,
+        probabilities: list[float],
+        labels: list[int],
+        *,
+        dataset_scope: str,
+        update_cadence: str = "weekly",
+    ) -> dict[str, object]:
+        return self.asymptotic_label_calibrator.fit(
+            probabilities,
+            labels,
+            dataset_scope=dataset_scope,
+            update_cadence=update_cadence,
+        )
+
+    def monitor_calibration_drift(self, probabilities: list[float], labels: list[int]) -> dict[str, object]:
+        return self.asymptotic_label_calibrator.monitor_drift(probabilities, labels)
+
     def health_payload(self) -> dict[str, object]:
+        calibration = self.asymptotic_label_calibrator.observability_payload()
         return {
             "status": "ok" if self.app_started else "starting",
             "started": self.app_started,
             "startup_completed_at": self.startup_completed_at,
             "redis_connected": self.redis_connected,
             "notes": self.health_notes[-5:],
+            "calibration": calibration,
         }
 
     def live_payload(self) -> dict[str, object]:
@@ -64,13 +87,16 @@ class MonitoringState:
 
     def ready_payload(self) -> dict[str, object]:
         ready = self.app_started
+        calibration = self.asymptotic_label_calibrator.observability_payload()
         return {
             "status": "ready" if ready else "not_ready",
             "ready": ready,
             "checks": {
                 "startup": self.app_started,
                 "redis": self.redis_connected,
+                "calibration": calibration["status"] in {"healthy", "insufficient_data"},
             },
+            "calibration": calibration,
         }
 
     def metrics_payload(self) -> dict[str, int]:
@@ -101,4 +127,3 @@ class MonitoringState:
 
 
 monitoring_state = MonitoringState()
-
