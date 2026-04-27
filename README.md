@@ -148,16 +148,27 @@ sudo systemctl restart systemd-resolved
       `https://codebylaszlo-rastaimperium-backend.hf.space/healthz`
 - [ ] Frontend calls API endpoints successfully
 
-## Railway Runtime Stability Notes
+## Hugging Face Spaces deployment bridge (canonical)
 
-If Railway deploys fail before any request traffic appears, treat this as a startup failure and inspect deployment logs directly in Railway (**Deployments → failed deploy → Logs**).
+For deterministic Spaces builds in this monorepo, Hugging Face should build from the **root-level `Dockerfile`**.
 
-This repository now pins Python to 3.11 for Railway/runtime compatibility:
-- `runtime.txt` → `python-3.11.11`
-- `.python-version` → `3.11`
+- The root Dockerfile intentionally copies only EVO-V runtime files from `evo-v/` into `/app`:
+  - `evo-v/requirements.txt`
+  - `evo-v/app/**`
+- Runtime entrypoint remains `app.main:app` inside the container.
+- Root `.dockerignore` keeps the build context minimal and excludes unrelated monorepo assets.
 
-The web process is expected to bind using Railway-compatible host/port:
+### Why this exists
+
+The repository contains multiple app surfaces (frontend, backend, docs, and legacy deployment files).  
+The root HF bridge prevents accidental coupling to unrelated root-level files while keeping EVO-V source canonical in `evo-v/`.
+
+### Entrypoint precedence during HF build
+
+When Spaces builds with Docker, it uses the root `Dockerfile` command:
 
 ```bash
-web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860}
 ```
+
+`Procfile` and other non-Docker entrypoints are not used by Hugging Face Docker builds.
