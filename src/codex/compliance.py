@@ -4,7 +4,35 @@ import hashlib
 import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from enum import Enum
 from typing import Dict, List
+
+
+class InvariantTier(str, Enum):
+    """Severity tiers for safety invariants."""
+
+    CRITICAL = "critical"
+    HIGH = "high"
+    MEDIUM = "medium"
+    INFORMATIONAL = "informational"
+
+
+class EscalationPath(str, Enum):
+    """Escalation paths emitted by the safety state machine."""
+
+    IMMEDIATE_COMPROMISE = "immediate_compromise"
+    STAGED_DEGRADATION = "staged_degradation"
+
+
+@dataclass(frozen=True)
+class SafetyTransition:
+    """Represents a deterministic safety state transition decision."""
+
+    previous_state: str
+    next_state: str
+    tier: InvariantTier
+    escalation: EscalationPath
+    rationale: str
 
 
 @dataclass
@@ -46,6 +74,63 @@ class ComplianceEngine:
 
     def should_trigger_rollback(self) -> bool:
         return any(v < 80.0 for v in self._trace_coverage.values())
+
+    def classify_invariant_tier(self, tier: str) -> InvariantTier:
+        """Normalize invariant tiers to the canonical deterministic set."""
+
+        normalized = tier.strip().lower().replace("-", "_").replace(" ", "_")
+        alias_map = {
+            "critical": InvariantTier.CRITICAL,
+            "high": InvariantTier.HIGH,
+            "medium": InvariantTier.MEDIUM,
+            "informational": InvariantTier.INFORMATIONAL,
+            "info": InvariantTier.INFORMATIONAL,
+            "low": InvariantTier.INFORMATIONAL,
+        }
+        if normalized not in alias_map:
+            raise ValueError(f"Unknown invariant tier: {tier}")
+        return alias_map[normalized]
+
+    def escalation_path_for_tier(self, tier: InvariantTier) -> EscalationPath:
+        """Critical invariants compromise immediately; all other tiers degrade in stages."""
+
+        if tier is InvariantTier.CRITICAL:
+            return EscalationPath.IMMEDIATE_COMPROMISE
+        return EscalationPath.STAGED_DEGRADATION
+
+    def transition_safety_state(
+        self,
+        current_state: str,
+        invariant_tier: InvariantTier | str,
+        reason: str,
+    ) -> SafetyTransition:
+        """Create a deterministic safety transition with tier and escalation rationale."""
+
+        tier = (
+            self.classify_invariant_tier(invariant_tier)
+            if isinstance(invariant_tier, str)
+            else invariant_tier
+        )
+        escalation = self.escalation_path_for_tier(tier)
+
+        if escalation is EscalationPath.IMMEDIATE_COMPROMISE:
+            next_state = "COMPROMISE"
+        else:
+            next_state = "DEGRADED"
+
+        rationale = (
+            f"tier={tier.value}; escalation={escalation.value}; "
+            f"decision={'critical violation => immediate compromise' if tier is InvariantTier.CRITICAL else 'non-critical violation => staged degradation'}; "
+            f"reason={reason}"
+        )
+
+        return SafetyTransition(
+            previous_state=current_state,
+            next_state=next_state,
+            tier=tier,
+            escalation=escalation,
+            rationale=rationale,
+        )
 
     @property
     def audit_log(self) -> List[AuditRecord]:
