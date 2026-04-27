@@ -73,7 +73,26 @@
       "payment_failures": "Total failed payment events"
     },
     "health_check_endpoints": ["/healthz", "/live", "/ready"],
-    "metrics_endpoint": "/metrics"
+    "metrics_endpoint": "/metrics",
+    "probe_rules": {
+      "contract_version_policy": {
+        "version_field": "schema_version",
+        "major_version": 1,
+        "compatibility": "additive fields only within same major version"
+      },
+      "endpoints": {
+        "/health": {
+          "required_keys": ["schema_version", "status"]
+        },
+        "/state": {
+          "required_keys": ["schema_version", "rollback_ready", "trace_coverage"]
+        },
+        "/epistemic": {
+          "required_keys": ["schema_version", "audit_log_entries", "trace_layers_monitored"]
+        }
+      },
+      "matching_strategy": "validate required keys + schema major version; do not full-body match"
+    }
   },
   "blueprintCoverage": {
     "enterprise": {

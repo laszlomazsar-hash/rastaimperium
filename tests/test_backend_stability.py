@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from app.core.monitoring import MonitoringState
 from src.admin.payment_sync import complete_payment_sync
 from src.payment.stripe_webhook_handler import BillingUsage, calculate_usage_cost, plan_catalog
@@ -47,3 +49,49 @@ def test_blueprint_v36_coverage_layers_are_functional() -> None:
     coverage = blueprint["blueprintCoverage"]
     assert set(coverage.keys()) == expected_layers
     assert all(layer["functional"] is True for layer in coverage.values())
+
+
+def test_probe_rules_validate_required_keys_not_full_body_matches() -> None:
+    manifest = json.loads(Path("config/rastaimperium-backend-v3.6.0.json").read_text())
+    rules = manifest["monitoring"]["probe_rules"]
+
+    assert rules["contract_version_policy"]["version_field"] == "schema_version"
+    assert rules["contract_version_policy"]["major_version"] == 1
+    assert "additive fields only" in rules["contract_version_policy"]["compatibility"]
+
+    endpoint_rules = rules["endpoints"]
+    assert endpoint_rules["/health"]["required_keys"] == ["schema_version", "status"]
+    assert endpoint_rules["/state"]["required_keys"] == [
+        "schema_version",
+        "rollback_ready",
+        "trace_coverage",
+    ]
+    assert endpoint_rules["/epistemic"]["required_keys"] == [
+        "schema_version",
+        "audit_log_entries",
+        "trace_layers_monitored",
+    ]
+    assert "do not full-body match" in rules["matching_strategy"]
+def test_compromise_state_payload_has_duration_and_restart_reason() -> None:
+    state = MonitoringState()
+    state.enter_compromise("temporary redis split", recoverable=True)
+    payload = state.state_payload()
+    assert payload["watchdog_state"] == "COMPROMISE"
+    assert payload["compromise_started_at"] is not None
+    assert isinstance(payload["compromise_duration_seconds"], float)
+    assert payload["restart_trigger_reason"] is None
+
+
+def test_non_recoverable_route_invariant_triggers_restart(monkeypatch: pytest.MonkeyPatch) -> None:
+    state = MonitoringState()
+    calls: list[int] = []
+
+    def fake_exit(code: int) -> None:
+        calls.append(code)
+        raise SystemExit(code)
+
+    monkeypatch.setattr("app.core.monitoring.os._exit", fake_exit)
+    with pytest.raises(SystemExit):
+        state.evaluate_route_integrity(required_routes={"/healthz"}, current_routes=None)
+    assert calls == [1]
+    assert state.restart_trigger_reason == "ROUTE_TABLE_CORRUPTION"
