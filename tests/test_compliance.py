@@ -28,6 +28,42 @@ def test_rollback_trigger_when_trace_drops() -> None:
     assert engine.should_trigger_rollback() is True
 
 
+<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
+def test_candidate_update_rejects_when_loss_increases() -> None:
+    engine = ComplianceEngine()
+    result = engine.evaluate_candidate_trace_update({"L2": 70})
+
+    assert result["gate_passed"] is False
+    assert result["accepted"] is False
+    assert result["L_new"] > result["L_old"]
+
+
+def test_candidate_update_accepts_when_loss_decreases() -> None:
+    engine = ComplianceEngine()
+    engine.set_trace_coverage("L2", 60)
+
+    result = engine.evaluate_candidate_trace_update({"L2": 88})
+
+    assert result["gate_passed"] is True
+    assert result["accepted"] is True
+    assert result["L_new"] < result["L_old"]
+
+
+def test_candidate_update_detects_revision_conflict(monkeypatch) -> None:
+    engine = ComplianceEngine()
+    engine.set_trace_coverage("L2", 60)
+
+    def force_conflict(*args, **kwargs):
+        engine.set_trace_coverage("L3", 50)
+        return 0.0
+
+    monkeypatch.setattr(engine, "_loss", force_conflict)
+    result = engine.evaluate_candidate_trace_update({"L2": 95})
+
+    assert result["gate_passed"] is True
+    assert result["accepted"] is False
+    assert result["conflict"] is True
+=======
 def test_override_precedence_manual_controls_predicates() -> None:
     engine = ComplianceEngine()
     metrics = {"min_trace_coverage": 70.0, "error_rate_pct": 12.0, "p95_latency_ms": 3_200.0}
@@ -72,3 +108,4 @@ def test_predicate_inputs_are_bounded_in_override_log() -> None:
     assert inputs["min_trace_coverage"] == 0.0
     assert inputs["error_rate_pct"] == 100.0
     assert inputs["p95_latency_ms"] == 60_000.0
+>>>>>>> main

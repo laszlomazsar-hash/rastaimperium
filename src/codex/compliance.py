@@ -6,6 +6,10 @@ import json
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
+<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
+from threading import RLock
+from typing import Dict, List, Mapping
+=======
 from typing import Any, Dict, List, Protocol
 
 
@@ -24,6 +28,7 @@ class TopologyValidationError(ValueError):
     """Raised when a candidate topology violates integrity or policy bounds."""
 
 from src.codex.canonical_json import dumps_canonical
+>>>>>>> main
 
 
 @dataclass
@@ -36,6 +41,12 @@ class AuditRecord:
     digest: str
 
 
+<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
+@dataclass(frozen=True)
+class TraceCoverageSnapshot:
+    revision: int
+    coverage: Dict[str, float]
+=======
 @dataclass
 class CalibrationMetadata:
     threshold_version: str
@@ -45,11 +56,19 @@ class CalibrationMetadata:
     policy_limit: float
     latest_residual_drift: float
     recalibration_required: bool
+>>>>>>> main
 
 
 class ComplianceEngine:
     """Article II-IV observability + audit logging + rollback triggers."""
 
+<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
+    def __init__(self) -> None:
+        self._lock = RLock()
+        self._audit_log: List[AuditRecord] = []
+        self._trace_coverage: Dict[str, float] = {f"L{i}": 100.0 for i in range(1, 10)}
+        self._revision = 0
+=======
     def __init__(self, *, override_cooldown_ticks: int = 2, override_min_hold_ticks: int = 3) -> None:
         self._audit_log: List[AuditRecord] = []
         self._trace_coverage: Dict[str, float] = {f"L{i}": 100.0 for i in range(1, 10)}
@@ -60,6 +79,7 @@ class ComplianceEngine:
         self._override_engaged_tick: int | None = None
         self._override_cooldown_ticks = max(0, override_cooldown_ticks)
         self._override_min_hold_ticks = max(0, override_min_hold_ticks)
+>>>>>>> main
 
     def append_audit_record(
         self,
@@ -83,7 +103,8 @@ class ComplianceEngine:
         }
         digest = hashlib.sha256(dumps_canonical(payload).encode("utf-8")).hexdigest()
         record = AuditRecord(**payload, digest=digest)
-        self._audit_log.append(record)
+        with self._lock:
+            self._audit_log.append(record)
         return record
 
     def probe_config_artifact(self, profile: str) -> Dict[str, object]:
@@ -123,10 +144,13 @@ class ComplianceEngine:
         return 0.0
 
     def set_trace_coverage(self, layer: str, coverage: float) -> None:
-        self._trace_coverage[layer] = max(0.0, min(100.0, coverage))
+        with self._lock:
+            self._trace_coverage[layer] = max(0.0, min(100.0, coverage))
+            self._revision += 1
 
     def trace_coverage_graph(self) -> List[Dict[str, float]]:
-        return [{"layer": layer, "coverage": value} for layer, value in sorted(self._trace_coverage.items())]
+        with self._lock:
+            return [{"layer": layer, "coverage": value} for layer, value in sorted(self._trace_coverage.items())]
 
     @staticmethod
     def _bound_metric(value: float, *, lower: float, upper: float) -> float:
@@ -211,6 +235,85 @@ class ComplianceEngine:
         return self._override_active
 
     def should_trigger_rollback(self) -> bool:
+<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
+        with self._lock:
+            return any(v < 80.0 for v in self._trace_coverage.values())
+
+    def snapshot(self) -> TraceCoverageSnapshot:
+        """Capture an immutable state view guarded by the registry lock."""
+        with self._lock:
+            return TraceCoverageSnapshot(
+                revision=self._revision,
+                coverage=deepcopy(self._trace_coverage),
+            )
+
+    def evaluate_candidate_trace_update(self, updates: Mapping[str, float]) -> Dict[str, object]:
+        """
+        Decide whether a candidate trace update should be accepted.
+
+        The decision is deterministic and race-safe:
+        1) capture immutable pre-state under lock,
+        2) build/evaluate candidate from that snapshot only,
+        3) compute L_old/L_new from immutable snapshots,
+        4) commit only if gate passes and revision is unchanged.
+        """
+        pre_state = self.snapshot()
+        candidate_coverage = self._build_candidate_coverage(pre_state.coverage, updates)
+        candidate_state = TraceCoverageSnapshot(
+            revision=pre_state.revision,
+            coverage=candidate_coverage,
+        )
+        l_old = self._loss(pre_state)
+        l_new = self._loss(candidate_state)
+        gate_passed = l_new <= l_old
+
+        committed = False
+        conflict = False
+        if gate_passed:
+            with self._lock:
+                if self._revision == pre_state.revision:
+                    self._trace_coverage = candidate_coverage
+                    self._revision += 1
+                    committed = True
+                else:
+                    conflict = True
+
+        return {
+            "accepted": committed,
+            "gate_passed": gate_passed,
+            "conflict": conflict,
+            "expected_revision": pre_state.revision,
+            "current_revision": self.snapshot().revision,
+            "L_old": l_old,
+            "L_new": l_new,
+        }
+
+    def _build_candidate_coverage(
+        self,
+        base_coverage: Mapping[str, float],
+        updates: Mapping[str, float],
+    ) -> Dict[str, float]:
+        candidate = dict(base_coverage)
+        for layer, coverage in sorted(updates.items()):
+            candidate[layer] = max(0.0, min(100.0, coverage))
+        return candidate
+
+    def _loss(self, snapshot: TraceCoverageSnapshot) -> float:
+        """
+        Loss L is deterministic and computed from immutable snapshots only.
+
+        Lower is better; layers below 80% contribute proportional deficit.
+        """
+        return round(
+            sum(max(0.0, 80.0 - value) for value in snapshot.coverage.values()),
+            6,
+        )
+
+    @property
+    def audit_log(self) -> List[AuditRecord]:
+        with self._lock:
+            return list(self._audit_log)
+=======
         return self.evaluate_override_state(
             metrics={
                 "min_trace_coverage": min(self._trace_coverage.values(), default=100.0),
@@ -506,3 +609,4 @@ class ComplianceEngine:
     @property
     def override_history(self) -> List[Dict[str, object]]:
         return list(self._override_history)
+>>>>>>> main
