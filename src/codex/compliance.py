@@ -320,6 +320,67 @@ class ComplianceEngine:
             "dataset_hash": lineage_record.dataset_hash,
         }
 
+    def compute_governance_diagnostics(self, policy_state: PolicyState) -> Dict[str, object]:
+        """
+        Build a replay-safe diagnostics payload from policy-state inputs only.
+
+        Confidence formula (v1):
+        0.70 * match_rate + 0.20 * compliance_rate + 0.10 * non_escalation_rate
+        where:
+          - match_rate = rules_matched / rules_evaluated
+          - compliance_rate = 1 - (violations / rules_evaluated)
+          - non_escalation_rate = 1 - (escalations / rules_evaluated)
+        """
+
+        evaluated = max(0, policy_state.rules_evaluated)
+        matched = min(max(0, policy_state.rules_matched), evaluated)
+        violations = min(max(0, policy_state.violations), evaluated)
+        escalations = min(max(0, policy_state.escalations), evaluated)
+
+        if evaluated == 0:
+            confidence = 0.0
+            match_rate = 0.0
+        else:
+            match_rate = matched / evaluated
+            compliance_rate = 1.0 - (violations / evaluated)
+            non_escalation_rate = 1.0 - (escalations / evaluated)
+            confidence = (
+                (0.70 * match_rate)
+                + (0.20 * compliance_rate)
+                + (0.10 * non_escalation_rate)
+            )
+
+        confidence = round(max(0.0, min(1.0, confidence)), 6)
+        strength = self._rule_match_strength(match_rate)
+        payload = {
+            "policy_state": {
+                "rules_evaluated": evaluated,
+                "rules_matched": matched,
+                "violations": violations,
+                "escalations": escalations,
+            },
+            "diagnostics": {
+                "confidence": confidence,
+                "rule_match_strength": strength,
+            },
+            "policy_metadata": {
+                "confidence_formula_version": self.CONFIDENCE_FORMULA_VERSION,
+                "confidence_formula": (
+                    "0.70*match_rate + 0.20*compliance_rate + 0.10*non_escalation_rate"
+                ),
+            },
+        }
+        return payload
+
+    def _rule_match_strength(self, match_rate: float) -> str:
+        if match_rate >= 0.9:
+            return "high"
+        if match_rate >= 0.7:
+            return "moderate"
+        if match_rate >= 0.4:
+            return "low"
+        return "minimal"
+
     @property
     def audit_log(self) -> List[AuditRecord]:
         return list(self._audit_log)
