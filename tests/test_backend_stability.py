@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from app.core.monitoring import MonitoringState
 from src.admin.payment_sync import complete_payment_sync
 from src.payment.stripe_webhook_handler import BillingUsage, calculate_usage_cost, plan_catalog
@@ -47,3 +49,28 @@ def test_blueprint_v36_coverage_layers_are_functional() -> None:
     coverage = blueprint["blueprintCoverage"]
     assert set(coverage.keys()) == expected_layers
     assert all(layer["functional"] is True for layer in coverage.values())
+
+
+def test_compromise_state_payload_has_duration_and_restart_reason() -> None:
+    state = MonitoringState()
+    state.enter_compromise("temporary redis split", recoverable=True)
+    payload = state.state_payload()
+    assert payload["watchdog_state"] == "COMPROMISE"
+    assert payload["compromise_started_at"] is not None
+    assert isinstance(payload["compromise_duration_seconds"], float)
+    assert payload["restart_trigger_reason"] is None
+
+
+def test_non_recoverable_route_invariant_triggers_restart(monkeypatch: pytest.MonkeyPatch) -> None:
+    state = MonitoringState()
+    calls: list[int] = []
+
+    def fake_exit(code: int) -> None:
+        calls.append(code)
+        raise SystemExit(code)
+
+    monkeypatch.setattr("app.core.monitoring.os._exit", fake_exit)
+    with pytest.raises(SystemExit):
+        state.evaluate_route_integrity(required_routes={"/healthz"}, current_routes=None)
+    assert calls == [1]
+    assert state.restart_trigger_reason == "ROUTE_TABLE_CORRUPTION"
