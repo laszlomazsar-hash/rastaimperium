@@ -26,6 +26,8 @@ class SoulEchoDashboardService:
             "vibration_score": snapshot.vibration_score,
             "layer_metrics": [vars(metric) for metric in snapshot.layer_metrics],
             "mutation_events": snapshot.mutation_events,
+            "policy_threshold": snapshot.policy_threshold,
+            "policy_deltas": [vars(delta) for delta in snapshot.policy_deltas],
         }
 
     def subscription_widgets(self, plan: str, workspace: str | None = None) -> List[DashboardWidget]:
