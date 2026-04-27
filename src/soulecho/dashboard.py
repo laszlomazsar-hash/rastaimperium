@@ -22,10 +22,24 @@ class SoulEchoDashboardService:
         snapshot = self._stream_engine.next_snapshot()
         return {
             "timestamp": snapshot.timestamp,
+            "metric_schema_version": snapshot.metric_schema_version,
             "livity_score": snapshot.livity_score,
             "vibration_score": snapshot.vibration_score,
+            "transport_metric_mode": snapshot.transport_metric_mode,
+            "transport_metric_mode_telemetry": [
+                {
+                    "tick": decision.tick,
+                    "tick_budget_class": decision.budget_state.tick_budget_class,
+                    "queue_depth": decision.budget_state.queue_depth,
+                    "configured_cap": decision.budget_state.configured_cap,
+                    "mode": decision.mode,
+                }
+                for decision in self._stream_engine.transport_mode_telemetry()
+            ],
             "layer_metrics": [vars(metric) for metric in snapshot.layer_metrics],
             "mutation_events": snapshot.mutation_events,
+            "policy_threshold": snapshot.policy_threshold,
+            "policy_deltas": [vars(delta) for delta in snapshot.policy_deltas],
         }
 
     def subscription_widgets(self, plan: str, workspace: str | None = None) -> List[DashboardWidget]:
