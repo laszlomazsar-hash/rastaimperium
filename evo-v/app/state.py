@@ -1,13 +1,76 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from collections import deque
+from dataclasses import dataclass
 from datetime import datetime, timezone
+from typing import Deque, Literal
+
+TransitionSource = Literal["watchdog", "health", "manual"]
+
+
+@dataclass(frozen=True)
+class TransitionEvent:
+    from_state: str
+    to_state: str
+    at: str
+    reason: str
+    source: TransitionSource
+
+
+class StateTracker:
+    def __init__(self, initial_state: str = "booting", history_size: int = 100) -> None:
+        self.current_state = initial_state
+        self._transition_history: Deque[TransitionEvent] = deque(maxlen=history_size)
+
+    def transition_to(self, to_state: str, reason: str, source: TransitionSource) -> TransitionEvent | None:
+        if to_state == self.current_state:
+            return None
+
+        event = TransitionEvent(
+            from_state=self.current_state,
+            to_state=to_state,
+            at=datetime.now(timezone.utc).isoformat(),
+            reason=reason,
+            source=source,
+        )
+        self.current_state = to_state
+        self._transition_history.append(event)
+        return event
+
+    def state_payload(self) -> dict:
+        return {
+            "state": self.current_state,
+            "transition_history": [event.__dict__ for event in self._transition_history],
+        }
+
+    def epistemic_summary(self) -> dict:
+        if not self._transition_history:
+            return {
+                "state": self.current_state,
+                "summary": "No transitions recorded yet.",
+                "history": [],
+            }
+
+        history = [
+            (
+                f"{event.at}: {event.from_state} -> {event.to_state} "
+                f"(source={event.source}, reason={event.reason})"
+            )
+            for event in self._transition_history
+        ]
+        return {
+            "state": self.current_state,
+            "summary": f"{len(self._transition_history)} transition(s) tracked.",
+            "history": history,
+        }
+
+
+state_tracker = StateTracker()
 from enum import Enum
-from threading import RLock
-from typing import Mapping
+from typing import Deque
 
 
-class RuntimeState(str, Enum):
+class EvoState(str, Enum):
     NORMAL = "NORMAL"
     DEGRADED = "DEGRADED"
     DRIFT = "DRIFT"
@@ -15,99 +78,138 @@ class RuntimeState(str, Enum):
     RECOVERY = "RECOVERY"
 
 
-DEFAULT_ALLOWED_TRANSITIONS: Mapping[RuntimeState, frozenset[RuntimeState]] = {
-    RuntimeState.NORMAL: frozenset({RuntimeState.DEGRADED, RuntimeState.COMPROMISE}),
-    RuntimeState.DEGRADED: frozenset(
-        {RuntimeState.NORMAL, RuntimeState.DRIFT, RuntimeState.COMPROMISE}
-    ),
-    RuntimeState.DRIFT: frozenset(
-        {RuntimeState.DEGRADED, RuntimeState.RECOVERY, RuntimeState.COMPROMISE}
-    ),
-    RuntimeState.COMPROMISE: frozenset({RuntimeState.RECOVERY}),
-    RuntimeState.RECOVERY: frozenset(
-        {
-            RuntimeState.NORMAL,
-            RuntimeState.DEGRADED,
-            RuntimeState.DRIFT,
-            RuntimeState.COMPROMISE,
-        }
-    ),
+LEGAL_TRANSITIONS: dict[EvoState, set[EvoState]] = {
+    EvoState.NORMAL: {EvoState.DEGRADED, EvoState.DRIFT, EvoState.COMPROMISE},
+    EvoState.DEGRADED: {
+        EvoState.NORMAL,
+        EvoState.DRIFT,
+        EvoState.COMPROMISE,
+        EvoState.RECOVERY,
+    },
+    EvoState.DRIFT: {EvoState.DEGRADED, EvoState.COMPROMISE, EvoState.RECOVERY},
+    EvoState.COMPROMISE: {EvoState.RECOVERY},
+    EvoState.RECOVERY: {EvoState.NORMAL, EvoState.DEGRADED},
 }
 
 
-@dataclass(slots=True)
-class StateManager:
-    allowed_transitions: Mapping[RuntimeState, frozenset[RuntimeState]] = field(
-        default_factory=lambda: DEFAULT_ALLOWED_TRANSITIONS
-    )
-    current_state: RuntimeState = RuntimeState.NORMAL
-    previous_state: RuntimeState | None = None
-    last_transition_at: datetime | None = None
-    compromise_started_at: datetime | None = None
-    anomaly_streak: int = 0
-    recovery_streak: int = 0
-    _lock: RLock = field(default_factory=RLock, init=False, repr=False)
+@dataclass(frozen=True, slots=True)
+class TransitionRecord:
+    from_state: EvoState
+    to_state: EvoState
+    at: datetime
+    reason: str | None = None
 
-    def transition_to(
-        self,
-        new_state: RuntimeState,
-        reason: str,
-        source: str,
-    ) -> RuntimeState:
-        if not reason.strip():
-            raise ValueError("reason must be a non-empty string")
-        if not source.strip():
-            raise ValueError("source must be a non-empty string")
+    def as_dict(self) -> dict[str, str | None]:
+        return {
+            "from_state": self.from_state,
+            "to_state": self.to_state,
+            "at": self.at.isoformat(),
+            "reason": self.reason,
+        }
 
-        with self._lock:
-            if new_state == self.current_state:
-                return self.current_state
 
-            allowed = self.allowed_transitions.get(self.current_state, frozenset())
-            if new_state not in allowed:
-                raise ValueError(
-                    "invalid transition "
-                    f"{self.current_state.value} -> {new_state.value} "
-                    f"(reason={reason!r}, source={source!r})"
-                )
+class StateMachine:
+    """Finite state machine used by health checks and watchdog workflows."""
 
-            self.previous_state = self.current_state
-            self.current_state = new_state
-            self.last_transition_at = datetime.now(timezone.utc)
+    def __init__(self, history_size: int = 50) -> None:
+        self.current_state: EvoState = EvoState.NORMAL
+        self.previous_state: EvoState | None = None
+        self.last_transition_at: datetime | None = None
+        self.transition_history: Deque[TransitionRecord] = deque(maxlen=history_size)
 
-            if new_state == RuntimeState.COMPROMISE:
-                self.compromise_started_at = self.last_transition_at
-            elif new_state == RuntimeState.NORMAL:
-                self.compromise_started_at = None
+    @staticmethod
+    def _utc_now() -> datetime:
+        return datetime.now(timezone.utc)
 
-            return self.current_state
+    def can_transition(self, to_state: EvoState) -> bool:
+        if to_state == self.current_state:
+            return True
+        return to_state in LEGAL_TRANSITIONS[self.current_state]
 
-    def record_anomaly(self, source: str, reason: str = "anomaly observed") -> RuntimeState:
-        with self._lock:
-            self.anomaly_streak += 1
-            self.recovery_streak = 0
+    def transition(self, to_state: EvoState, reason: str | None = None) -> bool:
+        if not self.can_transition(to_state):
+            raise ValueError(f"Illegal transition {self.current_state} -> {to_state}")
 
-            if self.current_state == RuntimeState.NORMAL:
-                return self.transition_to(RuntimeState.DEGRADED, reason=reason, source=source)
-            if self.current_state == RuntimeState.DEGRADED:
-                return self.transition_to(RuntimeState.DRIFT, reason=reason, source=source)
-            if self.current_state == RuntimeState.DRIFT:
-                return self.transition_to(RuntimeState.COMPROMISE, reason=reason, source=source)
-            if self.current_state == RuntimeState.RECOVERY:
-                return self.transition_to(RuntimeState.DEGRADED, reason=reason, source=source)
+        if to_state == self.current_state:
+            return False
 
-            return self.current_state
+        now = self._utc_now()
+        self.transition_history.append(
+            TransitionRecord(
+                from_state=self.current_state,
+                to_state=to_state,
+                at=now,
+                reason=reason,
+            )
+        )
+        self.previous_state = self.current_state
+        self.current_state = to_state
+        self.last_transition_at = now
+        return True
 
-    def record_recovery(self, source: str, reason: str = "recovery observed") -> RuntimeState:
-        with self._lock:
-            self.recovery_streak += 1
-            self.anomaly_streak = 0
+    # Helper methods used by watchdog and health checks.
+    def is_healthy(self) -> bool:
+        return self.current_state == EvoState.NORMAL
 
-            if self.current_state == RuntimeState.COMPROMISE:
-                return self.transition_to(RuntimeState.RECOVERY, reason=reason, source=source)
-            if self.current_state == RuntimeState.DRIFT:
-                return self.transition_to(RuntimeState.DEGRADED, reason=reason, source=source)
-            if self.current_state in {RuntimeState.DEGRADED, RuntimeState.RECOVERY}:
-                return self.transition_to(RuntimeState.NORMAL, reason=reason, source=source)
+    def needs_watchdog_attention(self) -> bool:
+        return self.current_state in {
+            EvoState.DEGRADED,
+            EvoState.DRIFT,
+            EvoState.COMPROMISE,
+        }
 
-            return self.current_state
+    def in_recovery(self) -> bool:
+        return self.current_state == EvoState.RECOVERY
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "current_state": self.current_state,
+            "previous_state": self.previous_state,
+            "last_transition_at": self.last_transition_at.isoformat()
+            if self.last_transition_at
+            else None,
+            "transition_history": [
+                transition.as_dict() for transition in self.transition_history
+            ],
+        }
+
+
+state_machine = StateMachine()
+"""Runtime state tracking for EVO-V deployment health."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+import threading
+import time
+
+
+@dataclass
+class RuntimeState:
+    """Shared mutable state used by health and watchdog checks."""
+
+    boot_time: float = field(default_factory=time.time)
+    last_check: float | None = None
+    failure_count: int = 0
+    last_failure: str | None = None
+    watchdog_started: bool = False
+    lock: threading.Lock = field(default_factory=threading.Lock)
+
+    def mark_check(self) -> None:
+        with self.lock:
+            self.last_check = time.time()
+
+    def mark_failure(self, reason: str) -> None:
+        with self.lock:
+            self.failure_count += 1
+            self.last_failure = reason
+
+    def mark_watchdog_started(self) -> bool:
+        with self.lock:
+            if self.watchdog_started:
+                return False
+            self.watchdog_started = True
+            return True
+
+
+STATE = RuntimeState()
