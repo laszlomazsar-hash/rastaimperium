@@ -24,6 +24,8 @@ class SoulEchoDashboardService:
             "timestamp": snapshot.timestamp,
             "livity_score": snapshot.livity_score,
             "vibration_score": snapshot.vibration_score,
+            "energy_schema_version": snapshot.energy_schema_version,
+            "energy_components": snapshot.energy_components,
             "layer_metrics": [vars(metric) for metric in snapshot.layer_metrics],
             "mutation_events": snapshot.mutation_events,
         }

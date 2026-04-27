@@ -31,6 +31,10 @@ def test_subscription_sync_dashboard_and_stripe_catalog() -> None:
     assert sync.db_synced is True
 
     dashboard = SoulEchoDashboardService()
+    stream = dashboard.stream_payload()
+    assert stream["energy_schema_version"] == "1.0.0"
+    assert "drift_avg" in stream["energy_components"]
+
     widgets = dashboard.subscription_widgets("enterprise", workspace="workspace-1")
     assert any(widget.key == "enterprise_metrics" and widget.visible for widget in widgets)
 
