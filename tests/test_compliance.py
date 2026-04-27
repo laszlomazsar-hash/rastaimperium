@@ -16,35 +16,47 @@ def test_rollback_trigger_when_trace_drops() -> None:
     assert engine.should_trigger_rollback() is True
 
 
-def test_proxy_threshold_calibration_metadata_tracks_scope_and_version() -> None:
+def test_override_precedence_manual_controls_predicates() -> None:
     engine = ComplianceEngine()
-    initial = engine.calibration_status()
+    metrics = {"min_trace_coverage": 70.0, "error_rate_pct": 12.0, "p95_latency_ms": 3_200.0}
 
-    metadata = engine.calibrate_proxy_thresholds(
-        dataset_scope="enterprise:tenant_a",
-        baseline_window="2026-01-01..2026-03-31",
-        policy_limit=0.15,
+    assert engine.evaluate_override_state(metrics, manual_override="force_off") is False
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_OFF"
+
+    assert engine.evaluate_override_state(metrics, manual_override="force_on") is True
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_ON_APPLIED"
+
+
+def test_override_recovery_path_obeys_min_hold_and_cooldown() -> None:
+    engine = ComplianceEngine(override_cooldown_ticks=1, override_min_hold_ticks=3)
+    emergency = {"min_trace_coverage": 72.0, "error_rate_pct": 0.0, "p95_latency_ms": 0.0}
+    recovered = {"min_trace_coverage": 96.0, "error_rate_pct": 0.1, "p95_latency_ms": 120.0}
+
+    assert engine.evaluate_override_state(emergency) is True
+
+    # Min-hold blocks immediate recovery.
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    # Recovery is applied once min-hold has elapsed.
+    assert engine.evaluate_override_state(recovered) is False
+    assert engine.override_history[-1]["reason_code"] == "PREDICATE_CLEAR_APPLIED"
+
+
+def test_predicate_inputs_are_bounded_in_override_log() -> None:
+    engine = ComplianceEngine()
+    engine.evaluate_override_state(
+        {
+            "min_trace_coverage": -12.0,
+            "error_rate_pct": 155.0,
+            "p95_latency_ms": 999_999.0,
+        }
     )
 
-    assert metadata.threshold_version != initial["threshold_version"]
-    assert metadata.calibrated_at
-    assert metadata.dataset_scope == "enterprise:tenant_a"
-    assert metadata.baseline_window == "2026-01-01..2026-03-31"
-    assert metadata.policy_limit == 0.15
-
-
-def test_proxy_residual_drift_trigger_and_observability_status() -> None:
-    engine = ComplianceEngine()
-    engine.calibrate_proxy_thresholds(
-        dataset_scope="rolling:90d",
-        baseline_window="2026-Q1",
-        policy_limit=0.2,
-    )
-
-    assert engine.evaluate_proxy_residual_drift(0.12) is False
-    assert engine.calibration_status()["recalibration_required"] is False
-
-    assert engine.evaluate_proxy_residual_drift(0.25) is True
-    status = engine.calibration_status()
-    assert status["latest_residual_drift"] == 0.25
-    assert status["recalibration_required"] is True
+    inputs = engine.override_history[-1]["predicate_inputs"]
+    assert inputs["min_trace_coverage"] == 0.0
+    assert inputs["error_rate_pct"] == 100.0
+    assert inputs["p95_latency_ms"] == 60_000.0
