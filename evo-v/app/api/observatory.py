@@ -1,9 +1,8 @@
 from fastapi import APIRouter
 
-from core.codex_engine import CodexEngine
+from core.engine_runtime import engine
 
 router = APIRouter()
-engine = CodexEngine()
 
 
 @router.get("/heartbeat")
