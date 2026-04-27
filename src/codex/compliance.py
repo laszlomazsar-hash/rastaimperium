@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import hashlib
-import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Dict, List
+
+from src.codex.canonical_json import dumps_canonical
 
 
 @dataclass
@@ -33,7 +34,7 @@ class ComplianceEngine:
             "metadata": metadata,
             "timestamp": timestamp,
         }
-        digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+        digest = hashlib.sha256(dumps_canonical(payload).encode("utf-8")).hexdigest()
         record = AuditRecord(**payload, digest=digest)
         self._audit_log.append(record)
         return record
