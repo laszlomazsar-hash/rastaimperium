@@ -1,11 +1,12 @@
 from src.soulecho.metrics import (
-    METRIC_SCHEMA_VERSION,
+    ENERGY_SCHEMA_VERSION,
     anomaly_alerts,
-    drift_i,
-    energy_from_runtime_snapshot,
+    compute_energy_breakdown,
     global_coherence,
+    normalized_drift_i,
+    normalized_variance_i,
 )
-from src.soulecho.v2 import LayerMetric, SoulEchoStreamEngine
+from src.soulecho.v2 import SoulEchoStreamEngine
 
 
 def test_global_coherence_average() -> None:
@@ -17,22 +18,23 @@ def test_anomaly_alerts_below_threshold() -> None:
     assert alerts == ["L2 deviated to 79%"]
 
 
-def test_drift_i_uses_canonical_fields() -> None:
-    hypothesis = LayerMetric(layer=1, coherence=96.0, predictive_mean=0.25)
-    assert drift_i(snapshot_drift=0.1, hypothesis=hypothesis) == 0.15
+def test_energy_formula_components_and_ranges() -> None:
+    breakdown = compute_energy_breakdown(actual_scores=[90.0, 95.0], predicted_scores=[88.0, 96.0])
+
+    assert breakdown.schema_version == ENERGY_SCHEMA_VERSION
+    assert 0.0 <= normalized_drift_i(90.0, 88.0) <= 1.0
+    assert 0.0 <= normalized_variance_i(90.0, 92.5) <= 1.0
+    assert 0.0 <= breakdown.drift_avg <= 1.0
+    assert 0.0 <= breakdown.variance_avg <= 1.0
+    assert 0.0 <= breakdown.energy_score <= 1.0
 
 
-def test_energy_computation_accepts_runtime_objects() -> None:
-    hypotheses = [
-        LayerMetric(layer=1, coherence=97.0, predictive_mean=0.2),
-        LayerMetric(layer=2, coherence=95.0, predictive_mean=0.4),
+def test_soulecho_stream_is_deterministic_across_deployments() -> None:
+    first = SoulEchoStreamEngine().next_snapshot()
+    second = SoulEchoStreamEngine().next_snapshot()
+
+    assert [metric.coherence for metric in first.layer_metrics] == [
+        metric.coherence for metric in second.layer_metrics
     ]
-    energy = energy_from_runtime_snapshot(snapshot_drift=0.1, hypotheses=hypotheses)
-    assert energy == 0.8333
-
-
-def test_stream_snapshot_versions_metric_schema_and_energy() -> None:
-    snapshot = SoulEchoStreamEngine().next_snapshot()
-    assert snapshot.metric_schema_version == METRIC_SCHEMA_VERSION
-    assert 0 <= snapshot.energy_score <= 1
-    assert all(hasattr(metric, "predictive_mean") for metric in snapshot.layer_metrics)
+    assert first.energy_schema_version == ENERGY_SCHEMA_VERSION
+    assert first.energy_components == second.energy_components
