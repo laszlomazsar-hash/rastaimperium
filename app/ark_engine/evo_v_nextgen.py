@@ -6,6 +6,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+from .core.convergence import RollingWindowConvergenceDetector
+
 
 @dataclass
 class AnalysisResult:
@@ -251,18 +253,29 @@ class CulturalNetworkAnalyst:
 class BioInspiredCulturalOptimizer:
     """Scaffold for bio-inspired cultural optimization."""
 
+    def __init__(self, detector: RollingWindowConvergenceDetector | None = None) -> None:
+        self.detector = detector or RollingWindowConvergenceDetector()
+
     def swarm_cultural_optimization(
         self,
         cultural_landscape: Dict[str, Any],
         swarm_size: int = 50,
     ) -> Dict[str, Any]:
+        swarm_trajectory = cultural_landscape.get("swarm_trajectory", [])
+        convergence_analysis = self.detector.detect(swarm_trajectory)
+
         return {
             "optimized_configuration": cultural_landscape,
             "optimization_cost": 0.0,
-            "swarm_trajectory": [],
-            "convergence_analysis": {},
+            "swarm_trajectory": swarm_trajectory,
+            "convergence_analysis": convergence_analysis,
             "swarm_diversity": 0.0,
             "cultural_fitness_landscape": {},
+            "telemetry": {
+                "current_mode": convergence_analysis["current_mode"],
+                "confidence": convergence_analysis["confidence"],
+                "supporting_metrics": convergence_analysis["supporting_metrics"],
+            },
         }
 
     def immune_cultural_adaptation(
