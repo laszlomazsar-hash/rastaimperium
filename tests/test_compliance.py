@@ -1,4 +1,4 @@
-from src.codex.compliance import ComplianceEngine
+from src.codex.compliance import CANONICALIZATION_VERSION, ComplianceEngine
 
 
 def test_audit_record_uses_sha256_digest() -> None:
@@ -6,6 +6,7 @@ def test_audit_record_uses_sha256_digest() -> None:
     record = engine.append_audit_record("admin", "deploy", "IV", {"release": "v3.6"})
 
     assert len(record.digest) == 64
+    assert record.canonical_manifest["canonicalization_version"] == CANONICALIZATION_VERSION
     assert record in engine.audit_log
 
 
