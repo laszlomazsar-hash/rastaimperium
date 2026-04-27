@@ -8,8 +8,7 @@ from fastapi import FastAPI
 
 from src.codex.compliance import ComplianceEngine
 
-SCHEMA_VERSION = "1.0.0"
-SCHEMA_VERSION = "1.1"
+SCHEMA_VERSION = "1.1.0"
 
 
 
@@ -86,29 +85,27 @@ class RuntimeState:
 
 app = FastAPI(title="ARK Safety Governance")
 engine = ComplianceEngine()
-OBSERVABILITY_SCHEMA_VERSION = "1.0.0"
+STATE = RuntimeState()
+OBSERVABILITY_SCHEMA_VERSION = SCHEMA_VERSION
 
 
 @app.get("/health")
 def health() -> dict[str, object]:
-    return {
-        "schema_version": SCHEMA_VERSION,
-def health() -> dict[str, str]:
-    return {
-        "schema_version": OBSERVABILITY_SCHEMA_VERSION,
-        "status": "ok",
-    }
+    rollback_ready = engine.should_trigger_rollback()
+    STATE.sync_with_rollback_readiness(rollback_ready)
+    return STATE.health_payload(rollback_ready=rollback_ready)
 
 
 @app.get("/state")
 def state() -> dict[str, object]:
+    rollback_ready = engine.should_trigger_rollback()
+    coverage = engine.trace_coverage_graph()
     return {
-        "schema_version": SCHEMA_VERSION,
-        "coverage": engine.trace_coverage_graph(),
-        "rollback_ready": engine.should_trigger_rollback(),
         "schema_version": OBSERVABILITY_SCHEMA_VERSION,
-        "rollback_ready": engine.should_trigger_rollback(),
-        "trace_coverage": engine.trace_coverage_graph(),
+        "rollback_ready": rollback_ready,
+        "trace_coverage": coverage,
+        # Backward-compatible alias expected by monitor checks.
+        "coverage": coverage,
     }
 
 
@@ -120,28 +117,27 @@ def epistemic() -> dict[str, object]:
         article="II",
         metadata={"source": "external_monitor"},
     )
-    return {
-        "schema_version": SCHEMA_VERSION,
-        "trace_coverage": round(sum(item["coverage"] for item in engine.trace_coverage_graph()) / 9, 2),
-        "rollback_ready": engine.should_trigger_rollback(),
-        "latest_audit_digest": audit_record.digest,
+    coverage = engine.trace_coverage_graph()
+    rollback_ready = engine.should_trigger_rollback()
     return {
         "schema_version": OBSERVABILITY_SCHEMA_VERSION,
+        "trace_coverage": round(sum(item["coverage"] for item in coverage) / max(len(coverage), 1), 2),
+        "rollback_ready": rollback_ready,
+        "latest_audit_digest": audit_record.digest,
         "audit_log_entries": len(engine.audit_log),
-        "trace_layers_monitored": len(engine.trace_coverage_graph()),
+        "trace_layers_monitored": len(coverage),
     }
 
 
 @app.get("/telemetry/coverage")
 def telemetry_coverage() -> dict[str, object]:
-    return {
-        "schema_version": SCHEMA_VERSION,
-        "coverage": engine.trace_coverage_graph(),
-        "rollback_ready": engine.should_trigger_rollback(),
-    }
     rollback_ready = engine.should_trigger_rollback()
     STATE.sync_with_rollback_readiness(rollback_ready)
-    return {"coverage": engine.trace_coverage_graph(), "rollback_ready": rollback_ready}
+    return {
+        "schema_version": OBSERVABILITY_SCHEMA_VERSION,
+        "coverage": engine.trace_coverage_graph(),
+        "rollback_ready": rollback_ready,
+    }
 
 
 @app.post("/telemetry/rollback")
@@ -152,10 +148,9 @@ def trigger_rollback(actor: str, reason: str) -> dict[str, object]:
         article="III",
         metadata={"reason": reason},
     )
+    STATE.record_failure(actor=actor, reason=reason)
     return {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": OBSERVABILITY_SCHEMA_VERSION,
         "ok": True,
         "audit_digest": record.digest,
     }
-    STATE.record_failure(actor=actor, reason=reason)
-    return {"ok": True, "audit_digest": record.digest}
