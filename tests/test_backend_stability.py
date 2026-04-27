@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from app.core.monitoring import MonitoringState
+from src.ark_safety.main import telemetry_coverage
 from src.admin.payment_sync import complete_payment_sync
 from src.payment.stripe_webhook_handler import BillingUsage, calculate_usage_cost, plan_catalog
 from src.soulecho.dashboard import SoulEchoDashboardService
