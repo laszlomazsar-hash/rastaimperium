@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api import observatory, provisioning
+from api import codex, observatory, provisioning
 from health import health_router
 from watchdog import start_watchdog
 
@@ -17,6 +17,7 @@ def root() -> dict[str, str]:
 
 
 app.include_router(health_router)
+app.include_router(codex.router)
 app.include_router(observatory.router, prefix="/api/observatory")
 app.include_router(provisioning.router, prefix="/api/provisioning")
 
