@@ -1,72 +1,13 @@
+"""Runtime and transition state for EVO-V health/watchdog workflows."""
+
 from __future__ import annotations
 
 from collections import deque
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Deque, Literal
-
-TransitionSource = Literal["watchdog", "health", "manual"]
-
-
-@dataclass(frozen=True)
-class TransitionEvent:
-    from_state: str
-    to_state: str
-    at: str
-    reason: str
-    source: TransitionSource
-
-
-class StateTracker:
-    def __init__(self, initial_state: str = "booting", history_size: int = 100) -> None:
-        self.current_state = initial_state
-        self._transition_history: Deque[TransitionEvent] = deque(maxlen=history_size)
-
-    def transition_to(self, to_state: str, reason: str, source: TransitionSource) -> TransitionEvent | None:
-        if to_state == self.current_state:
-            return None
-
-        event = TransitionEvent(
-            from_state=self.current_state,
-            to_state=to_state,
-            at=datetime.now(timezone.utc).isoformat(),
-            reason=reason,
-            source=source,
-        )
-        self.current_state = to_state
-        self._transition_history.append(event)
-        return event
-
-    def state_payload(self) -> dict:
-        return {
-            "state": self.current_state,
-            "transition_history": [event.__dict__ for event in self._transition_history],
-        }
-
-    def epistemic_summary(self) -> dict:
-        if not self._transition_history:
-            return {
-                "state": self.current_state,
-                "summary": "No transitions recorded yet.",
-                "history": [],
-            }
-
-        history = [
-            (
-                f"{event.at}: {event.from_state} -> {event.to_state} "
-                f"(source={event.source}, reason={event.reason})"
-            )
-            for event in self._transition_history
-        ]
-        return {
-            "state": self.current_state,
-            "summary": f"{len(self._transition_history)} transition(s) tracked.",
-            "history": history,
-        }
-
-
-state_tracker = StateTracker()
 from enum import Enum
+import threading
+import time
 from typing import Deque
 
 
@@ -147,41 +88,13 @@ class StateMachine:
         self.last_transition_at = now
         return True
 
-    # Helper methods used by watchdog and health checks.
-    def is_healthy(self) -> bool:
-        return self.current_state == EvoState.NORMAL
-
-    def needs_watchdog_attention(self) -> bool:
-        return self.current_state in {
-            EvoState.DEGRADED,
-            EvoState.DRIFT,
-            EvoState.COMPROMISE,
-        }
-
-    def in_recovery(self) -> bool:
-        return self.current_state == EvoState.RECOVERY
-
     def as_dict(self) -> dict[str, object]:
         return {
             "current_state": self.current_state,
             "previous_state": self.previous_state,
-            "last_transition_at": self.last_transition_at.isoformat()
-            if self.last_transition_at
-            else None,
-            "transition_history": [
-                transition.as_dict() for transition in self.transition_history
-            ],
+            "last_transition_at": self.last_transition_at.isoformat() if self.last_transition_at else None,
+            "transition_history": [transition.as_dict() for transition in self.transition_history],
         }
-
-
-state_machine = StateMachine()
-"""Runtime state tracking for EVO-V deployment health."""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-import threading
-import time
 
 
 @dataclass
@@ -212,4 +125,5 @@ class RuntimeState:
             return True
 
 
+state_machine = StateMachine()
 STATE = RuntimeState()

@@ -1,20 +1,3 @@
-from fastapi import APIRouter
-
-from state import state_machine
-
-router = APIRouter()
-
-
-@router.get("/state")
-def get_state() -> dict[str, object]:
-    state = state_machine.as_dict()
-    return {
-        "status": "ok",
-        "state": state_machine.current_state,
-        "current_state": state["current_state"],
-        "previous_state": state["previous_state"],
-        "last_transition_at": state["last_transition_at"],
-        "transition_history": state["transition_history"],
 """Health and invariant endpoints for EVO-V."""
 
 from __future__ import annotations
@@ -25,7 +8,7 @@ import time
 
 from fastapi import APIRouter
 
-from state import STATE
+from state import STATE, state_machine
 
 health_router = APIRouter()
 
@@ -63,10 +46,15 @@ def health() -> dict[str, object]:
 
 @health_router.get("/state")
 def state() -> dict[str, object]:
-    """Expose deployment mode for quick observability."""
+    """Expose deployment mode and finite-state transitions."""
 
+    runtime = state_machine.as_dict()
     return {
         "mode": "deterministic-runtime",
+        "current_state": runtime["current_state"],
+        "previous_state": runtime["previous_state"],
+        "last_transition_at": runtime["last_transition_at"],
+        "transition_history": runtime["transition_history"],
         "boot_time": STATE.boot_time,
         "last_check": STATE.last_check,
         "failure_count": STATE.failure_count,
