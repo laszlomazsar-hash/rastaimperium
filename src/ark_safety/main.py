@@ -6,7 +6,7 @@ from typing import Any
 
 from fastapi import FastAPI
 
-from src.codex.compliance import ComplianceEngine
+from src.codex.compliance import ComplianceEngine, ReplayResult
 
 SCHEMA_VERSION = "1.1.0"
 

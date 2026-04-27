@@ -468,6 +468,37 @@ class ComplianceEngine:
             separators=(",", ":"),
         )
 
+    def evaluate_replay_acceptance(self, replay: ReplayResult) -> dict[str, object]:
+        spec = PROFILE_SPECS[self._active_profile]
+        if self._active_profile is ReproducibilityProfile.BITWISE:
+            accepted = replay.hash_match and replay.max_abs_error == 0.0
+        elif self._active_profile is ReproducibilityProfile.NUMERIC_TOLERANCE:
+            accepted = replay.max_abs_error <= spec.acceptance_rules["max_abs_error"] and replay.hash_match
+        else:
+            accepted = replay.p_value >= spec.acceptance_rules["min_p_value"]
+
+        return {
+            "profile": self._active_profile.value,
+            "accepted": accepted,
+            "rules": spec.acceptance_rules,
+            "replay": {
+                "hash_match": replay.hash_match,
+                "max_abs_error": replay.max_abs_error,
+                "p_value": replay.p_value,
+            },
+        }
+
+    def runtime_diagnostics(self) -> dict[str, object]:
+        spec = PROFILE_SPECS[self._active_profile]
+        return {
+            "active_profile": self._active_profile.value,
+            "execution_guarantee": spec.execution_guarantee,
+            "environment_constraints": [
+                {"key": constraint.key, "required": constraint.required}
+                for constraint in spec.environment_constraints
+            ],
+        }
+
     @property
     def audit_log(self) -> List[AuditRecord]:
         return list(self._audit_log)
