@@ -147,3 +147,17 @@ sudo systemctl restart systemd-resolved
 - [ ] Backend health check passes:
       `https://codebylaszlo-rastaimperium-backend.hf.space/healthz`
 - [ ] Frontend calls API endpoints successfully
+
+## Railway Runtime Stability Notes
+
+If Railway deploys fail before any request traffic appears, treat this as a startup failure and inspect deployment logs directly in Railway (**Deployments → failed deploy → Logs**).
+
+This repository now pins Python to 3.11 for Railway/runtime compatibility:
+- `runtime.txt` → `python-3.11.11`
+- `.python-version` → `3.11`
+
+The web process is expected to bind using Railway-compatible host/port:
+
+```bash
+web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
