@@ -22,8 +22,11 @@ class SoulEchoDashboardService:
         snapshot = self._stream_engine.next_snapshot()
         return {
             "timestamp": snapshot.timestamp,
+            "metric_schema_version": snapshot.metric_schema_version,
             "livity_score": snapshot.livity_score,
             "vibration_score": snapshot.vibration_score,
+            "snapshot_drift": snapshot.snapshot_drift,
+            "energy_score": snapshot.energy_score,
             "layer_metrics": [vars(metric) for metric in snapshot.layer_metrics],
             "mutation_events": snapshot.mutation_events,
         }
