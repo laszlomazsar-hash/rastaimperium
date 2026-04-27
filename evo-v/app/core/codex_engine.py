@@ -13,13 +13,19 @@ class CodexEngine:
         self.sandboxes: List[Sandbox] = []
 
     def provision_agent(self, agent_name: str) -> tuple[ReasoningAgent, Sandbox]:
-        agent = ReasoningAgent(agent_name)
+        normalized_name = agent_name.strip()
+        if not normalized_name:
+            raise ValueError("agent_name must not be empty")
+
+        agent = ReasoningAgent(normalized_name)
         sandbox = Sandbox(agent)
         self.agents.append(agent)
         self.sandboxes.append(sandbox)
         return agent, sandbox
 
     async def run_all(self) -> None:
+        if not self.sandboxes:
+            return
         tasks = [sandbox.execute() for sandbox in self.sandboxes]
         await asyncio.gather(*tasks)
 
