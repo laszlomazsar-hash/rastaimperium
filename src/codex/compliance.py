@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
 import json
 from copy import deepcopy
 from dataclasses import dataclass
@@ -293,6 +294,31 @@ class ComplianceEngine:
             latest_residual_drift=latest_residual_drift,
             recalibration_required=recalibration_required,
         )
+
+    def replay_calibration(
+        self,
+        lineage_record: CalibrationLineageRecord,
+        runtime_artifact_versions: Mapping[str, str],
+        trust_root: TrustRoot,
+    ) -> Dict[str, object]:
+        """Replays only when runtime artifacts exactly match lineage versions."""
+
+        verify_lineage_record(lineage_record, trust_root)
+
+        expected = dict(lineage_record.artifact_versions)
+        observed = dict(runtime_artifact_versions)
+        if observed != expected:
+            raise CalibrationReplayError(
+                "Calibration replay requires exact lineage artifact versions; "
+                f"expected {expected}, got {observed}."
+            )
+
+        return {
+            "status": "replayed",
+            "calibration_id": lineage_record.calibration_id,
+            "artifact_versions": expected,
+            "dataset_hash": lineage_record.dataset_hash,
+        }
 
     @property
     def audit_log(self) -> List[AuditRecord]:
