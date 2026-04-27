@@ -15,7 +15,11 @@ def health() -> dict[str, str]:
 
 @app.get("/telemetry/coverage")
 def telemetry_coverage() -> dict[str, object]:
-    return {"coverage": engine.trace_coverage_graph(), "rollback_ready": engine.should_trigger_rollback()}
+    return {
+        "coverage": engine.trace_coverage_graph(),
+        "rollback_ready": engine.should_trigger_rollback(),
+        "likelihood_diagnostics": engine.likelihood_diagnostics(),
+    }
 
 
 @app.post("/telemetry/rollback")
