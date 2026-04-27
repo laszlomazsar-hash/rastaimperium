@@ -87,9 +87,35 @@ class NeurosymbolicCulturalReasoner:
         symbolic_rules: List[Dict[str, Any]],
         causal_structure: Dict[str, Any],
     ) -> float:
+        """Compute bounded epistemic confidence for integrated reasoning.
+
+        Formula:
+            base_signal = 0.1 * signal_strength + 0.05 * causal_strength
+            uncertainty = drift + anomaly + (0.5 * policy_uncertainty)
+            confidence = clamp(base_signal - uncertainty, 0.0, 1.0)
+
+        Invariants:
+            - confidence is always clamped to [0, 1]
+            - increasing drift/anomaly/policy_uncertainty cannot increase confidence
+            - policy is modeled as an uncertainty penalty (never a multiplicative boost)
+        """
         signal_strength = len(neural_patterns) + len(symbolic_rules)
         causal_strength = len(causal_structure.get("causal_graph", {}))
-        return min(1.0, 0.1 * signal_strength + 0.05 * causal_strength)
+        base_signal = 0.1 * signal_strength + 0.05 * causal_strength
+
+        metrics = causal_structure.get("metrics", {})
+        drift = self._clamp_unit(metrics.get("drift", 0.0))
+        anomaly = self._clamp_unit(metrics.get("anomaly", 0.0))
+        policy_uncertainty = self._clamp_unit(metrics.get("policy_uncertainty", 0.0))
+
+        uncertainty_penalty = drift + anomaly + (0.5 * policy_uncertainty)
+        return self._clamp_unit(base_signal - uncertainty_penalty)
+
+    @staticmethod
+    def _clamp_unit(value: Any) -> float:
+        """Clamp numeric values into the closed unit interval [0, 1]."""
+        numeric = float(value)
+        return max(0.0, min(1.0, numeric))
 
 
 class FederatedCulturalLearning:
