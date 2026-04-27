@@ -5,6 +5,8 @@ from datetime import datetime, timedelta, timezone
 from random import uniform
 from typing import Callable, Dict, List, Literal
 
+from .metrics import EnergyComponentBreakdown, compute_energy_breakdown
+
 
 @dataclass
 class LayerMetric:
@@ -83,7 +85,7 @@ def choose_transport_metric_mode(state: TransportBudgetState) -> TransportMetric
 
 
 class SoulEchoStreamEngine:
-    """Generates real-time friendly snapshot payloads for UI websocket streams."""
+    """Generates deterministic snapshot payloads for UI websocket streams."""
 
     def __init__(
         self,
@@ -119,10 +121,15 @@ class SoulEchoStreamEngine:
     def next_snapshot(self, now: datetime | None = None) -> SoulEchoSnapshot:
         timestamp = now or datetime.now(timezone.utc)
         layer_metrics: List[LayerMetric] = []
+        predicted_scores: List[float] = []
+        actual_scores: List[float] = []
 
+        step = self._event_count + 1
         for layer, score in self._base_layer_score.items():
-            updated = max(0.0, min(100.0, score + uniform(-1.5, 1.5)))
+            predicted_scores.append(score)
+            updated = max(0.0, min(100.0, score + self._delta(step=step, layer=layer)))
             self._base_layer_score[layer] = updated
+            actual_scores.append(updated)
             layer_metrics.append(LayerMetric(layer=layer, coherence=round(updated, 2)))
 
         self._event_count += 1
