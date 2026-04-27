@@ -5,12 +5,10 @@ WORKDIR /app
 COPY evo-v/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY evo-v/app ./app
-COPY evo-v/scripts ./scripts
-COPY evo-v/bootstrap.sh ./bootstrap.sh
+COPY ./app ./app
+COPY ./scripts ./scripts
+COPY ./bootstrap.sh ./bootstrap.sh
 
-ENV PYTHONPATH=/app/app
+EXPOSE 7860
 
-RUN chmod +x /app/bootstrap.sh
-
-CMD ["/app/bootstrap.sh"]
+CMD ["bash", "bootstrap.sh"]
