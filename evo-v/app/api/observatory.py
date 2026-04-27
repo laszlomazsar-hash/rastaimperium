@@ -69,6 +69,7 @@ def get_state_data() -> dict:
 
 @router.get("/heartbeat")
 async def heartbeat() -> dict:
+    health_state.mark_heartbeat()
     snapshot = engine.audit_state()
     runtime_state.set_watchdog("nominal")
     return {"status": "ok", "snapshot": snapshot}
