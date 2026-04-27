@@ -7,11 +7,14 @@ from typing import Callable, Dict, List, Literal
 
 from .metrics import EnergyComponentBreakdown, compute_energy_breakdown
 
+from .metrics import METRIC_SCHEMA_VERSION, energy_from_runtime_snapshot
 
 @dataclass
 class LayerMetric:
     layer: int
     coherence: float
+    predictive_mean: float
+    drift_i: float = 0.0
 
 
 TransportMetricMode = Literal["realtime", "batched", "deferred"]
@@ -43,6 +46,7 @@ class PolicyDelta:
 @dataclass
 class SoulEchoSnapshot:
     timestamp: str
+    metric_schema_version: str
     livity_score: float
     vibration_score: float
     transport_metric_mode: TransportMetricMode
@@ -144,6 +148,10 @@ class SoulEchoStreamEngine:
         )
         livity = round(sum(item.coherence for item in layer_metrics) / len(layer_metrics), 2)
         vibration = round(max(0.0, min(100.0, livity + uniform(-2.0, 2.0))), 2)
+        snapshot_drift = round(abs(vibration - livity), 2)
+        for metric in layer_metrics:
+            metric.drift_i = round(abs(snapshot_drift - metric.predictive_mean), 2)
+        energy_score = energy_from_runtime_snapshot(snapshot_drift=snapshot_drift, hypotheses=layer_metrics)
         event = f"EVO-V mutation event #{self._event_count}"
 
         self._pending_baseline_writes += 1
