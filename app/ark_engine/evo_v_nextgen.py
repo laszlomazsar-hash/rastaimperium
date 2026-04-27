@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Tuple
+import math
 
 
 @dataclass
@@ -191,6 +192,10 @@ class QuantumCulturalOptimizer:
 class EvolutionaryCulturalOptimizer:
     """Scaffold for evolutionary cultural algorithms."""
 
+    def __init__(self, model_error_budget: float = 0.35) -> None:
+        self.model_error_budget = max(0.0, model_error_budget)
+        self.error_audit_log: List[Dict[str, Any]] = []
+
     def evolve_cultural_traits(self, initial_traits: List[Dict[str, Any]], generations: int = 50) -> Dict[str, Any]:
         return {
             "best_traits": initial_traits[:1],
@@ -205,13 +210,42 @@ class EvolutionaryCulturalOptimizer:
         initial_cultures: List[Dict[str, Any]],
         steps: int = 100,
     ) -> Dict[str, Any]:
-        history = [{"step": step, "cultures": initial_cultures} for step in range(steps)]
+        self.error_audit_log = []
+        history: List[Dict[str, Any]] = []
+        for step in range(steps):
+            error_signal = self._estimate_model_error_tick(initial_cultures=initial_cultures, step=step)
+            history.append(
+                {
+                    "step": step,
+                    "cultures": initial_cultures,
+                    "epsilon_model": error_signal["epsilon_model"],
+                    "epsilon_confidence_interval": error_signal["confidence_interval"],
+                    "control_policy": {
+                        "aggressiveness": error_signal["aggressiveness"],
+                        "gated": error_signal["gated"],
+                        "budget": self.model_error_budget,
+                    },
+                    "lyapunov_residual_decomposition": error_signal["lyapunov_residual_decomposition"],
+                }
+            )
+            self.error_audit_log.append(
+                {
+                    "step": step,
+                    "epsilon_model": error_signal["epsilon_model"],
+                    "confidence_interval": error_signal["confidence_interval"],
+                    "lyapunov_residual_decomposition": error_signal["lyapunov_residual_decomposition"],
+                    "aggressiveness": error_signal["aggressiveness"],
+                    "gated": error_signal["gated"],
+                }
+            )
         return {
             "final_cultures": initial_cultures,
             "evolution_history": history,
             "evolutionary_analysis": {},
             "convergence_metrics": {},
             "innovation_trajectory": [],
+            "model_error_budget": self.model_error_budget,
+            "error_audit_log": self.error_audit_log,
         }
 
     def memetic_cultural_optimization(
@@ -225,6 +259,95 @@ class EvolutionaryCulturalOptimizer:
             "local_improvements": 0,
             "global_exploration": 0.0,
             "solution_robustness": 0.0,
+        }
+
+    def _estimate_model_error_tick(self, initial_cultures: List[Dict[str, Any]], step: int) -> Dict[str, Any]:
+        integration_error = self._estimate_integration_error(initial_cultures, step)
+        projection_distortion = self._estimate_projection_distortion(initial_cultures, step)
+        representation_error = self._estimate_representation_error(initial_cultures)
+        epsilon_model = integration_error + projection_distortion + representation_error
+
+        confidence_interval = self._estimate_confidence_interval(
+            integration_error=integration_error,
+            projection_distortion=projection_distortion,
+            representation_error=representation_error,
+            sample_size=max(1, len(initial_cultures)),
+        )
+        ci_upper = confidence_interval[1]
+        gated = ci_upper > self.model_error_budget
+        aggressiveness = 0.25 if gated else 1.0
+
+        return {
+            "components": {
+                "integration_error": integration_error,
+                "projection_distortion": projection_distortion,
+                "representation_error": representation_error,
+            },
+            "epsilon_model": epsilon_model,
+            "confidence_interval": confidence_interval,
+            "aggressiveness": aggressiveness,
+            "gated": gated,
+            "lyapunov_residual_decomposition": self._lyapunov_residual_decomposition(
+                integration_error=integration_error,
+                projection_distortion=projection_distortion,
+                representation_error=representation_error,
+                epsilon_model=epsilon_model,
+            ),
+        }
+
+    def _estimate_integration_error(self, initial_cultures: List[Dict[str, Any]], step: int) -> float:
+        if not initial_cultures:
+            return 0.0
+        energetic_variance = [abs(float(culture.get("energy", 0.0)) - 0.5) for culture in initial_cultures]
+        average_variance = sum(energetic_variance) / len(energetic_variance)
+        return min(1.0, average_variance * (1.0 + 0.02 * step))
+
+    def _estimate_projection_distortion(self, initial_cultures: List[Dict[str, Any]], step: int) -> float:
+        if not initial_cultures:
+            return 0.0
+        name_complexity = [len(str(culture.get("name", ""))) for culture in initial_cultures]
+        normalized_complexity = sum(name_complexity) / (max(1, len(name_complexity)) * 20.0)
+        temporal_pressure = min(0.5, step / 200.0)
+        return min(1.0, normalized_complexity + temporal_pressure)
+
+    def _estimate_representation_error(self, initial_cultures: List[Dict[str, Any]]) -> float:
+        if not initial_cultures:
+            return 0.0
+        value_lengths = [len(culture.get("values", [])) for culture in initial_cultures]
+        mean_length = sum(value_lengths) / len(value_lengths)
+        mean_absolute_deviation = sum(abs(length - mean_length) for length in value_lengths) / len(value_lengths)
+        return min(1.0, mean_absolute_deviation / 5.0)
+
+    def _estimate_confidence_interval(
+        self,
+        integration_error: float,
+        projection_distortion: float,
+        representation_error: float,
+        sample_size: int,
+    ) -> Tuple[float, float]:
+        components = [integration_error, projection_distortion, representation_error]
+        mean_error = sum(components) / len(components)
+        variance = sum((component - mean_error) ** 2 for component in components) / len(components)
+        std_error = math.sqrt(variance) / math.sqrt(max(1, sample_size))
+        margin = 1.96 * std_error
+        lower = max(0.0, mean_error - margin)
+        upper = min(3.0, mean_error + margin)
+        return (round(lower, 6), round(upper, 6))
+
+    def _lyapunov_residual_decomposition(
+        self,
+        integration_error: float,
+        projection_distortion: float,
+        representation_error: float,
+        epsilon_model: float,
+    ) -> Dict[str, float]:
+        stabilizing_term = max(0.0, self.model_error_budget - epsilon_model)
+        return {
+            "integration_error_term": integration_error,
+            "projection_distortion_term": projection_distortion,
+            "representation_error_term": representation_error,
+            "stabilizing_budget_term": stabilizing_term,
+            "residual_norm": max(0.0, epsilon_model - self.model_error_budget),
         }
 
 
