@@ -1,84 +1,215 @@
 from __future__ import annotations
 
-from copy import deepcopy
+from collections import deque
+from dataclasses import dataclass
 from datetime import datetime, timezone
-from threading import Lock
-from typing import Any
+from typing import Deque, Literal
+
+TransitionSource = Literal["watchdog", "health", "manual"]
 
 
-class EngineState:
-    """Thread-safe state machine + event ledger for the engine."""
+@dataclass(frozen=True)
+class TransitionEvent:
+    from_state: str
+    to_state: str
+    at: str
+    reason: str
+    source: TransitionSource
 
-    def __init__(self) -> None:
-        self._lock = Lock()
-        self._state: dict[str, Any] = {
-            "lifecycle": "idle",
-            "last_heartbeat": None,
-            "last_failure": None,
-            "agent_statuses": {},
-            "active_sandboxes": 0,
-        }
-        self._events: list[dict[str, Any]] = []
 
-    def transition(self, *, agent_name: str, status: str) -> None:
-        """Atomically update an agent status and append an event ledger entry."""
-        now = self._utc_now()
-        with self._lock:
-            self._state["agent_statuses"][agent_name] = status
-            self._events.append(
-                {
-                    "type": "transition",
-                    "agent": agent_name,
-                    "status": status,
-                    "at": now,
-                }
-            )
+class StateTracker:
+    def __init__(self, initial_state: str = "booting", history_size: int = 100) -> None:
+        self.current_state = initial_state
+        self._transition_history: Deque[TransitionEvent] = deque(maxlen=history_size)
 
-    def mark_failure(self, *, agent_name: str, error: str) -> None:
-        """Atomically record failure state and append a failure event."""
-        now = self._utc_now()
-        with self._lock:
-            self._state["lifecycle"] = "failed"
-            self._state["last_failure"] = {
-                "agent": agent_name,
-                "error": error,
-                "at": now,
-            }
-            self._events.append(
-                {
-                    "type": "failure",
-                    "agent": agent_name,
-                    "error": error,
-                    "at": now,
-                }
-            )
+    def transition_to(self, to_state: str, reason: str, source: TransitionSource) -> TransitionEvent | None:
+        if to_state == self.current_state:
+            return None
 
-    def mark_heartbeat(self, *, active_sandboxes: int) -> None:
-        """Atomically update heartbeat metadata and append a heartbeat event."""
-        now = self._utc_now()
-        with self._lock:
-            self._state["lifecycle"] = "healthy"
-            self._state["last_heartbeat"] = now
-            self._state["active_sandboxes"] = active_sandboxes
-            self._events.append(
-                {
-                    "type": "heartbeat",
-                    "active_sandboxes": active_sandboxes,
-                    "at": now,
-                }
-            )
+        event = TransitionEvent(
+            from_state=self.current_state,
+            to_state=to_state,
+            at=datetime.now(timezone.utc).isoformat(),
+            reason=reason,
+            source=source,
+        )
+        self.current_state = to_state
+        self._transition_history.append(event)
+        return event
 
-    def read_snapshot(self) -> dict[str, Any]:
-        """Return immutable-by-convention copy for API responses."""
-        with self._lock:
-            state_copy = deepcopy(self._state)
-            events_copy = deepcopy(self._events)
-
+    def state_payload(self) -> dict:
         return {
-            "state": state_copy,
-            "events": events_copy,
+            "state": self.current_state,
+            "transition_history": [event.__dict__ for event in self._transition_history],
         }
+
+    def epistemic_summary(self) -> dict:
+        if not self._transition_history:
+            return {
+                "state": self.current_state,
+                "summary": "No transitions recorded yet.",
+                "history": [],
+            }
+
+        history = [
+            (
+                f"{event.at}: {event.from_state} -> {event.to_state} "
+                f"(source={event.source}, reason={event.reason})"
+            )
+            for event in self._transition_history
+        ]
+        return {
+            "state": self.current_state,
+            "summary": f"{len(self._transition_history)} transition(s) tracked.",
+            "history": history,
+        }
+
+
+state_tracker = StateTracker()
+from enum import Enum
+from typing import Deque
+
+
+class EvoState(str, Enum):
+    NORMAL = "NORMAL"
+    DEGRADED = "DEGRADED"
+    DRIFT = "DRIFT"
+    COMPROMISE = "COMPROMISE"
+    RECOVERY = "RECOVERY"
+
+
+LEGAL_TRANSITIONS: dict[EvoState, set[EvoState]] = {
+    EvoState.NORMAL: {EvoState.DEGRADED, EvoState.DRIFT, EvoState.COMPROMISE},
+    EvoState.DEGRADED: {
+        EvoState.NORMAL,
+        EvoState.DRIFT,
+        EvoState.COMPROMISE,
+        EvoState.RECOVERY,
+    },
+    EvoState.DRIFT: {EvoState.DEGRADED, EvoState.COMPROMISE, EvoState.RECOVERY},
+    EvoState.COMPROMISE: {EvoState.RECOVERY},
+    EvoState.RECOVERY: {EvoState.NORMAL, EvoState.DEGRADED},
+}
+
+
+@dataclass(frozen=True, slots=True)
+class TransitionRecord:
+    from_state: EvoState
+    to_state: EvoState
+    at: datetime
+    reason: str | None = None
+
+    def as_dict(self) -> dict[str, str | None]:
+        return {
+            "from_state": self.from_state,
+            "to_state": self.to_state,
+            "at": self.at.isoformat(),
+            "reason": self.reason,
+        }
+
+
+class StateMachine:
+    """Finite state machine used by health checks and watchdog workflows."""
+
+    def __init__(self, history_size: int = 50) -> None:
+        self.current_state: EvoState = EvoState.NORMAL
+        self.previous_state: EvoState | None = None
+        self.last_transition_at: datetime | None = None
+        self.transition_history: Deque[TransitionRecord] = deque(maxlen=history_size)
 
     @staticmethod
-    def _utc_now() -> str:
-        return datetime.now(timezone.utc).isoformat()
+    def _utc_now() -> datetime:
+        return datetime.now(timezone.utc)
+
+    def can_transition(self, to_state: EvoState) -> bool:
+        if to_state == self.current_state:
+            return True
+        return to_state in LEGAL_TRANSITIONS[self.current_state]
+
+    def transition(self, to_state: EvoState, reason: str | None = None) -> bool:
+        if not self.can_transition(to_state):
+            raise ValueError(f"Illegal transition {self.current_state} -> {to_state}")
+
+        if to_state == self.current_state:
+            return False
+
+        now = self._utc_now()
+        self.transition_history.append(
+            TransitionRecord(
+                from_state=self.current_state,
+                to_state=to_state,
+                at=now,
+                reason=reason,
+            )
+        )
+        self.previous_state = self.current_state
+        self.current_state = to_state
+        self.last_transition_at = now
+        return True
+
+    # Helper methods used by watchdog and health checks.
+    def is_healthy(self) -> bool:
+        return self.current_state == EvoState.NORMAL
+
+    def needs_watchdog_attention(self) -> bool:
+        return self.current_state in {
+            EvoState.DEGRADED,
+            EvoState.DRIFT,
+            EvoState.COMPROMISE,
+        }
+
+    def in_recovery(self) -> bool:
+        return self.current_state == EvoState.RECOVERY
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "current_state": self.current_state,
+            "previous_state": self.previous_state,
+            "last_transition_at": self.last_transition_at.isoformat()
+            if self.last_transition_at
+            else None,
+            "transition_history": [
+                transition.as_dict() for transition in self.transition_history
+            ],
+        }
+
+
+state_machine = StateMachine()
+"""Runtime state tracking for EVO-V deployment health."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+import threading
+import time
+
+
+@dataclass
+class RuntimeState:
+    """Shared mutable state used by health and watchdog checks."""
+
+    boot_time: float = field(default_factory=time.time)
+    last_check: float | None = None
+    failure_count: int = 0
+    last_failure: str | None = None
+    watchdog_started: bool = False
+    lock: threading.Lock = field(default_factory=threading.Lock)
+
+    def mark_check(self) -> None:
+        with self.lock:
+            self.last_check = time.time()
+
+    def mark_failure(self, reason: str) -> None:
+        with self.lock:
+            self.failure_count += 1
+            self.last_failure = reason
+
+    def mark_watchdog_started(self) -> bool:
+        with self.lock:
+            if self.watchdog_started:
+                return False
+            self.watchdog_started = True
+            return True
+
+
+STATE = RuntimeState()
