@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PORT="${PORT:-7860}"
+echo "[EVO-V] Boot sequence initiated..."
 
-python - <<'PY'
-import importlib
+export PORT="${PORT:-7860}"
 
-required_modules = ("fastapi", "uvicorn", "app.main")
-for module_name in required_modules:
-    importlib.import_module(module_name)
-PY
+python -c "import fastapi, uvicorn" >/dev/null
 
 exec uvicorn app.main:app --host 0.0.0.0 --port "${PORT}"

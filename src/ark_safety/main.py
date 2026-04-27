@@ -6,11 +6,33 @@ from src.codex.compliance import ComplianceEngine
 
 app = FastAPI(title="ARK Safety Governance")
 engine = ComplianceEngine()
+OBSERVABILITY_SCHEMA_VERSION = "1.0.0"
 
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {
+        "schema_version": OBSERVABILITY_SCHEMA_VERSION,
+        "status": "ok",
+    }
+
+
+@app.get("/state")
+def state() -> dict[str, object]:
+    return {
+        "schema_version": OBSERVABILITY_SCHEMA_VERSION,
+        "rollback_ready": engine.should_trigger_rollback(),
+        "trace_coverage": engine.trace_coverage_graph(),
+    }
+
+
+@app.get("/epistemic")
+def epistemic() -> dict[str, object]:
+    return {
+        "schema_version": OBSERVABILITY_SCHEMA_VERSION,
+        "audit_log_entries": len(engine.audit_log),
+        "trace_layers_monitored": len(engine.trace_coverage_graph()),
+    }
 
 
 @app.get("/telemetry/coverage")
