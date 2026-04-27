@@ -23,6 +23,8 @@ class TopologyOperation(Protocol):
 class TopologyValidationError(ValueError):
     """Raised when a candidate topology violates integrity or policy bounds."""
 
+from src.codex.canonical_json import dumps_canonical
+
 
 @dataclass
 class AuditRecord:
@@ -68,7 +70,7 @@ class ComplianceEngine:
             "metadata": metadata,
             "timestamp": timestamp,
         }
-        digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+        digest = hashlib.sha256(dumps_canonical(payload).encode("utf-8")).hexdigest()
         record = AuditRecord(**payload, digest=digest)
         self._audit_log.append(record)
         return record
