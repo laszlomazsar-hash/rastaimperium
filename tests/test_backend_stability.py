@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from app.core.monitoring import MonitoringState
+from src.ark_safety.main import telemetry_coverage
 from src.admin.payment_sync import complete_payment_sync
 from src.payment.stripe_webhook_handler import BillingUsage, calculate_usage_cost, plan_catalog
 from src.soulecho.dashboard import SoulEchoDashboardService
@@ -47,3 +48,9 @@ def test_blueprint_v36_coverage_layers_are_functional() -> None:
     coverage = blueprint["blueprintCoverage"]
     assert set(coverage.keys()) == expected_layers
     assert all(layer["functional"] is True for layer in coverage.values())
+
+
+def test_observability_payload_includes_calibration_status() -> None:
+    payload = telemetry_coverage()
+    assert "calibration_status" in payload
+    assert "threshold_version" in payload["calibration_status"]
