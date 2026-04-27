@@ -11,4 +11,4 @@ COPY ./bootstrap.sh ./bootstrap.sh
 
 EXPOSE 7860
 
-CMD ["bash", "bootstrap.sh"]
+CMD ["sh", "bootstrap.sh"]
