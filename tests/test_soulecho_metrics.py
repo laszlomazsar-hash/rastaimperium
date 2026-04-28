@@ -1,11 +1,12 @@
-import logging
-
 from src.soulecho.metrics import (
-    TrendPolicy,
+    ENERGY_SCHEMA_VERSION,
     anomaly_alerts,
-    evaluate_trend,
+    compute_energy_breakdown,
     global_coherence,
+    normalized_drift_i,
+    normalized_variance_i,
 )
+from src.soulecho.v2 import SoulEchoStreamEngine
 
 
 def test_global_coherence_average() -> None:
@@ -17,27 +18,23 @@ def test_anomaly_alerts_below_threshold() -> None:
     assert alerts == ["L2 deviated to 79%"]
 
 
-def test_evaluate_trend_uses_default_theil_sen_within_window() -> None:
-    result = evaluate_trend([1, 2, 3, 4, 5], policy=TrendPolicy(trend_window_max_for_theil_sen=5))
-    assert result.estimator_mode == "theil_sen"
-    assert result.slope == 1.0
+def test_energy_formula_components_and_ranges() -> None:
+    breakdown = compute_energy_breakdown(actual_scores=[90.0, 95.0], predicted_scores=[88.0, 96.0])
+
+    assert breakdown.schema_version == ENERGY_SCHEMA_VERSION
+    assert 0.0 <= normalized_drift_i(90.0, 88.0) <= 1.0
+    assert 0.0 <= normalized_variance_i(90.0, 92.5) <= 1.0
+    assert 0.0 <= breakdown.drift_avg <= 1.0
+    assert 0.0 <= breakdown.variance_avg <= 1.0
+    assert 0.0 <= breakdown.energy_score <= 1.0
 
 
-def test_evaluate_trend_switches_to_fallback_when_window_exceeds_threshold() -> None:
-    result = evaluate_trend([float(i) for i in range(7)], policy=TrendPolicy(trend_window_max_for_theil_sen=6))
-    assert result.estimator_mode == "ols"
-    assert result.slope == 1.0
+def test_soulecho_stream_is_deterministic_across_deployments() -> None:
+    first = SoulEchoStreamEngine().next_snapshot()
+    second = SoulEchoStreamEngine().next_snapshot()
 
-
-def test_evaluate_trend_switches_to_fallback_for_unsupported_default_mode() -> None:
-    result = evaluate_trend([1, 2, 3], policy=TrendPolicy(trend_mode_default="unknown", trend_mode_fallback="ols"))
-    assert result.estimator_mode == "ols"
-
-
-def test_evaluate_trend_logs_mode_selected_per_cycle(caplog) -> None:
-    caplog.set_level(logging.INFO)
-
-    evaluate_trend([1, 2, 3], policy=TrendPolicy())
-
-    assert "Trend estimator mode selected for evaluation cycle" in caplog.text
-    assert "mode=theil_sen" in caplog.text
+    assert [metric.coherence for metric in first.layer_metrics] == [
+        metric.coherence for metric in second.layer_metrics
+    ]
+    assert first.energy_schema_version == ENERGY_SCHEMA_VERSION
+    assert first.energy_components == second.energy_components
