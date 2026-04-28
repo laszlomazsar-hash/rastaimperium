@@ -127,3 +127,45 @@ class RuntimeState:
 
 state_machine = StateMachine()
 STATE = RuntimeState()
+
+
+@dataclass
+class EngineState:
+    """Engine-local event/state tracker used by CodexEngine."""
+
+    state: str = "idle"
+    events: list[dict[str, str | int]] = field(default_factory=list)
+
+    def transition(self, *, agent_name: str, status: str) -> None:
+        self.state = status
+        self.events.append(
+            {
+                "event": "transition",
+                "agent": agent_name,
+                "status": status,
+                "at": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+
+    def mark_failure(self, *, agent_name: str, error: str) -> None:
+        self.state = "error"
+        self.events.append(
+            {
+                "event": "failure",
+                "agent": agent_name,
+                "error": error,
+                "at": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+
+    def mark_heartbeat(self, *, active_sandboxes: int) -> None:
+        self.events.append(
+            {
+                "event": "heartbeat",
+                "active_sandboxes": active_sandboxes,
+                "at": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+
+    def read_snapshot(self) -> dict[str, object]:
+        return {"state": self.state, "events": list(self.events)}

@@ -6,7 +6,88 @@ import json
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Protocol
+from typing import Any, Dict, List, Mapping, Protocol
+
+DATASET_SNAPSHOT_FORMAT_VERSION = "1.0.0"
+LINEAGE_SCHEMA_VERSION = "1.0.0"
+
+
+class LineageVerificationError(ValueError):
+    """Raised when calibration lineage signatures are invalid."""
+
+
+class CalibrationReplayError(ValueError):
+    """Raised when replay artifacts diverge from lineage-pinned versions."""
+
+
+@dataclass(frozen=True)
+class DatasetSnapshot:
+    dataset_hash: str
+    format_version: str = DATASET_SNAPSHOT_FORMAT_VERSION
+
+
+@dataclass(frozen=True)
+class TrustRoot:
+    key_id: str
+    secret: bytes
+
+
+@dataclass(frozen=True)
+class CalibrationLineageRecord:
+    calibration_id: str
+    schema_version: str
+    created_at: str
+    dataset_hash: str
+    artifact_versions: Mapping[str, str]
+    key_id: str
+    signature: str
+
+
+def build_trust_root(key_id: str, secret: str) -> TrustRoot:
+    return TrustRoot(key_id=key_id, secret=secret.encode("utf-8"))
+
+
+def _lineage_payload(record: CalibrationLineageRecord) -> bytes:
+    payload = {
+        "calibration_id": record.calibration_id,
+        "schema_version": record.schema_version,
+        "created_at": record.created_at,
+        "dataset_hash": record.dataset_hash,
+        "artifact_versions": dict(record.artifact_versions),
+        "key_id": record.key_id,
+    }
+    return json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+
+
+def create_lineage_record(
+    calibration_id: str,
+    dataset_snapshot: DatasetSnapshot,
+    artifact_versions: Mapping[str, str],
+    trust_root: TrustRoot,
+) -> CalibrationLineageRecord:
+    record = CalibrationLineageRecord(
+        calibration_id=calibration_id,
+        schema_version=LINEAGE_SCHEMA_VERSION,
+        created_at=datetime.now(timezone.utc).isoformat(),
+        dataset_hash=dataset_snapshot.dataset_hash,
+        artifact_versions=dict(artifact_versions),
+        key_id=trust_root.key_id,
+        signature="",
+    )
+    signature = hmac.new(trust_root.secret, _lineage_payload(record), hashlib.sha256).hexdigest()
+    return CalibrationLineageRecord(**{**record.__dict__, "signature": signature})
+
+
+def verify_lineage_record(record: CalibrationLineageRecord, trust_root: TrustRoot) -> None:
+    if record.schema_version != LINEAGE_SCHEMA_VERSION:
+        raise LineageVerificationError(
+            f"Unsupported lineage schema version: expected {LINEAGE_SCHEMA_VERSION}, got {record.schema_version}"
+        )
+    if record.key_id != trust_root.key_id:
+        raise LineageVerificationError(f"Trust root key mismatch: expected {trust_root.key_id}, got {record.key_id}")
+    expected_signature = hmac.new(trust_root.secret, _lineage_payload(record), hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(record.signature, expected_signature):
+        raise LineageVerificationError("Lineage signature verification failed.")
 
 
 class TopologyOperation(Protocol):
@@ -51,6 +132,21 @@ class ComplianceEngine:
     def __init__(self, *, override_cooldown_ticks: int = 2, override_min_hold_ticks: int = 3) -> None:
         self._audit_log: List[AuditRecord] = []
         self._trace_coverage: Dict[str, float] = {f"L{i}": 100.0 for i in range(1, 10)}
+        self._topology_registry: Dict[str, Any] = {"nodes": [], "edges": []}
+        self._topology_policy_bounds: Dict[str, int] = {
+            "min_nodes": 0,
+            "max_nodes": 10_000,
+            "max_edges": 50_000,
+            "max_degree": 10_000,
+        }
+        self._calibration_counter = 0
+        self._proxy_threshold_metadata = self._build_calibration_metadata(
+            dataset_scope="unset",
+            baseline_window="unset",
+            policy_limit=0.0,
+            latest_residual_drift=0.0,
+            recalibration_required=False,
+        )
         self._override_active = False
         self._override_history: List[Dict[str, object]] = []
         self._override_tick = 0
@@ -327,3 +423,7 @@ class ComplianceEngine:
     @property
     def override_history(self) -> List[Dict[str, object]]:
         return list(self._override_history)
+
+    @property
+    def topology_registry(self) -> Dict[str, Any]:
+        return deepcopy(self._topology_registry)

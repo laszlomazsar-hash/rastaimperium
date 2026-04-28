@@ -38,7 +38,7 @@ class HypothesisRegistry:
 
     def freeze(self) -> FrozenHypothesisRegistry:
         with self._lock:
-            ordered_hypotheses = tuple(sorted(self._hypotheses, key=id))
+            ordered_hypotheses = tuple(self._hypotheses)
             snapshots = tuple(
                 HypothesisSnapshot(name=h.name, value=deepcopy(h.value))
                 for h in ordered_hypotheses

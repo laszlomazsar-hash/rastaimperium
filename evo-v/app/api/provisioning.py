@@ -17,14 +17,14 @@ def provision_instance(agent_name: str) -> dict:
         "provisioning",
         f"Provisioning requested for agent '{agent_name}'.",
     )
-    agent, sandbox = engine.provision_agent(agent_name)
     runtime_state.transition_to(
         "active",
         f"Agent '{agent_name}' provisioned and sandbox attached.",
     )
+    snapshot = runtime_state.snapshot()
     return {
         "agent_id": id(agent),
         "sandbox_id": id(sandbox),
         "status": agent.status,
-        "state": snapshot["state"],
+        "state": snapshot["current_state"],
     }
