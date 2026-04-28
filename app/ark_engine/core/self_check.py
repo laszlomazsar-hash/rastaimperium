@@ -1,112 +1,150 @@
-"""Self-check helpers for stability heuristics and attractor-condition verification."""
+"""Self-check helpers for stability heuristics.
+
+Control law notes
+-----------------
+The controller uses three scalar terms over stability ``s``:
+
+* ``C(s)``: tracking cost around the nominal operating point ``s=1``.
+* ``R(s)``: risk barrier for low/high instability zones.
+* ``D(s)``: damping term to discourage oscillatory corrections.
+
+Differentiability / Lipschitz conditions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* In ``subgradient`` mode, ``C`` and ``D`` use absolute-value style penalties and
+  ``R`` uses hinge penalties. These are globally Lipschitz, and their gradients
+  are interpreted as valid Clarke subgradients at non-smooth points.
+* In ``smooth`` mode, each non-smooth primitive is replaced by a pseudo-Huber
+  surrogate parameterized by ``smoothing_strength`` in ``[0, 1]``. For any
+  ``smoothing_strength > 0``, all gradients are continuous and bounded.
+
+Non-smooth point behavior
+~~~~~~~~~~~~~~~~~~~~~~~~~
+* ``subgradient`` mode picks a neutral subgradient of ``0.0`` at kink points.
+* ``smooth`` mode uses the differentiable surrogate with epsilon tied to
+  ``smoothing_strength``.
+"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Iterable, List, Mapping
+from typing import Literal
 
-
-REQUIRED_ATTRACTOR_CONDITIONS: tuple[str, ...] = (
-    "boundedness",
-    "dissipativity",
-    "continuity_like",
-    "closed_map",
-    "invariant_set",
-)
+LOW_STABILITY_BOUNDARY = 0.6
+HIGH_STABILITY_BOUNDARY = 1.2
+NOMINAL_STABILITY = 1.0
 
 
 @dataclass(frozen=True)
-class ConditionArtifact:
-    """Verification artifact for a single attractor-existence condition."""
+class GradientPolicy:
+    """Policy controlling treatment of non-smooth gradients.
 
-    condition: str
-    proven: bool
-    empirically_observed: bool
-    evidence: str
+    ``smoothing_strength`` is clamped to ``[0, 1]`` and controls the surrogate
+    sharpness in ``smooth`` mode, and boundary hysteresis width in action logic.
+    """
 
-    @property
-    def status(self) -> str:
-        if self.proven:
-            return "proven"
-        if self.empirically_observed:
-            return "empirical_only"
-        return "unverified"
+    mode: Literal["subgradient", "smooth"] = "subgradient"
+    smoothing_strength: float = 0.0
+
+    def __post_init__(self) -> None:
+        if self.mode not in {"subgradient", "smooth"}:
+            raise ValueError("mode must be 'subgradient' or 'smooth'")
+        if not 0.0 <= self.smoothing_strength <= 1.0:
+            raise ValueError("smoothing_strength must be in [0, 1]")
 
 
-def self_check(memory: Any) -> str:
-    if memory.stability < 0.6:
+DEFAULT_POLICY = GradientPolicy()
+
+
+def _epsilon(policy: GradientPolicy) -> float:
+    return 1e-6 + 1e-1 * policy.smoothing_strength
+
+
+def _abs_value(x: float, policy: GradientPolicy) -> float:
+    if policy.mode == "smooth":
+        eps = _epsilon(policy)
+        return (x * x + eps * eps) ** 0.5 - eps
+    return abs(x)
+
+
+def _abs_grad(x: float, policy: GradientPolicy) -> float:
+    if policy.mode == "smooth":
+        eps = _epsilon(policy)
+        return x / ((x * x + eps * eps) ** 0.5)
+    if x > 0:
+        return 1.0
+    if x < 0:
+        return -1.0
+    return 0.0
+
+
+def _hinge_value(x: float, policy: GradientPolicy) -> float:
+    if policy.mode == "smooth":
+        eps = _epsilon(policy)
+        return ((x * x + eps * eps) ** 0.5 + x) / 2.0
+    return max(0.0, x)
+
+
+def _hinge_grad(x: float, policy: GradientPolicy) -> float:
+    if policy.mode == "smooth":
+        eps = _epsilon(policy)
+        return 0.5 * (1.0 + x / ((x * x + eps * eps) ** 0.5))
+    if x > 0:
+        return 1.0
+    if x < 0:
+        return 0.0
+    return 0.0
+
+
+def C(stability: float, policy: GradientPolicy = DEFAULT_POLICY) -> float:
+    """Tracking cost around nominal stability."""
+
+    return _abs_value(stability - NOMINAL_STABILITY, policy)
+
+
+def R(stability: float, policy: GradientPolicy = DEFAULT_POLICY) -> float:
+    """Barrier cost for low/high risk operating regions."""
+
+    return _hinge_value(LOW_STABILITY_BOUNDARY - stability, policy) + _hinge_value(
+        stability - HIGH_STABILITY_BOUNDARY,
+        policy,
+    )
+
+
+def D(stability: float, policy: GradientPolicy = DEFAULT_POLICY) -> float:
+    """Damping penalty used in controller correction term."""
+
+    return 0.5 * _abs_value(stability - NOMINAL_STABILITY, policy)
+
+
+def control_gradient(stability: float, policy: GradientPolicy = DEFAULT_POLICY) -> float:
+    """Gradient of the aggregate control objective C + R + D."""
+
+    dc = _abs_grad(stability - NOMINAL_STABILITY, policy)
+    dr = -_hinge_grad(LOW_STABILITY_BOUNDARY - stability, policy) + _hinge_grad(
+        stability - HIGH_STABILITY_BOUNDARY,
+        policy,
+    )
+    dd = 0.5 * _abs_grad(stability - NOMINAL_STABILITY, policy)
+    return dc + dr + dd
+
+
+def _boundary_margin(policy: GradientPolicy) -> float:
+    return 0.01 + 0.09 * policy.smoothing_strength
+
+
+def control_action(stability: float, policy: GradientPolicy = DEFAULT_POLICY) -> str:
+    """Policy action with hysteresis near non-smooth boundaries.
+
+    The hysteresis band prevents action chatter around low/high thresholds.
+    """
+
+    margin = _boundary_margin(policy)
+    if stability < LOW_STABILITY_BOUNDARY - margin:
         return "recover"
-    if memory.stability > 1.2:
+    if stability > HIGH_STABILITY_BOUNDARY + margin:
         return "expand"
     return "steady"
 
 
-def attractor_existence_statement(assumptions: str = "A..N") -> str:
-    """Return a cautious claim that avoids overstated guarantees."""
-    return (
-        f"Under assumptions {assumptions}, attractor existence follows from "
-        "boundedness + dissipativity + continuity-like conditions."
-    )
-
-
-def required_attractor_conditions() -> tuple[str, ...]:
-    """Return all conditions that must be checked before claiming proof."""
-    return REQUIRED_ATTRACTOR_CONDITIONS
-
-
-def build_condition_artifacts(
-    observations: Mapping[str, Mapping[str, Any]],
-) -> List[ConditionArtifact]:
-    """Build per-condition artifacts documenting proofs vs empirical evidence.
-
-    Each observation item can include:
-    - proven: bool
-    - empirically_observed: bool
-    - evidence: str
-    """
-    artifacts: List[ConditionArtifact] = []
-    for condition in REQUIRED_ATTRACTOR_CONDITIONS:
-        payload = observations.get(condition, {})
-        artifacts.append(
-            ConditionArtifact(
-                condition=condition,
-                proven=bool(payload.get("proven", False)),
-                empirically_observed=bool(payload.get("empirically_observed", False)),
-                evidence=str(payload.get("evidence", "")),
-            )
-        )
-    return artifacts
-
-
-def summarize_attractor_verification(artifacts: Iterable[ConditionArtifact]) -> Dict[str, Any]:
-    """Summarize what is proven versus empirically observed."""
-    artifact_list = list(artifacts)
-    proven_conditions = [a.condition for a in artifact_list if a.proven]
-    empirical_only_conditions = [
-        a.condition for a in artifact_list if (not a.proven and a.empirically_observed)
-    ]
-    missing_conditions = [a.condition for a in artifact_list if a.status == "unverified"]
-
-    fully_proven = len(proven_conditions) == len(REQUIRED_ATTRACTOR_CONDITIONS)
-    return {
-        "statement": attractor_existence_statement(),
-        "required_conditions": list(REQUIRED_ATTRACTOR_CONDITIONS),
-        "proven_conditions": proven_conditions,
-        "empirical_only_conditions": empirical_only_conditions,
-        "missing_conditions": missing_conditions,
-        "attractor_existence_proven": fully_proven,
-        "note": (
-            "Proof-level claim is valid only when all required conditions are proven; "
-            "otherwise treat results as empirical observations."
-        ),
-        "artifacts": [
-            {
-                "condition": a.condition,
-                "status": a.status,
-                "proven": a.proven,
-                "empirically_observed": a.empirically_observed,
-                "evidence": a.evidence,
-            }
-            for a in artifact_list
-        ],
-    }
+def self_check(memory, policy: GradientPolicy = DEFAULT_POLICY) -> str:
+    return control_action(memory.stability, policy=policy)
