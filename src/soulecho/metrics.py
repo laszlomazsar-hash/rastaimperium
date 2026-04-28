@@ -8,6 +8,8 @@ from typing import Iterable, Protocol
 class HasLogBelief(Protocol):
     log_belief: float
 
+logger = logging.getLogger(__name__)
+
 
 def global_coherence(layer_scores: Iterable[float]) -> float:
     scores = list(layer_scores)
