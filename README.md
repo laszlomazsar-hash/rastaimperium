@@ -172,3 +172,49 @@ uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860}
 ```
 
 `Procfile` and other non-Docker entrypoints are not used by Hugging Face Docker builds.
+
+## Repository Orchestrator (local + CI parity)
+
+A root-level `Makefile` defines one canonical command surface for Python quality gates and startup smoke checks. Use these commands from the repository root (`/workspace/rastaimperium`) locally and in CI.
+
+### Environment variables used by orchestrated commands
+
+These defaults are encoded in the Makefile and can be overridden in either local shells or CI runners:
+
+- `PYTHONPATH_ROOT` (default: `.`) — used for root backend test/lint/smoke commands.
+- `PYTHONPATH_EVO_V` (default: `.`) — used for EVO-V test/lint/smoke commands executed from `evo-v/`.
+- `UVICORN_HOST` (default: `127.0.0.1`) — host bind for startup smoke checks.
+- `UVICORN_PORT_BACKEND` (default: `8001`) — backend smoke-check port.
+- `UVICORN_PORT_EVO_V` (default: `8002`) — EVO-V smoke-check port.
+- `SMOKE_TIMEOUT_SECONDS` (default: `8`) — timeout used so smoke checks validate startup without hanging.
+
+### Exact command map
+
+From repo root (`/workspace/rastaimperium`):
+
+- `make pytest`
+  - Runs backend suite in working directory `/workspace/rastaimperium`:
+    - `PYTHONPATH="$PYTHONPATH_ROOT" pytest tests`
+  - Runs EVO-V core suite in working directory `/workspace/rastaimperium/evo-v`:
+    - `PYTHONPATH="$PYTHONPATH_EVO_V" pytest tests`
+
+- `make ruff`
+  - Root backend package lint in `/workspace/rastaimperium`:
+    - `ruff check app src tests`
+  - EVO-V package lint in `/workspace/rastaimperium/evo-v`:
+    - `ruff check app tests`
+
+- `make flake8`
+  - Root legacy lint parity in `/workspace/rastaimperium`:
+    - `flake8 app src tests`
+  - EVO-V legacy lint parity in `/workspace/rastaimperium/evo-v`:
+    - `flake8 app tests`
+
+- `make smoke`
+  - Backend startup smoke in `/workspace/rastaimperium`:
+    - `PYTHONPATH="$PYTHONPATH_ROOT" timeout "$SMOKE_TIMEOUT_SECONDS" uvicorn app.main:app --host "$UVICORN_HOST" --port "$UVICORN_PORT_BACKEND"`
+  - EVO-V startup smoke in `/workspace/rastaimperium/evo-v`:
+    - `PYTHONPATH="$PYTHONPATH_EVO_V" timeout "$SMOKE_TIMEOUT_SECONDS" uvicorn app.main:app --host "$UVICORN_HOST" --port "$UVICORN_PORT_EVO_V"`
+
+- `make ci`
+  - Runs `lint`, `pytest`, and `smoke` in sequence with the same directory/env contracts above.
