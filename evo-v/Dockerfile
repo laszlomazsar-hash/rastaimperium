@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY ./requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./app ./app
@@ -11,4 +11,4 @@ COPY ./bootstrap.sh ./bootstrap.sh
 
 EXPOSE 7860
 
-CMD ["bash", "bootstrap.sh"]
+CMD ["sh", "bootstrap.sh"]

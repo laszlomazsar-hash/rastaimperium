@@ -5,6 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Tuple
+import math
+
+from .core.convergence import RollingWindowConvergenceDetector
 
 
 @dataclass
@@ -87,9 +90,35 @@ class NeurosymbolicCulturalReasoner:
         symbolic_rules: List[Dict[str, Any]],
         causal_structure: Dict[str, Any],
     ) -> float:
+        """Compute bounded epistemic confidence for integrated reasoning.
+
+        Formula:
+            base_signal = 0.1 * signal_strength + 0.05 * causal_strength
+            uncertainty = drift + anomaly + (0.5 * policy_uncertainty)
+            confidence = clamp(base_signal - uncertainty, 0.0, 1.0)
+
+        Invariants:
+            - confidence is always clamped to [0, 1]
+            - increasing drift/anomaly/policy_uncertainty cannot increase confidence
+            - policy is modeled as an uncertainty penalty (never a multiplicative boost)
+        """
         signal_strength = len(neural_patterns) + len(symbolic_rules)
         causal_strength = len(causal_structure.get("causal_graph", {}))
-        return min(1.0, 0.1 * signal_strength + 0.05 * causal_strength)
+        base_signal = 0.1 * signal_strength + 0.05 * causal_strength
+
+        metrics = causal_structure.get("metrics", {})
+        drift = self._clamp_unit(metrics.get("drift", 0.0))
+        anomaly = self._clamp_unit(metrics.get("anomaly", 0.0))
+        policy_uncertainty = self._clamp_unit(metrics.get("policy_uncertainty", 0.0))
+
+        uncertainty_penalty = drift + anomaly + (0.5 * policy_uncertainty)
+        return self._clamp_unit(base_signal - uncertainty_penalty)
+
+    @staticmethod
+    def _clamp_unit(value: Any) -> float:
+        """Clamp numeric values into the closed unit interval [0, 1]."""
+        numeric = float(value)
+        return max(0.0, min(1.0, numeric))
 
 
 class FederatedCulturalLearning:
@@ -191,6 +220,10 @@ class QuantumCulturalOptimizer:
 class EvolutionaryCulturalOptimizer:
     """Scaffold for evolutionary cultural algorithms."""
 
+    def __init__(self, model_error_budget: float = 0.35) -> None:
+        self.model_error_budget = max(0.0, model_error_budget)
+        self.error_audit_log: List[Dict[str, Any]] = []
+
     def evolve_cultural_traits(self, initial_traits: List[Dict[str, Any]], generations: int = 50) -> Dict[str, Any]:
         return {
             "best_traits": initial_traits[:1],
@@ -205,13 +238,42 @@ class EvolutionaryCulturalOptimizer:
         initial_cultures: List[Dict[str, Any]],
         steps: int = 100,
     ) -> Dict[str, Any]:
-        history = [{"step": step, "cultures": initial_cultures} for step in range(steps)]
+        self.error_audit_log = []
+        history: List[Dict[str, Any]] = []
+        for step in range(steps):
+            error_signal = self._estimate_model_error_tick(initial_cultures=initial_cultures, step=step)
+            history.append(
+                {
+                    "step": step,
+                    "cultures": initial_cultures,
+                    "epsilon_model": error_signal["epsilon_model"],
+                    "epsilon_confidence_interval": error_signal["confidence_interval"],
+                    "control_policy": {
+                        "aggressiveness": error_signal["aggressiveness"],
+                        "gated": error_signal["gated"],
+                        "budget": self.model_error_budget,
+                    },
+                    "lyapunov_residual_decomposition": error_signal["lyapunov_residual_decomposition"],
+                }
+            )
+            self.error_audit_log.append(
+                {
+                    "step": step,
+                    "epsilon_model": error_signal["epsilon_model"],
+                    "confidence_interval": error_signal["confidence_interval"],
+                    "lyapunov_residual_decomposition": error_signal["lyapunov_residual_decomposition"],
+                    "aggressiveness": error_signal["aggressiveness"],
+                    "gated": error_signal["gated"],
+                }
+            )
         return {
             "final_cultures": initial_cultures,
             "evolution_history": history,
             "evolutionary_analysis": {},
             "convergence_metrics": {},
             "innovation_trajectory": [],
+            "model_error_budget": self.model_error_budget,
+            "error_audit_log": self.error_audit_log,
         }
 
     def memetic_cultural_optimization(
@@ -225,6 +287,95 @@ class EvolutionaryCulturalOptimizer:
             "local_improvements": 0,
             "global_exploration": 0.0,
             "solution_robustness": 0.0,
+        }
+
+    def _estimate_model_error_tick(self, initial_cultures: List[Dict[str, Any]], step: int) -> Dict[str, Any]:
+        integration_error = self._estimate_integration_error(initial_cultures, step)
+        projection_distortion = self._estimate_projection_distortion(initial_cultures, step)
+        representation_error = self._estimate_representation_error(initial_cultures)
+        epsilon_model = integration_error + projection_distortion + representation_error
+
+        confidence_interval = self._estimate_confidence_interval(
+            integration_error=integration_error,
+            projection_distortion=projection_distortion,
+            representation_error=representation_error,
+            sample_size=max(1, len(initial_cultures)),
+        )
+        ci_upper = confidence_interval[1]
+        gated = ci_upper > self.model_error_budget
+        aggressiveness = 0.25 if gated else 1.0
+
+        return {
+            "components": {
+                "integration_error": integration_error,
+                "projection_distortion": projection_distortion,
+                "representation_error": representation_error,
+            },
+            "epsilon_model": epsilon_model,
+            "confidence_interval": confidence_interval,
+            "aggressiveness": aggressiveness,
+            "gated": gated,
+            "lyapunov_residual_decomposition": self._lyapunov_residual_decomposition(
+                integration_error=integration_error,
+                projection_distortion=projection_distortion,
+                representation_error=representation_error,
+                epsilon_model=epsilon_model,
+            ),
+        }
+
+    def _estimate_integration_error(self, initial_cultures: List[Dict[str, Any]], step: int) -> float:
+        if not initial_cultures:
+            return 0.0
+        energetic_variance = [abs(float(culture.get("energy", 0.0)) - 0.5) for culture in initial_cultures]
+        average_variance = sum(energetic_variance) / len(energetic_variance)
+        return min(1.0, average_variance * (1.0 + 0.02 * step))
+
+    def _estimate_projection_distortion(self, initial_cultures: List[Dict[str, Any]], step: int) -> float:
+        if not initial_cultures:
+            return 0.0
+        name_complexity = [len(str(culture.get("name", ""))) for culture in initial_cultures]
+        normalized_complexity = sum(name_complexity) / (max(1, len(name_complexity)) * 20.0)
+        temporal_pressure = min(0.5, step / 200.0)
+        return min(1.0, normalized_complexity + temporal_pressure)
+
+    def _estimate_representation_error(self, initial_cultures: List[Dict[str, Any]]) -> float:
+        if not initial_cultures:
+            return 0.0
+        value_lengths = [len(culture.get("values", [])) for culture in initial_cultures]
+        mean_length = sum(value_lengths) / len(value_lengths)
+        mean_absolute_deviation = sum(abs(length - mean_length) for length in value_lengths) / len(value_lengths)
+        return min(1.0, mean_absolute_deviation / 5.0)
+
+    def _estimate_confidence_interval(
+        self,
+        integration_error: float,
+        projection_distortion: float,
+        representation_error: float,
+        sample_size: int,
+    ) -> Tuple[float, float]:
+        components = [integration_error, projection_distortion, representation_error]
+        mean_error = sum(components) / len(components)
+        variance = sum((component - mean_error) ** 2 for component in components) / len(components)
+        std_error = math.sqrt(variance) / math.sqrt(max(1, sample_size))
+        margin = 1.96 * std_error
+        lower = max(0.0, mean_error - margin)
+        upper = min(3.0, mean_error + margin)
+        return (round(lower, 6), round(upper, 6))
+
+    def _lyapunov_residual_decomposition(
+        self,
+        integration_error: float,
+        projection_distortion: float,
+        representation_error: float,
+        epsilon_model: float,
+    ) -> Dict[str, float]:
+        stabilizing_term = max(0.0, self.model_error_budget - epsilon_model)
+        return {
+            "integration_error_term": integration_error,
+            "projection_distortion_term": projection_distortion,
+            "representation_error_term": representation_error,
+            "stabilizing_budget_term": stabilizing_term,
+            "residual_norm": max(0.0, epsilon_model - self.model_error_budget),
         }
 
 
@@ -251,18 +402,29 @@ class CulturalNetworkAnalyst:
 class BioInspiredCulturalOptimizer:
     """Scaffold for bio-inspired cultural optimization."""
 
+    def __init__(self, detector: RollingWindowConvergenceDetector | None = None) -> None:
+        self.detector = detector or RollingWindowConvergenceDetector()
+
     def swarm_cultural_optimization(
         self,
         cultural_landscape: Dict[str, Any],
         swarm_size: int = 50,
     ) -> Dict[str, Any]:
+        swarm_trajectory = cultural_landscape.get("swarm_trajectory", [])
+        convergence_analysis = self.detector.detect(swarm_trajectory)
+
         return {
             "optimized_configuration": cultural_landscape,
             "optimization_cost": 0.0,
-            "swarm_trajectory": [],
-            "convergence_analysis": {},
+            "swarm_trajectory": swarm_trajectory,
+            "convergence_analysis": convergence_analysis,
             "swarm_diversity": 0.0,
             "cultural_fitness_landscape": {},
+            "telemetry": {
+                "current_mode": convergence_analysis["current_mode"],
+                "confidence": convergence_analysis["confidence"],
+                "supporting_metrics": convergence_analysis["supporting_metrics"],
+            },
         }
 
     def immune_cultural_adaptation(
@@ -283,14 +445,88 @@ class BioInspiredCulturalOptimizer:
 class CulturalAnalyticsDashboard:
     """Scaffold for cultural analytics dashboard configuration."""
 
+    _MAX_IDENTIFIER_LENGTH = 64
+    _MAX_LINEAGE_DEPTH = 16
+
     def __init__(self) -> None:
         self.last_updated = datetime.now().isoformat()
         self.status = "initialized"
+        self.snapshot_counter = 0
 
-    def system_status_snapshot(self) -> Dict[str, Any]:
+    def _canonicalize_identifier(self, value: Any) -> str:
+        normalized = str(value).strip().lower().replace(" ", "_")
+        return normalized[: self._MAX_IDENTIFIER_LENGTH]
+
+    def _canonicalize_lineage(self, lineage: Optional[List[Any]]) -> List[str]:
+        if not lineage:
+            return []
+        canonical_lineage = [
+            self._canonicalize_identifier(lineage_value)
+            for lineage_value in lineage[: self._MAX_LINEAGE_DEPTH]
+        ]
+        return canonical_lineage
+
+    def _project_equivalence_class(self, metadata: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Metadata quotient map for non-dynamical coordinates.
+
+        Two metadata objects are equivalent iff they induce the same
+        canonical representatives below. This collapses irrelevant detail
+        (e.g., long IDs or verbose lineage payloads) while preserving
+        dynamics-relevant labels.
+        """
+        run_id = self._canonicalize_identifier(metadata.get("run_id", "run"))
+        lineage = self._canonicalize_lineage(metadata.get("lineage", []))
+        label = self._canonicalize_identifier(metadata.get("label", "default"))
+        return {
+            "run_id": run_id,
+            "lineage": lineage,
+            "label": label,
+        }
+
+    def _project_state_coordinates(
+        self,
+        *,
+        status: str,
+        snapshot_index: int,
+        metadata: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Compact projected state used for the dynamical argument.
+
+        Dynamical coordinates are represented in a bounded box:
+          - status in a finite set (encoded as canonical string),
+          - snapshot_index normalized to [0, 1].
+        Non-dynamical metadata is tracked through an equivalence-class
+        projection, not as free coordinates in the dynamical state.
+        """
+        projected_metadata = self._project_equivalence_class(metadata)
+        normalized_progress = min(1.0, max(0.0, snapshot_index / 10_000.0))
+        return {
+            "dynamical_coordinates": {
+                "status": self._canonicalize_identifier(status),
+                "normalized_progress": normalized_progress,
+            },
+            "metadata_equivalence_class": projected_metadata,
+            "compactness_claim": (
+                "Projected state lives in finite×[0,1]; therefore closure is compact "
+                "under standard product topology assumptions."
+            ),
+        }
+
+    def system_status_snapshot(self, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        self.snapshot_counter += 1
+        metadata = metadata or {}
+        projected_state = self._project_state_coordinates(
+            status=self.status,
+            snapshot_index=self.snapshot_counter,
+            metadata=metadata,
+        )
         return {
             "status": self.status,
             "last_updated": self.last_updated,
+            "snapshot_counter": self.snapshot_counter,
+            "projected_state": projected_state,
         }
 
 
@@ -306,6 +542,79 @@ class UpgradeReport:
     version: str
     steps: List[UpgradeStep]
     generated_at: str
+
+
+@dataclass(frozen=True)
+class JumpCandidate:
+    """A candidate jump emitted by ARK decision systems."""
+
+    jump_id: str
+    jump_type: str
+    belief_rank: int
+    operation_timestamp_bucket: int
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class JumpDecision:
+    """Deterministic jump selection output for replay-stable execution."""
+
+    selected_jump: Optional[JumpCandidate]
+    discarded_candidates: List[JumpCandidate]
+    decision_log: Dict[str, Any]
+
+
+class DeterministicJumpResolver:
+    """Resolve jump candidates with strict priority and stable tie-breaks."""
+
+    JUMP_PRIORITY_ORDER: Tuple[str, ...] = ("safety", "correction", "exploration")
+
+    def __init__(self) -> None:
+        self._priority_rank = {jump_type: idx for idx, jump_type in enumerate(self.JUMP_PRIORITY_ORDER)}
+
+    def resolve(self, candidates: List[JumpCandidate]) -> JumpDecision:
+        if not candidates:
+            return JumpDecision(
+                selected_jump=None,
+                discarded_candidates=[],
+                decision_log={
+                    "selected_jump": None,
+                    "discarded_candidates": [],
+                    "priority_order": list(self.JUMP_PRIORITY_ORDER),
+                },
+            )
+
+        ordered = sorted(candidates, key=self._sort_key)
+        selected_jump = ordered[0]
+        discarded = ordered[1:]
+
+        return JumpDecision(
+            selected_jump=selected_jump,
+            discarded_candidates=discarded,
+            decision_log={
+                "selected_jump": self._serialize_candidate(selected_jump),
+                "discarded_candidates": [self._serialize_candidate(candidate) for candidate in discarded],
+                "priority_order": list(self.JUMP_PRIORITY_ORDER),
+            },
+        )
+
+    def _sort_key(self, candidate: JumpCandidate) -> Tuple[int, int, str, int]:
+        priority_index = self._priority_rank.get(candidate.jump_type, len(self.JUMP_PRIORITY_ORDER))
+        return (
+            priority_index,
+            -candidate.belief_rank,
+            candidate.jump_id,
+            candidate.operation_timestamp_bucket,
+        )
+
+    def _serialize_candidate(self, candidate: JumpCandidate) -> Dict[str, Any]:
+        return {
+            "jump_id": candidate.jump_id,
+            "jump_type": candidate.jump_type,
+            "belief_rank": candidate.belief_rank,
+            "operation_timestamp_bucket": candidate.operation_timestamp_bucket,
+            "metadata": candidate.metadata,
+        }
 
 
 class EvoVUpgradePlanner:
