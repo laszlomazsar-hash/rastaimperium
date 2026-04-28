@@ -334,6 +334,79 @@ class UpgradeReport:
     generated_at: str
 
 
+@dataclass(frozen=True)
+class JumpCandidate:
+    """A candidate jump emitted by ARK decision systems."""
+
+    jump_id: str
+    jump_type: str
+    belief_rank: int
+    operation_timestamp_bucket: int
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class JumpDecision:
+    """Deterministic jump selection output for replay-stable execution."""
+
+    selected_jump: Optional[JumpCandidate]
+    discarded_candidates: List[JumpCandidate]
+    decision_log: Dict[str, Any]
+
+
+class DeterministicJumpResolver:
+    """Resolve jump candidates with strict priority and stable tie-breaks."""
+
+    JUMP_PRIORITY_ORDER: Tuple[str, ...] = ("safety", "correction", "exploration")
+
+    def __init__(self) -> None:
+        self._priority_rank = {jump_type: idx for idx, jump_type in enumerate(self.JUMP_PRIORITY_ORDER)}
+
+    def resolve(self, candidates: List[JumpCandidate]) -> JumpDecision:
+        if not candidates:
+            return JumpDecision(
+                selected_jump=None,
+                discarded_candidates=[],
+                decision_log={
+                    "selected_jump": None,
+                    "discarded_candidates": [],
+                    "priority_order": list(self.JUMP_PRIORITY_ORDER),
+                },
+            )
+
+        ordered = sorted(candidates, key=self._sort_key)
+        selected_jump = ordered[0]
+        discarded = ordered[1:]
+
+        return JumpDecision(
+            selected_jump=selected_jump,
+            discarded_candidates=discarded,
+            decision_log={
+                "selected_jump": self._serialize_candidate(selected_jump),
+                "discarded_candidates": [self._serialize_candidate(candidate) for candidate in discarded],
+                "priority_order": list(self.JUMP_PRIORITY_ORDER),
+            },
+        )
+
+    def _sort_key(self, candidate: JumpCandidate) -> Tuple[int, int, str, int]:
+        priority_index = self._priority_rank.get(candidate.jump_type, len(self.JUMP_PRIORITY_ORDER))
+        return (
+            priority_index,
+            -candidate.belief_rank,
+            candidate.jump_id,
+            candidate.operation_timestamp_bucket,
+        )
+
+    def _serialize_candidate(self, candidate: JumpCandidate) -> Dict[str, Any]:
+        return {
+            "jump_id": candidate.jump_id,
+            "jump_type": candidate.jump_type,
+            "belief_rank": candidate.belief_rank,
+            "operation_timestamp_bucket": candidate.operation_timestamp_bucket,
+            "metadata": candidate.metadata,
+        }
+
+
 class EvoVUpgradePlanner:
     """Upgrade planner for EVO-V next-generation capabilities."""
 
