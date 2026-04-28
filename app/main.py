@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Redirect
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.core.config import settings
-from app.core.monitoring import monitoring_state
+from app.core.container import container_state_payload, get_container
 from app.api.v1.endpoints import router as api_v1_router
 from app.core.redis import redis_manager
 
@@ -37,16 +37,17 @@ app.include_router(api_v1_router, prefix="/api/v1")
 @app.on_event("startup")
 async def startup_event():
     """Ignite the memory connections when the kingdom wakes."""
-    monitoring_state.mark_startup()
-    monitoring_state.evaluate_route_integrity(
+    app.state.container = get_container()
+    get_container().health_state.mark_startup()
+    get_container().health_state.evaluate_route_integrity(
         required_routes={"/healthz", "/live", "/ready", "/metrics", "/state"},
         current_routes={route.path for route in app.routes},
     )
     try:
         await redis_manager.connect()
-        monitoring_state.mark_redis_connected()
+        get_container().health_state.mark_redis_connected()
     except Exception as e:
-        monitoring_state.mark_redis_error(e)
+        get_container().health_state.mark_redis_error(e)
         print(f"Redis connection failed: {e}")
     else:
         print("Redis connection OK.")
@@ -63,29 +64,31 @@ async def shutdown_event():
 
 @app.get("/healthz")
 async def healthz() -> JSONResponse:
-    return JSONResponse(status_code=200, content=monitoring_state.health_payload())
+    return JSONResponse(status_code=200, content=get_container().health_state.health_payload())
 
 
 @app.get("/live")
 async def live() -> JSONResponse:
-    return JSONResponse(status_code=200, content=monitoring_state.live_payload())
+    return JSONResponse(status_code=200, content=get_container().health_state.live_payload())
 
 
 @app.get("/ready")
 async def ready() -> JSONResponse:
-    payload = monitoring_state.ready_payload()
+    payload = get_container().health_state.ready_payload()
     status_code = 200 if payload["ready"] else 503
     return JSONResponse(status_code=status_code, content=payload)
 
 
 @app.get("/metrics")
 async def metrics() -> HTMLResponse:
-    return HTMLResponse(content=monitoring_state.prometheus(), media_type="text/plain; version=0.0.4")
+    return HTMLResponse(content=get_container().health_state.prometheus(), media_type="text/plain; version=0.0.4")
 
 
 @app.get("/state")
 async def state() -> JSONResponse:
-    return JSONResponse(status_code=200, content=monitoring_state.state_payload())
+    payload = get_container().health_state.state_payload()
+    payload["container"] = container_state_payload()
+    return JSONResponse(status_code=200, content=payload)
 
 # --- THE VISUAL GATEWAY ---
 @app.get("/")
@@ -306,7 +309,7 @@ async def enterprise_intake_submit(
         "budget_band": budget_band.strip(),
         "notes": notes.strip(),
     }
-    monitoring_state.mark_intake_submission()
+    get_container().health_state.mark_intake_submission()
 
     return JSONResponse(
         status_code=200,

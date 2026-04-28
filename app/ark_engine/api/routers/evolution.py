@@ -7,7 +7,7 @@ from typing import Any, Dict, List
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-from ..dependencies_evo import get_evolutionary_optimizer, get_field_controller
+from app.api.dependencies import get_evolutionary_optimizer, get_field_controller
 from ...core.field_controller import IFieldController
 from ...evo_v_nextgen import EvolutionaryCulturalOptimizer
 
