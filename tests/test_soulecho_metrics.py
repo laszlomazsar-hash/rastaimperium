@@ -1,10 +1,12 @@
 from src.soulecho.metrics import (
+    ENERGY_SCHEMA_VERSION,
     anomaly_alerts,
-    empirical_coverage,
+    compute_energy_breakdown,
     global_coherence,
-    probabilistic_safety_margin,
-    std_estimate,
+    normalized_drift_i,
+    normalized_variance_i,
 )
+from src.soulecho.v2 import SoulEchoStreamEngine
 
 
 def test_global_coherence_average() -> None:
@@ -16,28 +18,23 @@ def test_anomaly_alerts_below_threshold() -> None:
     assert alerts == ["L2 deviated to 79%"]
 
 
-def test_std_estimate_matches_sample_standard_deviation() -> None:
-    values = [10.0, 12.0, 14.0]
-    assert round(std_estimate(values), 5) == round(2.0, 5)
+def test_energy_formula_components_and_ranges() -> None:
+    breakdown = compute_energy_breakdown(actual_scores=[90.0, 95.0], predicted_scores=[88.0, 96.0])
+
+    assert breakdown.schema_version == ENERGY_SCHEMA_VERSION
+    assert 0.0 <= normalized_drift_i(90.0, 88.0) <= 1.0
+    assert 0.0 <= normalized_variance_i(90.0, 92.5) <= 1.0
+    assert 0.0 <= breakdown.drift_avg <= 1.0
+    assert 0.0 <= breakdown.variance_avg <= 1.0
+    assert 0.0 <= breakdown.energy_score <= 1.0
 
 
-def test_probabilistic_safety_margin_gaussian_has_diagnostics() -> None:
-    values = [90.0, 91.0, 89.5, 92.0, 88.0, 90.5, 91.5, 89.0, 90.2, 90.8] * 4
-    result = probabilistic_safety_margin(values, confidence_level=0.95, error_model="gaussian")
-    assert result.safety_margin > 0
-    assert result.diagnostics.error_model == "gaussian"
-    assert result.diagnostics.sample_size == len(values)
-    assert "sample_size<30" not in result.diagnostics.failed_assumptions
+def test_soulecho_stream_is_deterministic_across_deployments() -> None:
+    first = SoulEchoStreamEngine().next_snapshot()
+    second = SoulEchoStreamEngine().next_snapshot()
 
-
-def test_probabilistic_safety_margin_flags_stale_model_when_underpowered() -> None:
-    values = [100.0, 100.0, 100.0]
-    result = probabilistic_safety_margin(values, confidence_level=0.99, error_model="bootstrapped")
-    assert result.diagnostics.stale_model is True
-    assert "sample_size<50" in result.diagnostics.failed_assumptions
-    assert "std_estimate==0" in result.diagnostics.failed_assumptions
-
-
-def test_empirical_coverage_for_interval() -> None:
-    values = [1, 2, 3, 4, 5]
-    assert empirical_coverage(values, lower=2, upper=4) == 0.6
+    assert [metric.coherence for metric in first.layer_metrics] == [
+        metric.coherence for metric in second.layer_metrics
+    ]
+    assert first.energy_schema_version == ENERGY_SCHEMA_VERSION
+    assert first.energy_components == second.energy_components
