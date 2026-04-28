@@ -3,7 +3,8 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter
 
-from core.runtime_state import engine, runtime_state
+from core.codex_engine import CodexEngine
+from core.runtime_state import runtime_state
 
 router = APIRouter()
 engine = CodexEngine()
