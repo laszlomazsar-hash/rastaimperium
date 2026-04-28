@@ -44,6 +44,7 @@ class CodexEngine:
     def audit_state(self) -> dict:
         self.state.mark_heartbeat(active_sandboxes=len(self.sandboxes))
         state_snapshot = self.state.read_snapshot()
+        pre_state = state_snapshot["state"]
         snapshot = {
             "agents": [agent.name for agent in self.agents],
             "statuses": [agent.status for agent in self.agents],
