@@ -6,9 +6,7 @@ import time
 
 from fastapi import APIRouter
 
-from core.invariant_families import build_all
-from core.invariants import ObligationStatus, ProofTreeNode, and_aggregate, summarize_tree
-from state import STATE
+from state import STATE, state_machine
 
 health_router = APIRouter()
 
@@ -60,12 +58,15 @@ def health() -> dict[str, object]:
 
 @health_router.get("/state")
 def state() -> dict[str, object]:
-    """Expose deployment mode and invariant verdicts for observability."""
+    """Expose deployment mode and finite-state transitions."""
 
-    proof_tree = invariant_check()
-
+    runtime = state_machine.as_dict()
     return {
         "mode": "deterministic-runtime",
+        "current_state": runtime["current_state"],
+        "previous_state": runtime["previous_state"],
+        "last_transition_at": runtime["last_transition_at"],
+        "transition_history": runtime["transition_history"],
         "boot_time": STATE.boot_time,
         "last_check": STATE.last_check,
         "failure_count": STATE.failure_count,
