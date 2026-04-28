@@ -8,6 +8,8 @@ import time
 
 COMPROMISE_MAX_SECONDS = 30.0
 
+from app.core.calibration import AsymptoticLabelCalibrator
+
 
 def _utc_iso_now() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -228,6 +230,24 @@ class MonitoringState:
         )
         return trend
 
+    def record_calibration_dataset(
+        self,
+        probabilities: list[float],
+        labels: list[int],
+        *,
+        dataset_scope: str,
+        update_cadence: str = "weekly",
+    ) -> dict[str, object]:
+        return self.asymptotic_label_calibrator.fit(
+            probabilities,
+            labels,
+            dataset_scope=dataset_scope,
+            update_cadence=update_cadence,
+        )
+
+    def monitor_calibration_drift(self, probabilities: list[float], labels: list[int]) -> dict[str, object]:
+        return self.asymptotic_label_calibrator.monitor_drift(probabilities, labels)
+
     def health_payload(self) -> dict[str, object]:
         self.enforce_compromise_timeout()
         return {
@@ -254,13 +274,16 @@ class MonitoringState:
 
     def ready_payload(self) -> dict[str, object]:
         ready = self.app_started
+        calibration = self.asymptotic_label_calibrator.observability_payload()
         return {
             "status": "ready" if ready else "not_ready",
             "ready": ready,
             "checks": {
                 "startup": self.app_started,
                 "redis": self.redis_connected,
+                "calibration": calibration["status"] in {"healthy", "insufficient_data"},
             },
+            "calibration": calibration,
         }
 
     def metrics_payload(self) -> dict[str, int]:
