@@ -1,3 +1,3 @@
-from core.codex_engine import CodexEngine
+from core.runtime_state import engine
 
-engine = CodexEngine()
+__all__ = ["engine"]

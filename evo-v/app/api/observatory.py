@@ -6,7 +6,6 @@ from fastapi import APIRouter
 from core.runtime_state import engine, runtime_state
 
 router = APIRouter()
-engine = CodexEngine()
 _transition_log: deque[dict[str, str]] = deque(maxlen=20)
 _last_state_label = "initializing"
 

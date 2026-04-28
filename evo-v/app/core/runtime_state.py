@@ -1,4 +1,5 @@
 from __future__ import annotations
+"""Canonical shared process runtime state for the Evo-V core."""
 
 from collections import deque
 from dataclasses import dataclass, field
@@ -50,6 +51,10 @@ class RuntimeState:
         }
 
 
-engine = CodexEngine()
+_ENGINE = CodexEngine()
+# Public singleton used by all runtime readers/writers.
+engine = _ENGINE
 runtime_state = RuntimeState()
 runtime_state.transition_to("idle", "Awaiting provisioning requests.")
+
+__all__ = ["engine", "runtime_state", "RuntimeState", "MAX_TRANSITIONS"]
