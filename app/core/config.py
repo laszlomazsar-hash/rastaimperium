@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     REDIS_PASSWORD: str | None = None
     SHOW_DOCS: bool = True
     ADMIN_API_TOKEN: str | None = None
+    STABILITY_TREND_WINDOW_SIZE: int = 6
+    STABILITY_MIN_SLOPE_MAGNITUDE: float = 0.2
+    STABILITY_REQUIRED_CONSECUTIVE_WINDOWS: int = 2
 
     @field_validator("REDIS_URL", mode="after")
     def assemble_redis_url(cls, value, info):

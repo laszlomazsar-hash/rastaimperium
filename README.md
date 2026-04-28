@@ -147,3 +147,28 @@ sudo systemctl restart systemd-resolved
 - [ ] Backend health check passes:
       `https://codebylaszlo-rastaimperium-backend.hf.space/healthz`
 - [ ] Frontend calls API endpoints successfully
+
+## Hugging Face Spaces deployment bridge (canonical)
+
+For deterministic Spaces builds in this monorepo, Hugging Face should build from the **root-level `Dockerfile`**.
+
+- The root Dockerfile intentionally copies only EVO-V runtime files from `evo-v/` into `/app`:
+  - `evo-v/requirements.txt`
+  - `evo-v/app/**`
+- Runtime entrypoint remains `app.main:app` inside the container.
+- Root `.dockerignore` keeps the build context minimal and excludes unrelated monorepo assets.
+
+### Why this exists
+
+The repository contains multiple app surfaces (frontend, backend, docs, and legacy deployment files).  
+The root HF bridge prevents accidental coupling to unrelated root-level files while keeping EVO-V source canonical in `evo-v/`.
+
+### Entrypoint precedence during HF build
+
+When Spaces builds with Docker, it uses the root `Dockerfile` command:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860}
+```
+
+`Procfile` and other non-Docker entrypoints are not used by Hugging Face Docker builds.
