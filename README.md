@@ -38,8 +38,8 @@ Set `NEXT_PUBLIC_API_URL` during the static build to your Render backend URL (fo
 > Guard: if `NEXT_PUBLIC_API_URL` is unset, the static frontend falls back to relative API paths (e.g. `/api/v1/...`). On GitHub Pages this points to the Pages origin and API calls will fail unless you proxy them.
 
 Key API callers already route through `apiUrl("/api/v1/...")`:
-- `app/consulting/checkout.tsx` (lead submission)
-- `app/dashboard/admin/page.tsx` (admin pipeline fetch)
+- `frontend/app/consulting/checkout.tsx` (lead submission)
+- `frontend/app/dashboard/admin/page.tsx` (admin pipeline fetch)
 
 ## One-command deploy
 ```bash
@@ -89,7 +89,7 @@ curl -fsS https://<your-render-service>/healthz
 curl -fsS https://<your-render-service>/api/v1/leads
 ```
 
-> Important backend note: `app/core/database.py` uses `os.getenv("DATABASE_URL", "sqlite:///./app.db")`.  
+> Important backend note: `frontend/app/core/database.py` uses `os.getenv("DATABASE_URL", "sqlite:///./app.db")`.  
 > If `DATABASE_URL` is missing in Render, the app will silently use SQLite (`./app.db`) instead of Supabase Postgres.
 
 ## Namecheap DNS Setup (Custom Domain → HF Spaces Frontend)
@@ -150,11 +150,11 @@ sudo systemctl restart systemd-resolved
 
 ## Hugging Face Spaces deployment bridge (canonical)
 
-For deterministic Spaces builds in this monorepo, Hugging Face should build from the **root-level `Dockerfile`**.
+For deterministic Spaces builds in this monorepo, Hugging Face should build from the **`infra/Dockerfile`**.
 
-- The root Dockerfile intentionally copies only EVO-V runtime files from `evo-v/` into `/app`:
-  - `evo-v/requirements.txt`
-  - `evo-v/app/**`
+- The root Dockerfile intentionally copies only EVO-V runtime files from `evo-v-core/` into `/app`:
+  - `evo-v-core/requirements.txt`
+  - `evo-v-core/app/**`
 - Runtime entrypoint remains `app.main:app` inside the container.
 - Root `.dockerignore` keeps the build context minimal and excludes unrelated monorepo assets.
 

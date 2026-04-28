@@ -5,10 +5,10 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 
-REPLAY_MODULE_PATH = Path("evo-v/app/core/replay.py")
-APP_MODULE_PATH = Path("evo-v/app/main.py")
+REPLAY_MODULE_PATH = Path("evo-v-core/app/core/replay.py")
+APP_MODULE_PATH = Path("evo-v-core/app/main.py")
 
-APP_ROOT = Path("evo-v/app").resolve()
+APP_ROOT = Path("evo-v-core/app").resolve()
 if str(APP_ROOT) not in sys.path:
     sys.path.insert(0, str(APP_ROOT))
 
