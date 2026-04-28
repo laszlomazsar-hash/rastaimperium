@@ -11,6 +11,19 @@ from state import STATE, state_machine
 health_router = APIRouter()
 
 
+class HealthState:
+    """Mutable health heartbeat state shared across health endpoints."""
+
+    def __init__(self) -> None:
+        self.last_heartbeat_at: float | None = None
+
+    def mark_heartbeat(self) -> None:
+        self.last_heartbeat_at = time.time()
+
+
+health_state = HealthState()
+
+
 def invariant_check() -> ProofTreeNode:
     """Evaluate all invariant families into a compositional proof tree."""
 

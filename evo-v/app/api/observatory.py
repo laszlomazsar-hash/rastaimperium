@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter
 
 from core.runtime_state import engine, runtime_state
+from health import health_state
 
 router = APIRouter()
 engine = CodexEngine()
