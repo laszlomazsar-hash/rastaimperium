@@ -239,3 +239,11 @@ Recursive engine production enablement is blocked unless all criteria pass:
 - **Document version:** v1.0
 - **Review cadence:** weekly during rollout; monthly post-launch.
 - **Change process:** updates require Security + Technical Lead approval and ADR linkage.
+
+## Control Estimator Semantics (Executable Invariant)
+
+- Runtime control uses a **single estimator** `g_hat` computed directly from directional probes.
+- The implementation path does **not** construct a finite candidate set `G_hat = {g^1, g^2, ...}` and does **not** perform an `argmin` selector stage.
+- Decision mapping is deterministic from `g_hat` with a fixed safety band: `expand` when `g_hat > 0.20`, `recover` when `g_hat < -0.20`, else `steady`.
+- If confidence mass is zero (or no probes exist), `g_hat` resolves to `0.0` and action resolves to `steady`.
+
