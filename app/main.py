@@ -38,6 +38,10 @@ app.include_router(api_v1_router, prefix="/api/v1")
 async def startup_event():
     """Ignite the memory connections when the kingdom wakes."""
     monitoring_state.mark_startup()
+    monitoring_state.evaluate_route_integrity(
+        required_routes={"/healthz", "/live", "/ready", "/metrics", "/state"},
+        current_routes={route.path for route in app.routes},
+    )
     try:
         await redis_manager.connect()
         monitoring_state.mark_redis_connected()
@@ -77,6 +81,11 @@ async def ready() -> JSONResponse:
 @app.get("/metrics")
 async def metrics() -> HTMLResponse:
     return HTMLResponse(content=monitoring_state.prometheus(), media_type="text/plain; version=0.0.4")
+
+
+@app.get("/state")
+async def state() -> JSONResponse:
+    return JSONResponse(status_code=200, content=monitoring_state.state_payload())
 
 # --- THE VISUAL GATEWAY ---
 @app.get("/")
