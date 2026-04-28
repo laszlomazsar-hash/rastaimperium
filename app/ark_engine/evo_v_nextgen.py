@@ -309,14 +309,88 @@ class BioInspiredCulturalOptimizer:
 class CulturalAnalyticsDashboard:
     """Scaffold for cultural analytics dashboard configuration."""
 
+    _MAX_IDENTIFIER_LENGTH = 64
+    _MAX_LINEAGE_DEPTH = 16
+
     def __init__(self) -> None:
         self.last_updated = datetime.now().isoformat()
         self.status = "initialized"
+        self.snapshot_counter = 0
 
-    def system_status_snapshot(self) -> Dict[str, Any]:
+    def _canonicalize_identifier(self, value: Any) -> str:
+        normalized = str(value).strip().lower().replace(" ", "_")
+        return normalized[: self._MAX_IDENTIFIER_LENGTH]
+
+    def _canonicalize_lineage(self, lineage: Optional[List[Any]]) -> List[str]:
+        if not lineage:
+            return []
+        canonical_lineage = [
+            self._canonicalize_identifier(lineage_value)
+            for lineage_value in lineage[: self._MAX_LINEAGE_DEPTH]
+        ]
+        return canonical_lineage
+
+    def _project_equivalence_class(self, metadata: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Metadata quotient map for non-dynamical coordinates.
+
+        Two metadata objects are equivalent iff they induce the same
+        canonical representatives below. This collapses irrelevant detail
+        (e.g., long IDs or verbose lineage payloads) while preserving
+        dynamics-relevant labels.
+        """
+        run_id = self._canonicalize_identifier(metadata.get("run_id", "run"))
+        lineage = self._canonicalize_lineage(metadata.get("lineage", []))
+        label = self._canonicalize_identifier(metadata.get("label", "default"))
+        return {
+            "run_id": run_id,
+            "lineage": lineage,
+            "label": label,
+        }
+
+    def _project_state_coordinates(
+        self,
+        *,
+        status: str,
+        snapshot_index: int,
+        metadata: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Compact projected state used for the dynamical argument.
+
+        Dynamical coordinates are represented in a bounded box:
+          - status in a finite set (encoded as canonical string),
+          - snapshot_index normalized to [0, 1].
+        Non-dynamical metadata is tracked through an equivalence-class
+        projection, not as free coordinates in the dynamical state.
+        """
+        projected_metadata = self._project_equivalence_class(metadata)
+        normalized_progress = min(1.0, max(0.0, snapshot_index / 10_000.0))
+        return {
+            "dynamical_coordinates": {
+                "status": self._canonicalize_identifier(status),
+                "normalized_progress": normalized_progress,
+            },
+            "metadata_equivalence_class": projected_metadata,
+            "compactness_claim": (
+                "Projected state lives in finite×[0,1]; therefore closure is compact "
+                "under standard product topology assumptions."
+            ),
+        }
+
+    def system_status_snapshot(self, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        self.snapshot_counter += 1
+        metadata = metadata or {}
+        projected_state = self._project_state_coordinates(
+            status=self.status,
+            snapshot_index=self.snapshot_counter,
+            metadata=metadata,
+        )
         return {
             "status": self.status,
             "last_updated": self.last_updated,
+            "snapshot_counter": self.snapshot_counter,
+            "projected_state": projected_state,
         }
 
 
