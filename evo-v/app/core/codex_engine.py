@@ -1,5 +1,7 @@
 import asyncio
-from typing import List
+import hashlib
+import json
+from typing import Any, List
 
 from agents.reasoning_agent import ReasoningAgent
 from agents.sandbox import Sandbox
@@ -51,4 +53,9 @@ class CodexEngine:
         }
         if validate_action("audit_state"):
             anchor_state(snapshot)
+        self._emit_transition_proof(
+            pre_state=pre_state,
+            post_state=snapshot,
+            applied_control="audit_state",
+        )
         return snapshot
