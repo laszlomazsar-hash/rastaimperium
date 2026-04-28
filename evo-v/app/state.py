@@ -8,8 +8,20 @@ from datetime import datetime, timezone
 from enum import Enum
 import threading
 import time
-from typing import Deque
+from typing import Any, Deque
 
+
+
+
+class ProofStatus(str, Enum):
+    UNKNOWN = "UNKNOWN"
+    VALID = "VALID"
+    INVALID = "INVALID"
+
+
+class RuntimeMode(str, Enum):
+    NORMAL = "NORMAL"
+    COMPROMISE = "COMPROMISE"
 
 class EvoState(str, Enum):
     NORMAL = "NORMAL"
@@ -163,3 +175,23 @@ class RuntimeState:
 
 state_machine = StateMachine()
 STATE = RuntimeState()
+
+
+class EngineState:
+    """Engine lifecycle state consumed by CodexEngine and API heartbeat endpoints."""
+
+    def __init__(self) -> None:
+        self.state = "initializing"
+        self.events: list[dict[str, Any]] = []
+
+    def transition(self, agent_name: str, status: str) -> None:
+        self.events.append({"event": "transition", "agent_name": agent_name, "status": status})
+
+    def mark_failure(self, agent_name: str, error: str) -> None:
+        self.events.append({"event": "failure", "agent_name": agent_name, "error": error})
+
+    def mark_heartbeat(self, active_sandboxes: int = 0) -> None:
+        self.events.append({"event": "heartbeat", "active_sandboxes": active_sandboxes})
+
+    def read_snapshot(self) -> dict[str, Any]:
+        return {"state": self.state, "events": list(self.events[-50:])}

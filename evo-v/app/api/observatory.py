@@ -1,12 +1,14 @@
 from collections import deque
 from datetime import datetime, timezone
+import logging
 
 from fastapi import APIRouter
 
 from core.runtime_state import engine, runtime_state
 
 router = APIRouter()
-engine = CodexEngine()
+logger = logging.getLogger(__name__)
+health_state = getattr(engine, "state", None)
 _transition_log: deque[dict[str, str]] = deque(maxlen=20)
 _last_state_label = "initializing"
 
@@ -69,7 +71,13 @@ def get_state_data() -> dict:
 
 @router.get("/heartbeat")
 async def heartbeat() -> dict:
-    health_state.mark_heartbeat()
+    current_health_state = health_state or getattr(engine, "state", None)
+    if current_health_state is None:
+        logger.error("Heartbeat requested but engine state is unavailable; skipping mark_heartbeat.")
+    elif hasattr(current_health_state, "mark_heartbeat"):
+        current_health_state.mark_heartbeat()
+    else:
+        logger.error("Heartbeat requested but engine state lacks mark_heartbeat; type=%s", type(current_health_state).__name__)
     snapshot = engine.audit_state()
     runtime_state.set_watchdog("nominal")
     return {"status": "ok", "snapshot": snapshot}
