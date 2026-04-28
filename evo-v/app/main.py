@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 
-from api import epistemic, observatory, provisioning
-from api import observatory, provisioning
-from epistemic import router as epistemic_router
-from health import health_router
-from watchdog import start_watchdog
+from app.api import codex, epistemic, observatory, provisioning
+from app.api.epistemic import router as epistemic_router
+from app.health import health_router
+from app.watchdog import start_watchdog
 
 app = FastAPI(title="EVO-V Kernel")
 

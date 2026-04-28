@@ -3,7 +3,7 @@ from typing import Any
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
-from core.replay import verify_replay
+from app.core.replay import verify_replay
 
 router = APIRouter()
 

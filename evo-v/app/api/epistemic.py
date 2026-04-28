@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
-from core.runtime_state import runtime_state
+from app.core.runtime_state import runtime_state
 
 router = APIRouter()
 

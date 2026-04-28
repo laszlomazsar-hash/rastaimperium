@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
-from core.proof_store import ProofStore
-from models.proof_models import ProofObject
+from app.core.proof_store import ProofStore
+from app.models.proof_models import ProofObject
 
 router = APIRouter()
 store = ProofStore()

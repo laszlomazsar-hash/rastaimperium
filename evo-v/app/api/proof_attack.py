@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from state import STATE
+from app.state import STATE
 
 router = APIRouter()
 

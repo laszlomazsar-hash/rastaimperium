@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import HTTPException
 
-from core.runtime_state import engine, runtime_state
+from app.core.runtime_state import engine, runtime_state
 
 router = APIRouter()
 
