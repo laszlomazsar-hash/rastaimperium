@@ -12,6 +12,7 @@ exclude =
     .pytest_cache,
     .tox,
     archive,
+    evo-v-core,
     frontend,
     infra
 max-line-length = 127

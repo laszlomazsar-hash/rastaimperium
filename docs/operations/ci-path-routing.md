@@ -9,7 +9,7 @@ This repository routes checks by changed paths to keep CI focused on relevant ar
 | `frontend/pages` | `frontend/app/**/page.tsx` | `frontend-pages-check` |
 | `backend/python` | `backend/**/*.py` | `backend-python-checks` |
 | `evo-v/evo-v-core` | `evo-v-core/**` | `evo-v-core-checks` |
-| `shared infra` | `infra/**`, `.github/workflows/**`, `pyproject.toml`, `requirements*.txt` | Full matrix: `frontend-pages-check`, `backend-python-checks`, `evo-v-core-checks` |
+| `shared infra` | `infra/**`, `infra/.github/workflows/**`, `pyproject.toml`, `requirements*.txt` | Full matrix: `frontend-pages-check`, `backend-python-checks`, `evo-v-core-checks` |
 
 ## Decision rules
 

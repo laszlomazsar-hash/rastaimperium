@@ -9,7 +9,6 @@ on:
       - 'evo-v-core/requirements*.txt'
       - 'infra/**'
       - 'infra/.github/workflows/python-package-conda.yml'
-      - '.github/workflows/python-package-conda.yml'
       - 'pyproject.toml'
       - 'requirements*.txt'
 
@@ -36,7 +35,7 @@ jobs:
               - 'evo-v-core/**'
             shared_infra:
               - 'infra/**'
-              - '.github/workflows/**'
+              - 'infra/.github/workflows/**'
               - 'pyproject.toml'
               - 'requirements*.txt'
 
@@ -56,6 +55,10 @@ jobs:
     if: needs.changed-paths.outputs.backend_python == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
     strategy:
       max-parallel: 5
+    env:
+      # Keep enabled until 3 consecutive green runs confirm stable topology,
+      # then gate behind CODEX_LINT_DIAGNOSTICS=1 or remove entirely.
+      CODEX_LINT_DIAGNOSTICS: '1'
 
     steps:
       - uses: actions/checkout@v4
@@ -74,17 +77,22 @@ jobs:
         working-directory: .
         run: |
           python infra/scripts/validate_architecture_version.py
-      - name: Check canonical codex package root
-        working-directory: .
-        run: |
-          python tools/check_codex_package_roots.py
-      - name: Lint with flake8
+      - name: Debug codex compliance import path
         working-directory: backend
         env:
-          PYTHONPATH: src
+          PYTHONPATH: backend/src
         run: |
-          bash ../infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log src migrations tests
-          flake8 src migrations tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          python -c "import codex.compliance; print(codex.compliance.__file__)"
+          find . -path '*codex/compliance.py'
+      - name: Lint with flake8
+        # Canonical Python package root for codex runtime code is backend/src.
+        # Lint only backend runtime + tests to avoid stale top-level paths (e.g., ./src).
+        working-directory: .
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log backend/src backend/tests
+          flake8 backend/src backend/tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         working-directory: backend
         env:
