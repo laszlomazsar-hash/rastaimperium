@@ -3,14 +3,22 @@ name: Python Package
 on:
   push:
     paths:
-      - 'frontend/app/**/page.tsx'
-      - 'backend/**/*.py'
-      - 'evo-v-core/**/*.py'
-      - 'evo-v-core/requirements*.txt'
-      - 'infra/**'
-      - 'infra/.github/workflows/python-package-conda.yml'
-      - 'pyproject.toml'
+      - 'backend/src/**'
+      - 'evo-v-core/**'
+      - 'tests/**'
+      - 'scripts/**'
       - 'requirements*.txt'
+      - '.github/workflows/python-package-conda.yml'
+      - 'infra/.github/workflows/python-package-conda.yml'
+  pull_request:
+    paths:
+      - 'backend/src/**'
+      - 'evo-v-core/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
+      - '.github/workflows/python-package-conda.yml'
+      - 'infra/.github/workflows/python-package-conda.yml'
 
 jobs:
   changed-paths:
