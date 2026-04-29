@@ -71,6 +71,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          clean: true
+          fetch-depth: 0
+      - name: Repository diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          git show --name-only --oneline -n 1
+
+          for file in \
+            "evo-v-core/app/api/observatory.py" \
+            "evo-v-core/app/api/provisioning.py" \
+            "backend/src/codex/compliance.py"; do
+            if [[ -f "${file}" ]]; then
+              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
+              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
+              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
+            else
+              echo "exists:${file}:no"
+            fi
+          done
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -86,6 +108,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          clean: true
+          fetch-depth: 0
+      - name: Repository diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          git show --name-only --oneline -n 1
+
+          for file in \
+            "evo-v-core/app/api/observatory.py" \
+            "evo-v-core/app/api/provisioning.py" \
+            "backend/src/codex/compliance.py"; do
+            if [[ -f "${file}" ]]; then
+              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
+              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
+              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
+            else
+              echo "exists:${file}:no"
+            fi
+          done
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -101,6 +145,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          clean: true
+          fetch-depth: 0
+      - name: Repository diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          git show --name-only --oneline -n 1
+
+          for file in \
+            "evo-v-core/app/api/observatory.py" \
+            "evo-v-core/app/api/provisioning.py" \
+            "backend/src/codex/compliance.py"; do
+            if [[ -f "${file}" ]]; then
+              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
+              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
+              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
+            else
+              echo "exists:${file}:no"
+            fi
+          done
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
