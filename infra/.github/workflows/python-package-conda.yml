@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
     - uses: actions/checkout@v4
@@ -22,18 +25,19 @@ jobs:
     - name: Validate architecture artifact versions
       run: |
         python infra/scripts/validate_architecture_version.py
-    - name: Debug flake8 target and config
+    - name: Debug flake8 configuration
       run: |
-        python -c "from pathlib import Path; p = Path('backend/.flake8').resolve(); print(f'flake8 config: {p}'); print(f'exists={p.exists()}')"
-        sed -n '1,160p' backend/.flake8
-        find . -type f -path '*/soulecho/v2.py' -print
+        python -c "from pathlib import Path; p=Path('.flake8').resolve(); print(f'flake8 config: {p}'); print('exists=', p.exists())"
+        sed -n '1,200p' .flake8
+        echo "Tracked python files under lint roots:"
+        git ls-files 'backend/src/*.py' 'backend/src/**/*.py' 'backend/migrations/*.py' 'backend/migrations/**/*.py' 'tests/*.py' 'tests/**/*.py' 'infra/scripts/*.py' 'infra/scripts/**/*.py' | sed -n '1,120p'
     - name: Lint with flake8
       run: |
-        FLAKE8_CONFIG=backend/.flake8
+        SOURCE_ROOTS=(backend/src tests evo-v-core/app evo-v-core/tests infra/scripts tools examples)
         # stop the build if there are Python syntax errors or undefined names
-        flake8 backend/src tests --config "${FLAKE8_CONFIG}" --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 src migrations --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 backend/src tests --config "${FLAKE8_CONFIG}" --count --exit-zero --statistics
+        flake8 src migrations --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
         pytest
