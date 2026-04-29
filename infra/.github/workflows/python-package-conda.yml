@@ -3,26 +3,24 @@ name: Python Package
 on:
   push:
     paths:
-      - 'frontend/**'
-      - 'backend/**'
-      - 'evo-v-core/**'
+      - 'frontend/app/**/page.tsx'
+      - 'backend/**/*.py'
+      - 'evo-v-core/**/*.py'
+      - 'evo-v-core/requirements*.txt'
       - 'infra/**'
-      - 'docs/**'
-      - '.github/workflows/**'
+      - 'infra/.github/workflows/python-package-conda.yml'
+      - '.github/workflows/python-package-conda.yml'
       - 'pyproject.toml'
       - 'requirements*.txt'
-
 
 jobs:
   changed-paths:
     runs-on: ubuntu-latest
     outputs:
-      frontend_lane: ${{ steps.filter.outputs.frontend_lane }}
-      backend_lane: ${{ steps.filter.outputs.backend_lane }}
-      evo_v_core_lane: ${{ steps.filter.outputs.evo_v_core_lane }}
-      infra_lane: ${{ steps.filter.outputs.infra_lane }}
-      docs_lane: ${{ steps.filter.outputs.docs_lane }}
-      shared_impact: ${{ steps.filter.outputs.shared_impact }}
+      frontend_pages: ${{ steps.filter.outputs.frontend_pages }}
+      backend_python: ${{ steps.filter.outputs.backend_python }}
+      evo_v_core: ${{ steps.filter.outputs.evo_v_core }}
+      shared_infra: ${{ steps.filter.outputs.shared_infra }}
     steps:
       - uses: actions/checkout@v4
       - name: Detect changed paths
@@ -30,41 +28,32 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            frontend_lane:
-              - 'frontend/**'
-            backend_lane:
-              - 'backend/**'
-            evo_v_core_lane:
+            frontend_pages:
+              - 'frontend/app/**/page.tsx'
+            backend_python:
+              - 'backend/**/*.py'
+            evo_v_core:
               - 'evo-v-core/**'
-            infra_lane:
+            shared_infra:
               - 'infra/**'
-            docs_lane:
-              - 'docs/**'
-            shared_impact:
               - '.github/workflows/**'
-              - 'infra/.github/workflows/**'
-              - 'infra/scripts/**'
-              - 'infra/Dockerfile*'
               - 'pyproject.toml'
               - 'requirements*.txt'
-              - 'backend/requirements*.txt'
-              - 'backend/pytest.ini'
-              - 'backend/.flake8'
 
   frontend-lane-check:
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.frontend_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    if: needs.changed-paths.outputs.frontend_pages == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Validate frontend page exports
         run: |
-          echo "Frontend lane active; running frontend lane checks only unless shared-impact is true."
+          echo "Frontend page files changed; backend and evo-v Python checks are not required for this scope."
 
   backend-lane-checks:
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.backend_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    if: needs.changed-paths.outputs.backend_python == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
     strategy:
       max-parallel: 5
 
@@ -81,30 +70,16 @@ jobs:
           pip install -r backend/requirements.txt
           pip install -r backend/requirements-dev.txt
       - name: Validate architecture artifact versions
-        if: needs.changed-paths.outputs.shared_impact == 'true'
+        if: needs.changed-paths.outputs.shared_infra == 'true'
         working-directory: .
         run: |
           python infra/scripts/validate_architecture_version.py
-      - name: Debug flake8 configuration
-        working-directory: .
-        env:
-          PYTHONPATH: backend/src
-        run: |
-          python -c "from pathlib import Path; p=Path('backend/.flake8').resolve(); print(f'flake8 config: {p}'); print('exists=', p.exists())"
-          sed -n '1,200p' backend/.flake8
-          echo "Tracked python files under lint roots:"
-          git ls-files 'backend/src/*.py' 'backend/src/**/*.py' 'backend/migrations/*.py' 'backend/migrations/**/*.py' 'backend/tests/*.py' 'backend/tests/**/*.py' 'infra/scripts/*.py' 'infra/scripts/**/*.py' | sed -n '1,120p'
       - name: Lint with flake8
         working-directory: backend
         env:
           PYTHONPATH: src
         run: |
-          # Job scope: this workflow job runs in backend/ and only lints backend paths
-          # passed below (src and migrations).
-          # The wrapper keeps raw flake8 output/exit code intact and prints a deduplicated
-          # F821 summary so repeated parser output cannot mask unique files/symbols.
           bash ../infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log src migrations tests
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 src migrations tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         working-directory: backend
@@ -113,32 +88,20 @@ jobs:
         run: |
           pytest tests
 
-  evo-v-core-lane-check:
+  evo-v-core-checks:
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.evo_v_core_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    if: needs.changed-paths.outputs.evo_v_core == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
     steps:
       - uses: actions/checkout@v4
-      - name: Validate evo-v-core lane routing
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+      - name: Install evo-v-core dependencies
         run: |
-          echo "evo-v-core lane active; reserved full matrix only when shared-impact is true."
-
-  infra-lane-check:
-    runs-on: ubuntu-latest
-    needs: changed-paths
-    if: needs.changed-paths.outputs.infra_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Validate infra lane routing
+          python -m pip install --upgrade pip
+          pip install -r evo-v-core/requirements.txt
+      - name: Run evo-v-core tests
         run: |
-          echo "infra lane active; reserved full matrix only when shared-impact is true."
-
-  docs-lane-check:
-    runs-on: ubuntu-latest
-    needs: changed-paths
-    if: needs.changed-paths.outputs.docs_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Validate docs lane routing
-        run: |
-          echo "docs lane active; reserved full matrix only when shared-impact is true."
+          pytest evo-v-core/tests

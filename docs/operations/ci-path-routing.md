@@ -1,66 +1,28 @@
 # CI Path Routing Policy
 
-This repository uses changed-path routing in `infra/.github/workflows/python-package-conda.yml` to keep checks fast and predictable.
+This repository routes checks by changed paths to keep CI focused on relevant areas.
 
-## Domain lanes
+## Path groups and checks
 
-### 1) Frontend lane
-- Matchers:
-  - `frontend/**`
-- Required check:
-  - `frontend-lane-check`
-
-### 2) Backend lane
-- Matchers:
-  - `backend/**`
-- Required check:
-  - `backend-lane-checks` (dependency install, flake8, pytest)
-
-### 3) Evo-v-core lane
-- Matchers:
-  - `evo-v-core/**`
-- Required check:
-  - `evo-v-core-lane-check`
-
-### 4) Infra lane
-- Matchers:
-  - `infra/**`
-- Required check:
-  - `infra-lane-check`
-
-### 5) Docs lane
-- Matchers:
-  - `docs/**`
-- Required check:
-  - `docs-lane-check`
-
-## Shared-impact routing
-
-Shared-impact changes reserve the full lane matrix (all lane jobs run together).
-
-- Shared-impact matchers:
-  - `.github/workflows/**`
-  - `infra/.github/workflows/**`
-  - `infra/scripts/**`
-  - `infra/Dockerfile*`
-  - `pyproject.toml`
-  - `requirements*.txt`
-  - `backend/requirements*.txt`
-  - `backend/pytest.ini`
-  - `backend/.flake8`
+| Path group | Matchers | Checks that run |
+| --- | --- | --- |
+| `frontend/pages` | `frontend/app/**/page.tsx` | `frontend-pages-check` |
+| `backend/python` | `backend/**/*.py` | `backend-python-checks` |
+| `evo-v/evo-v-core` | `evo-v-core/**` | `evo-v-core-checks` |
+| `shared infra` | `infra/**`, `.github/workflows/**`, `pyproject.toml`, `requirements*.txt` | Full matrix: `frontend-pages-check`, `backend-python-checks`, `evo-v-core-checks` |
 
 ## Decision rules
 
-- If only one domain lane matches, run only that lane’s required check.
-- If multiple domain lanes match, run the union of those lanes.
-- If any shared-impact matcher changes, run the full matrix across all lanes.
+- If changes match only one non-shared group, only that group's check job runs.
+- If changes include `shared infra`, the full matrix runs.
+- If multiple non-shared groups match, CI runs the union of those group jobs.
 
-## Contributor guidance
+## Contributor quick check
 
-Before pushing, check touched files against the lane matchers above to predict required checks.
-
-Quick self-check command:
+Use this command to list changed files before pushing:
 
 ```bash
 git diff --name-only origin/main...HEAD
 ```
+
+Map each changed file to the table above to predict which checks will run.
