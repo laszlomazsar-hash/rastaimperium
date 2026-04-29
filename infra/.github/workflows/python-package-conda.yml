@@ -245,14 +245,18 @@ jobs:
         run: |
           python -c "import codex.compliance; print(codex.compliance.__file__)"
           find . -path '*codex/compliance.py'
+      - name: Detect legacy duplicate roots
+        run: |
+          test ! -d src/codex || (echo "Legacy root src/codex detected"; exit 1)
+          test ! -d evo-v/app || (echo "Legacy root evo-v/app detected"; exit 1)
+
       - name: Lint backend/src with flake8
         working-directory: .
         env:
           PYTHONPATH: backend/src
         run: |
           bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.backend-src.strict.log backend/src
-          flake8 backend/src \
-            --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 backend/src --count --select=E9,F63,F7,F82 --show-source --statistics
       - name: Lint tests with flake8
         working-directory: .
         env:
@@ -337,10 +341,14 @@ jobs:
           else
             pytest evo-v-core/tests
           fi
+      - name: Detect legacy duplicate roots
+        run: |
+          test ! -d src/codex || (echo "Legacy root src/codex detected"; exit 1)
+          test ! -d evo-v/app || (echo "Legacy root evo-v/app detected"; exit 1)
+
       - name: Lint evo-v-core with flake8
         working-directory: .
         env:
           PYTHONPATH: evo-v-core
         run: |
-          flake8 evo-v-core \
-            --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 evo-v-core --count --select=E9,F63,F7,F82 --show-source --statistics
