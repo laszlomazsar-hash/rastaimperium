@@ -31,6 +31,11 @@ jobs:
       backend_python: ${{ steps.filter.outputs.backend_python }}
       evo_v_core: ${{ steps.filter.outputs.evo_v_core }}
       shared_infra: ${{ steps.filter.outputs.shared_infra }}
+      backend_tests: ${{ steps.test_scope.outputs.backend_tests }}
+      core_tests: ${{ steps.test_scope.outputs.core_tests }}
+      test_scope_ambiguous: ${{ steps.test_scope.outputs.test_scope_ambiguous }}
+      backend_test_files: ${{ steps.test_scope.outputs.backend_test_files }}
+      core_test_files: ${{ steps.test_scope.outputs.core_test_files }}
     steps:
       - uses: actions/checkout@v4
       - name: Detect changed paths
@@ -49,6 +54,52 @@ jobs:
               - 'infra/.github/workflows/**'
               - 'pyproject.toml'
               - 'requirements*.txt'
+      - name: Classify changed tests by domain
+        id: test_scope
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+            BASE_REF="origin/${{ github.base_ref }}"
+          else
+            BASE_REF="${{ github.event.before }}"
+          fi
+
+          CHANGED_TESTS=$(git diff --name-only "$BASE_REF" "$GITHUB_SHA" -- 'tests/**/*.py' 'tests/*.py' || true)
+          BACKEND_LIST=""
+          CORE_LIST=""
+          AMBIGUOUS=false
+          for test_file in $CHANGED_TESTS; do
+            file_name=$(basename "$test_file")
+            if [[ "$file_name" =~ ^test_(evo_v_|reasoning_agent|topology|governance|replay|proof|lyapunov|belief|epistemic|stability_trend|field_controller) ]]; then
+              CORE_LIST+="${test_file}"$'\n'
+            elif [[ "$file_name" =~ ^test_(backend|health|deployment|policy_update|compliance|canonical_json|measure_runtime_bridge|snapshot_freeze|hypothesis|ark_safety|control_logic|metric_decision|deterministic_policy|mode_detection|switching_policy|regime_switching|transport_metric_mode|nonsmooth_control_selector|safety_derivative_estimator) ]]; then
+              BACKEND_LIST+="${test_file}"$'\n'
+            else
+              AMBIGUOUS=true
+            fi
+          done
+
+          HAS_BACKEND=false
+          HAS_CORE=false
+          [ -n "$BACKEND_LIST" ] && HAS_BACKEND=true
+          [ -n "$CORE_LIST" ] && HAS_CORE=true
+          if [ "$HAS_BACKEND" = true ] && [ "$HAS_CORE" = true ]; then
+            AMBIGUOUS=true
+          fi
+          echo "backend_tests=$HAS_BACKEND" >> "$GITHUB_OUTPUT"
+          echo "core_tests=$HAS_CORE" >> "$GITHUB_OUTPUT"
+          echo "test_scope_ambiguous=$AMBIGUOUS" >> "$GITHUB_OUTPUT"
+          {
+            echo 'backend_test_files<<EOF'
+            printf '%s' "$BACKEND_LIST"
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+          {
+            echo 'core_test_files<<EOF'
+            printf '%s' "$CORE_LIST"
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
 
   frontend-lane-check:
     runs-on: ubuntu-latest
@@ -215,7 +266,11 @@ jobs:
         env:
           PYTHONPATH: src
         run: |
-          pytest tests
+          if [ "${{ needs.changed-paths.outputs.backend_tests }}" = "true" ] && [ "${{ needs.changed-paths.outputs.core_tests }}" = "false" ] && [ "${{ needs.changed-paths.outputs.test_scope_ambiguous }}" = "false" ]; then
+            printf '%s\n' "${{ needs.changed-paths.outputs.backend_test_files }}" | sed '/^$/d' | sed 's#^#../#' | xargs pytest
+          else
+            pytest tests
+          fi
 
   # Evo-v-core domain checks run in a separate job with its own import root.
   evo-v-core-checks:
@@ -277,7 +332,11 @@ jobs:
         env:
           PYTHONPATH: evo-v-core
         run: |
-          pytest evo-v-core/tests
+          if [ "${{ needs.changed-paths.outputs.core_tests }}" = "true" ] && [ "${{ needs.changed-paths.outputs.backend_tests }}" = "false" ] && [ "${{ needs.changed-paths.outputs.test_scope_ambiguous }}" = "false" ]; then
+            printf '%s\n' "${{ needs.changed-paths.outputs.core_test_files }}" | sed '/^$/d' | xargs pytest
+          else
+            pytest evo-v-core/tests
+          fi
       - name: Lint evo-v-core with flake8
         working-directory: .
         env:
