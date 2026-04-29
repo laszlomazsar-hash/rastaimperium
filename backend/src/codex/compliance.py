@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from threading import RLock
-from typing import Any, Callable, Dict, List, Mapping, Optional, Protocol
+from typing import Any, Callable, Dict, List, Literal, Mapping, Optional, Protocol
 
 from src.codex.canonical_json import dumps_canonical
 
@@ -302,7 +302,11 @@ class ComplianceEngine:
             "latency_breach": p95_latency_ms > 2_500.0,
         }
 
-    def evaluate_override_state(self, metrics: Dict[str, float], manual_override: str | None = None) -> bool:
+    def evaluate_override_state(
+        self,
+        metrics: Dict[str, float],
+        manual_override: Literal["force_on", "force_off"] | None = None,
+    ) -> bool:
         """
         Evaluate emergency rollback override with anti-toggle controls.
 
