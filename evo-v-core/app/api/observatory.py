@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter
 
-from core.runtime_state import engine, health_state, runtime_state
+from core.runtime_state import engine, runtime_state
 
 router = APIRouter()
 _transition_log: deque[dict[str, str]] = deque(maxlen=20)
