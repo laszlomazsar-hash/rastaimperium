@@ -1,5 +1,8 @@
 name: Python Package
 
+# Path-routing contract for Python domains lives in:
+# docs/operations/ci-path-routing.md
+# Keep this workflow and that document updated together.
 on:
   push:
     paths:
