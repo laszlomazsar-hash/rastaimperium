@@ -112,15 +112,34 @@ jobs:
         run: |
           python -c "import codex.compliance; print(codex.compliance.__file__)"
           find . -path '*codex/compliance.py'
-      - name: Lint with flake8
-        # Canonical Python package root for codex runtime code is backend/src.
-        # Lint only backend runtime + tests to avoid stale top-level paths (e.g., ./src).
+      - name: Lint backend/src with flake8
         working-directory: .
         env:
           PYTHONPATH: backend/src
         run: |
-          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log backend/src backend/tests
-          flake8 backend/src backend/tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.backend-src.strict.log backend/src
+          flake8 backend/src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Lint tests with flake8
+        working-directory: .
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.tests.strict.log tests
+          flake8 tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Lint infra/scripts with flake8
+        working-directory: .
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.infra-scripts.strict.log infra/scripts
+          flake8 infra/scripts --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Lint tools with flake8
+        working-directory: .
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.tools.strict.log tools
+          flake8 tools --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         working-directory: backend
         env:
@@ -145,3 +164,6 @@ jobs:
       - name: Run evo-v-core tests
         run: |
           pytest evo-v-core/tests
+      - name: Lint evo-v-core/app with flake8
+        run: |
+          flake8 evo-v-core/app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
