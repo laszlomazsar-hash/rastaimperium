@@ -126,6 +126,9 @@ jobs:
       - name: Pre-lint codex package root guard
         working-directory: .
         run: |
+          set -euo pipefail
+          echo "Checking codex package roots..."
+          find . -type d \( -path './backend/src/codex' -o -path './src/codex' -o -path './evo-v-core/app/codex' \) | sort
           python tools/check_codex_package_roots.py
       - name: Install dependencies
         working-directory: .
@@ -193,6 +196,9 @@ jobs:
       - name: Pre-lint codex package root guard
         working-directory: .
         run: |
+          set -euo pipefail
+          echo "Checking codex package roots..."
+          find . -type d \( -path './backend/src/codex' -o -path './src/codex' -o -path './evo-v-core/app/codex' \) | sort
           python tools/check_codex_package_roots.py
       - name: Install evo-v-core dependencies
         run: |
