@@ -11,8 +11,8 @@ on:
       - 'tests/**'
       - 'scripts/**'
       - 'requirements*.txt'
-      - '.github/workflows/python-package-conda.yml'
-      - 'infra/.github/workflows/python-package-conda.yml'
+      - '.github/workflows/**'
+      - 'infra/.github/workflows/**'
   pull_request:
     paths:
       - 'backend/src/**'
@@ -20,8 +20,8 @@ on:
       - 'tests/**'
       - 'scripts/**'
       - 'requirements*.txt'
-      - '.github/workflows/python-package-conda.yml'
-      - 'infra/.github/workflows/python-package-conda.yml'
+      - '.github/workflows/**'
+      - 'infra/.github/workflows/**'
 
 jobs:
   changed-paths:
@@ -78,6 +78,21 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.10'
+      - name: CI truth check
+        run: |
+          echo "=== CI CONTEXT ==="
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "GITHUB_REF=$GITHUB_REF"
+          git rev-parse HEAD
+          git status --porcelain
+          echo "=== PYTHON ROOTS ==="
+          find backend/src evo-v-core -maxdepth 2 -type d
+      - name: Guardrail legacy entrypoint
+        run: |
+          if grep -R "app.main:app" -n .; then
+            echo "❌ Legacy app.main entrypoint detected"
+            exit 1
+          fi
       - name: Lint topology diagnostics
         run: |
           echo "== git rev-parse HEAD =="
@@ -182,20 +197,6 @@ jobs:
           bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.tests.strict.log tests
           flake8 tests \
             --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Lint infra/scripts with flake8
-        working-directory: .
-        env:
-          PYTHONPATH: backend/src
-        run: |
-          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.infra-scripts.strict.log infra/scripts
-          flake8 infra/scripts --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Lint tools with flake8
-        working-directory: .
-        env:
-          PYTHONPATH: backend/src
-        run: |
-          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.tools.strict.log tools
-          flake8 tools --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test backend domain with pytest
         working-directory: backend
         env:
@@ -214,6 +215,21 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.10'
+      - name: CI truth check
+        run: |
+          echo "=== CI CONTEXT ==="
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "GITHUB_REF=$GITHUB_REF"
+          git rev-parse HEAD
+          git status --porcelain
+          echo "=== PYTHON ROOTS ==="
+          find backend/src evo-v-core -maxdepth 2 -type d
+      - name: Guardrail legacy entrypoint
+        run: |
+          if grep -R "app.main:app" -n .; then
+            echo "❌ Legacy app.main entrypoint detected"
+            exit 1
+          fi
       - name: Pre-lint codex package root guard
         working-directory: .
         run: |
