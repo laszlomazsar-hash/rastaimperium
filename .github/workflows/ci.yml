@@ -45,11 +45,11 @@ jobs:
           while IFS= read -r file; do
             [[ -z "${file}" ]] && continue
 
-            if [[ "${file}" == backend/src/* ]]; then
+            if [[ "${file}" == backend/src/* || "${file}" == src/* ]]; then
               backend=true
             fi
 
-            if [[ "${file}" == evo-v-core/* ]]; then
+            if [[ "${file}" == evo-v-core/* || "${file}" == evo-v/* ]]; then
               core=true
             fi
 
