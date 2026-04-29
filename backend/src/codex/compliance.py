@@ -7,9 +7,8 @@ from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from threading import RLock
-from collections import Counter
-from enum import Enum
-from typing import Any, Callable, Dict, List, Mapping, Optional, Protocol
+from typing import Dict, List, Mapping
+from typing import Any, Dict, List, Protocol
 
 
 class TopologyOperation(Protocol):
@@ -634,28 +633,3 @@ class ComplianceEngine:
     @property
     def override_history(self) -> List[Dict[str, object]]:
         return list(self._override_history)
-@dataclass(frozen=True)
-class ReplayResult:
-    hash_match: bool
-    max_abs_error: float
-    p_value: float
-
-
-class ReproducibilityProfile(str, Enum):
-    BITWISE = "bitwise"
-    NUMERIC_TOLERANCE = "numeric_tolerance"
-    STATISTICAL = "statistical"
-
-
-@dataclass(frozen=True)
-class _ProfileSpec:
-    acceptance_rules: Dict[str, float]
-    execution_guarantee: str
-    environment_constraints: List[Any]
-
-
-PROFILE_SPECS: Dict[ReproducibilityProfile, _ProfileSpec] = {
-    ReproducibilityProfile.BITWISE: _ProfileSpec({"max_abs_error": 0.0, "min_p_value": 1.0}, "bitwise", []),
-    ReproducibilityProfile.NUMERIC_TOLERANCE: _ProfileSpec({"max_abs_error": 1e-9, "min_p_value": 0.0}, "tolerance", []),
-    ReproducibilityProfile.STATISTICAL: _ProfileSpec({"max_abs_error": 1.0, "min_p_value": 0.05}, "statistical", []),
-}
