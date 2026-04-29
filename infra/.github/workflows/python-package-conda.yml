@@ -17,17 +17,23 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements-dev.txt
+        pip install -r backend/requirements.txt
+        pip install -r backend/requirements-dev.txt
     - name: Validate architecture artifact versions
       run: |
-        python scripts/validate_architecture_version.py
+        python infra/scripts/validate_architecture_version.py
+    - name: Debug flake8 configuration
+      run: |
+        python -c "from pathlib import Path; p=Path('.flake8').resolve(); print(f'flake8 config: {p}'); print('exists=', p.exists())"
+        sed -n '1,200p' .flake8
+        echo "Tracked python files under lint roots:"
+        git ls-files 'backend/src/*.py' 'backend/src/**/*.py' 'backend/migrations/*.py' 'backend/migrations/**/*.py' 'tests/*.py' 'tests/**/*.py' 'infra/scripts/*.py' 'infra/scripts/**/*.py' | sed -n '1,120p'
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 backend/src backend/migrations tests infra/scripts --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 backend/src backend/migrations tests infra/scripts --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
         pytest
