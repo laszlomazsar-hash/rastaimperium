@@ -3,6 +3,13 @@ name: Deploy static frontend to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - 'frontend/**'
+      - 'infra/.github/workflows/deploy-pages.yml'
+      - '.github/workflows/deploy-pages.yml'
+      - 'infra/**'
+    paths-ignore:
+      - 'backend/**'
   workflow_dispatch:
 
 permissions:
