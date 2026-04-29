@@ -74,13 +74,25 @@ jobs:
         working-directory: .
         run: |
           python infra/scripts/validate_architecture_version.py
-      - name: Lint with flake8
-        working-directory: backend
+      - name: Lint Python domains with flake8
         env:
-          PYTHONPATH: src
+          PYTHONPATH: backend/src
         run: |
-          bash ../infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log src migrations tests
-          flake8 src migrations tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          echo "::group::flake8: backend/src"
+          flake8 --config backend/.flake8 backend/src
+          echo "::endgroup::"
+
+          echo "::group::flake8: evo-v-core/app"
+          flake8 evo-v-core/app
+          echo "::endgroup::"
+
+          echo "::group::flake8: frontend/app"
+          flake8 frontend/app
+          echo "::endgroup::"
+
+          echo "::group::flake8: tests tools infra/scripts"
+          flake8 tests tools infra/scripts
+          echo "::endgroup::"
       - name: Test with pytest
         working-directory: backend
         env:
