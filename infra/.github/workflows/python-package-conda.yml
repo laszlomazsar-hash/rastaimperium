@@ -55,6 +55,10 @@ jobs:
     if: needs.changed-paths.outputs.backend_python == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
     strategy:
       max-parallel: 5
+    env:
+      # Keep enabled until 3 consecutive green runs confirm stable topology,
+      # then gate behind CODEX_LINT_DIAGNOSTICS=1 or remove entirely.
+      CODEX_LINT_DIAGNOSTICS: '1'
 
     steps:
       - uses: actions/checkout@v4
