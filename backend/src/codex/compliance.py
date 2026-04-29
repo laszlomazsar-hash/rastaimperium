@@ -3,12 +3,13 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+from collections import Counter
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from enum import Enum
 from threading import RLock
-from typing import Dict, List, Mapping
-from typing import Any, Dict, List, Protocol
+from typing import Any, Callable, Dict, List, Mapping, Optional, Protocol
 
 
 class TopologyOperation(Protocol):
@@ -88,17 +89,61 @@ class CalibrationMetadata:
     recalibration_required: bool
 
 
+@dataclass(frozen=True)
+class ReplayResult:
+    hash_match: bool
+    max_abs_error: float
+    p_value: float
+
+
+class ReproducibilityProfile(Enum):
+    BITWISE = "bitwise"
+    NUMERIC_TOLERANCE = "numeric_tolerance"
+    STATISTICAL = "statistical"
+
+
+@dataclass(frozen=True)
+class EnvironmentConstraint:
+    key: str
+    required: bool
+
+
+@dataclass(frozen=True)
+class ReproducibilityProfileSpec:
+    execution_guarantee: str
+    acceptance_rules: Dict[str, float]
+    environment_constraints: List[EnvironmentConstraint]
+
+
+PROFILE_SPECS: Dict[ReproducibilityProfile, ReproducibilityProfileSpec] = {
+    ReproducibilityProfile.BITWISE: ReproducibilityProfileSpec(
+        execution_guarantee="deterministic-bitwise",
+        acceptance_rules={"max_abs_error": 0.0},
+        environment_constraints=[EnvironmentConstraint(key="stable_runtime", required=True)],
+    ),
+    ReproducibilityProfile.NUMERIC_TOLERANCE: ReproducibilityProfileSpec(
+        execution_guarantee="numeric-tolerance",
+        acceptance_rules={"max_abs_error": 1e-9},
+        environment_constraints=[EnvironmentConstraint(key="deterministic_math", required=True)],
+    ),
+    ReproducibilityProfile.STATISTICAL: ReproducibilityProfileSpec(
+        execution_guarantee="distributional-equivalence",
+        acceptance_rules={"min_p_value": 0.05},
+        environment_constraints=[EnvironmentConstraint(key="seed_control", required=True)],
+    ),
+}
+
+
 class ComplianceEngine:
     """Article II-IV observability + audit logging + rollback triggers."""
 
-    def __init__(self) -> None:
+    CONFIDENCE_FORMULA_VERSION = "v1"
+
+    def __init__(self, *, override_cooldown_ticks: int = 2, override_min_hold_ticks: int = 3) -> None:
         self._lock = RLock()
         self._audit_log: List[AuditRecord] = []
         self._trace_coverage: Dict[str, float] = {f"L{i}": 100.0 for i in range(1, 10)}
         self._revision = 0
-    def __init__(self, *, override_cooldown_ticks: int = 2, override_min_hold_ticks: int = 3) -> None:
-        self._audit_log: List[AuditRecord] = []
-        self._trace_coverage: Dict[str, float] = {f"L{i}": 100.0 for i in range(1, 10)}
         self._override_active = False
         self._override_history: List[Dict[str, object]] = []
         self._override_tick = 0
@@ -106,6 +151,23 @@ class ComplianceEngine:
         self._override_engaged_tick: int | None = None
         self._override_cooldown_ticks = max(0, override_cooldown_ticks)
         self._override_min_hold_ticks = max(0, override_min_hold_ticks)
+        self._topology_registry: Dict[str, Any] = {"nodes": [], "edges": []}
+        self._topology_policy_bounds: Dict[str, int] = {
+            "min_nodes": 0,
+            "max_nodes": 10_000,
+            "max_edges": 50_000,
+            "max_degree": 10_000,
+        }
+        self._calibration_counter = 0
+        self._proxy_threshold_metadata = self._build_calibration_metadata(
+            dataset_scope="uninitialized",
+            baseline_window="uninitialized",
+            policy_limit=0.0,
+            latest_residual_drift=0.0,
+            recalibration_required=False,
+        )
+        self._active_profile = ReproducibilityProfile.BITWISE
+        self._certified_profiles: Dict[str, Any] = {}
 
     def append_audit_record(
         self,
@@ -338,13 +400,6 @@ class ComplianceEngine:
     def audit_log(self) -> List[AuditRecord]:
         with self._lock:
             return list(self._audit_log)
-        return self.evaluate_override_state(
-            metrics={
-                "min_trace_coverage": min(self._trace_coverage.values(), default=100.0),
-                "error_rate_pct": 0.0,
-                "p95_latency_ms": 0.0,
-            }
-        )
 
     def set_topology_policy_bounds(
         self,
@@ -625,10 +680,6 @@ class ComplianceEngine:
                 for constraint in spec.environment_constraints
             ],
         }
-
-    @property
-    def audit_log(self) -> List[AuditRecord]:
-        return list(self._audit_log)
 
     @property
     def override_history(self) -> List[Dict[str, object]]:
