@@ -74,6 +74,10 @@ jobs:
         working-directory: .
         run: |
           python infra/scripts/validate_architecture_version.py
+      - name: Check canonical codex package root
+        working-directory: .
+        run: |
+          python tools/check_codex_package_roots.py
       - name: Lint with flake8
         working-directory: backend
         env:

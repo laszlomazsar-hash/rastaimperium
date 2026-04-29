@@ -240,3 +240,16 @@ Workflow triggers under `infra/.github/workflows/` now use path filters so contr
 - **Backend Python change**: backend lint/test workflow runs; frontend Pages workflow is skipped.
 - **Shared infra change** (for example under `infra/`): both workflows run.
 - **Mixed changes** (frontend + backend and/or infra): both workflows can run, preserving full cross-surface validation behavior.
+
+## Canonical `codex` package root
+
+The canonical Python package root for `codex` is:
+
+- `backend/src/codex`
+
+Do not add duplicate or legacy roots (for example `src/codex` or any additional `*/codex/compliance.py` package roots). CI enforces this with `tools/check_codex_package_roots.py`, and local contributors can run the same guard before opening a PR.
+
+```bash
+python tools/check_codex_package_roots.py
+```
+
