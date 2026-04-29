@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.2 (2026-04-29)
+- Added a maintenance changelog entry to track repository updates through the agent workflow.
+
 ## v1.1 (2026-02-16)
 - Single-page MVP upgraded to Next.js 15 multi-page architecture.
 - Added blueprint pages: `/empire`, `/pillars`, `/library`, `/intelligence`.
