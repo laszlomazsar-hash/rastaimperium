@@ -152,14 +152,16 @@ jobs:
           PYTHONPATH: backend/src
         run: |
           bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.backend-src.strict.log backend/src
-          flake8 backend/src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 backend/src \
+            --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Lint tests with flake8
         working-directory: .
         env:
           PYTHONPATH: backend/src
         run: |
           bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.tests.strict.log tests
-          flake8 tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 tests \
+            --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Lint infra/scripts with flake8
         working-directory: .
         env:
@@ -209,4 +211,5 @@ jobs:
         env:
           PYTHONPATH: evo-v-core
         run: |
-          flake8 evo-v-core/app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 evo-v-core/app \
+            --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
