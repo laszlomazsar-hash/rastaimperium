@@ -45,11 +45,11 @@ jobs:
           while IFS= read -r file; do
             [[ -z "${file}" ]] && continue
 
-            if [[ "${file}" == backend/src/* ]]; then
+            if [[ "${file}" == backend/src/* || "${file}" == src/* ]]; then
               backend=true
             fi
 
-            if [[ "${file}" == evo-v-core/* ]]; then
+            if [[ "${file}" == evo-v-core/* || "${file}" == evo-v/* ]]; then
               core=true
             fi
 
@@ -71,13 +71,44 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          clean: true
+          fetch-depth: 0
+      - name: Repository diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          git show --name-only --oneline -n 1
+
+          for file in \
+            "evo-v-core/app/api/observatory.py" \
+            "evo-v-core/app/api/provisioning.py" \
+            "backend/src/codex/compliance.py" \
+            "evo-v/app/api/observatory.py" \
+            "evo-v/app/api/provisioning.py" \
+            "src/codex/compliance.py"; do
+            if [[ -f "${file}" ]]; then
+              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
+              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
+              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
+            else
+              echo "exists:${file}:no"
+            fi
+          done
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Backend lint/test (scoped)
         run: |
-          python -m compileall backend/src
+          set -euo pipefail
+          for dir in backend/src src; do
+            if [[ -d "${dir}" ]]; then
+              echo "Compiling ${dir}"
+              python -m compileall "${dir}"
+            fi
+          done
 
   core:
     runs-on: ubuntu-latest
@@ -86,13 +117,44 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          clean: true
+          fetch-depth: 0
+      - name: Repository diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          git show --name-only --oneline -n 1
+
+          for file in \
+            "evo-v-core/app/api/observatory.py" \
+            "evo-v-core/app/api/provisioning.py" \
+            "backend/src/codex/compliance.py" \
+            "evo-v/app/api/observatory.py" \
+            "evo-v/app/api/provisioning.py" \
+            "src/codex/compliance.py"; do
+            if [[ -f "${file}" ]]; then
+              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
+              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
+              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
+            else
+              echo "exists:${file}:no"
+            fi
+          done
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Core lint/test (scoped)
         run: |
-          python -m compileall evo-v-core
+          set -euo pipefail
+          for dir in evo-v-core evo-v; do
+            if [[ -d "${dir}" ]]; then
+              echo "Compiling ${dir}"
+              python -m compileall "${dir}"
+            fi
+          done
 
   tests:
     runs-on: ubuntu-latest
@@ -101,6 +163,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          clean: true
+          fetch-depth: 0
+      - name: Repository diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          git show --name-only --oneline -n 1
+
+          for file in \
+            "evo-v-core/app/api/observatory.py" \
+            "evo-v-core/app/api/provisioning.py" \
+            "backend/src/codex/compliance.py" \
+            "evo-v/app/api/observatory.py" \
+            "evo-v/app/api/provisioning.py" \
+            "src/codex/compliance.py"; do
+            if [[ -f "${file}" ]]; then
+              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
+              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
+              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
+            else
+              echo "exists:${file}:no"
+            fi
+          done
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
