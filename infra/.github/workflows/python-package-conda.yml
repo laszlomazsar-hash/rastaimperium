@@ -3,11 +3,18 @@ name: Python Package
 on:
   push:
     paths:
-      # Backend Python scope
-      - "backend/**/*.py"
-      - "backend/requirements*.txt"
-      # Shared infra scope -> run full matrix
-      - "infra/**"
+      - 'backend/**/*.py'
+      - 'backend/requirements*.txt'
+      - 'backend/pyproject.toml'
+      - 'backend/pytest.ini'
+      - 'backend/.flake8'
+      - 'infra/.github/workflows/python-package-conda.yml'
+      - 'infra/scripts/**'
+      - '.github/workflows/python-package-conda.yml'
+      - 'pyproject.toml'
+      - 'requirements*.txt'
+    paths-ignore:
+      - 'frontend/pages/**'
 
 jobs:
   build-linux:

@@ -4,10 +4,12 @@ on:
   push:
     branches: [main]
     paths:
-      # Frontend/pages scope
-      - "frontend/**"
-      # Shared infra scope -> run full matrix
-      - "infra/**"
+      - 'frontend/**'
+      - 'infra/.github/workflows/deploy-pages.yml'
+      - '.github/workflows/deploy-pages.yml'
+      - 'infra/**'
+    paths-ignore:
+      - 'backend/**'
   workflow_dispatch:
 
 permissions:
