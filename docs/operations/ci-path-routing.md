@@ -2,48 +2,65 @@
 
 This repository uses changed-path routing in `infra/.github/workflows/python-package-conda.yml` to keep checks fast and predictable.
 
-## Path groups
+## Domain lanes
 
-### 1) Frontend pages files
+### 1) Frontend lane
 - Matchers:
-  - `frontend/app/**/page.tsx`
-  - `frontend/app/page.tsx`
-- Required checks:
-  - `frontend-pages-check`
-- Not required by default:
-  - backend flake8/pytest matrix
+  - `frontend/**`
+- Required check:
+  - `frontend-lane-check`
 
-### 2) Backend Python files
+### 2) Backend lane
 - Matchers:
-  - `backend/**/*.py`
-- Required checks:
-  - `backend-python-checks` (dependency install, flake8, pytest)
+  - `backend/**`
+- Required check:
+  - `backend-lane-checks` (dependency install, flake8, pytest)
 
-### 3) Shared infra/workflow files
+### 3) Evo-v-core lane
 - Matchers:
+  - `evo-v-core/**`
+- Required check:
+  - `evo-v-core-lane-check`
+
+### 4) Infra lane
+- Matchers:
+  - `infra/**`
+- Required check:
+  - `infra-lane-check`
+
+### 5) Docs lane
+- Matchers:
+  - `docs/**`
+- Required check:
+  - `docs-lane-check`
+
+## Shared-impact routing
+
+Shared-impact changes reserve the full lane matrix (all lane jobs run together).
+
+- Shared-impact matchers:
+  - `.github/workflows/**`
   - `infra/.github/workflows/**`
   - `infra/scripts/**`
   - `infra/Dockerfile*`
-  - `.github/workflows/**`
-- Required checks:
-  - full matrix for this workflow: `frontend-pages-check` and `backend-python-checks`
-  - shared-impact-only validation step: architecture artifact version validation
+  - `pyproject.toml`
+  - `requirements*.txt`
+  - `backend/requirements*.txt`
+  - `backend/pytest.ini`
+  - `backend/.flake8`
 
 ## Decision rules
 
-- If only **frontend pages** are changed, run only `frontend-pages-check`.
-- If only **backend python** is changed, run only `backend-python-checks`.
-- If any **shared infra/workflow** file changes, run the full matrix for this workflow.
-- If multiple groups match, the union of required jobs runs automatically.
+- If only one domain lane matches, run only that lane’s required check.
+- If multiple domain lanes match, run the union of those lanes.
+- If any shared-impact matcher changes, run the full matrix across all lanes.
 
 ## Contributor guidance
 
-Before pushing, check touched files against the three path groups above to predict required checks.
+Before pushing, check touched files against the lane matchers above to predict required checks.
 
 Quick self-check command:
 
 ```bash
 git diff --name-only origin/main...HEAD
 ```
-
-Then compare output paths against the matcher lists in this document.

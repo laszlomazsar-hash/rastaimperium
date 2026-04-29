@@ -3,25 +3,25 @@ name: Python Package
 on:
   push:
     paths:
-      - 'backend/**/*.py'
-      - 'backend/requirements*.txt'
-      - 'backend/pyproject.toml'
-      - 'backend/pytest.ini'
-      - 'backend/.flake8'
-      - 'infra/.github/workflows/python-package-conda.yml'
-      - 'infra/scripts/**'
-      - '.github/workflows/python-package-conda.yml'
+      - 'frontend/**'
+      - 'backend/**'
+      - 'evo-v-core/**'
+      - 'infra/**'
+      - 'docs/**'
+      - '.github/workflows/**'
       - 'pyproject.toml'
       - 'requirements*.txt'
-    paths-ignore:
-      - 'frontend/pages/**'
+
 
 jobs:
   changed-paths:
     runs-on: ubuntu-latest
     outputs:
-      frontend_pages: ${{ steps.filter.outputs.frontend_pages }}
-      backend_python: ${{ steps.filter.outputs.backend_python }}
+      frontend_lane: ${{ steps.filter.outputs.frontend_lane }}
+      backend_lane: ${{ steps.filter.outputs.backend_lane }}
+      evo_v_core_lane: ${{ steps.filter.outputs.evo_v_core_lane }}
+      infra_lane: ${{ steps.filter.outputs.infra_lane }}
+      docs_lane: ${{ steps.filter.outputs.docs_lane }}
       shared_impact: ${{ steps.filter.outputs.shared_impact }}
     steps:
       - uses: actions/checkout@v4
@@ -30,31 +30,41 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            frontend_pages:
-              - 'frontend/app/**/page.tsx'
-              - 'frontend/app/page.tsx'
-            backend_python:
-              - 'backend/**/*.py'
+            frontend_lane:
+              - 'frontend/**'
+            backend_lane:
+              - 'backend/**'
+            evo_v_core_lane:
+              - 'evo-v-core/**'
+            infra_lane:
+              - 'infra/**'
+            docs_lane:
+              - 'docs/**'
             shared_impact:
+              - '.github/workflows/**'
               - 'infra/.github/workflows/**'
               - 'infra/scripts/**'
               - 'infra/Dockerfile*'
-              - '.github/workflows/**'
+              - 'pyproject.toml'
+              - 'requirements*.txt'
+              - 'backend/requirements*.txt'
+              - 'backend/pytest.ini'
+              - 'backend/.flake8'
 
-  frontend-pages-check:
+  frontend-lane-check:
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.frontend_pages == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    if: needs.changed-paths.outputs.frontend_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Validate frontend page exports
         run: |
-          echo "Frontend page files changed; backend lint/test matrix is not required for this scope."
+          echo "Frontend lane active; running frontend lane checks only unless shared-impact is true."
 
-  backend-python-checks:
+  backend-lane-checks:
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.backend_python == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    if: needs.changed-paths.outputs.backend_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
     strategy:
       max-parallel: 5
 
@@ -102,3 +112,33 @@ jobs:
           PYTHONPATH: src
         run: |
           pytest tests
+
+  evo-v-core-lane-check:
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.evo_v_core_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate evo-v-core lane routing
+        run: |
+          echo "evo-v-core lane active; reserved full matrix only when shared-impact is true."
+
+  infra-lane-check:
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.infra_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate infra lane routing
+        run: |
+          echo "infra lane active; reserved full matrix only when shared-impact is true."
+
+  docs-lane-check:
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.docs_lane == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate docs lane routing
+        run: |
+          echo "docs lane active; reserved full matrix only when shared-impact is true."
