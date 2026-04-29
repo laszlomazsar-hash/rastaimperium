@@ -33,6 +33,8 @@ jobs:
         git ls-files 'backend/src/*.py' 'backend/src/**/*.py' 'backend/migrations/*.py' 'backend/migrations/**/*.py' 'tests/*.py' 'tests/**/*.py' 'infra/scripts/*.py' 'infra/scripts/**/*.py' | sed -n '1,120p'
     - name: Lint with flake8
       run: |
+        # Job scope: this workflow job runs in backend/ and only lints backend paths
+        # passed below (src and migrations).
         # The wrapper keeps raw flake8 output/exit code intact and prints a deduplicated
         # F821 summary so repeated parser output cannot mask unique files/symbols.
         bash ../infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log src migrations
