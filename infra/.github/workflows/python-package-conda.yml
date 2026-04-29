@@ -1,53 +1,92 @@
 name: Python Package
 
-on: [push]
+on:
+  push:
+  pull_request:
 
 jobs:
-  build-linux:
+  changed-paths:
     runs-on: ubuntu-latest
+    outputs:
+      frontend_pages: ${{ steps.filter.outputs.frontend_pages }}
+      backend_python: ${{ steps.filter.outputs.backend_python }}
+      shared_impact: ${{ steps.filter.outputs.shared_impact }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect changed paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            frontend_pages:
+              - 'frontend/app/**/page.tsx'
+              - 'frontend/app/page.tsx'
+            backend_python:
+              - 'backend/**/*.py'
+            shared_impact:
+              - 'infra/.github/workflows/**'
+              - 'infra/scripts/**'
+              - 'infra/Dockerfile*'
+              - '.github/workflows/**'
+
+  frontend-pages-check:
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.frontend_pages == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate frontend page exports
+        run: |
+          echo "Frontend page files changed; backend lint/test matrix is not required for this scope."
+
+  backend-python-checks:
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.backend_python == 'true' || needs.changed-paths.outputs.shared_impact == 'true'
     strategy:
       max-parallel: 5
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
-    - name: Install dependencies
-      working-directory: .
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
-        pip install -r backend/requirements-dev.txt
-    - name: Validate architecture artifact versions
-      working-directory: .
-      run: |
-        python infra/scripts/validate_architecture_version.py
-    - name: Debug flake8 configuration
-      working-directory: .
-      env:
-        PYTHONPATH: backend/src
-      run: |
-        python -c "from pathlib import Path; p=Path('backend/.flake8').resolve(); print(f'flake8 config: {p}'); print('exists=', p.exists())"
-        sed -n '1,200p' backend/.flake8
-        echo "Tracked python files under lint roots:"
-        git ls-files 'backend/src/*.py' 'backend/src/**/*.py' 'backend/migrations/*.py' 'backend/migrations/**/*.py' 'backend/tests/*.py' 'backend/tests/**/*.py' 'infra/scripts/*.py' 'infra/scripts/**/*.py' | sed -n '1,120p'
-    - name: Lint with flake8
-      working-directory: backend
-      env:
-        PYTHONPATH: src
-      run: |
-        # Job scope: this workflow job runs in backend/ and only lints backend paths
-        # passed below (src and migrations).
-        # The wrapper keeps raw flake8 output/exit code intact and prints a deduplicated
-        # F821 summary so repeated parser output cannot mask unique files/symbols.
-        bash ../infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log src migrations tests
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 src migrations tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      working-directory: backend
-      env:
-        PYTHONPATH: src
-      run: |
-        pytest tests
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        working-directory: .
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install -r backend/requirements-dev.txt
+      - name: Validate architecture artifact versions
+        if: needs.changed-paths.outputs.shared_impact == 'true'
+        working-directory: .
+        run: |
+          python infra/scripts/validate_architecture_version.py
+      - name: Debug flake8 configuration
+        working-directory: .
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          python -c "from pathlib import Path; p=Path('backend/.flake8').resolve(); print(f'flake8 config: {p}'); print('exists=', p.exists())"
+          sed -n '1,200p' backend/.flake8
+          echo "Tracked python files under lint roots:"
+          git ls-files 'backend/src/*.py' 'backend/src/**/*.py' 'backend/migrations/*.py' 'backend/migrations/**/*.py' 'backend/tests/*.py' 'backend/tests/**/*.py' 'infra/scripts/*.py' 'infra/scripts/**/*.py' | sed -n '1,120p'
+      - name: Lint with flake8
+        working-directory: backend
+        env:
+          PYTHONPATH: src
+        run: |
+          # Job scope: this workflow job runs in backend/ and only lints backend paths
+          # passed below (src and migrations).
+          # The wrapper keeps raw flake8 output/exit code intact and prints a deduplicated
+          # F821 summary so repeated parser output cannot mask unique files/symbols.
+          bash ../infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log src migrations tests
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 src migrations tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Test with pytest
+        working-directory: backend
+        env:
+          PYTHONPATH: src
+        run: |
+          pytest tests

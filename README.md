@@ -149,6 +149,15 @@ sudo systemctl restart systemd-resolved
 - [ ] Frontend calls API endpoints successfully
 
 
+
+## CI path-routing policy (predict checks before push)
+
+CI check routing for this repository is documented in `docs/operations/ci-path-routing.md`.
+
+- Frontend page-only changes route to frontend page checks.
+- Backend Python changes route to backend lint and tests.
+- Shared infra/workflow changes route to the full workflow matrix.
+
 ## PR/CI debugging: job scope first
 
 When triaging lint failures (especially `F821 undefined name`), identify the workflow job
