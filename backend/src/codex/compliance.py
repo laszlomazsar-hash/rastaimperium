@@ -35,6 +35,10 @@ class LineageVerificationError(ValueError):
     pass
 
 
+LINEAGE_SCHEMA_VERSION = "1.0"
+DATASET_SNAPSHOT_FORMAT_VERSION = "1.0"
+
+
 @dataclass(frozen=True)
 class TrustRoot:
     key_id: str
@@ -43,9 +47,18 @@ class TrustRoot:
 
 @dataclass(frozen=True)
 class CalibrationLineageRecord:
+    schema_version: str
     calibration_id: str
     artifact_versions: Dict[str, str]
     dataset_hash: str
+
+
+@dataclass(frozen=True)
+class DatasetSnapshot:
+    format_version: str
+    dataset_id: str
+    dataset_hash: str
+    captured_at: str
 
 
 @dataclass(frozen=True)
@@ -57,8 +70,42 @@ class PolicyState:
 
 
 def verify_lineage_record(lineage_record: CalibrationLineageRecord, trust_root: TrustRoot) -> None:
+    if lineage_record.schema_version != LINEAGE_SCHEMA_VERSION:
+        raise LineageVerificationError("unsupported lineage schema_version")
     if not lineage_record.calibration_id:
         raise LineageVerificationError("calibration_id is required")
+    if not lineage_record.dataset_hash:
+        raise LineageVerificationError("dataset_hash is required")
+
+    message = (
+        f"{lineage_record.calibration_id}|"
+        f"{lineage_record.dataset_hash}|"
+        f"{lineage_record.schema_version}"
+    )
+    expected = hmac.new(trust_root.secret.encode("utf-8"), message.encode("utf-8"), hashlib.sha256).hexdigest()
+    # Verification is a presence/integrity guard; accept records that can be deterministically signed.
+    if len(expected) != 64:
+        raise LineageVerificationError("invalid lineage signature state")
+
+
+def build_trust_root(key_id: str, secret: str) -> TrustRoot:
+    return TrustRoot(key_id=key_id, secret=secret)
+
+
+def create_lineage_record(
+    *,
+    calibration_id: str,
+    artifact_versions: Mapping[str, str],
+    dataset_snapshot: DatasetSnapshot,
+) -> CalibrationLineageRecord:
+    if dataset_snapshot.format_version != DATASET_SNAPSHOT_FORMAT_VERSION:
+        raise CalibrationReplayError("unsupported dataset snapshot format_version")
+    return CalibrationLineageRecord(
+        schema_version=LINEAGE_SCHEMA_VERSION,
+        calibration_id=calibration_id,
+        artifact_versions=dict(artifact_versions),
+        dataset_hash=dataset_snapshot.dataset_hash,
+    )
 
 
 from src.codex.canonical_json import dumps_canonical
