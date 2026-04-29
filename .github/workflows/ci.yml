@@ -97,10 +97,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install backend linter
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ruff
       - name: Backend lint/test (scoped)
         run: |
           echo "Resolved compile targets: backend/src"
           python -m compileall backend/src
+          ruff check --select F401,F403,F404,F405,F406,F407,F811,F821,F822,F823,F831,F841 backend/src
 
   core:
     runs-on: ubuntu-latest
@@ -135,10 +140,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install core linter
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ruff
       - name: Core lint/test (scoped)
         run: |
           echo "Resolved compile targets: evo-v-core"
           python -m compileall evo-v-core
+          ruff check --select F401,F403,F404,F405,F406,F407,F811,F821,F822,F823,F831,F841 evo-v-core
 
   tests:
     runs-on: ubuntu-latest
