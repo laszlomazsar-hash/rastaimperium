@@ -23,14 +23,11 @@ def provision_instance(agent_name: str) -> dict:
         f"Agent '{agent_name}' provisioned and sandbox attached.",
     )
 
-    provisioning_snapshot = runtime_state.snapshot()
-    state_value = provisioning_snapshot.get("state") if provisioning_snapshot else None
-    if state_value is None:
-        state_value = (
-            provisioning_snapshot.get("current_state")
-            if provisioning_snapshot
-            else runtime_state.current_state
-        )
+    provisioning_snapshot = runtime_state.snapshot() or {}
+    state_value = provisioning_snapshot.get(
+        "state",
+        provisioning_snapshot.get("current_state", runtime_state.current_state),
+    )
 
     return {
         "agent_id": id(agent),
