@@ -201,18 +201,31 @@ jobs:
             cat /tmp/ci_python_roots.txt
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Pre-lint codex package root guard
+      - name: Pre-lint top-level path guard
         working-directory: .
         run: |
           set -euo pipefail
-          echo "Checking codex package roots..."
-          ROOTS=$(find . -type d \( -path './backend/src/codex' -o -path './src/codex' -o -path './evo-v-core/app/codex' \))
-          printf '%s\n' "$ROOTS" | sort
-          COUNT=$(printf '%s\n' "$ROOTS" | sed '/^$/d' | wc -l)
-          if [ "$COUNT" -gt 1 ]; then
-            echo "Expected at most one codex package root, found $COUNT."
+          echo "Checking for unintended top-level Python domain roots..."
+          OFFENDING_ROOTS=()
+          if [ -d "src" ]; then
+            OFFENDING_ROOTS+=("src/")
+          fi
+          if [ -d "app" ]; then
+            OFFENDING_ROOTS+=("app/")
+          fi
+
+          if [ ${#OFFENDING_ROOTS[@]} -gt 0 ]; then
+            echo "❌ Unapproved repository-root directories detected:"
+            printf ' - %s\n' "${OFFENDING_ROOTS[@]}"
+            echo
+            echo "Allowed canonical roots are scoped to:"
+            echo " - backend/src/"
+            echo " - evo-v-core/app/"
+            echo "Move files under approved domain roots to fix CI path routing."
             exit 1
           fi
+
+          echo "✅ Top-level path guard passed (no unexpected src/ or app/ at repository root)."
           python tools/check_codex_package_roots.py
       - name: Install dependencies
         working-directory: .
@@ -285,18 +298,31 @@ jobs:
             echo "❌ Legacy app.main entrypoint detected"
             exit 1
           fi
-      - name: Pre-lint codex package root guard
+      - name: Pre-lint top-level path guard
         working-directory: .
         run: |
           set -euo pipefail
-          echo "Checking codex package roots..."
-          ROOTS=$(find . -type d \( -path './backend/src/codex' -o -path './src/codex' -o -path './evo-v-core/app/codex' \))
-          printf '%s\n' "$ROOTS" | sort
-          COUNT=$(printf '%s\n' "$ROOTS" | sed '/^$/d' | wc -l)
-          if [ "$COUNT" -gt 1 ]; then
-            echo "Expected at most one codex package root, found $COUNT."
+          echo "Checking for unintended top-level Python domain roots..."
+          OFFENDING_ROOTS=()
+          if [ -d "src" ]; then
+            OFFENDING_ROOTS+=("src/")
+          fi
+          if [ -d "app" ]; then
+            OFFENDING_ROOTS+=("app/")
+          fi
+
+          if [ ${#OFFENDING_ROOTS[@]} -gt 0 ]; then
+            echo "❌ Unapproved repository-root directories detected:"
+            printf ' - %s\n' "${OFFENDING_ROOTS[@]}"
+            echo
+            echo "Allowed canonical roots are scoped to:"
+            echo " - backend/src/"
+            echo " - evo-v-core/app/"
+            echo "Move files under approved domain roots to fix CI path routing."
             exit 1
           fi
+
+          echo "✅ Top-level path guard passed (no unexpected src/ or app/ at repository root)."
           python tools/check_codex_package_roots.py
       - name: Install evo-v-core dependencies
         run: |
