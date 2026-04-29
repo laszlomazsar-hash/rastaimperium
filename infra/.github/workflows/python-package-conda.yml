@@ -33,6 +33,7 @@ jobs:
         git ls-files 'backend/src/*.py' 'backend/src/**/*.py' 'backend/migrations/*.py' 'backend/migrations/**/*.py' 'tests/*.py' 'tests/**/*.py' 'infra/scripts/*.py' 'infra/scripts/**/*.py' | sed -n '1,120p'
     - name: Lint with flake8
       run: |
+        SOURCE_ROOTS=(backend/src tests evo-v-core/app evo-v-core/tests infra/scripts tools examples)
         # stop the build if there are Python syntax errors or undefined names
         flake8 src migrations --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
