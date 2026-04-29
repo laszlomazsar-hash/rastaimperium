@@ -25,6 +25,41 @@ class TopologyOperation(Protocol):
 class TopologyValidationError(ValueError):
     """Raised when a candidate topology violates integrity or policy bounds."""
 
+
+class CalibrationReplayError(RuntimeError):
+    pass
+
+
+class LineageVerificationError(ValueError):
+    pass
+
+
+@dataclass(frozen=True)
+class TrustRoot:
+    key_id: str
+    secret: str
+
+
+@dataclass(frozen=True)
+class CalibrationLineageRecord:
+    calibration_id: str
+    artifact_versions: Dict[str, str]
+    dataset_hash: str
+
+
+@dataclass(frozen=True)
+class PolicyState:
+    rules_evaluated: int
+    rules_matched: int
+    violations: int
+    escalations: int
+
+
+def verify_lineage_record(lineage_record: CalibrationLineageRecord, trust_root: TrustRoot) -> None:
+    if not lineage_record.calibration_id:
+        raise LineageVerificationError("calibration_id is required")
+
+
 from src.codex.canonical_json import dumps_canonical
 
 
