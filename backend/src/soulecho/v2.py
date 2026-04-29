@@ -94,6 +94,7 @@ class SoulEchoStreamEngine:
     def __init__(
         self,
         *,
+        budget_state_provider: Callable[[int], TransportBudgetState] | None = None,
         policy_update_interval_seconds: int = 60,
         ema_alpha: float = 0.25,
         delta_limit: float = 1.0,
@@ -105,22 +106,20 @@ class SoulEchoStreamEngine:
         self._tick = 0
         self._transport_mode_telemetry: List[TransportModeDecision] = []
         self._budget_state_provider = budget_state_provider or self._default_budget_state_provider
-
-    def _default_budget_state_provider(self, _: int) -> TransportBudgetState:
-        return TransportBudgetState(tick_budget_class=2, queue_depth=0, configured_cap=10)
-
         self._policy_update_interval = timedelta(seconds=policy_update_interval_seconds)
         self._ema_alpha = ema_alpha
         self._delta_limit = abs(delta_limit)
         self._hysteresis_band = abs(hysteresis_band)
         self._cooldown = timedelta(seconds=cooldown_seconds)
-
         self._policy_threshold = 80.0
         self._ema_target = self._policy_threshold
         self._last_policy_update_at: datetime | None = None
         self._last_direction_change_at: datetime | None = None
         self._last_direction = 0
         self._pending_baseline_writes = 0
+
+    def _default_budget_state_provider(self, _: int) -> TransportBudgetState:
+        return TransportBudgetState(tick_budget_class=2, queue_depth=0, configured_cap=10)
 
     def next_snapshot(self, now: datetime | None = None) -> SoulEchoSnapshot:
         timestamp = now or datetime.now(timezone.utc)

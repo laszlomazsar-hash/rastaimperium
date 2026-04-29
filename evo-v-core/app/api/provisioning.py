@@ -26,5 +26,5 @@ def provision_instance(agent_name: str) -> dict:
         "agent_id": id(agent),
         "sandbox_id": id(sandbox),
         "status": agent.status,
-        "state": snapshot["state"],
+        "state": runtime_state.current_state,
     }
