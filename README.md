@@ -176,6 +176,9 @@ and its `working-directory` before inspecting code.
 - If you need lint coverage for another root such as `evo-v-core/`, add a separate explicit
   lint job (or matrix entry) with its own `working-directory` and target paths, rather than
   mixing repository roots in one implicit command.
+- Investigation note (2026-04-29): checked out PR head SHA
+  `fa4f41dbbe0246de9207d624f9235e60f7086d7e` to align local static-check context with CI
+  findings before rerunning lint.
 
 ## Hugging Face Spaces deployment bridge (canonical)
 
