@@ -80,7 +80,7 @@ jobs:
       - name: Debug codex compliance import path
         working-directory: backend
         env:
-          PYTHONPATH: src
+          PYTHONPATH: backend/src
         run: |
           python -c "import codex.compliance; print(codex.compliance.__file__)"
           find . -path '*codex/compliance.py'
