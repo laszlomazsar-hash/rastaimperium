@@ -40,7 +40,7 @@ jobs:
               - 'pyproject.toml'
               - 'requirements*.txt'
 
-  frontend-pages-check:
+  frontend-lane-check:
     runs-on: ubuntu-latest
     needs: changed-paths
     if: needs.changed-paths.outputs.frontend_pages == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
@@ -50,7 +50,7 @@ jobs:
         run: |
           echo "Frontend page files changed; backend and evo-v Python checks are not required for this scope."
 
-  backend-python-checks:
+  backend-lane-checks:
     runs-on: ubuntu-latest
     needs: changed-paths
     if: needs.changed-paths.outputs.backend_python == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
