@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail fast when both canonical and legacy codex package roots exist."""
+"""Fail fast when duplicate codex package roots exist."""
 
 from __future__ import annotations
 
@@ -8,47 +8,23 @@ import sys
 
 
 CANONICAL_ROOT = Path("backend/src/codex")
-LEGACY_ROOT_CANDIDATES = (Path("src/codex"),)
-
-
-def find_compliance_roots(repo_root: Path) -> set[Path]:
-    roots: set[Path] = set()
-    for compliance_file in repo_root.glob("**/codex/compliance.py"):
-        rel = compliance_file.relative_to(repo_root)
-        roots.add(rel.parent)
-    return roots
+LEGACY_ROOT = Path("src/codex")
+ERROR_MESSAGE = "Duplicate codex roots detected; keep only canonical root."
 
 
 def main() -> int:
     repo_root = Path.cwd()
-    compliance_roots = find_compliance_roots(repo_root)
+    canonical_exists = (repo_root / CANONICAL_ROOT).is_dir()
+    legacy_exists = (repo_root / LEGACY_ROOT).is_dir()
 
-    top_level_canonical = CANONICAL_ROOT in compliance_roots or (repo_root / CANONICAL_ROOT).is_dir()
+    print("Detected codex root candidates:")
+    print(f" - {CANONICAL_ROOT}: {'present' if canonical_exists else 'missing'}")
+    print(f" - {LEGACY_ROOT}: {'present' if legacy_exists else 'missing'}")
 
-    legacy_roots: set[Path] = set()
-    for root in compliance_roots:
-        if root != CANONICAL_ROOT:
-            legacy_roots.add(root)
-    for candidate in LEGACY_ROOT_CANDIDATES:
-        if (repo_root / candidate).is_dir():
-            legacy_roots.add(candidate)
-
-    print("Detected codex package roots:")
-    for root in sorted(compliance_roots | legacy_roots):
-        print(f" - {root}")
-
-    if top_level_canonical and legacy_roots:
-        legacy_list = ", ".join(str(path) for path in sorted(legacy_roots))
+    if canonical_exists and legacy_exists:
+        print(f"\nERROR: {ERROR_MESSAGE}", file=sys.stderr)
         print(
-            "\nERROR: Found both canonical and legacy codex package roots.",
-            file=sys.stderr,
-        )
-        print(
-            f"Canonical root: {CANONICAL_ROOT}; legacy roots: {legacy_list}.",
-            file=sys.stderr,
-        )
-        print(
-            "Please keep only backend/src/codex and remove/rename legacy roots.",
+            f"Canonical root is {CANONICAL_ROOT}; remove {LEGACY_ROOT} from this commit.",
             file=sys.stderr,
         )
         return 1
