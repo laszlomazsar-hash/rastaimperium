@@ -233,9 +233,10 @@ jobs:
           PYTHONPATH: evo-v-core
         run: |
           pytest evo-v-core/tests
-      - name: Lint evo-v-core/app with flake8
+      - name: Lint evo-v-core with flake8
+        working-directory: .
         env:
           PYTHONPATH: evo-v-core
         run: |
-          flake8 evo-v-core/app \
+          flake8 evo-v-core \
             --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
