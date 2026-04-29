@@ -149,6 +149,21 @@ sudo systemctl restart systemd-resolved
 - [ ] Frontend calls API endpoints successfully
 
 
+
+## CI path routing (workflows under `infra/.github/workflows/`)
+
+Path filters are configured so only relevant checks run on `push` events:
+
+| Changed path scope | Workflow(s) triggered | Checks run |
+|---|---|---|
+| `frontend/**` | `deploy-pages.yml` | Frontend Pages build + deploy pipeline (`build`, `deploy`) |
+| `backend/**/*.py`, `backend/requirements*.txt` | `python-package-conda.yml` | Backend Python lint + tests (`build-linux`) |
+| `infra/**` (shared infra) | `deploy-pages.yml` + `python-package-conda.yml` | Full matrix: frontend Pages checks and backend lint/tests |
+
+Notes:
+- Routing is implemented with workflow-level `on.push.paths` filters.
+- `workflow_dispatch` is still available for manual runs regardless of path scope.
+
 ## PR/CI debugging: job scope first
 
 When triaging lint failures (especially `F821 undefined name`), identify the workflow job
