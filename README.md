@@ -170,9 +170,9 @@ When triaging lint failures (especially `F821 undefined name`), identify the wor
 and its `working-directory` before inspecting code.
 
 - `infra/.github/workflows/python-package-conda.yml` → `build-linux` sets
-  `working-directory: backend`, and its lint step targets `src migrations` under `backend/`.
-- Treat those `F821` reports as **backend tree** issues first (`backend/src/**`,
-  `backend/migrations/**`).
+  `working-directory: backend`, and its lint step targets explicit repository roots (`backend/src`, `tests`).
+- Treat those `F821` reports as **canonical codex roots** first (`backend/src/**`,
+  `tests/**`).
 - If you need lint coverage for another root such as `evo-v-core/`, add a separate explicit
   lint job (or matrix entry) with its own `working-directory` and target paths, rather than
   mixing repository roots in one implicit command.
@@ -212,7 +212,7 @@ To keep CI deterministic, Python workflow steps must always declare explicit `wo
 - `backend` project:
   - Use repository root (`.`) for repo-level scripts under `infra/scripts/`.
   - Use `working-directory: backend` for backend lint and tests.
-  - Lint targets must be explicit (for example: `src`, `migrations`, `tests`).
+  - Lint targets must be explicit (for example: `backend/src`, `tests`).
   - Test target must be explicit (for example: `pytest tests`).
   - Set `PYTHONPATH: src` for lint/test steps so imports resolve from `backend/src` without relying on implicit shell cwd behavior.
 - `evo-v-core` project:
