@@ -129,7 +129,13 @@ jobs:
         run: |
           set -euo pipefail
           echo "Checking codex package roots..."
-          find . -type d \( -path './backend/src/codex' -o -path './src/codex' -o -path './evo-v-core/app/codex' \) | sort
+          ROOTS=$(find . -type d \( -path './backend/src/codex' -o -path './src/codex' -o -path './evo-v-core/app/codex' \))
+          printf '%s\n' "$ROOTS" | sort
+          COUNT=$(printf '%s\n' "$ROOTS" | sed '/^$/d' | wc -l)
+          if [ "$COUNT" -gt 1 ]; then
+            echo "Expected at most one codex package root, found $COUNT."
+            exit 1
+          fi
           python tools/check_codex_package_roots.py
       - name: Install dependencies
         working-directory: .
@@ -202,7 +208,13 @@ jobs:
         run: |
           set -euo pipefail
           echo "Checking codex package roots..."
-          find . -type d \( -path './backend/src/codex' -o -path './src/codex' -o -path './evo-v-core/app/codex' \) | sort
+          ROOTS=$(find . -type d \( -path './backend/src/codex' -o -path './src/codex' -o -path './evo-v-core/app/codex' \))
+          printf '%s\n' "$ROOTS" | sort
+          COUNT=$(printf '%s\n' "$ROOTS" | sed '/^$/d' | wc -l)
+          if [ "$COUNT" -gt 1 ]; then
+            echo "Expected at most one codex package root, found $COUNT."
+            exit 1
+          fi
           python tools/check_codex_package_roots.py
       - name: Install evo-v-core dependencies
         run: |
