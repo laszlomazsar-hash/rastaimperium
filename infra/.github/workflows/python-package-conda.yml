@@ -49,6 +49,7 @@ jobs:
         run: |
           echo "Frontend page files changed; backend and evo-v Python checks are not required for this scope."
 
+  # Backend domain checks are isolated from evo-v-core to avoid cross-root imports.
   backend-lane-checks:
     runs-on: ubuntu-latest
     needs: changed-paths
@@ -173,13 +174,14 @@ jobs:
         run: |
           bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.tools.strict.log tools
           flake8 tools --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Test with pytest
+      - name: Test backend domain with pytest
         working-directory: backend
         env:
           PYTHONPATH: src
         run: |
           pytest tests
 
+  # Evo-v-core domain checks run in a separate job with its own import root.
   evo-v-core-checks:
     runs-on: ubuntu-latest
     needs: changed-paths
@@ -199,8 +201,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r evo-v-core/requirements.txt
       - name: Run evo-v-core tests
+        env:
+          PYTHONPATH: evo-v-core
         run: |
           pytest evo-v-core/tests
       - name: Lint evo-v-core/app with flake8
+        env:
+          PYTHONPATH: evo-v-core
         run: |
           flake8 evo-v-core/app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
