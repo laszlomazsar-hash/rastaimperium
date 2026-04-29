@@ -63,6 +63,34 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.10'
+      - name: Lint topology diagnostics
+        run: |
+          echo "== git rev-parse HEAD =="
+          git rev-parse HEAD | tee /tmp/ci_head.txt
+          echo
+          echo "== git show --name-only --oneline -n 1 =="
+          git show --name-only --oneline -n 1 | tee /tmp/ci_show.txt
+          echo
+          echo "== find . -path '*codex/compliance.py' =="
+          find . -path '*codex/compliance.py' | tee /tmp/ci_compliance_paths.txt
+          {
+            echo "## Lint topology diagnostics"
+            echo
+            echo '```text'
+            echo "$ git rev-parse HEAD"
+            cat /tmp/ci_head.txt
+            echo
+            echo "$ git show --name-only --oneline -n 1"
+            cat /tmp/ci_show.txt
+            echo
+            echo "$ find . -path '*codex/compliance.py'"
+            if [ -s /tmp/ci_compliance_paths.txt ]; then
+              cat /tmp/ci_compliance_paths.txt
+            else
+              echo "(no matches)"
+            fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Install dependencies
         working-directory: .
         run: |
