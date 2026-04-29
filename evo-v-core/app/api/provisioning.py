@@ -17,7 +17,6 @@ def provision_instance(agent_name: str) -> dict:
         "provisioning",
         f"Provisioning requested for agent '{agent_name}'.",
     )
-    agent, sandbox = get_engine().provision_agent(agent_name)
     runtime_state.transition_to(
         "active",
         f"Agent '{agent_name}' provisioned and sandbox attached.",
