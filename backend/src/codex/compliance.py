@@ -11,6 +11,8 @@ from enum import Enum
 from threading import RLock
 from typing import Any, Callable, Dict, List, Mapping, Optional, Protocol
 
+from src.codex.canonical_json import dumps_canonical
+
 
 class TopologyOperation(Protocol):
     """Pure topology operation.
@@ -107,8 +109,6 @@ def create_lineage_record(
         dataset_hash=dataset_snapshot.dataset_hash,
     )
 
-
-from src.codex.canonical_json import dumps_canonical
 
 
 @dataclass
