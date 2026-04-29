@@ -84,10 +84,7 @@ jobs:
           for file in \
             "evo-v-core/app/api/observatory.py" \
             "evo-v-core/app/api/provisioning.py" \
-            "backend/src/codex/compliance.py" \
-            "evo-v/app/api/observatory.py" \
-            "evo-v/app/api/provisioning.py" \
-            "src/codex/compliance.py"; do
+            "backend/src/codex/compliance.py"; do
             if [[ -f "${file}" ]]; then
               checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
               first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
@@ -102,6 +99,7 @@ jobs:
           python-version: '3.11'
       - name: Backend lint/test (scoped)
         run: |
+          echo "Resolved compile targets: backend/src"
           python -m compileall backend/src
 
   core:
@@ -124,10 +122,7 @@ jobs:
           for file in \
             "evo-v-core/app/api/observatory.py" \
             "evo-v-core/app/api/provisioning.py" \
-            "backend/src/codex/compliance.py" \
-            "evo-v/app/api/observatory.py" \
-            "evo-v/app/api/provisioning.py" \
-            "src/codex/compliance.py"; do
+            "backend/src/codex/compliance.py"; do
             if [[ -f "${file}" ]]; then
               checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
               first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
@@ -142,6 +137,7 @@ jobs:
           python-version: '3.11'
       - name: Core lint/test (scoped)
         run: |
+          echo "Resolved compile targets: evo-v-core"
           python -m compileall evo-v-core
 
   tests:
@@ -164,10 +160,7 @@ jobs:
           for file in \
             "evo-v-core/app/api/observatory.py" \
             "evo-v-core/app/api/provisioning.py" \
-            "backend/src/codex/compliance.py" \
-            "evo-v/app/api/observatory.py" \
-            "evo-v/app/api/provisioning.py" \
-            "src/codex/compliance.py"; do
+            "backend/src/codex/compliance.py"; do
             if [[ -f "${file}" ]]; then
               checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
               first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
@@ -182,6 +175,7 @@ jobs:
           python-version: '3.11'
       - name: Tests domain checks (scoped)
         run: |
+          echo "Resolved compile targets: tests"
           python -m compileall tests
 
   summary:
