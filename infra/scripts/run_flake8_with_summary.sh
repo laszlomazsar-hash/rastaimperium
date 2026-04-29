@@ -8,7 +8,7 @@ shift || true
 
 targets=("$@")
 if [ ${#targets[@]} -eq 0 ]; then
-  targets=(src migrations)
+  targets=(backend/src tests)
 fi
 
 flake8 "${targets[@]}" --count --select=E9,F63,F7,F82 --show-source --statistics 2>&1 | tee "$LOG_FILE"
