@@ -3,6 +3,11 @@ name: Deploy static frontend to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      # Frontend/pages scope
+      - "frontend/**"
+      # Shared infra scope -> run full matrix
+      - "infra/**"
   workflow_dispatch:
 
 permissions:
