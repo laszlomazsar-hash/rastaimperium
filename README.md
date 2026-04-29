@@ -150,13 +150,19 @@ sudo systemctl restart systemd-resolved
 
 
 
-## CI path-routing policy (predict checks before push)
+## CI path routing (workflows under `infra/.github/workflows/`)
 
-CI check routing for this repository is documented in `docs/operations/ci-path-routing.md`.
+Path filters are configured so only relevant checks run on `push` events:
 
-- Frontend page-only changes route to frontend page checks.
-- Backend Python changes route to backend lint and tests.
-- Shared infra/workflow changes route to the full workflow matrix.
+| Changed path scope | Workflow(s) triggered | Checks run |
+|---|---|---|
+| `frontend/**` | `deploy-pages.yml` | Frontend Pages build + deploy pipeline (`build`, `deploy`) |
+| `backend/**/*.py`, `backend/requirements*.txt` | `python-package-conda.yml` | Backend Python lint + tests (`build-linux`) |
+| `infra/**` (shared infra) | `deploy-pages.yml` + `python-package-conda.yml` | Full matrix: frontend Pages checks and backend lint/tests |
+
+Notes:
+- Routing is implemented with workflow-level `on.push.paths` filters.
+- `workflow_dispatch` is still available for manual runs regardless of path scope.
 
 ## PR/CI debugging: job scope first
 
@@ -212,3 +218,25 @@ To keep CI deterministic, Python workflow steps must always declare explicit `wo
   - If tests run from outside `evo-v-core`, set `PYTHONPATH` explicitly to the intended source root.
 
 General rule: avoid implicit import resolution that changes with cwd; CI should encode import roots directly in workflow step configuration.
+
+## CI path filters (which workflows run)
+
+Workflow triggers under `infra/.github/workflows/` now use path filters so contributors can predict check coverage:
+
+- **Frontend Pages workflow** (`deploy-pages.yml`) runs on pushes to `main` when changed files include:
+  - `frontend/**` (frontend pages/app changes),
+  - `infra/**` (shared infra updates, including workflow/script wiring),
+  - its own workflow file.
+  - It also ignores backend-only edits via `paths-ignore: backend/**`.
+- **Backend Python workflow** (`python-package-conda.yml`) runs on pushes when changed files include:
+  - backend Python/runtime/testing config (`backend/**/*.py`, requirements, pytest/flake8 config),
+  - shared automation paths (`infra/scripts/**`),
+  - its own workflow file and shared dependency manifests.
+  - It ignores frontend pages-only edits via `paths-ignore: frontend/pages/**`.
+
+### Behavior by change type
+
+- **Frontend/pages-only change**: frontend workflow runs; backend lint/test workflow is skipped.
+- **Backend Python change**: backend lint/test workflow runs; frontend Pages workflow is skipped.
+- **Shared infra change** (for example under `infra/`): both workflows run.
+- **Mixed changes** (frontend + backend and/or infra): both workflows can run, preserving full cross-surface validation behavior.
