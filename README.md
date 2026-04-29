@@ -172,3 +172,20 @@ uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860}
 ```
 
 `Procfile` and other non-Docker entrypoints are not used by Hugging Face Docker builds.
+
+## CI conventions: Python working directories and import roots
+
+To keep CI deterministic, Python workflow steps must always declare explicit `working-directory`, target paths, and (when needed) step-level `PYTHONPATH`.
+
+- `backend` project:
+  - Use repository root (`.`) for repo-level scripts under `infra/scripts/`.
+  - Use `working-directory: backend` for backend lint and tests.
+  - Lint targets must be explicit (for example: `src`, `migrations`, `tests`).
+  - Test target must be explicit (for example: `pytest tests`).
+  - Set `PYTHONPATH: src` for lint/test steps so imports resolve from `backend/src` without relying on implicit shell cwd behavior.
+- `evo-v-core` project:
+  - Use `working-directory: evo-v-core` for project-local lint/test commands.
+  - Prefer package-qualified imports rooted at the project package instead of cwd-sensitive imports like `from state import ...`.
+  - If tests run from outside `evo-v-core`, set `PYTHONPATH` explicitly to the intended source root.
+
+General rule: avoid implicit import resolution that changes with cwd; CI should encode import roots directly in workflow step configuration.
