@@ -27,6 +27,23 @@ This repository routes checks by changed paths to keep CI focused on relevant ar
 - If changes include `shared infra`, the full matrix runs.
 - If multiple non-shared groups match, CI runs the union of those group jobs.
 
+## Repository-root guard policy
+
+CI includes a repository-root guard to prevent broad, ambiguous Python roots from being introduced outside approved domains.
+
+- Scope:
+  - The guard checks only top-level directories at repository root.
+  - It does **not** scan nested paths recursively for this policy decision.
+- Approved canonical roots:
+  - `backend/src/`
+  - `evo-v-core/app/`
+- Enforced failure conditions:
+  - CI fails if unscoped top-level roots such as `src/` or `app/` appear at repository root.
+  - On failure, CI prints each offending path so remediation is obvious.
+- Rationale:
+  - Root-level `src/` or `app/` reintroduce cross-domain ambiguity and can silently bypass intended path routing ownership.
+  - Keeping roots scoped under canonical domains preserves deterministic routing between backend and evo-v-core lanes.
+
 ## Explicit anti-patterns (unsafe routing)
 
 - `app/**` as a trigger glob:
