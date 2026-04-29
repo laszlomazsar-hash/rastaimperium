@@ -74,6 +74,13 @@ jobs:
         working-directory: .
         run: |
           python infra/scripts/validate_architecture_version.py
+      - name: Debug codex compliance import path
+        working-directory: backend
+        env:
+          PYTHONPATH: src
+        run: |
+          python -c "import codex.compliance; print(codex.compliance.__file__)"
+          find . -path '*codex/compliance.py'
       - name: Lint with flake8
         working-directory: backend
         env:
