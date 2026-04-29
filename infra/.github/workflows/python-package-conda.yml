@@ -22,12 +22,44 @@ jobs:
     - name: Validate architecture artifact versions
       run: |
         python scripts/validate_architecture_version.py
+    - name: Debug soulecho v2 lint target
+      run: |
+        python - <<'PY'
+        import pathlib
+        import subprocess
+
+        repo = pathlib.Path('.').resolve()
+        tracked = subprocess.check_output([
+            "git", "ls-files", "**/soulecho/v2.py"
+        ], text=True).splitlines()
+        discovered = sorted(str(p.relative_to(repo)) for p in repo.rglob("soulecho/v2.py"))
+
+        print("Tracked soulecho/v2.py files:")
+        for path in tracked:
+            print(f" - {path}")
+        print("Discovered soulecho/v2.py files on disk:")
+        for path in discovered:
+            print(f" - {path}")
+
+        canonical = repo / "backend" / "src" / "soulecho" / "v2.py"
+        print(f"Canonical file: {canonical}")
+        print("Canonical file snippet (lines 90-170):")
+        with canonical.open() as fh:
+            for idx, line in enumerate(fh, start=1):
+                if 90 <= idx <= 170:
+                    print(f"{idx:04d}: {line.rstrip()}")
+        PY
     - name: Lint with flake8
       run: |
+        SOURCE_ROOTS=(backend/src tests evo-v-core/app evo-v-core/tests infra/scripts tools examples)
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 "${SOURCE_ROOTS[@]}" \
+          --count --select=E9,F63,F7,F82 --show-source --statistics \
+          --exclude=.git,__pycache__,node_modules,.venv,venv,build,dist,output,vendor
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 "${SOURCE_ROOTS[@]}" \
+          --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics \
+          --exclude=.git,__pycache__,node_modules,.venv,venv,build,dist,output,vendor
     - name: Test with pytest
       run: |
         pytest
