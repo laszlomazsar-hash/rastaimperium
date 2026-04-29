@@ -2,11 +2,17 @@ from fastapi import FastAPI
 
 from api import epistemic, observatory, provisioning
 from api import observatory, provisioning
+from core.runtime_state import initialize_runtime
 from epistemic import router as epistemic_router
 from health import health_router
 from watchdog import start_watchdog
 
 app = FastAPI(title="EVO-V Kernel")
+
+
+@app.on_event("startup")
+def startup_runtime() -> None:
+    initialize_runtime()
 
 
 @app.get("/")
