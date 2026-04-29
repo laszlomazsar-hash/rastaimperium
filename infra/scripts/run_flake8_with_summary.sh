@@ -11,6 +11,28 @@ if [ ${#targets[@]} -eq 0 ]; then
   targets=(backend/src tests)
 fi
 
+echo "=== Lint topology diagnostics ==="
+echo "git rev-parse HEAD"
+git rev-parse HEAD
+
+echo
+echo "git show --name-only --oneline -n 1"
+git show --name-only --oneline -n 1
+
+echo
+echo "find . -path '*codex/compliance.py'"
+find . -path '*codex/compliance.py'
+
+echo
+echo "Top-level Python file map grouped by root (optional drift view):"
+for root in backend tests tools; do
+  if [ -d "$root" ]; then
+    echo "[$root]"
+    find "$root" -maxdepth 2 -type f -name '*.py' | sort || true
+  fi
+done
+
+echo
 flake8 "${targets[@]}" --count --select=E9,F63,F7,F82 --show-source --statistics 2>&1 | tee "$LOG_FILE"
 flake8_rc=${PIPESTATUS[0]}
 
