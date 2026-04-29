@@ -76,6 +76,32 @@ jobs:
           echo
           echo "== find . -path '*codex/compliance.py' =="
           find . -path '*codex/compliance.py' | tee /tmp/ci_compliance_paths.txt
+          echo
+          echo "== python package root distribution (top 12 prefixes) =="
+          python - <<'PY' | tee /tmp/ci_python_roots.txt
+          from collections import Counter
+          from pathlib import Path
+
+          roots = Counter()
+          for path in Path(".").rglob("*.py"):
+              if ".git" in path.parts:
+                  continue
+              if "node_modules" in path.parts:
+                  continue
+              parts = path.parts
+              if len(parts) >= 3 and parts[0] == ".":
+                  key = "/".join(parts[:3])
+              elif len(parts) >= 2:
+                  key = "/".join(parts[:2])
+              else:
+                  key = parts[0]
+              roots[key] += 1
+
+          for prefix, count in roots.most_common(12):
+              print(f"{count:4}  {prefix}")
+          if not roots:
+              print("(no Python files found)")
+          PY
           {
             echo "## Lint topology diagnostics"
             echo
@@ -92,6 +118,9 @@ jobs:
             else
               echo "(no matches)"
             fi
+            echo
+            echo "$ python roots (top 12 prefixes)"
+            cat /tmp/ci_python_roots.txt
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Pre-lint codex package root guard
