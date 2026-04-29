@@ -9,7 +9,6 @@ on:
       - 'evo-v-core/requirements*.txt'
       - 'infra/**'
       - 'infra/.github/workflows/python-package-conda.yml'
-      - '.github/workflows/python-package-conda.yml'
       - 'pyproject.toml'
       - 'requirements*.txt'
 
@@ -36,7 +35,7 @@ jobs:
               - 'evo-v-core/**'
             shared_infra:
               - 'infra/**'
-              - '.github/workflows/**'
+              - 'infra/.github/workflows/**'
               - 'pyproject.toml'
               - 'requirements*.txt'
 
