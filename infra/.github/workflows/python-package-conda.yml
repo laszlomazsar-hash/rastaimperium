@@ -56,6 +56,10 @@ jobs:
     if: needs.changed-paths.outputs.backend_python == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
     strategy:
       max-parallel: 5
+    env:
+      # Keep enabled until 3 consecutive green runs confirm stable topology,
+      # then gate behind CODEX_LINT_DIAGNOSTICS=1 or remove entirely.
+      CODEX_LINT_DIAGNOSTICS: '1'
 
     steps:
       - uses: actions/checkout@v4
@@ -74,6 +78,31 @@ jobs:
         working-directory: .
         run: |
           python infra/scripts/validate_architecture_version.py
+      - name: Pre-lint topology diagnostics
+        if: env.CODEX_LINT_DIAGNOSTICS == '1'
+        working-directory: .
+        run: |
+          echo "current SHA:"
+          git rev-parse HEAD
+          echo "candidate tree existence:"
+          for path in .github/workflows src/codex backend/src/codex; do
+            if [ -e "$path" ]; then
+              echo "exists: $path"
+            else
+              echo "missing: $path"
+            fi
+          done
+          echo "codex/compliance.py matches:"
+          find . -path '*codex/compliance.py'
+
+      - name: Verify codex module resolution
+        if: env.CODEX_LINT_DIAGNOSTICS == '1'
+        working-directory: backend
+        env:
+          PYTHONPATH: src
+        run: |
+          python -c "import codex.compliance; print(codex.compliance.__file__)"
+
       - name: Lint with flake8
         working-directory: backend
         env:
