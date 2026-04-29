@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter
 
-from core.runtime_state import engine, runtime_state
+from core.runtime_state import get_engine, runtime_state
 
 router = APIRouter()
 _transition_log: deque[dict[str, str]] = deque(maxlen=20)
@@ -55,7 +55,7 @@ def _record_transition(next_label: str) -> None:
 
 
 def get_state_data() -> dict:
-    snapshot = engine.audit_state()
+    snapshot = get_engine().audit_state()
     state_label = _determine_state_label(snapshot)
     _record_transition(state_label)
     return {
@@ -68,7 +68,7 @@ def get_state_data() -> dict:
 
 @router.get("/heartbeat")
 async def heartbeat() -> dict:
-    snapshot = engine.audit_state()
+    snapshot = get_engine().audit_state()
     runtime_state.set_watchdog("nominal")
     return {"status": "ok", "snapshot": snapshot}
 
