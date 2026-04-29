@@ -27,6 +27,35 @@ This repository routes checks by changed paths to keep CI focused on relevant ar
 - If changes include `shared infra`, the full matrix runs.
 - If multiple non-shared groups match, CI runs the union of those group jobs.
 
+### Cross-root `tests/` mapping convention
+
+Because repository-level `tests/` includes both backend-leaning and core-leaning checks, CI classifies changed test filenames into a domain before choosing pytest scope:
+
+- **Core tests (`core_tests=true`)**: filenames starting with `test_evo_v_` or with prefixes tied to core runtime concepts (`reasoning_agent`, `topology`, `governance`, `replay`, `proof`, `lyapunov`, `belief`, `epistemic`, etc.).
+- **Backend tests (`backend_tests=true`)**: filenames starting with backend/API/safety prefixes (`backend`, `health`, `deployment`, `policy_update`, `compliance`, `canonical_json`, `measure_runtime_bridge`, `snapshot_freeze`, etc.).
+- **Ambiguous mapping (`test_scope_ambiguous=true`)**: unknown filename pattern, or a mixed backend+core test change in the same diff.
+
+Routing behavior:
+
+- If only backend tests changed and mapping is unambiguous, backend job runs targeted pytest for those changed files.
+- If only core tests changed and mapping is unambiguous, evo-v-core job runs targeted pytest for those changed files.
+- If mapping is ambiguous (or both domains are touched), both jobs fall back to full test suites for safety.
+
+### Examples
+
+- `tests/test_backend_stability.py` changed alone:
+  - `backend_tests=true`, `core_tests=false`, `test_scope_ambiguous=false`
+  - Backend lane runs targeted `pytest ../tests/test_backend_stability.py`.
+- `tests/test_evo_v_self_healing.py` changed alone:
+  - `backend_tests=false`, `core_tests=true`, `test_scope_ambiguous=false`
+  - Evo-v-core lane runs targeted `pytest tests/test_evo_v_self_healing.py`.
+- `tests/test_backend_stability.py` + `tests/test_evo_v_self_healing.py`:
+  - both domain outputs true, ambiguous true
+  - both lanes run full pytest scopes.
+- `tests/test_new_experiment.py` (unknown prefix):
+  - ambiguous true
+  - both lanes keep full-suite fallback until naming is made explicit.
+
 ## Explicit anti-patterns (unsafe routing)
 
 - `app/**` as a trigger glob:
