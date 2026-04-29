@@ -97,35 +97,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install backend linter
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ruff
       - name: Backend lint/test (scoped)
         run: |
           echo "Resolved compile targets: backend/src"
           python -m compileall backend/src
-      - name: Install backend test dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r backend/requirements.txt -r backend/requirements-dev.txt pytest
-      - name: Backend pytest (domain-scoped)
-        run: |
-          # Repository tests are centralized under tests/ rather than tests/backend/.
-          # Backend ownership mapping uses backend-focused module names and backend-specific prefixes.
-          pytest -q \
-            tests/test_backend_*.py \
-            tests/test_compliance.py \
-            tests/test_snapshot_freeze.py \
-            tests/test_hypothesis_*.py \
-            tests/test_canonical_json.py \
-            tests/test_measure_runtime_bridge.py \
-            tests/test_ark_safety_*.py \
-            tests/test_control_logic.py \
-            tests/test_metric_decision_bias.py \
-            tests/test_policy_update_runtime.py \
-            tests/test_theorem_conditions.py \
-            tests/test_mode_detection.py \
-            tests/test_regime_switching.py \
-            tests/test_soulecho_*.py \
-            tests/test_transport_metric_mode.py \
-            tests/test_switching_policy.py
+          ruff check --select F401,F403,F404,F405,F406,F407,F811,F821,F822,F823,F831,F841 backend/src
 
   core:
     runs-on: ubuntu-latest
@@ -160,25 +140,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install core linter
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ruff
       - name: Core lint/test (scoped)
         run: |
           echo "Resolved compile targets: evo-v-core"
           python -m compileall evo-v-core
-      - name: Install core test dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r evo-v-core/requirements.txt pytest
-      - name: Core pytest (domain-scoped)
-        run: |
-          # Core-owned tests live in evo-v-core/tests plus core-specific tests in the shared tests/ tree.
-          pytest -q \
-            evo-v-core/tests \
-            tests/test_evo_v_*.py \
-            tests/test_governance_replayability.py \
-            tests/test_reasoning_agent_pruning.py \
-            tests/test_observability_contracts.py \
-            tests/test_health_endpoints.py \
-            tests/test_replay_acceptance_script.py
+          ruff check --select F401,F403,F404,F405,F406,F407,F811,F821,F822,F823,F831,F841 evo-v-core
 
   tests:
     runs-on: ubuntu-latest
