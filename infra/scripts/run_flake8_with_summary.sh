@@ -8,8 +8,10 @@ shift || true
 
 targets=("$@")
 if [ ${#targets[@]} -eq 0 ]; then
-  targets=(backend/src tests)
+  targets=(evo-v-core backend/src tests)
 fi
+
+echo "Resolved lint targets: ${targets[*]}"
 
 echo "=== Lint topology diagnostics ==="
 echo "git rev-parse HEAD"
@@ -25,7 +27,7 @@ find . -path '*codex/compliance.py'
 
 echo
 echo "Top-level Python file map grouped by root (optional drift view):"
-for root in backend tests tools; do
+for root in evo-v-core backend tests tools; do
   if [ -d "$root" ]; then
     echo "[$root]"
     find "$root" -maxdepth 2 -type f -name '*.py' | sort || true

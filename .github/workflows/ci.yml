@@ -77,6 +77,7 @@ jobs:
           python-version: '3.11'
       - name: Backend lint/test (scoped)
         run: |
+          echo "Resolved compile targets: backend/src"
           python -m compileall backend/src
 
   core:
@@ -92,6 +93,7 @@ jobs:
           python-version: '3.11'
       - name: Core lint/test (scoped)
         run: |
+          echo "Resolved compile targets: evo-v-core"
           python -m compileall evo-v-core
 
   tests:
@@ -107,6 +109,7 @@ jobs:
           python-version: '3.11'
       - name: Tests domain checks (scoped)
         run: |
+          echo "Resolved compile targets: tests"
           python -m compileall tests
 
   summary:
