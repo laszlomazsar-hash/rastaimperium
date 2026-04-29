@@ -112,6 +112,18 @@ jobs:
         run: |
           python -c "import codex.compliance; print(codex.compliance.__file__)"
           find . -path '*codex/compliance.py'
+      - name: Guard duplicate codex roots before lint
+        working-directory: .
+        run: |
+          root_a="src/codex"
+          root_b="backend/src/codex"
+          if [ -d "$root_a" ] && [ -d "$root_b" ]; then
+            echo "Duplicate codex roots detected; CI requires a single canonical codex root."
+            echo "Conflicting roots:"
+            echo " - $root_a"
+            echo " - $root_b"
+            exit 1
+          fi
       - name: Lint with flake8
         # Canonical Python package root for codex runtime code is backend/src.
         # Lint only backend runtime + tests to avoid stale top-level paths (e.g., ./src).

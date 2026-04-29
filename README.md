@@ -173,6 +173,8 @@ and its `working-directory` before inspecting code.
   `working-directory: backend`, and its lint step targets explicit repository roots (`backend/src`, `tests`).
 - Treat those `F821` reports as **canonical codex roots** first (`backend/src/**`,
   `tests/**`).
+- Canonical codex package root for CI is `backend/src/codex`; repository-root `src/codex`
+  is treated as a conflicting duplicate when both are present.
 - If you need lint coverage for another root such as `evo-v-core/`, add a separate explicit
   lint job (or matrix entry) with its own `working-directory` and target paths, rather than
   mixing repository roots in one implicit command.
@@ -255,4 +257,3 @@ Do not add duplicate or legacy roots (for example `src/codex` or any additional 
 ```bash
 python tools/check_codex_package_roots.py
 ```
-
