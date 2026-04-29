@@ -8,7 +8,18 @@ from datetime import datetime, timezone
 from enum import Enum
 import threading
 import time
-from typing import Deque
+from typing import Any, Deque
+
+
+class ProofStatus(str, Enum):
+    UNKNOWN = "UNKNOWN"
+    VALID = "VALID"
+    INVALID = "INVALID"
+
+
+class RuntimeMode(str, Enum):
+    NORMAL = "NORMAL"
+    COMPROMISE = "COMPROMISE"
 
 
 class EvoState(str, Enum):

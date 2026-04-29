@@ -6,10 +6,8 @@ import json
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
-<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
 from threading import RLock
 from typing import Dict, List, Mapping
-=======
 from typing import Any, Dict, List, Protocol
 
 
@@ -28,7 +26,6 @@ class TopologyValidationError(ValueError):
     """Raised when a candidate topology violates integrity or policy bounds."""
 
 from src.codex.canonical_json import dumps_canonical
->>>>>>> main
 
 
 @dataclass
@@ -41,12 +38,10 @@ class AuditRecord:
     digest: str
 
 
-<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
 @dataclass(frozen=True)
 class TraceCoverageSnapshot:
     revision: int
     coverage: Dict[str, float]
-=======
 @dataclass
 class CalibrationMetadata:
     threshold_version: str
@@ -56,19 +51,16 @@ class CalibrationMetadata:
     policy_limit: float
     latest_residual_drift: float
     recalibration_required: bool
->>>>>>> main
 
 
 class ComplianceEngine:
     """Article II-IV observability + audit logging + rollback triggers."""
 
-<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
     def __init__(self) -> None:
         self._lock = RLock()
         self._audit_log: List[AuditRecord] = []
         self._trace_coverage: Dict[str, float] = {f"L{i}": 100.0 for i in range(1, 10)}
         self._revision = 0
-=======
     def __init__(self, *, override_cooldown_ticks: int = 2, override_min_hold_ticks: int = 3) -> None:
         self._audit_log: List[AuditRecord] = []
         self._trace_coverage: Dict[str, float] = {f"L{i}": 100.0 for i in range(1, 10)}
@@ -79,7 +71,6 @@ class ComplianceEngine:
         self._override_engaged_tick: int | None = None
         self._override_cooldown_ticks = max(0, override_cooldown_ticks)
         self._override_min_hold_ticks = max(0, override_min_hold_ticks)
->>>>>>> main
 
     def append_audit_record(
         self,
@@ -235,7 +226,6 @@ class ComplianceEngine:
         return self._override_active
 
     def should_trigger_rollback(self) -> bool:
-<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
         with self._lock:
             return any(v < 80.0 for v in self._trace_coverage.values())
 
@@ -313,7 +303,6 @@ class ComplianceEngine:
     def audit_log(self) -> List[AuditRecord]:
         with self._lock:
             return list(self._audit_log)
-=======
         return self.evaluate_override_state(
             metrics={
                 "min_trace_coverage": min(self._trace_coverage.values(), default=100.0),
@@ -609,4 +598,3 @@ class ComplianceEngine:
     @property
     def override_history(self) -> List[Dict[str, object]]:
         return list(self._override_history)
->>>>>>> main
