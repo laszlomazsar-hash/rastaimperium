@@ -38,6 +38,8 @@ jobs:
       env:
         PYTHONPATH: src
       run: |
+        # Job scope: this workflow job runs in backend/ and only lints backend paths
+        # passed below (src and migrations).
         # The wrapper keeps raw flake8 output/exit code intact and prints a deduplicated
         # F821 summary so repeated parser output cannot mask unique files/symbols.
         bash ../infra/scripts/run_flake8_with_summary.sh /tmp/flake8.strict.log src migrations tests

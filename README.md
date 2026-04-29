@@ -148,6 +148,20 @@ sudo systemctl restart systemd-resolved
       `https://codebylaszlo-rastaimperium-backend.hf.space/healthz`
 - [ ] Frontend calls API endpoints successfully
 
+
+## PR/CI debugging: job scope first
+
+When triaging lint failures (especially `F821 undefined name`), identify the workflow job
+and its `working-directory` before inspecting code.
+
+- `infra/.github/workflows/python-package-conda.yml` → `build-linux` sets
+  `working-directory: backend`, and its lint step targets `src migrations` under `backend/`.
+- Treat those `F821` reports as **backend tree** issues first (`backend/src/**`,
+  `backend/migrations/**`).
+- If you need lint coverage for another root such as `evo-v-core/`, add a separate explicit
+  lint job (or matrix entry) with its own `working-directory` and target paths, rather than
+  mixing repository roots in one implicit command.
+
 ## Hugging Face Spaces deployment bridge (canonical)
 
 For deterministic Spaces builds in this monorepo, Hugging Face should build from the **`infra/Dockerfile`**.
