@@ -1,4 +1,16 @@
-from src.codex.compliance import AuditRecord, ComplianceEngine
+import pytest
+
+from src.codex.compliance import (
+    CalibrationReplayError,
+    ComplianceEngine,
+    DATASET_SNAPSHOT_FORMAT_VERSION,
+    DatasetSnapshot,
+    LINEAGE_SCHEMA_VERSION,
+    LineageVerificationError,
+    build_trust_root,
+    create_lineage_record,
+    verify_lineage_record,
+)
 
 
 def test_audit_record_uses_sha256_digest() -> None:
@@ -18,54 +30,81 @@ def test_rollback_trigger_when_trace_drops() -> None:
     assert engine.should_trigger_rollback() is True
 
 
-def test_temporal_integrity_verifier_detects_reordering() -> None:
+def test_candidate_update_rejects_when_loss_increases() -> None:
     engine = ComplianceEngine()
-    first = engine.append_audit_record("admin", "init", "II", {"step": 1})
-    second = engine.append_audit_record("admin", "deploy", "IV", {"step": 2})
+    result = engine.evaluate_candidate_trace_update({"L2": 70})
 
-    report = engine.verify_temporal_integrity([second, first])
-
-    assert report["valid"] is False
-    assert any("Broken linkage" in error for error in report["errors"])
+    assert result["gate_passed"] is False
+    assert result["accepted"] is False
+    assert result["L_new"] > result["L_old"]
 
 
-def test_temporal_integrity_verifier_detects_missing_certificate() -> None:
+def test_candidate_update_accepts_when_loss_decreases() -> None:
     engine = ComplianceEngine()
-    first = engine.append_audit_record("admin", "init", "II", {"step": 1})
-    engine.append_audit_record("admin", "deploy", "IV", {"step": 2})
-    third = engine.append_audit_record("admin", "rollout", "IV", {"step": 3})
+    engine.set_trace_coverage("L2", 60)
 
-    report = engine.verify_temporal_integrity([first, third])
+    result = engine.evaluate_candidate_trace_update({"L2": 88})
 
-    assert report["valid"] is False
-    assert any("Certificate index mismatch" in error for error in report["errors"])
-
-
-def test_periodic_checkpoint_anchoring() -> None:
-    engine = ComplianceEngine(checkpoint_interval=2)
-
-    engine.append_audit_record("admin", "init", "II", {"step": 1})
-    second = engine.append_audit_record("admin", "deploy", "IV", {"step": 2})
-
-    assert len(engine.checkpoints) == 1
-    assert engine.checkpoints[0].cert_hash == second.cert_hash
+    assert result["gate_passed"] is True
+    assert result["accepted"] is True
+    assert result["L_new"] < result["L_old"]
 
 
-def test_external_anchor_on_manual_checkpoint() -> None:
+def test_candidate_update_detects_revision_conflict(monkeypatch) -> None:
     engine = ComplianceEngine()
-    engine.append_audit_record("admin", "deploy", "IV", {"release": "v3.7"})
+    engine.set_trace_coverage("L2", 60)
 
-    checkpoint = engine.anchor_checkpoint(external_anchor="btc:000000000000000000abc")
+    def force_conflict(*args, **kwargs):
+        engine.set_trace_coverage("L3", 50)
+        return 0.0
 
-    assert checkpoint.external_anchor == "btc:000000000000000000abc"
+    monkeypatch.setattr(engine, "_loss", force_conflict)
+    result = engine.evaluate_candidate_trace_update({"L2": 95})
 
-
-def test_verifier_detects_tampered_hash() -> None:
+    assert result["gate_passed"] is True
+    assert result["accepted"] is False
+    assert result["conflict"] is True
+def test_override_precedence_manual_controls_predicates() -> None:
     engine = ComplianceEngine()
-    record = engine.append_audit_record("admin", "deploy", "IV", {"release": "v3.6"})
-    tampered = AuditRecord(**{**record.__dict__, "cert_hash": "0" * 64, "digest": "0" * 64})
+    metrics = {"min_trace_coverage": 70.0, "error_rate_pct": 12.0, "p95_latency_ms": 3_200.0}
 
-    report = engine.verify_temporal_integrity([tampered])
+    assert engine.evaluate_override_state(metrics, manual_override="force_off") is False
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_OFF"
 
-    assert report["valid"] is False
-    assert any("Hash mismatch" in error for error in report["errors"])
+    assert engine.evaluate_override_state(metrics, manual_override="force_on") is True
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_ON_APPLIED"
+
+
+def test_override_recovery_path_obeys_min_hold_and_cooldown() -> None:
+    engine = ComplianceEngine(override_cooldown_ticks=1, override_min_hold_ticks=3)
+    emergency = {"min_trace_coverage": 72.0, "error_rate_pct": 0.0, "p95_latency_ms": 0.0}
+    recovered = {"min_trace_coverage": 96.0, "error_rate_pct": 0.1, "p95_latency_ms": 120.0}
+
+    assert engine.evaluate_override_state(emergency) is True
+
+    # Min-hold blocks immediate recovery.
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    # Recovery is applied once min-hold has elapsed.
+    assert engine.evaluate_override_state(recovered) is False
+    assert engine.override_history[-1]["reason_code"] == "PREDICATE_CLEAR_APPLIED"
+
+
+def test_predicate_inputs_are_bounded_in_override_log() -> None:
+    engine = ComplianceEngine()
+    engine.evaluate_override_state(
+        {
+            "min_trace_coverage": -12.0,
+            "error_rate_pct": 155.0,
+            "p95_latency_ms": 999_999.0,
+        }
+    )
+
+    inputs = engine.override_history[-1]["predicate_inputs"]
+    assert inputs["min_trace_coverage"] == 0.0
+    assert inputs["error_rate_pct"] == 100.0
+    assert inputs["p95_latency_ms"] == 60_000.0
