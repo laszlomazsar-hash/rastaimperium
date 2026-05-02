@@ -64,6 +64,8 @@ def test_candidate_update_detects_revision_conflict(monkeypatch) -> None:
     assert result["gate_passed"] is True
     assert result["accepted"] is False
     assert result["conflict"] is True
+
+
 def test_override_precedence_manual_controls_predicates() -> None:
     engine = ComplianceEngine()
     metrics = {"min_trace_coverage": 70.0, "error_rate_pct": 12.0, "p95_latency_ms": 3_200.0}
