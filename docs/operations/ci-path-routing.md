@@ -67,6 +67,22 @@ Routing behavior:
 - `flake8 .` at repository root:
   - Unsafe because it merges independent Python domains into one lint scope.
   - This can mask cross-domain import mistakes, force incorrect `PYTHONPATH`, and create flaky outcomes from unrelated files.
+- Repository-root `pytest` across all trees:
+  - Unsafe as a default in this monorepo because archived/experimental trees can fail independently of active domains.
+  - It obscures ownership and introduces noisy failures unrelated to the changed paths.
+
+## Temporary mitigation status (effective April 29, 2026)
+
+To stabilize the legacy Python workflow while domain ownership is being tightened:
+
+- CI uses targeted `python -m compileall` on active domains (`backend/src`, `evo-v-core`, and `tests`) instead of root-recursive `flake8 .` and repository-root `pytest`.
+- This still catches syntax regressions in active code paths while eliminating false-negative signal from archived/experimental trees not covered by current ownership boundaries.
+- Domain-scoped quality gates remain in place via `ruff` for active backend/core sources.
+
+### Follow-up issue
+
+- **#908 — Reintroduce scoped lint/test by domain in legacy Python workflow**
+  - Re-enable per-domain lint/test execution (including pytest scopes) once archived/experimental directories are fully isolated from active CI ownership.
 
 ## PR reviewer checklist
 

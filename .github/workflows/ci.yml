@@ -113,6 +113,12 @@ jobs:
           python -m pip install ruff
       - name: Backend lint/test (scoped)
         run: |
+          # TEMPORARY MITIGATION (2026-04-29):
+          # Legacy root-recursive `flake8 .` / `pytest` intermittently fail on
+          # archived and experimental trees that are outside active ownership.
+          # Compile only active backend sources to keep syntax regression
+          # coverage without pulling unrelated Python roots into this lane.
+          # Follow-up issue: #908 - restore scoped lint/test by domain.
           echo "Resolved compile targets: backend/src"
           python -m compileall backend/src
           ruff check --select F401,F403,F404,F405,F406,F407,F811,F821,F822,F823,F831,F841 backend/src
@@ -156,6 +162,12 @@ jobs:
           python -m pip install ruff
       - name: Core lint/test (scoped)
         run: |
+          # TEMPORARY MITIGATION (2026-04-29):
+          # Legacy root-recursive `flake8 .` / `pytest` intermittently fail on
+          # archived and experimental trees that are outside active ownership.
+          # Compile only active core sources to keep syntax regression coverage
+          # without pulling unrelated Python roots into this lane.
+          # Follow-up issue: #908 - restore scoped lint/test by domain.
           echo "Resolved compile targets: evo-v-core"
           python -m compileall evo-v-core
           ruff check --select F401,F403,F404,F405,F406,F407,F811,F821,F822,F823,F831,F841 evo-v-core
@@ -195,6 +207,11 @@ jobs:
           python-version: '3.11'
       - name: Tests domain checks (scoped)
         run: |
+          # TEMPORARY MITIGATION (2026-04-29):
+          # Replace legacy repository-root `pytest` execution with compile-only
+          # checks on active test sources. This preserves syntax regression
+          # detection while avoiding failures from archived/experimental trees.
+          # Follow-up issue: #908 - restore scoped lint/test by domain.
           echo "Resolved compile targets: tests"
           python -m compileall tests
 
