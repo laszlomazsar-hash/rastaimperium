@@ -1,0 +1,24 @@
+name: python-package-conda (deprecated)
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-package-conda:
+    name: python-package-conda (deprecated no-op)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deprecation notice
+        run: |
+          echo "::warning::Deprecated required-check shim: 'python-package-conda'."
+          echo "This workflow is intentionally a no-op to avoid blocking PRs while required checks are migrated."
+          echo "Replacement workflow: '.github/workflows/ci.yml'."
+          echo "Action requested: remove 'python-package-conda' from branch protection required status checks and require the new CI check(s) from ci.yml instead."
