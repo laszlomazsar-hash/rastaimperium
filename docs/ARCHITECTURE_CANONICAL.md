@@ -13,6 +13,16 @@ All architecture summaries, blueprints, and generated representations must match
 ## Derived Artifacts
 - `config/blueprint-v3.5.json` (machine-readable blueprint used by tooling/integrations)
 
+## Canonical `codex` Package Root
+- Authoritative Python package root for `codex`: `backend/src/codex`.
+- Legacy duplicate root `src/codex` is forbidden.
+- CI must run `python tools/check_codex_package_roots.py` before Python linting to fail fast when both roots exist in the same commit.
+
+## Canonical Snapshot Determinism
+- Canonical snapshot bytes MUST be derived from canonical row content only.
+- Runtime ingestion/source order MUST NOT affect canonical snapshot bytes.
+- If rows are exact duplicates, snapshot format MUST encode multiplicity explicitly (for example, `{row, count}`), instead of relying on positional duplicates.
+
 ## Update Workflow
 When architecture changes, update files in this exact order:
 

@@ -1,0 +1,14 @@
+{
+  "required_status_checks": {
+    "strict": true,
+    "checks": [
+      {"context": "backend-ci"},
+      {"context": "core-ci"},
+      {"context": "frontend-ci"},
+      {"context": "tests-ci"}
+    ]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": null,
+  "restrictions": null
+}

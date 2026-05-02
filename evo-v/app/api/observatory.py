@@ -1,12 +1,9 @@
-from fastapi import APIRouter
+"""Compatibility wrapper for legacy evo-v import paths."""
 
-from core.codex_engine import CodexEngine
-
-router = APIRouter()
-engine = CodexEngine()
+from core.runtime_state import get_engine, runtime_state
 
 
-@router.get("/heartbeat")
 async def heartbeat() -> dict:
-    snapshot = engine.audit_state()
+    snapshot = get_engine().audit_state()
+    runtime_state.set_watchdog("nominal")
     return {"status": "ok", "snapshot": snapshot}
