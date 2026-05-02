@@ -10,16 +10,7 @@ import threading
 import time
 from typing import Any, Deque
 
-
-class ProofStatus(str, Enum):
-    UNKNOWN = "UNKNOWN"
-    VALID = "VALID"
-    INVALID = "INVALID"
-
-
-class RuntimeMode(str, Enum):
-    NORMAL = "NORMAL"
-    COMPROMISE = "COMPROMISE"
+from runtime_enums import ProofStatus, RuntimeMode
 
 
 class EvoState(str, Enum):
