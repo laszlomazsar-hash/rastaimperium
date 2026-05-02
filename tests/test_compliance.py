@@ -18,6 +18,8 @@ def test_audit_record_uses_sha256_digest() -> None:
     record = engine.append_audit_record("admin", "deploy", "IV", {"release": "v3.6"})
 
     assert len(record.digest) == 64
+    assert record.digest == record.cert_hash
+    assert len(record.prev_cert_hash) == 64
     assert record in engine.audit_log
 
 
