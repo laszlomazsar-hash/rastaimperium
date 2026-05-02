@@ -1,24 +1,33 @@
-name: python-package-conda (deprecated)
+name: Python Package
 
-on:
-  pull_request:
-  push:
-    branches:
-      - main
-      - master
-  workflow_dispatch:
-
-permissions:
-  contents: read
+on: [push]
 
 jobs:
-  python-package-conda:
-    name: python-package-conda (deprecated no-op)
+  build-linux:
     runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+
     steps:
-      - name: Deprecation notice
-        run: |
-          echo "::warning::Deprecated required-check shim: 'python-package-conda'."
-          echo "This workflow is intentionally a no-op to avoid blocking PRs while required checks are migrated."
-          echo "Replacement workflow: '.github/workflows/ci.yml'."
-          echo "Action requested: remove 'python-package-conda' from branch protection required status checks and require the new CI check(s) from ci.yml instead."
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+    - name: Validate architecture artifact versions
+      run: |
+        python scripts/validate_architecture_version.py
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        pytest
