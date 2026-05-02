@@ -223,7 +223,7 @@ rasta_imperium_v2.1.7/
 ├── tests/
 ├── docs/
 ├── scripts/
-└── .github/workflows/
+└── infra/.github/workflows/
 ```
 
 ✦ **RASTA IMPERIUM v2.1.7 — Nonuple Governance-Anchored Empire** ✦
