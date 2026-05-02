@@ -38,8 +38,8 @@ Set `NEXT_PUBLIC_API_URL` during the static build to your Render backend URL (fo
 > Guard: if `NEXT_PUBLIC_API_URL` is unset, the static frontend falls back to relative API paths (e.g. `/api/v1/...`). On GitHub Pages this points to the Pages origin and API calls will fail unless you proxy them.
 
 Key API callers already route through `apiUrl("/api/v1/...")`:
-- `app/consulting/checkout.tsx` (lead submission)
-- `app/dashboard/admin/page.tsx` (admin pipeline fetch)
+- `frontend/app/consulting/checkout.tsx` (lead submission)
+- `frontend/app/dashboard/admin/page.tsx` (admin pipeline fetch)
 
 ## One-command deploy
 ```bash
@@ -89,7 +89,7 @@ curl -fsS https://<your-render-service>/healthz
 curl -fsS https://<your-render-service>/api/v1/leads
 ```
 
-> Important backend note: `app/core/database.py` uses `os.getenv("DATABASE_URL", "sqlite:///./app.db")`.  
+> Important backend note: `frontend/app/core/database.py` uses `os.getenv("DATABASE_URL", "sqlite:///./app.db")`.  
 > If `DATABASE_URL` is missing in Render, the app will silently use SQLite (`./app.db`) instead of Supabase Postgres.
 
 ## Namecheap DNS Setup (Custom Domain → HF Spaces Frontend)
@@ -148,13 +148,47 @@ sudo systemctl restart systemd-resolved
       `https://codebylaszlo-rastaimperium-backend.hf.space/healthz`
 - [ ] Frontend calls API endpoints successfully
 
+
+
+## CI path routing (workflows under `infra/.github/workflows/`)
+
+Path filters are configured so only relevant checks run on `push` events:
+
+| Changed path scope | Workflow(s) triggered | Checks run |
+|---|---|---|
+| `frontend/**` | `deploy-pages.yml` | Frontend Pages build + deploy pipeline (`build`, `deploy`) |
+| `backend/**/*.py`, `backend/requirements*.txt` | `python-package-conda.yml` | Backend Python lint + tests (`build-linux`) |
+| `infra/**` (shared infra) | `deploy-pages.yml` + `python-package-conda.yml` | Full matrix: frontend Pages checks and backend lint/tests |
+
+Notes:
+- Routing is implemented with workflow-level `on.push.paths` filters.
+- `workflow_dispatch` is still available for manual runs regardless of path scope.
+
+## PR/CI debugging: job scope first
+
+When triaging lint failures (especially `F821 undefined name`), identify the workflow job
+and its `working-directory` before inspecting code.
+
+- `infra/.github/workflows/python-package-conda.yml` → `build-linux` sets
+  `working-directory: backend`, and its lint step targets explicit repository roots (`backend/src`, `tests`).
+- Treat those `F821` reports as **canonical codex roots** first (`backend/src/**`,
+  `tests/**`).
+- Canonical codex package root for CI is `backend/src/codex`; repository-root `src/codex`
+  is treated as a conflicting duplicate when both are present.
+- If you need lint coverage for another root such as `evo-v-core/`, add a separate explicit
+  lint job (or matrix entry) with its own `working-directory` and target paths, rather than
+  mixing repository roots in one implicit command.
+- Investigation note (2026-04-29): checked out PR head SHA
+  `fa4f41dbbe0246de9207d624f9235e60f7086d7e` to align local static-check context with CI
+  findings before rerunning lint.
+
 ## Hugging Face Spaces deployment bridge (canonical)
 
-For deterministic Spaces builds in this monorepo, Hugging Face should build from the **root-level `Dockerfile`**.
+For deterministic Spaces builds in this monorepo, Hugging Face should build from the **`infra/Dockerfile`**.
 
-- The root Dockerfile intentionally copies only EVO-V runtime files from `evo-v/` into `/app`:
-  - `evo-v/requirements.txt`
-  - `evo-v/app/**`
+- The root Dockerfile intentionally copies only EVO-V runtime files from `evo-v-core/` into `/app`:
+  - `evo-v-core/requirements.txt`
+  - `evo-v-core/app/**`
 - Runtime entrypoint remains `app.main:app` inside the container.
 - Root `.dockerignore` keeps the build context minimal and excludes unrelated monorepo assets.
 
@@ -173,48 +207,53 @@ uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860}
 
 `Procfile` and other non-Docker entrypoints are not used by Hugging Face Docker builds.
 
-## Repository Orchestrator (local + CI parity)
+## CI conventions: Python working directories and import roots
 
-A root-level `Makefile` defines one canonical command surface for Python quality gates and startup smoke checks. Use these commands from the repository root (`/workspace/rastaimperium`) locally and in CI.
+To keep CI deterministic, Python workflow steps must always declare explicit `working-directory`, target paths, and (when needed) step-level `PYTHONPATH`.
 
-### Environment variables used by orchestrated commands
+- `backend` project:
+  - Use repository root (`.`) for repo-level scripts under `infra/scripts/`.
+  - Use `working-directory: backend` for backend lint and tests.
+  - Lint targets must be explicit (for example: `backend/src`, `tests`).
+  - Test target must be explicit (for example: `pytest tests`).
+  - Set `PYTHONPATH: src` for lint/test steps so imports resolve from `backend/src` without relying on implicit shell cwd behavior.
+- `evo-v-core` project:
+  - Use `working-directory: evo-v-core` for project-local lint/test commands.
+  - Prefer package-qualified imports rooted at the project package instead of cwd-sensitive imports like `from state import ...`.
+  - If tests run from outside `evo-v-core`, set `PYTHONPATH` explicitly to the intended source root.
 
-These defaults are encoded in the Makefile and can be overridden in either local shells or CI runners:
+General rule: avoid implicit import resolution that changes with cwd; CI should encode import roots directly in workflow step configuration.
 
-- `PYTHONPATH_ROOT` (default: `.`) — used for root backend test/lint/smoke commands.
-- `PYTHONPATH_EVO_V` (default: `.`) — used for EVO-V test/lint/smoke commands executed from `evo-v/`.
-- `UVICORN_HOST` (default: `127.0.0.1`) — host bind for startup smoke checks.
-- `UVICORN_PORT_BACKEND` (default: `8001`) — backend smoke-check port.
-- `UVICORN_PORT_EVO_V` (default: `8002`) — EVO-V smoke-check port.
-- `SMOKE_TIMEOUT_SECONDS` (default: `8`) — timeout used so smoke checks validate startup without hanging.
+## CI path filters (which workflows run)
 
-### Exact command map
+Workflow triggers under `infra/.github/workflows/` now use path filters so contributors can predict check coverage:
 
-From repo root (`/workspace/rastaimperium`):
+- **Frontend Pages workflow** (`deploy-pages.yml`) runs on pushes to `main` when changed files include:
+  - `frontend/**` (frontend pages/app changes),
+  - `infra/**` (shared infra updates, including workflow/script wiring),
+  - its own workflow file.
+  - It also ignores backend-only edits via `paths-ignore: backend/**`.
+- **Backend Python workflow** (`python-package-conda.yml`) runs on pushes when changed files include:
+  - backend Python/runtime/testing config (`backend/**/*.py`, requirements, pytest/flake8 config),
+  - shared automation paths (`infra/scripts/**`),
+  - its own workflow file and shared dependency manifests.
+  - It ignores frontend pages-only edits via `paths-ignore: frontend/pages/**`.
 
-- `make pytest`
-  - Runs backend suite in working directory `/workspace/rastaimperium`:
-    - `PYTHONPATH="$PYTHONPATH_ROOT" pytest tests`
-  - Runs EVO-V core suite in working directory `/workspace/rastaimperium/evo-v`:
-    - `PYTHONPATH="$PYTHONPATH_EVO_V" pytest tests`
+### Behavior by change type
 
-- `make ruff`
-  - Root backend package lint in `/workspace/rastaimperium`:
-    - `ruff check app src tests`
-  - EVO-V package lint in `/workspace/rastaimperium/evo-v`:
-    - `ruff check app tests`
+- **Frontend/pages-only change**: frontend workflow runs; backend lint/test workflow is skipped.
+- **Backend Python change**: backend lint/test workflow runs; frontend Pages workflow is skipped.
+- **Shared infra change** (for example under `infra/`): both workflows run.
+- **Mixed changes** (frontend + backend and/or infra): both workflows can run, preserving full cross-surface validation behavior.
 
-- `make flake8`
-  - Root legacy lint parity in `/workspace/rastaimperium`:
-    - `flake8 app src tests`
-  - EVO-V legacy lint parity in `/workspace/rastaimperium/evo-v`:
-    - `flake8 app tests`
+## Canonical `codex` package root
 
-- `make smoke`
-  - Backend startup smoke in `/workspace/rastaimperium`:
-    - `PYTHONPATH="$PYTHONPATH_ROOT" timeout "$SMOKE_TIMEOUT_SECONDS" uvicorn app.main:app --host "$UVICORN_HOST" --port "$UVICORN_PORT_BACKEND"`
-  - EVO-V startup smoke in `/workspace/rastaimperium/evo-v`:
-    - `PYTHONPATH="$PYTHONPATH_EVO_V" timeout "$SMOKE_TIMEOUT_SECONDS" uvicorn app.main:app --host "$UVICORN_HOST" --port "$UVICORN_PORT_EVO_V"`
+The canonical Python package root for `codex` is:
 
-- `make ci`
-  - Runs `lint`, `pytest`, and `smoke` in sequence with the same directory/env contracts above.
+- `backend/src/codex`
+
+Do not add duplicate or legacy roots (for example `src/codex` or any additional `*/codex/compliance.py` package roots). CI enforces this with `tools/check_codex_package_roots.py`, and local contributors can run the same guard before opening a PR.
+
+```bash
+python tools/check_codex_package_roots.py
+```

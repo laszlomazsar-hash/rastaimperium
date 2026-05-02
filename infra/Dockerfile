@@ -6,10 +6,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-COPY evo-v/requirements.txt ./requirements.txt
+COPY evo-v-core/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY evo-v/app ./app
+COPY evo-v-core/app ./app
 
 EXPOSE 7860
 

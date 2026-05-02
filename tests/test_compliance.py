@@ -18,6 +18,8 @@ def test_audit_record_uses_sha256_digest() -> None:
     record = engine.append_audit_record("admin", "deploy", "IV", {"release": "v3.6"})
 
     assert len(record.digest) == 64
+    assert record.digest == record.cert_hash
+    assert len(record.prev_cert_hash) == 64
     assert record in engine.audit_log
 
 
@@ -28,7 +30,6 @@ def test_rollback_trigger_when_trace_drops() -> None:
     assert engine.should_trigger_rollback() is True
 
 
-<<<<<<< codex/ensure-race-free-deterministic-acceptance-decisions
 def test_candidate_update_rejects_when_loss_increases() -> None:
     engine = ComplianceEngine()
     result = engine.evaluate_candidate_trace_update({"L2": 70})
@@ -63,7 +64,6 @@ def test_candidate_update_detects_revision_conflict(monkeypatch) -> None:
     assert result["gate_passed"] is True
     assert result["accepted"] is False
     assert result["conflict"] is True
-=======
 def test_override_precedence_manual_controls_predicates() -> None:
     engine = ComplianceEngine()
     metrics = {"min_trace_coverage": 70.0, "error_rate_pct": 12.0, "p95_latency_ms": 3_200.0}
@@ -108,4 +108,3 @@ def test_predicate_inputs_are_bounded_in_override_log() -> None:
     assert inputs["min_trace_coverage"] == 0.0
     assert inputs["error_rate_pct"] == 100.0
     assert inputs["p95_latency_ms"] == 60_000.0
->>>>>>> main

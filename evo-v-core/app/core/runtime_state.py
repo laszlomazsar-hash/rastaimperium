@@ -50,6 +50,20 @@ class RuntimeState:
         }
 
 
-engine = CodexEngine()
 runtime_state = RuntimeState()
-runtime_state.transition_to("idle", "Awaiting provisioning requests.")
+
+engine: CodexEngine | None = None
+
+
+def initialize_runtime() -> CodexEngine:
+    global engine
+    if engine is None:
+        engine = CodexEngine()
+        runtime_state.transition_to("idle", "Awaiting provisioning requests.")
+    return engine
+
+
+def get_engine() -> CodexEngine:
+    if engine is None:
+        return initialize_runtime()
+    return engine
