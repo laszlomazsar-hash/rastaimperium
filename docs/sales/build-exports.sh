@@ -3,8 +3,8 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SOURCE_DIR="$ROOT_DIR/docs/sales"
-PUBLIC_SOURCE_DIR="$ROOT_DIR/public/sales-assets/source"
-PUBLIC_EXPORT_DIR="$ROOT_DIR/public/sales-assets/exports"
+PUBLIC_SOURCE_DIR="$ROOT_DIR/frontend/public/sales-assets/source"
+PUBLIC_EXPORT_DIR="$ROOT_DIR/frontend/public/sales-assets/exports"
 
 mkdir -p "$PUBLIC_SOURCE_DIR" "$PUBLIC_EXPORT_DIR"
 
@@ -31,4 +31,4 @@ for file in "${SOURCE_FILES[@]}"; do
   pandoc "$SOURCE_DIR/$file" -t pptx -o "$PUBLIC_EXPORT_DIR/$name.pptx"
 done
 
-echo "Sales collateral exports generated in public/sales-assets/exports/."
+echo "Sales collateral exports generated in frontend/public/sales-assets/exports/."

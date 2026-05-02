@@ -1,0 +1,354 @@
+name: Python Package
+
+# Path-routing contract for Python domains lives in:
+# docs/operations/ci-path-routing.md
+# Keep this workflow and that document updated together.
+on:
+  push:
+    paths:
+      - 'backend/src/**'
+      - 'evo-v-core/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
+      - '.github/workflows/**'
+      - 'infra/.github/workflows/**'
+  pull_request:
+    paths:
+      - 'backend/src/**'
+      - 'evo-v-core/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
+      - '.github/workflows/**'
+      - 'infra/.github/workflows/**'
+
+jobs:
+  changed-paths:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend_pages: ${{ steps.filter.outputs.frontend_pages }}
+      backend_python: ${{ steps.filter.outputs.backend_python }}
+      evo_v_core: ${{ steps.filter.outputs.evo_v_core }}
+      shared_infra: ${{ steps.filter.outputs.shared_infra }}
+      backend_tests: ${{ steps.test_scope.outputs.backend_tests }}
+      core_tests: ${{ steps.test_scope.outputs.core_tests }}
+      test_scope_ambiguous: ${{ steps.test_scope.outputs.test_scope_ambiguous }}
+      backend_test_files: ${{ steps.test_scope.outputs.backend_test_files }}
+      core_test_files: ${{ steps.test_scope.outputs.core_test_files }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect changed paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            frontend_pages:
+              - 'frontend/app/**/page.tsx'
+            backend_python:
+              - 'backend/**/*.py'
+            evo_v_core:
+              - 'evo-v-core/**'
+            shared_infra:
+              - 'infra/**'
+              - 'infra/.github/workflows/**'
+              - 'pyproject.toml'
+              - 'requirements*.txt'
+      - name: Classify changed tests by domain
+        id: test_scope
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+            BASE_REF="origin/${{ github.base_ref }}"
+          else
+            BASE_REF="${{ github.event.before }}"
+          fi
+
+          CHANGED_TESTS=$(git diff --name-only "$BASE_REF" "$GITHUB_SHA" -- 'tests/**/*.py' 'tests/*.py' || true)
+          BACKEND_LIST=""
+          CORE_LIST=""
+          AMBIGUOUS=false
+          for test_file in $CHANGED_TESTS; do
+            file_name=$(basename "$test_file")
+            if [[ "$file_name" =~ ^test_(evo_v_|reasoning_agent|topology|governance|replay|proof|lyapunov|belief|epistemic|stability_trend|field_controller) ]]; then
+              CORE_LIST+="${test_file}"$'\n'
+            elif [[ "$file_name" =~ ^test_(backend|health|deployment|policy_update|compliance|canonical_json|measure_runtime_bridge|snapshot_freeze|hypothesis|ark_safety|control_logic|metric_decision|deterministic_policy|mode_detection|switching_policy|regime_switching|transport_metric_mode|nonsmooth_control_selector|safety_derivative_estimator) ]]; then
+              BACKEND_LIST+="${test_file}"$'\n'
+            else
+              AMBIGUOUS=true
+            fi
+          done
+
+          HAS_BACKEND=false
+          HAS_CORE=false
+          [ -n "$BACKEND_LIST" ] && HAS_BACKEND=true
+          [ -n "$CORE_LIST" ] && HAS_CORE=true
+          if [ "$HAS_BACKEND" = true ] && [ "$HAS_CORE" = true ]; then
+            AMBIGUOUS=true
+          fi
+          echo "backend_tests=$HAS_BACKEND" >> "$GITHUB_OUTPUT"
+          echo "core_tests=$HAS_CORE" >> "$GITHUB_OUTPUT"
+          echo "test_scope_ambiguous=$AMBIGUOUS" >> "$GITHUB_OUTPUT"
+          {
+            echo 'backend_test_files<<EOF'
+            printf '%s' "$BACKEND_LIST"
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+          {
+            echo 'core_test_files<<EOF'
+            printf '%s' "$CORE_LIST"
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+  frontend-lane-check:
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.frontend_pages == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate frontend page exports
+        run: |
+          echo "Frontend page files changed; backend and evo-v Python checks are not required for this scope."
+
+  # Backend domain checks are isolated from evo-v-core to avoid cross-root imports.
+  backend-lane-checks:
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.backend_python == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
+    strategy:
+      max-parallel: 5
+    env:
+      # Keep enabled until 3 consecutive green runs confirm stable topology,
+      # then gate behind CODEX_LINT_DIAGNOSTICS=1 or remove entirely.
+      CODEX_LINT_DIAGNOSTICS: '1'
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+      - name: CI truth check
+        run: |
+          echo "=== CI CONTEXT ==="
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "GITHUB_REF=$GITHUB_REF"
+          git rev-parse HEAD
+          git status --porcelain
+          echo "=== PYTHON ROOTS ==="
+          find backend/src evo-v-core -maxdepth 2 -type d
+      - name: Guardrail legacy entrypoint
+        run: |
+          if grep -R "app.main:app" -n .; then
+            echo "❌ Legacy app.main entrypoint detected"
+            exit 1
+          fi
+      - name: Lint topology diagnostics
+        run: |
+          echo "== git rev-parse HEAD =="
+          git rev-parse HEAD | tee /tmp/ci_head.txt
+          echo
+          echo "== git show --name-only --oneline -n 1 =="
+          git show --name-only --oneline -n 1 | tee /tmp/ci_show.txt
+          echo
+          echo "== find . -path '*codex/compliance.py' =="
+          find . -path '*codex/compliance.py' | tee /tmp/ci_compliance_paths.txt
+          echo
+          echo "== python package root distribution (top 12 prefixes) =="
+          python - <<'PY' | tee /tmp/ci_python_roots.txt
+          from collections import Counter
+          from pathlib import Path
+
+          roots = Counter()
+          for path in Path(".").rglob("*.py"):
+              if ".git" in path.parts:
+                  continue
+              if "node_modules" in path.parts:
+                  continue
+              parts = path.parts
+              if len(parts) >= 3 and parts[0] == ".":
+                  key = "/".join(parts[:3])
+              elif len(parts) >= 2:
+                  key = "/".join(parts[:2])
+              else:
+                  key = parts[0]
+              roots[key] += 1
+
+          for prefix, count in roots.most_common(12):
+              print(f"{count:4}  {prefix}")
+          if not roots:
+              print("(no Python files found)")
+          PY
+          {
+            echo "## Lint topology diagnostics"
+            echo
+            echo '```text'
+            echo "$ git rev-parse HEAD"
+            cat /tmp/ci_head.txt
+            echo
+            echo "$ git show --name-only --oneline -n 1"
+            cat /tmp/ci_show.txt
+            echo
+            echo "$ find . -path '*codex/compliance.py'"
+            if [ -s /tmp/ci_compliance_paths.txt ]; then
+              cat /tmp/ci_compliance_paths.txt
+            else
+              echo "(no matches)"
+            fi
+            echo
+            echo "$ python roots (top 12 prefixes)"
+            cat /tmp/ci_python_roots.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Pre-lint top-level path guard
+        working-directory: .
+        run: |
+          set -euo pipefail
+          echo "Checking for unintended top-level Python domain roots..."
+          OFFENDING_ROOTS=()
+          if [ -d "src" ]; then
+            OFFENDING_ROOTS+=("src/")
+          fi
+          if [ -d "app" ]; then
+            OFFENDING_ROOTS+=("app/")
+          fi
+
+          if [ ${#OFFENDING_ROOTS[@]} -gt 0 ]; then
+            echo "❌ Unapproved repository-root directories detected:"
+            printf ' - %s\n' "${OFFENDING_ROOTS[@]}"
+            echo
+            echo "Allowed canonical roots are scoped to:"
+            echo " - backend/src/"
+            echo " - evo-v-core/app/"
+            echo "Move files under approved domain roots to fix CI path routing."
+            exit 1
+          fi
+
+          echo "✅ Top-level path guard passed (no unexpected src/ or app/ at repository root)."
+          python tools/check_codex_package_roots.py
+      - name: Install dependencies
+        working-directory: .
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install -r backend/requirements-dev.txt
+      - name: Validate architecture artifact versions
+        if: needs.changed-paths.outputs.shared_infra == 'true'
+        working-directory: .
+        run: |
+          python infra/scripts/validate_architecture_version.py
+      - name: Debug codex compliance import path
+        working-directory: backend
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          python -c "import codex.compliance; print(codex.compliance.__file__)"
+          find . -path '*codex/compliance.py'
+      - name: Detect legacy duplicate roots
+        run: |
+          test ! -d src/codex || (echo "Legacy root src/codex detected"; exit 1)
+          test ! -d evo-v/app || (echo "Legacy root evo-v/app detected"; exit 1)
+
+      - name: Lint backend/src with flake8
+        working-directory: .
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.backend-src.strict.log backend/src
+          flake8 backend/src --count --select=E9,F63,F7,F82 --show-source --statistics
+      - name: Lint tests with flake8
+        working-directory: .
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          bash infra/scripts/run_flake8_with_summary.sh /tmp/flake8.tests.strict.log tests
+          flake8 tests \
+            --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Test backend domain with pytest
+        working-directory: backend
+        env:
+          PYTHONPATH: src
+        run: |
+          if [ "${{ needs.changed-paths.outputs.backend_tests }}" = "true" ] && [ "${{ needs.changed-paths.outputs.core_tests }}" = "false" ] && [ "${{ needs.changed-paths.outputs.test_scope_ambiguous }}" = "false" ]; then
+            printf '%s\n' "${{ needs.changed-paths.outputs.backend_test_files }}" | sed '/^$/d' | sed 's#^#../#' | xargs pytest
+          else
+            pytest tests
+          fi
+
+  # Evo-v-core domain checks run in a separate job with its own import root.
+  evo-v-core-checks:
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.evo_v_core == 'true' || needs.changed-paths.outputs.shared_infra == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+      - name: CI truth check
+        run: |
+          echo "=== CI CONTEXT ==="
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "GITHUB_REF=$GITHUB_REF"
+          git rev-parse HEAD
+          git status --porcelain
+          echo "=== PYTHON ROOTS ==="
+          find backend/src evo-v-core -maxdepth 2 -type d
+      - name: Guardrail legacy entrypoint
+        run: |
+          if grep -R "app.main:app" -n .; then
+            echo "❌ Legacy app.main entrypoint detected"
+            exit 1
+          fi
+      - name: Pre-lint top-level path guard
+        working-directory: .
+        run: |
+          set -euo pipefail
+          echo "Checking for unintended top-level Python domain roots..."
+          OFFENDING_ROOTS=()
+          if [ -d "src" ]; then
+            OFFENDING_ROOTS+=("src/")
+          fi
+          if [ -d "app" ]; then
+            OFFENDING_ROOTS+=("app/")
+          fi
+
+          if [ ${#OFFENDING_ROOTS[@]} -gt 0 ]; then
+            echo "❌ Unapproved repository-root directories detected:"
+            printf ' - %s\n' "${OFFENDING_ROOTS[@]}"
+            echo
+            echo "Allowed canonical roots are scoped to:"
+            echo " - backend/src/"
+            echo " - evo-v-core/app/"
+            echo "Move files under approved domain roots to fix CI path routing."
+            exit 1
+          fi
+
+          echo "✅ Top-level path guard passed (no unexpected src/ or app/ at repository root)."
+          python tools/check_codex_package_roots.py
+      - name: Install evo-v-core dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r evo-v-core/requirements.txt
+      - name: Run evo-v-core tests
+        env:
+          PYTHONPATH: evo-v-core
+        run: |
+          if [ "${{ needs.changed-paths.outputs.core_tests }}" = "true" ] && [ "${{ needs.changed-paths.outputs.backend_tests }}" = "false" ] && [ "${{ needs.changed-paths.outputs.test_scope_ambiguous }}" = "false" ]; then
+            printf '%s\n' "${{ needs.changed-paths.outputs.core_test_files }}" | sed '/^$/d' | xargs pytest
+          else
+            pytest evo-v-core/tests
+          fi
+      - name: Detect legacy duplicate roots
+        run: |
+          test ! -d src/codex || (echo "Legacy root src/codex detected"; exit 1)
+          test ! -d evo-v/app || (echo "Legacy root evo-v/app detected"; exit 1)
+
+      - name: Lint evo-v-core with flake8
+        working-directory: .
+        env:
+          PYTHONPATH: evo-v-core
+        run: |
+          flake8 evo-v-core --count --select=E9,F63,F7,F82 --show-source --statistics

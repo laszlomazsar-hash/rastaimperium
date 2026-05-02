@@ -1,0 +1,10 @@
+[
+  {"value": -0.0, "canonical": "0", "note": "normalize negative zero"},
+  {"value": 0.0, "canonical": "0", "note": "zero"},
+  {"value": 1.2345, "canonical": "1.2345", "note": "simple decimal"},
+  {"value": 2.5, "canonical": "2.5", "note": "half-even no forced integer rounding"},
+  {"value": 0.000000123456789012345, "canonical": "1.23456789012345e-07", "note": "very small uses scientific"},
+  {"value": 123456789012345678901.0, "canonical": "1.23456789012346e+20", "note": "large magnitude uses scientific"},
+  {"value": 1e-308, "canonical": "1e-308", "note": "subnormal/very small canonical exponent"},
+  {"value": 1000000.0, "canonical": "1000000", "note": "no scientific within range"}
+]
