@@ -2,6 +2,9 @@ name: Python Package
 
 on:
   push:
+    branches:
+      - main
+      - master
     paths:
       - 'app/**'
       - 'src/**'
@@ -9,6 +12,18 @@ on:
       - 'scripts/**'
       - 'requirements*.txt'
       - '.github/workflows/python-package-conda.yml'
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'app/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
+      - '.github/workflows/python-package-conda.yml'
+  workflow_dispatch:
 
 jobs:
   build-linux:
