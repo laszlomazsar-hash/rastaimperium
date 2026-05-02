@@ -100,3 +100,14 @@ git diff --name-only origin/main...HEAD
 ```
 
 Map each changed file to the tables above to predict which checks will run.
+
+## Branch protection required checks
+
+Branch protection should require only these scoped status checks from `.github/workflows/ci.yml`:
+
+- `backend-ci`
+- `core-ci`
+- `frontend-ci`
+- `tests-ci`
+
+Keep these check names stable to avoid branch protection drift.

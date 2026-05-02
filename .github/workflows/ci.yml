@@ -2,262 +2,132 @@ name: CI
 
 on:
   pull_request:
-  push:
-    branches:
-      - main
+    paths:
+      - 'backend/src/**'
+      - 'backend/requirements*.txt'
+      - 'evo-v-core/**'
+      - 'frontend/**'
+      - 'tests/**'
+      - '.github/workflows/ci.yml'
 
 jobs:
-  detect_changes:
+  changed-paths:
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.set_flags.outputs.backend }}
-      core: ${{ steps.set_flags.outputs.core }}
-      tests: ${{ steps.set_flags.outputs.tests }}
-      integration: ${{ steps.set_flags.outputs.integration }}
+      backend: ${{ steps.filter.outputs.backend }}
+      core: ${{ steps.filter.outputs.core }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      tests: ${{ steps.filter.outputs.tests }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - id: filter
+        uses: dorny/paths-filter@v3
         with:
-          fetch-depth: 0
+          filters: |
+            backend:
+              - 'backend/src/**'
+              - 'backend/requirements*.txt'
+            core:
+              - 'evo-v-core/**'
+            frontend:
+              - 'frontend/**'
+            tests:
+              - 'tests/**'
 
-      - name: Compute changed files
-        id: set_flags
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BASE_REF="${{ github.base_ref }}"
-            git fetch --no-tags --prune --depth=1 origin "${BASE_REF}"
-            DIFF_RANGE="origin/${BASE_REF}...HEAD"
-          else
-            BEFORE_SHA="${{ github.event.before }}"
-            DIFF_RANGE="${BEFORE_SHA}...HEAD"
-          fi
-
-          CHANGED_FILES="$(git diff --name-only ${DIFF_RANGE})"
-          echo "Changed files:"
-          echo "${CHANGED_FILES}"
-
-          backend=false
-          core=false
-          tests=false
-          integration=false
-
-          while IFS= read -r file; do
-            [[ -z "${file}" ]] && continue
-
-            if [[ "${file}" == backend/src/* || "${file}" == src/* ]]; then
-              backend=true
-            fi
-
-            if [[ "${file}" == evo-v-core/* || "${file}" == evo-v/* ]]; then
-              core=true
-            fi
-
-            if [[ "${file}" == tests/* ]]; then
-              tests=true
-            fi
-
-            # Integration validation should run when interface contracts or
-            # integration-specific tests change. This keeps job scope explicit
-            # and prevents accidental broadening over time.
-            if [[ "${file}" == tests/integration/* || "${file}" == interfaces/* || "${file}" == shared/interfaces/* ]]; then
-              integration=true
-            fi
-          done <<< "${CHANGED_FILES}"
-
-          {
-            echo "backend=${backend}"
-            echo "core=${core}"
-            echo "tests=${tests}"
-            echo "integration=${integration}"
-          } >> "$GITHUB_OUTPUT"
-
-  backend:
+  backend-ci:
+    name: backend-ci
     runs-on: ubuntu-latest
-    needs: detect_changes
-    if: needs.detect_changes.outputs.backend == 'true'
+    needs: changed-paths
+    if: needs.changed-paths.outputs.backend == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          clean: true
-          fetch-depth: 0
-      - name: Repository diagnostics
-        shell: bash
-        run: |
-          set -euo pipefail
-          git rev-parse HEAD
-          git show --name-only --oneline -n 1
 
-          for file in \
-            "evo-v-core/app/api/observatory.py" \
-            "evo-v-core/app/api/provisioning.py" \
-            "backend/src/codex/compliance.py"; do
-            if [[ -f "${file}" ]]; then
-              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
-              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
-              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
-            else
-              echo "exists:${file}:no"
-            fi
-          done
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install backend linter
+
+      - name: Install backend lint deps
+        working-directory: backend
         run: |
           python -m pip install --upgrade pip
           python -m pip install ruff
-      - name: Backend lint/test (scoped)
-        run: |
-          # TEMPORARY MITIGATION (2026-04-29):
-          # Legacy root-recursive `flake8 .` / `pytest` intermittently fail on
-          # archived and experimental trees that are outside active ownership.
-          # Compile only active backend sources to keep syntax regression
-          # coverage without pulling unrelated Python roots into this lane.
-          # Follow-up issue: #908 - restore scoped lint/test by domain.
-          echo "Resolved compile targets: backend/src"
-          python -m compileall backend/src
-          ruff check --select F401,F403,F404,F405,F406,F407,F811,F821,F822,F823,F831,F841 backend/src
 
-  core:
+      - name: Backend compile + lint
+        working-directory: backend
+        run: |
+          python -m compileall src
+          ruff check src
+
+  core-ci:
+    name: core-ci
     runs-on: ubuntu-latest
-    needs: detect_changes
-    if: needs.detect_changes.outputs.core == 'true'
+    needs: changed-paths
+    if: needs.changed-paths.outputs.core == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          clean: true
-          fetch-depth: 0
-      - name: Repository diagnostics
-        shell: bash
-        run: |
-          set -euo pipefail
-          git rev-parse HEAD
-          git show --name-only --oneline -n 1
 
-          for file in \
-            "evo-v-core/app/api/observatory.py" \
-            "evo-v-core/app/api/provisioning.py" \
-            "backend/src/codex/compliance.py"; do
-            if [[ -f "${file}" ]]; then
-              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
-              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
-              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
-            else
-              echo "exists:${file}:no"
-            fi
-          done
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install core linter
+
+      - name: Install core lint deps
+        working-directory: evo-v-core
         run: |
           python -m pip install --upgrade pip
           python -m pip install ruff
-      - name: Core lint/test (scoped)
-        run: |
-          # TEMPORARY MITIGATION (2026-04-29):
-          # Legacy root-recursive `flake8 .` / `pytest` intermittently fail on
-          # archived and experimental trees that are outside active ownership.
-          # Compile only active core sources to keep syntax regression coverage
-          # without pulling unrelated Python roots into this lane.
-          # Follow-up issue: #908 - restore scoped lint/test by domain.
-          echo "Resolved compile targets: evo-v-core"
-          python -m compileall evo-v-core
-          ruff check --select F401,F403,F404,F405,F406,F407,F811,F821,F822,F823,F831,F841 evo-v-core
 
-  tests:
+      - name: Core compile + lint
+        working-directory: evo-v-core
+        run: |
+          python -m compileall app
+          ruff check app
+
+  frontend-ci:
+    name: frontend-ci
     runs-on: ubuntu-latest
-    needs: detect_changes
-    if: needs.detect_changes.outputs.tests == 'true'
+    needs: changed-paths
+    if: needs.changed-paths.outputs.frontend == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          clean: true
-          fetch-depth: 0
-      - name: Repository diagnostics
-        shell: bash
-        run: |
-          set -euo pipefail
-          git rev-parse HEAD
-          git show --name-only --oneline -n 1
 
-          for file in \
-            "evo-v-core/app/api/observatory.py" \
-            "evo-v-core/app/api/provisioning.py" \
-            "backend/src/codex/compliance.py"; do
-            if [[ -f "${file}" ]]; then
-              checksum="$(sha256sum "${file}" | cut -d' ' -f1)"
-              first_line="$(sed -n '1p' "${file}" | tr -d '\r')"
-              echo "exists:${file}:yes sha256:${checksum} first_line:${first_line}"
-            else
-              echo "exists:${file}:no"
-            fi
-          done
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
+
+      - name: Frontend lint
+        working-directory: frontend
+        run: npm run lint
+
+  tests-ci:
+    name: tests-ci
+    runs-on: ubuntu-latest
+    needs: changed-paths
+    if: needs.changed-paths.outputs.tests == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Tests domain checks (scoped)
-        run: |
-          # TEMPORARY MITIGATION (2026-04-29):
-          # Replace legacy repository-root `pytest` execution with compile-only
-          # checks on active test sources. This preserves syntax regression
-          # detection while avoiding failures from archived/experimental trees.
-          # Follow-up issue: #908 - restore scoped lint/test by domain.
-          echo "Resolved compile targets: tests"
-          python -m compileall tests
 
-  integration:
-    runs-on: ubuntu-latest
-    needs: detect_changes
-    # Rationale: integration validation is isolated from domain jobs and only
-    # runs when contract/integration paths change. If CI cost is acceptable,
-    # switch this condition to always run on pull_request to catch coupling
-    # issues earlier.
-    if: needs.detect_changes.outputs.integration == 'true'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          clean: true
-          fetch-depth: 0
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Run integration tests only
+      - name: Install test deps
+        working-directory: backend
         run: |
-          pytest tests/integration
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
 
-  summary:
-    runs-on: ubuntu-latest
-    needs:
-      - detect_changes
-      - backend
-      - core
-      - tests
-      - integration
-    if: always()
-    steps:
-      - name: CI summary
-        run: |
-          {
-            echo "## CI Domain Execution Summary"
-            echo ""
-            echo "- backend changed: ${{ needs.detect_changes.outputs.backend }}"
-            echo "- backend result: ${{ needs.backend.result }}"
-            echo "- core changed: ${{ needs.detect_changes.outputs.core }}"
-            echo "- core result: ${{ needs.core.result }}"
-            echo "- tests changed: ${{ needs.detect_changes.outputs.tests }}"
-            echo "- tests result: ${{ needs.tests.result }}"
-            echo "- integration changed: ${{ needs.detect_changes.outputs.integration }}"
-            echo "- integration result: ${{ needs.integration.result }}"
-          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Run tests domain
+        working-directory: tests
+        run: pytest
