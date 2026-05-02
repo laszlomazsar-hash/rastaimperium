@@ -4,6 +4,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 import os
 import time
+from typing import Literal
 
 
 COMPROMISE_MAX_SECONDS = 30.0
