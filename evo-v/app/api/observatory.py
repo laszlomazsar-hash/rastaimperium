@@ -9,5 +9,6 @@ engine = get_engine()
 async def heartbeat() -> dict:
     snapshot = engine.audit_state()
     runtime_state.set_watchdog("nominal")
+    # Update shared health singleton before responding to heartbeat probes.
     health_state.mark_heartbeat()
     return {"status": "ok", "snapshot": snapshot}
