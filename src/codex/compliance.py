@@ -67,6 +67,7 @@ class ComplianceEngine:
 
         # Reproducibility controls.
         self._approved_profiles: Dict[str, DeterministicExecutionProfile] = {}
+        self._approved_profiles_by_hash: Dict[str, DeterministicExecutionProfile] = {}
         self._manifest_bindings: Dict[str, ManifestBinding] = {}
         self._epsilon_by_profile_metric: Dict[str, Dict[str, float]] = {}
 
@@ -87,6 +88,7 @@ class ComplianceEngine:
     def approve_execution_profile(self, profile: DeterministicExecutionProfile) -> str:
         profile_hash = profile.hash()
         self._approved_profiles[profile.name] = profile
+        self._approved_profiles_by_hash[profile_hash] = profile
         self._epsilon_by_profile_metric.setdefault(profile.name, {})
         return profile_hash
 
@@ -132,7 +134,9 @@ class ComplianceEngine:
         if binding is None:
             raise KeyError("Manifest has no profile binding")
 
-        expected_profile = self._approved_profiles[binding.profile_name]
+        expected_profile = self._approved_profiles_by_hash.get(binding.profile_hash)
+        if expected_profile is None:
+            raise KeyError("Bound profile hash is no longer approved")
         mismatches = self._profile_mismatches(expected_profile, replay_profile)
         mismatch_count = len(mismatches)
         passed = mismatch_count <= policy.max_profile_mismatches

@@ -52,6 +52,33 @@ def test_epsilon_is_configured_per_profile_and_metric_type() -> None:
     assert engine.epsilon_for(profile.name, "accuracy") == 0.001
 
 
+
+
+def test_replay_verification_uses_bound_profile_hash_when_name_is_reapproved() -> None:
+    engine = ComplianceEngine()
+    original_profile = _approved_profile()
+    engine.approve_execution_profile(original_profile)
+
+    manifest = {"run_id": "abc123", "model": "v1"}
+    engine.bind_manifest_to_execution_profile(manifest, original_profile.name)
+
+    reapproved_profile = DeterministicExecutionProfile(
+        name=original_profile.name,
+        library_versions={"numpy": "2.1.0", "pandas": "2.2.3"},
+        thread_counts={"omp": 2, "mkl": 1},
+        deterministic_flags={"cudnn_deterministic": True, "pythonhashseed": False},
+    )
+    engine.approve_execution_profile(reapproved_profile)
+
+    result = engine.verify_replay_profile(manifest, reapproved_profile)
+
+    assert result.passed is False
+    assert set(result.mismatches) == {
+        "library_versions.numpy",
+        "thread_counts.omp",
+        "deterministic_flags.pythonhashseed",
+    }
+
 def test_replay_verification_fails_when_profile_mismatch_exceeds_policy() -> None:
     engine = ComplianceEngine()
     profile = _approved_profile()
