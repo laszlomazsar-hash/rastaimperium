@@ -10,7 +10,7 @@ import threading
 import time
 from typing import Any, Deque
 
-from runtime_enums import ProofStatus, RuntimeMode
+from .runtime_enums import ProofStatus, RuntimeMode
 
 
 class EvoState(str, Enum):
