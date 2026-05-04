@@ -95,6 +95,7 @@ class SoulEchoStreamEngine:
     def __init__(
         self,
         *,
+        # Tunables are explicit constructor args so callers can override policy behavior.
         budget_state_provider: Callable[[int], TransportBudgetState] | None = None,
         policy_update_interval_seconds: int = 60,
         ema_alpha: float = 0.25,
