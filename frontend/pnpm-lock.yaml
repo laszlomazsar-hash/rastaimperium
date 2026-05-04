@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       next:
-        specifier: ^15.5.15
+        specifier: ^15.0.7
         version: 15.5.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: 18.3.1
@@ -19,25 +19,25 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^22.19.17
+        specifier: ^22.10.2
         version: 22.19.17
       '@types/react':
-        specifier: ^18.3.28
+        specifier: ^18.3.12
         version: 18.3.28
       '@types/react-dom':
-        specifier: ^18.3.7
+        specifier: ^18.3.1
         version: 18.3.7(@types/react@18.3.28)
       autoprefixer:
-        specifier: ^10.5.0
+        specifier: ^10.4.20
         version: 10.5.0(postcss@8.5.12)
       postcss:
-        specifier: ^8.5.12
+        specifier: ^8.4.49
         version: 8.5.12
       tailwindcss:
-        specifier: ^3.4.19
+        specifier: ^3.4.17
         version: 3.4.19
       typescript:
-        specifier: ^5.9.3
+        specifier: ^5.7.2
         version: 5.9.3
 
 packages:
