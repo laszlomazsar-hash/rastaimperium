@@ -52,6 +52,9 @@ jobs:
       - name: Legacy runtime guard
         run: bash infra/scripts/check_legacy_runtime_reintroduction.sh
 
+      - name: Import policy guard
+        run: python scripts/check_import_policies.py
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -138,11 +141,24 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Import policy guard
+        run: python scripts/check_import_policies.py
+
       - name: Install test deps
         working-directory: backend
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements-dev.txt
+          python -m pip install pytest
+
+      - name: Run architecture enforcement
+        run: |
+          python infra/scripts/validate_architecture_version.py
+          pytest tests/test_architecture_version_validation.py tests/test_architecture_dependency_container_guard.py
+
+      - name: Install full test deps
+        if: success()
+        working-directory: backend
+        run: python -m pip install -r requirements-dev.txt
 
       - name: Run tests domain
         working-directory: tests
