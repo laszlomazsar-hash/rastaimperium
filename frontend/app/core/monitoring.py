@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
+from math import fsum, sqrt
 import os
 import time
 from typing import Literal
@@ -37,6 +38,18 @@ class StabilityAssessmentEvent:
     slope: float
     mode_used: Literal["short", "long"]
     window_used: int
+
+
+@dataclass(frozen=True)
+class RepresentationQualitySnapshot:
+    tick: int
+    status: Literal["ok", "warn", "fail"]
+    metrics: dict[str, float]
+    failed_proxies: list[str]
+    warn_proxies: list[str]
+    remediation_actions: list[str]
+    observed_at: str
+    policy_thresholds: dict[str, float]
 
 
 def stability_trend(samples: list[float], policy: StabilityPolicy | None = None) -> StabilityTrend:

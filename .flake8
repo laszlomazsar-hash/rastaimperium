@@ -10,5 +10,6 @@ exclude =
     output,
     vendor,
     node_modules,
-    archive
+    archive,
+    evo-v
 filename = *.py
