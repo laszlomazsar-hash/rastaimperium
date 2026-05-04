@@ -12,7 +12,7 @@ from enum import Enum
 from threading import RLock
 from typing import Any, Callable, Dict, List, Literal, Mapping, Optional, Protocol
 
-from codex.canonical_json import dumps_canonical
+from .canonical_json import dumps_canonical
 
 
 class TopologyOperation(Protocol):
