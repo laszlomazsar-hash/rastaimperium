@@ -1,12 +1,12 @@
 from pathlib import Path
+import re
 
-# Only dedicated composition roots may instantiate engine/controller objects.
-# - app/core/container.py: central DI container/composition root for wiring runtime objects.
-# Any dependency modules (for example app/api/dependencies.py and
-# app/ark_engine/api/dependencies_evo.py) must remain constructor-free pass-through layers.
+# DI policy source of truth:
+# Selected endpoint/dependency wiring modules may instantiate engine/controller objects.
+# All other modules must consume these objects via dependency injection.
 ALLOWED_FILES = {
-    "app/core/container.py",
     "app/api/v1/endpoints.py",
+    "app/ark_engine/api/dependencies_evo.py",
 }
 
 
@@ -38,7 +38,7 @@ def _is_allowed(path: Path) -> bool:
     return normalized in ALLOWED_FILES
 
 
-def test_engine_and_controller_constructors_are_container_scoped() -> None:
+def _find_constructor_violations() -> list[str]:
     violations: list[str] = []
 
     for py_file in _iter_python_files():
@@ -46,11 +46,34 @@ def test_engine_and_controller_constructors_are_container_scoped() -> None:
             continue
 
         source = py_file.read_text(encoding="utf-8")
-        import re
         if any(re.search(pattern, source) for pattern in FORBIDDEN_CALL_PATTERNS):
             violations.append(py_file.as_posix())
+
+    return violations
+
+
+def test_engine_and_controller_constructors_are_container_scoped() -> None:
+    violations = _find_constructor_violations()
 
     assert violations == [], (
         "Direct engine/controller construction found outside approved DI wiring modules: "
         + ", ".join(sorted(violations))
     )
+
+
+def test_constructor_guard_allows_only_allowlisted_wiring_modules(tmp_path: Path, monkeypatch) -> None:
+    frontend_app_root = tmp_path / "frontend" / "app"
+    allowed_file = frontend_app_root / "api" / "v1" / "endpoints.py"
+    forbidden_file = frontend_app_root / "services" / "worker.py"
+
+    allowed_file.parent.mkdir(parents=True, exist_ok=True)
+    forbidden_file.parent.mkdir(parents=True, exist_ok=True)
+
+    allowed_file.write_text("def build():\n    return CodexEngine()\n", encoding="utf-8")
+    forbidden_file.write_text("def build():\n    return CodexEngine()\n", encoding="utf-8")
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(__import__(__name__), "TARGET_DIRS", (Path("frontend/app"),))
+    monkeypatch.setattr(__import__(__name__), "ALLOWED_FILES", {"app/api/v1/endpoints.py"})
+
+    assert _find_constructor_violations() == ["frontend/app/services/worker.py"]
