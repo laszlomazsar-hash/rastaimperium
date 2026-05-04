@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from src.codex.canonical_json import canonicalize_float, dumps_canonical
+from codex.compliance import ComplianceEngine
 from backend.src.codex.compliance import ComplianceEngine
 
 
@@ -39,7 +40,7 @@ def test_compliance_digest_uses_canonical_float_serialization(monkeypatch: pytes
 
             return datetime(2026, 4, 27, 12, 0, 0, tzinfo=tz)
 
-    monkeypatch.setattr("src.codex.compliance.datetime", _FrozenDatetime)
+    monkeypatch.setattr("codex.compliance.datetime", _FrozenDatetime)
     record = engine.append_audit_record(
         "auditor",
         "calibrate",

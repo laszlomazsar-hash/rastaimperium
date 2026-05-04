@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from codex.compliance import CANONICALIZATION_VERSION, canonical_json, sha256_canonical_digest
 from backend.src.codex.compliance import CANONICALIZATION_VERSION, canonical_json, sha256_canonical_digest
 
 
