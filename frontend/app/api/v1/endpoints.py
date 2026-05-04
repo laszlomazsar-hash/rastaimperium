@@ -10,6 +10,7 @@ from app.ark_engine.api.routers.divine_guidance import router as divine_router
 from app.ark_engine.api.routers.evolution import router as evolution_router
 from app.ark_engine.core.field_controller import IFieldController, seed_the_ark
 from app.ark_engine.evo_v_nextgen import EvolutionaryCulturalOptimizer
+from app.api.dependencies import get_evolutionary_optimizer, get_field_controller
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.monitoring import monitoring_state
@@ -71,7 +72,7 @@ async def get_manifest():
 
 @router.get("/simulate")
 async def get_simulation():
-    optimizer = EvolutionaryCulturalOptimizer()
+    optimizer: EvolutionaryCulturalOptimizer = get_evolutionary_optimizer()
     initial_cultures = [
         {"name": "Roots", "values": ["integrity", "stewardship"], "energy": 0.82},
         {"name": "Zion", "values": ["vision", "joy"], "energy": 0.91},
@@ -81,7 +82,7 @@ async def get_simulation():
 
 @router.get("/nuggets")
 async def get_nuggets():
-    controller = IFieldController()
+    controller: IFieldController = get_field_controller()
     seed_the_ark(controller)
     return {
         "count": len(controller.ark.storage),
