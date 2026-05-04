@@ -26,6 +26,33 @@ def test_monitoring_metrics_flow_and_prometheus_payload() -> None:
     payload = state.prometheus()
     assert "rasta_webhook_events_processed 2" in payload
     assert "rasta_subscription_sync_events 1" in payload
+    health = state.health_payload()
+    assert "stability" in health
+    assert "trend_slope" in health["stability"]
+    assert "trend_confidence" in health["stability"]
+
+
+def test_monitoring_stability_requires_consecutive_windows() -> None:
+    state = MonitoringState(
+        stability_window_size=4,
+        stability_min_slope_magnitude=0.05,
+        stability_required_consecutive_windows=3,
+    )
+
+    state._stability_status = "stable"
+    for sample in [6.0, 4.0, 2.0]:
+        state._record_stability_sample(sample)
+    assert state.observability_payload()["stability"]["status"] == "stable"
+
+    state._record_stability_sample(0.0)
+    assert state.observability_payload()["stability"]["status"] == "unstable"
+
+    state._record_stability_sample(-2.0)
+    assert state.observability_payload()["stability"]["status"] == "unstable"
+
+    for sample in [0.0, 2.0, 4.0, 6.0]:
+        state._record_stability_sample(sample)
+    assert state.observability_payload()["stability"]["status"] == "stable"
 
 
 def test_subscription_sync_dashboard_and_stripe_catalog() -> None:
@@ -34,6 +61,10 @@ def test_subscription_sync_dashboard_and_stripe_catalog() -> None:
     assert sync.db_synced is True
 
     dashboard = SoulEchoDashboardService()
+    stream = dashboard.stream_payload()
+    assert stream["energy_schema_version"] == "1.0.0"
+    assert "drift_avg" in stream["energy_components"]
+
     widgets = dashboard.subscription_widgets("enterprise", workspace="workspace-1")
     assert any(widget.key == "enterprise_metrics" and widget.visible for widget in widgets)
 
