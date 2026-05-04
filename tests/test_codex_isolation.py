@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-import importlib
-import pkgutil
-import sys
+import ast
 from pathlib import Path
-from types import ModuleType
 from typing import Iterable
 
 FORBIDDEN_PREFIXES = (
@@ -13,42 +10,47 @@ FORBIDDEN_PREFIXES = (
 )
 
 
-def _ensure_codex_search_paths() -> None:
+def _normalize_module_name(module: str) -> str:
+    return module.strip()
+
+
+def extract_imports(path: Path) -> list[tuple[int, str]]:
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=path.as_posix())
+    imports: list[tuple[int, str]] = []
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                imports.append((node.lineno, _normalize_module_name(alias.name)))
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            imports.append((node.lineno, _normalize_module_name(node.module)))
+
+    return imports
+
+
+def _iter_python_files() -> Iterable[Path]:
     root = Path(__file__).resolve().parents[1]
-    for rel in ("backend/src", "src"):
-        candidate = root / rel
-        if candidate.exists() and str(candidate) not in sys.path:
-            sys.path.insert(0, str(candidate))
-
-
-def _module_origins(module: ModuleType) -> Iterable[str]:
-    for value in vars(module).values():
-        if isinstance(value, ModuleType):
-            origin = value.__name__
-        else:
-            origin = getattr(value, "__module__", None)
-
-        if isinstance(origin, str) and origin:
-            yield origin
+    for base in (root / "backend" / "src", root / "tests"):
+        if not base.exists():
+            continue
+        yield from base.rglob("*.py")
 
 
 def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
-    _ensure_codex_search_paths()
-    importlib.invalidate_caches()
-    codex = importlib.import_module("backend.src.codex")
+    root = Path(__file__).resolve().parents[1]
+    violations: list[tuple[str, int, str]] = []
 
-    violations: list[str] = []
-
-    for _, modname, _ in pkgutil.walk_packages(codex.__path__, "backend.src.codex."):
-        module = importlib.import_module(modname)
-
-        if any(modname.startswith(prefix) for prefix in FORBIDDEN_PREFIXES):
-            forbidden = next(prefix for prefix in FORBIDDEN_PREFIXES if modname.startswith(prefix))
-            violations.append(f"{modname} depends on {forbidden}")
-
-        for origin in _module_origins(module):
-            forbidden = next((prefix for prefix in FORBIDDEN_PREFIXES if origin.startswith(prefix)), None)
+    for py_file in _iter_python_files():
+        rel_path = py_file.resolve().relative_to(root).as_posix()
+        for lineno, imported_module in extract_imports(py_file):
+            forbidden = next(
+                (prefix for prefix in FORBIDDEN_PREFIXES if imported_module.startswith(prefix)),
+                None,
+            )
             if forbidden:
-                violations.append(f"{modname} depends on {forbidden}")
+                violations.append((rel_path, lineno, imported_module))
 
-    assert not violations, "\n".join(sorted(set(violations)))
+    assert not violations, "\n".join(
+        f"{file}:{line} imports {imported_module}"
+        for file, line, imported_module in sorted(set(violations))
+    )
