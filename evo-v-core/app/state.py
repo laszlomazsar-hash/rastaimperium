@@ -8,7 +8,9 @@ from datetime import datetime, timezone
 from enum import Enum
 import threading
 import time
-from typing import Deque
+from typing import Any, Deque
+
+from .runtime_enums import ProofStatus, RuntimeMode
 
 
 class EvoState(str, Enum):

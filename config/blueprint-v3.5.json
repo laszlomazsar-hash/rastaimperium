@@ -5,7 +5,12 @@
   "metadata": {
     "architectureVersion": "3.6.0",
     "sourceOfTruth": "docs/ARCHITECTURE_CANONICAL.md",
-    "artifactRole": "machine-readable-derivative"
+    "artifactRole": "machine-readable-derivative",
+    "deterministicBoundaryControlPolicy": {
+      "version": "1.0.0",
+      "selectionRule": "minimum_norm_then_lexicographic",
+      "description": "Deterministic boundary-point subgradient selection with lexicographic tie-break."
+    }
   },
   "website": {
     "domain": "rastaimperium.com",

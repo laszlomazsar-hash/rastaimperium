@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
-from random import uniform
 from typing import Callable, Dict, List, Literal
 
 from .metrics import EnergyComponentBreakdown, compute_energy_breakdown
@@ -54,6 +53,8 @@ class SoulEchoSnapshot:
     mutation_events: List[str] = field(default_factory=list)
     policy_deltas: List[PolicyDelta] = field(default_factory=list)
     policy_threshold: float = 80.0
+    energy_schema_version: str = METRIC_SCHEMA_VERSION
+    energy_components: EnergyComponentBreakdown | None = None
 
 
 def choose_transport_metric_mode(state: TransportBudgetState) -> TransportMetricMode:
@@ -94,33 +95,40 @@ class SoulEchoStreamEngine:
     def __init__(
         self,
         *,
+        # Tunables are explicit constructor args so callers can override policy behavior.
+        budget_state_provider: Callable[[int], TransportBudgetState] | None = None,
         policy_update_interval_seconds: int = 60,
         ema_alpha: float = 0.25,
         delta_limit: float = 1.0,
         hysteresis_band: float = 0.2,
         cooldown_seconds: int = 120,
     ) -> None:
+        # Defaults mirror the previous hard-coded policy tuning values.
         self._base_layer_score: Dict[int, float] = {layer: 95.0 for layer in range(1, 10)}
         self._event_count = 0
         self._tick = 0
         self._transport_mode_telemetry: List[TransportModeDecision] = []
         self._budget_state_provider = budget_state_provider or self._default_budget_state_provider
-
-    def _default_budget_state_provider(self, _: int) -> TransportBudgetState:
-        return TransportBudgetState(tick_budget_class=2, queue_depth=0, configured_cap=10)
-
         self._policy_update_interval = timedelta(seconds=policy_update_interval_seconds)
         self._ema_alpha = ema_alpha
         self._delta_limit = abs(delta_limit)
         self._hysteresis_band = abs(hysteresis_band)
         self._cooldown = timedelta(seconds=cooldown_seconds)
-
         self._policy_threshold = 80.0
         self._ema_target = self._policy_threshold
         self._last_policy_update_at: datetime | None = None
         self._last_direction_change_at: datetime | None = None
         self._last_direction = 0
         self._pending_baseline_writes = 0
+
+    def _default_budget_state_provider(self, _: int) -> TransportBudgetState:
+        return TransportBudgetState(tick_budget_class=2, queue_depth=0, configured_cap=10)
+
+    @staticmethod
+    def _delta(*, step: int, layer: int) -> float:
+        """Deterministic bounded layer drift used for replay-stable snapshots."""
+        phase = (step * 17 + layer * 13) % 11
+        return float(phase - 5) * 0.1
 
     def next_snapshot(self, now: datetime | None = None) -> SoulEchoSnapshot:
         timestamp = now or datetime.now(timezone.utc)
@@ -134,7 +142,7 @@ class SoulEchoStreamEngine:
             updated = max(0.0, min(100.0, score + self._delta(step=step, layer=layer)))
             self._base_layer_score[layer] = updated
             actual_scores.append(updated)
-            layer_metrics.append(LayerMetric(layer=layer, coherence=round(updated, 2)))
+            layer_metrics.append(LayerMetric(layer=layer, coherence=round(updated, 2), predictive_mean=round(score, 2)))
 
         self._event_count += 1
         budget_state = self._budget_state_provider(self._tick)
@@ -147,18 +155,21 @@ class SoulEchoStreamEngine:
             )
         )
         livity = round(sum(item.coherence for item in layer_metrics) / len(layer_metrics), 2)
-        vibration = round(max(0.0, min(100.0, livity + uniform(-2.0, 2.0))), 2)
+        vibration = round(max(0.0, min(100.0, livity + self._delta(step=step, layer=0))), 2)
         snapshot_drift = round(abs(vibration - livity), 2)
         for metric in layer_metrics:
             metric.drift_i = round(abs(snapshot_drift - metric.predictive_mean), 2)
+        energy_components = compute_energy_breakdown(actual_scores=actual_scores, predicted_scores=predicted_scores)
         energy_score = energy_from_runtime_snapshot(snapshot_drift=snapshot_drift, hypotheses=layer_metrics)
         event = f"EVO-V mutation event #{self._event_count}"
 
         self._pending_baseline_writes += 1
         policy_deltas = self._update_policy_if_due(self._policy_signal(livity), timestamp)
+        self._tick += 1
 
         return SoulEchoSnapshot(
             timestamp=timestamp.isoformat(),
+            metric_schema_version=METRIC_SCHEMA_VERSION,
             livity_score=livity,
             vibration_score=vibration,
             transport_metric_mode=selected_mode,
@@ -166,6 +177,7 @@ class SoulEchoStreamEngine:
             mutation_events=[event],
             policy_deltas=policy_deltas,
             policy_threshold=round(self._policy_threshold, 3),
+            energy_components=energy_components,
         )
 
     def _policy_signal(self, livity_score: float) -> float:
