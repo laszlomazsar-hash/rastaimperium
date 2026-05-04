@@ -142,6 +142,8 @@ class AuditRecord:
     metadata: Dict[str, object]
     timestamp: str
     digest: str
+    cert_hash: str
+    prev_cert_hash: str
 
 
 @dataclass(frozen=True)
@@ -262,8 +264,9 @@ class ComplianceEngine:
             "timestamp": timestamp,
         }
         digest = hashlib.sha256(dumps_canonical(payload).encode("utf-8")).hexdigest()
-        record = AuditRecord(**payload, digest=digest)
         with self._lock:
+            prev_hash = self._audit_log[-1].cert_hash if self._audit_log else ("0" * 64)
+            record = AuditRecord(**payload, digest=digest, cert_hash=digest, prev_cert_hash=prev_hash)
             self._audit_log.append(record)
         return record
 
@@ -397,6 +400,71 @@ class ComplianceEngine:
             }
         )
         return self._override_active
+
+
+    def register_likelihood(
+        self,
+        *,
+        regime: str,
+        model_class: str,
+        likelihood_form: LikelihoodForm,
+        noise_model: str,
+        parameter_bounds: Mapping[str, tuple[float, float]] | None = None,
+    ) -> None:
+        key = (regime, model_class)
+        self._likelihood_specs[key] = LikelihoodSpecification(
+            regime=regime,
+            model_class=model_class,
+            likelihood_form=likelihood_form,
+            noise_model=noise_model,
+            parameter_bounds=dict(parameter_bounds or {}),
+        )
+
+    def calibrate_regime(
+        self,
+        *,
+        regime: str,
+        model_class: str,
+        predicted_probabilities: list[float],
+        observed_outcomes: list[float],
+        bins: int = 10,
+    ) -> Dict[str, object]:
+        key = (regime, model_class)
+        if key not in self._likelihood_specs:
+            raise CalibrationReplayError("likelihood spec not registered")
+        n = min(len(predicted_probabilities), len(observed_outcomes))
+        if n == 0:
+            raise CalibrationReplayError("empty calibration inputs")
+        probs = [self._bound_metric(float(p), lower=0.0, upper=1.0) for p in predicted_probabilities[:n]]
+        obs = [self._bound_metric(float(o), lower=0.0, upper=1.0) for o in observed_outcomes[:n]]
+        eps = 1e-12
+        spec = self._likelihood_specs[key]
+        if spec.likelihood_form == "gaussian":
+            residuals = [o - p for p, o in zip(probs, obs)]
+            sigma = max((spec.parameter_bounds.get("sigma", (0.1, 0.1))[0]), eps)
+            nll = sum(((r ** 2) / (2 * sigma**2)) + math.log(sigma * math.sqrt(2 * math.pi)) for r in residuals) / n
+        else:
+            nll = -sum(o * math.log(max(p, eps)) + (1 - o) * math.log(max(1 - p, eps)) for p, o in zip(probs, obs)) / n
+        bin_count = max(1, int(bins))
+        curve = []
+        for i in range(bin_count):
+            lo = i / bin_count
+            hi = (i + 1) / bin_count
+            idx = [j for j, p in enumerate(probs) if (lo <= p < hi) or (i == bin_count - 1 and p == 1.0)]
+            if not idx:
+                continue
+            pm = sum(probs[j] for j in idx) / len(idx)
+            of = sum(obs[j] for j in idx) / len(idx)
+            curve.append({"bin_start": lo, "bin_end": hi, "predicted_mean": pm, "observed_frequency": of, "absolute_error": abs(pm-of), "sample_count": len(idx)})
+        result={"regime":regime,"model_class":model_class,"sample_size":n,"nll":round(nll,6),"reliability_curve":curve}
+        self._calibration_results[key]=result
+        return result
+
+    def likelihood_diagnostics(self) -> Dict[str, object]:
+        return {
+            "specifications": {f"{r}:{m}": {"likelihood_form": spec.likelihood_form, "noise_model": spec.noise_model, "parameter_bounds": spec.parameter_bounds} for (r,m), spec in self._likelihood_specs.items()},
+            "calibration": {f"{r}:{m}": data for (r,m), data in self._calibration_results.items()},
+        }
 
     def should_trigger_rollback(self) -> bool:
         with self._lock:
