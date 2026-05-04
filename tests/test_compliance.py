@@ -1,6 +1,7 @@
 import pytest
 
-from src.codex.compliance import (
+from codex.compliance import (
+from backend.src.codex.compliance import (
     CalibrationReplayError,
     ComplianceEngine,
     DATASET_SNAPSHOT_FORMAT_VERSION,

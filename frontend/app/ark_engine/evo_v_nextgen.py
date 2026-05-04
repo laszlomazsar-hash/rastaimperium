@@ -220,7 +220,12 @@ class QuantumCulturalOptimizer:
 class EvolutionaryCulturalOptimizer:
     """Scaffold for evolutionary cultural algorithms."""
 
-    def __init__(self, model_error_budget: float = 0.35) -> None:
+    def __init__(self, model_error_budget: float = 0.35, *, _container_token: object | None = None) -> None:
+        from app.core.container import is_container_token
+
+        if not is_container_token(_container_token):
+            raise RuntimeError("EvolutionaryCulturalOptimizer must be created by AppContainer via get_container().")
+
         self.model_error_budget = max(0.0, model_error_budget)
         self.error_audit_log: List[Dict[str, Any]] = []
 
