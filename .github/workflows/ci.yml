@@ -24,6 +24,38 @@ jobs:
       tests: ${{ steps.filter.outputs.tests }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
       - id: filter
         uses: dorny/paths-filter@v3
         with:
@@ -48,6 +80,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Legacy runtime guard
         run: bash infra/scripts/check_legacy_runtime_reintroduction.sh
@@ -80,6 +145,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -106,6 +204,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -135,6 +266,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up Python
         uses: actions/setup-python@v5
