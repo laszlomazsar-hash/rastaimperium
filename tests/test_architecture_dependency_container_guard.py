@@ -1,31 +1,17 @@
 from pathlib import Path
 import re
 
-# DI policy source of truth:
-# Selected endpoint/dependency wiring modules may instantiate engine/controller objects.
-# All other modules must consume these objects via dependency injection.
-ALLOWED_FILES = {
-    "app/api/v1/endpoints.py",
-    "app/ark_engine/api/dependencies_evo.py",
-}
-
-
-TARGET_DIRS = (
-    Path("app"),
-    Path("frontend/app"),
-)
-
-FORBIDDEN_CALL_PATTERNS = (
-    r"(?<!class\s)\bFieldController\(",
-    r"(?<!class\s)\bEvolutionaryOptimizer\(",
-    r"(?<!class\s)\bEvolutionaryCulturalOptimizer\(",
-    r"(?<!class\s)\bCodexEngine\(",
+from tests.architecture.policy import (
+    DI_ALLOWLIST_FILES,
+    DI_OPTIONAL_ALLOWLIST_FILES,
+    DI_TARGET_DIRS,
+    FORBIDDEN_DEPENDENCY_EDGES,
 )
 
 
 def _iter_python_files() -> list[Path]:
     files: list[Path] = []
-    for root in TARGET_DIRS:
+    for root in DI_TARGET_DIRS:
         if not root.exists():
             continue
         files.extend(path for path in root.rglob("*.py") if path.name != "__init__.py")
@@ -36,7 +22,7 @@ def _is_allowed(path: Path) -> bool:
     normalized = path.as_posix()
     if normalized.startswith("frontend/"):
         normalized = normalized[len("frontend/") :]
-    return normalized in ALLOWED_FILES
+    return normalized in (DI_ALLOWLIST_FILES | DI_OPTIONAL_ALLOWLIST_FILES)
 
 
 def _find_constructor_violations() -> list[str]:
@@ -47,7 +33,7 @@ def _find_constructor_violations() -> list[str]:
             continue
 
         source = py_file.read_text(encoding="utf-8")
-        if any(re.search(pattern, source) for pattern in FORBIDDEN_CALL_PATTERNS):
+        if any(re.search(pattern, source) for pattern in FORBIDDEN_DEPENDENCY_EDGES):
             violations.append(py_file.as_posix())
 
     return violations
@@ -74,7 +60,7 @@ def test_constructor_guard_allows_only_allowlisted_wiring_modules(tmp_path: Path
     forbidden_file.write_text("def build():\n    return CodexEngine()\n", encoding="utf-8")
 
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(__import__(__name__), "TARGET_DIRS", (Path("frontend/app"),))
-    monkeypatch.setattr(__import__(__name__), "ALLOWED_FILES", {"app/api/v1/endpoints.py"})
+    monkeypatch.setattr(__import__(__name__), "DI_TARGET_DIRS", (Path("frontend/app"),))
+    monkeypatch.setattr(__import__(__name__), "DI_ALLOWLIST_FILES", {"app/api/v1/endpoints.py"})
 
     assert _find_constructor_violations() == ["frontend/app/services/worker.py"]
