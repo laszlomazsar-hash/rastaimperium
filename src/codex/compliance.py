@@ -1,19 +1,6 @@
-"""Compatibility module for legacy ``src.codex.compliance`` import path."""
+"""Compatibility shim for legacy ``src.codex.compliance`` imports.
 
-from backend.src.codex.compliance import (
-    PROFILE_SPECS,
-    ComplianceEngine,
-    ReplayResult,
-    ReproducibilityProfile,
-)
+All implementation lives in ``backend.src.codex.compliance``.
+"""
 
-# Backwards-compatible name used by older call sites.
-CodexEngine = ComplianceEngine
-
-__all__ = [
-    "CodexEngine",
-    "ComplianceEngine",
-    "ReplayResult",
-    "ReproducibilityProfile",
-    "PROFILE_SPECS",
-]
+from backend.src.codex.compliance import *  # noqa: F401,F403
