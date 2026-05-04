@@ -1,8 +1,14 @@
-from app.ark_engine.core.field_controller import IFieldController
+from app.core.container import get_container
+
+
+def _controller():
+    controller = get_container().field_controller
+    controller.__init__(_container_token=getattr(__import__("app.core.container", fromlist=["_CONTAINER_TOKEN"]), "_CONTAINER_TOKEN"))
+    return controller
 
 
 def test_min_dwell_blocks_fast_oscillation() -> None:
-    controller = IFieldController()
+    controller = _controller()
 
     controller.update_state("deep joy in zion", 0.95)
     assert controller.current_state == "ROOTS_GROUNDING"
@@ -13,7 +19,7 @@ def test_min_dwell_blocks_fast_oscillation() -> None:
 
 
 def test_hysteresis_holds_state_near_threshold() -> None:
-    controller = IFieldController()
+    controller = _controller()
 
     controller.update_state("deep joy in zion", 0.95)
     controller.update_state("deep joy in zion", 0.95)
@@ -27,7 +33,7 @@ def test_hysteresis_holds_state_near_threshold() -> None:
 
 
 def test_transition_log_persists_reason_and_boundary_metrics() -> None:
-    controller = IFieldController()
+    controller = _controller()
 
     controller.update_state("network drive", 0.2)
     controller.update_state("network drive", 0.2)

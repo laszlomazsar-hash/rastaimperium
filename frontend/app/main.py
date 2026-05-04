@@ -7,10 +7,12 @@ from app.core.config import settings
 from app.core.monitoring import monitoring_state
 from app.api.v1.endpoints import router as api_v1_router
 from app.core.redis import redis_manager
+from app.core.container import get_container
 
 # --- THE HEART ---
 # This variable 'app' is what Uvicorn looks for to ignite the engine
 app = FastAPI(title=settings.PROJECT_NAME)
+get_container()
 
 # --- THE PATH ALIGNMENT ---
 # We find the exact location of this file to prevent "TemplateNotFound" errors
