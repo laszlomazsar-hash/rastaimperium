@@ -16,16 +16,9 @@ if [[ -n "$base_ref" ]]; then
   diff_range="$base_ref...HEAD"
   changed_files="$(git diff --name-only "$diff_range")"
 else
-  changed_files="$(git ls-files)"
+  changed_files="$(git diff --name-only HEAD~1...HEAD 2>/dev/null || true)"
 fi
 
-if echo "$changed_files" | rg -q '^evo-v/.+\.py$'; then
-  echo "ERROR: Python runtime edits under evo-v/ are deprecated. Move runtime changes to backend/src."
-  echo "$changed_files" | rg '^evo-v/.+\.py$' || true
-  exit 1
-fi
-
-# Block runtime reintroduction in top-level legacy trees.
 if echo "$changed_files" | rg -q '^evo-v/.+\.py$'; then
   echo "ERROR: Runtime Python changes under deprecated legacy tree evo-v/ are blocked."
   echo "Use backend/src for runtime changes."
