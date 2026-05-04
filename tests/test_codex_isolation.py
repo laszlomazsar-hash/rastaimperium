@@ -5,6 +5,18 @@ import importlib
 import pkgutil
 import re
 import sys
+from types import ModuleType
+from typing import Iterable
+
+from tests.architecture.policy import CANONICAL_RUNTIME_ROOT, FORBIDDEN_NAMESPACES
+
+
+def _ensure_codex_search_paths() -> None:
+    root = CANONICAL_RUNTIME_ROOT
+    for rel in ("backend/src", "src"):
+        candidate = root / rel
+        if candidate.exists() and str(candidate) not in sys.path:
+            sys.path.insert(0, str(candidate))
 from pathlib import Path
 from typing import Iterable
 
@@ -82,6 +94,12 @@ def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
     root = Path(__file__).resolve().parents[1]
     violations: list[tuple[str, int, str]] = []
 
+        if any(modname.startswith(prefix) for prefix in FORBIDDEN_NAMESPACES):
+            forbidden = next(prefix for prefix in FORBIDDEN_NAMESPACES if modname.startswith(prefix))
+            violations.append(f"{modname} depends on {forbidden}")
+
+        for origin in _module_origins(module):
+            forbidden = next((prefix for prefix in FORBIDDEN_NAMESPACES if origin.startswith(prefix)), None)
     for py_file in _iter_python_files():
         rel_path = py_file.resolve().relative_to(root).as_posix()
         for lineno, imported_module in extract_imports(py_file):
