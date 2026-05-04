@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 import re
 
@@ -60,7 +61,8 @@ def test_constructor_guard_allows_only_allowlisted_wiring_modules(tmp_path: Path
     forbidden_file.write_text("def build():\n    return CodexEngine()\n", encoding="utf-8")
 
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(__import__(__name__), "DI_TARGET_DIRS", (Path("frontend/app"),))
-    monkeypatch.setattr(__import__(__name__), "DI_ALLOWLIST_FILES", {"app/api/v1/endpoints.py"})
+    module = sys.modules[__name__]
+    monkeypatch.setattr(module, "DI_TARGET_DIRS", (Path("frontend/app"),))
+    monkeypatch.setattr(module, "DI_ALLOWLIST_FILES", {"app/api/v1/endpoints.py"})
 
     assert _find_constructor_violations() == ["frontend/app/services/worker.py"]
