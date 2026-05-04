@@ -7,7 +7,11 @@ on:
       - 'backend/requirements*.txt'
       - 'evo-v-core/**'
       - 'frontend/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
       - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
       - '.github/workflows/ci.yml'
 
 jobs:
@@ -31,6 +35,8 @@ jobs:
               - 'evo-v-core/**'
             frontend:
               - 'frontend/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
             tests:
               - 'tests/**'
 

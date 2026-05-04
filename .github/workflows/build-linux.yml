@@ -2,7 +2,21 @@ name: build-linux
 
 on:
   push:
+    paths:
+      - 'backend/**'
+      - 'evo-v-core/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
+      - '.github/workflows/build-linux.yml'
   pull_request:
+    paths:
+      - 'backend/**'
+      - 'evo-v-core/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
+      - '.github/workflows/build-linux.yml'
 
 jobs:
   build:

@@ -21,6 +21,19 @@ This repository routes checks by changed paths to keep CI focused on relevant ar
 | `evo-v/evo-v-core` | `evo-v-core/**` | `evo-v-core-checks` |
 | `shared infra` | `infra/**`, `infra/.github/workflows/**`, `pyproject.toml`, `requirements*.txt` | Full matrix: `frontend-pages-check`, `backend-python-checks`, `evo-v-core-checks` |
 
+## Workflow trigger map (changed paths → expected workflows)
+
+| Changed path pattern | Expected workflow(s) |
+| --- | --- |
+| `frontend/**` | `.github/workflows/ci.yml` (`frontend-ci` job only), `.github/workflows/deploy-pages.yml` for pages/infrastructure subsets. |
+| `package.json`, `pnpm-lock.yaml` (repo root) | `.github/workflows/ci.yml` (`frontend-ci` job only). |
+| `backend/**`, `evo-v-core/**`, `tests/**`, `scripts/**`, `requirements*.txt` | Python workflows: `.github/workflows/build-linux.yml`, `.github/workflows/python-package-conda.yml`, plus scoped jobs in `.github/workflows/ci.yml` according to changed-path filters. |
+| `.github/workflows/ci.yml` | `.github/workflows/ci.yml` (for routing logic validation in PRs). |
+| `.github/workflows/build-linux.yml` | `.github/workflows/build-linux.yml` (self-validation). |
+| `.github/workflows/python-package-conda.yml` | `.github/workflows/python-package-conda.yml` (self-validation). |
+
+Policy intent: a PR that changes only `frontend/pnpm-lock.yaml` should run frontend CI jobs and must not trigger unrelated backend/core Python jobs.
+
 ## Decision rules
 
 - If changes match only one non-shared group, only that group's check job runs.
