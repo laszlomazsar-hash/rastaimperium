@@ -39,7 +39,7 @@ bash docs/sales/build-exports.sh
 
 The script will:
 
-1. Sync markdown source files to `public/sales-assets/source/`.
-2. Build `PDF` and `PPTX` exports into `public/sales-assets/exports/` via `pandoc` (if installed).
+1. Sync markdown source files to `frontend/public/sales-assets/source/`.
+2. Build `PDF` and `PPTX` exports into `frontend/public/sales-assets/exports/` via `pandoc` (if installed).
 
 > If `pandoc` is unavailable, markdown sources remain usable and can still be shared directly.
