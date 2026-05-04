@@ -1,4 +1,4 @@
-from app.core.container import get_container
+from evo_v_core.runtime.container import get_container
 
 
 def get_evolutionary_optimizer():
