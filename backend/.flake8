@@ -1,0 +1,19 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    node_modules,
+    dist,
+    build,
+    site-packages,
+    .mypy_cache,
+    .pytest_cache,
+    .tox,
+    archive,
+    evo-v-core,
+    frontend,
+    infra
+max-line-length = 127
+max-complexity = 10

@@ -1,0 +1,14 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    src,
+    .venv,
+    venv,
+    build,
+    dist,
+    output,
+    vendor,
+    node_modules,
+    archive
+filename = *.py
