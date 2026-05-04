@@ -14,6 +14,11 @@ for entry in (BACKEND_SRC, REPO_ROOT):
         sys.path.insert(0, entry_str)
 
 from codex.compliance import ComplianceEngine, ReplayResult
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from backend.src.codex.compliance import ComplianceEngine, ReplayResult
 
 
 def parse_args() -> argparse.Namespace:

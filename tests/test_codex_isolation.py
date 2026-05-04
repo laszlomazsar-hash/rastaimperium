@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+import ast
 import importlib
 import pkgutil
 import re
 import sys
 from pathlib import Path
-from types import ModuleType
 from typing import Iterable
 
 POLICY_NAMESPACES = {
@@ -20,25 +20,22 @@ POLICY_NAMESPACES = {
 }
 
 
-def _ensure_codex_search_paths() -> None:
-    root = Path(__file__).resolve().parents[1]
-    for rel in ("backend/src", "src"):
-        candidate = root / rel
-        if candidate.exists() and str(candidate) not in sys.path:
-            sys.path.insert(0, str(candidate))
+def _normalize_module_name(module: str) -> str:
+    return module.strip()
 
 
-def _module_origins(module: ModuleType) -> Iterable[str]:
-    for value in vars(module).values():
-        if isinstance(value, ModuleType):
-            origin = value.__name__
-        else:
-            origin = getattr(value, "__module__", None)
+def extract_imports(path: Path) -> list[tuple[int, str]]:
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=path.as_posix())
+    imports: list[tuple[int, str]] = []
 
-        if isinstance(origin, str) and origin:
-            yield origin
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                imports.append((node.lineno, _normalize_module_name(alias.name)))
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            imports.append((node.lineno, _normalize_module_name(node.module)))
 
-
+    return imports
 def _module_tokens(module_name: str) -> tuple[str, ...]:
     normalized = module_name.strip().lower()
     tokens = tuple(token for token in re.split(r"[./]", normalized) if token)
@@ -72,11 +69,26 @@ def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
     importlib.invalidate_caches()
     codex = importlib.import_module("backend.src.codex")
 
-    violations: list[str] = []
 
-    for _, modname, _ in pkgutil.walk_packages(codex.__path__, "backend.src.codex."):
-        module = importlib.import_module(modname)
+def _iter_python_files() -> Iterable[Path]:
+    root = Path(__file__).resolve().parents[1]
+    for base in (root / "backend" / "src", root / "tests"):
+        if not base.exists():
+            continue
+        yield from base.rglob("*.py")
 
+
+def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
+    root = Path(__file__).resolve().parents[1]
+    violations: list[tuple[str, int, str]] = []
+
+    for py_file in _iter_python_files():
+        rel_path = py_file.resolve().relative_to(root).as_posix()
+        for lineno, imported_module in extract_imports(py_file):
+            forbidden = next(
+                (prefix for prefix in FORBIDDEN_PREFIXES if imported_module.startswith(prefix)),
+                None,
+            )
         forbidden = _violates_policy(modname)
         if forbidden:
             violations.append(f"{modname} depends on {forbidden}")
@@ -84,8 +96,12 @@ def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
         for origin in _module_origins(module):
             forbidden = _violates_policy(origin)
             if forbidden:
-                violations.append(f"{modname} depends on {forbidden}")
+                violations.append((rel_path, lineno, imported_module))
 
+    assert not violations, "\n".join(
+        f"{file}:{line} imports {imported_module}"
+        for file, line, imported_module in sorted(set(violations))
+    )
     assert not violations, "\n".join(sorted(set(violations)))
 
 

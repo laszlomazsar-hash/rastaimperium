@@ -24,6 +24,38 @@ jobs:
       tests: ${{ steps.filter.outputs.tests }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
       - id: filter
         uses: dorny/paths-filter@v3
         with:
@@ -50,6 +82,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Legacy runtime guard
         run: bash infra/scripts/check_legacy_runtime_reintroduction.sh
@@ -62,17 +127,32 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Diagnose Python import path
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          python - <<'PY'
+          import importlib
+          import pprint
+          import sys
+
+          print("sys.path:")
+          pprint.pp(sys.path)
+          module = importlib.import_module("codex.compliance")
+          print(f"codex.compliance module: {module.__file__}")
+          PY
+
       - name: Install backend lint deps
-        working-directory: backend
         run: |
           python -m pip install --upgrade pip
           python -m pip install ruff
 
       - name: Backend compile + lint
-        working-directory: backend
+        env:
+          PYTHONPATH: backend/src
         run: |
-          python -m compileall src
-          ruff check src
+          python -m compileall backend/src
+          ruff check backend/src
 
   core-ci:
     name: core-ci
@@ -84,6 +164,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -91,16 +204,14 @@ jobs:
           python-version: '3.11'
 
       - name: Install core lint deps
-        working-directory: evo-v-core
         run: |
           python -m pip install --upgrade pip
           python -m pip install ruff
 
       - name: Core compile + lint
-        working-directory: evo-v-core
         run: |
-          python -m compileall app
-          ruff check app
+          python -m compileall evo-v-core/app
+          ruff check evo-v-core/app
 
   frontend-ci:
     name: frontend-ci
@@ -110,6 +221,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -141,6 +285,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Print and verify commit identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          CHECKED_OUT_SHA=$(git rev-parse HEAD)
+          echo "Resolved HEAD SHA: $CHECKED_OUT_SHA"
+          echo "Expected PR/event SHA: $EXPECTED_SHA"
+          echo "Expected PR/event ref: $EXPECTED_REF"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub head ref: ${GITHUB_HEAD_REF:-}"
+          if [[ "$CHECKED_OUT_SHA" != "$EXPECTED_SHA" ]]; then
+            echo "Mismatch: checked-out SHA does not match event payload SHA" >&2
+            exit 1
+          fi
+
+          {
+            echo "### Commit identity"
+            echo
+            echo "- Resolved HEAD SHA: \\`$CHECKED_OUT_SHA\\`"
+            echo "- Expected SHA (event payload): \\`$EXPECTED_SHA\\`"
+            echo "- Expected ref (event payload): \\`$EXPECTED_REF\\`"
+            echo "- GitHub ref: \\`$GITHUB_REF\\`"
+            echo "- GitHub ref name: \\`$GITHUB_REF_NAME\\`"
+            echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
+            echo "- Local compare command: \\`git rev-parse HEAD\\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -151,9 +328,26 @@ jobs:
         run: python scripts/check_import_policies.py
 
       - name: Install test deps
-        working-directory: backend
         run: |
           python -m pip install --upgrade pip
+<<<<<<< codex/audit-and-normalize-workflow-files
+          python -m pip install -r backend/requirements-dev.txt
+
+      - name: Diagnose Python import path
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          python - <<'PY'
+          import importlib
+          import pprint
+          import sys
+
+          print("sys.path:")
+          pprint.pp(sys.path)
+          module = importlib.import_module("codex.compliance")
+          print(f"codex.compliance module: {module.__file__}")
+          PY
+=======
           python -m pip install pytest
 
       - name: Run architecture enforcement
@@ -165,7 +359,9 @@ jobs:
         if: success()
         working-directory: backend
         run: python -m pip install -r requirements-dev.txt
+>>>>>>> main
 
       - name: Run tests domain
-        working-directory: tests
-        run: pytest
+        env:
+          PYTHONPATH: backend/src
+        run: pytest tests

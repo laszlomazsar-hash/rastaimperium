@@ -8,7 +8,7 @@ from fastapi import FastAPI
 
 from codex.compliance import ComplianceEngine, ReplayResult
 
-from backend.src.runtime_import_guard import install_legacy_import_guard
+from src.runtime_import_guard import install_legacy_import_guard
 
 install_legacy_import_guard()
 
