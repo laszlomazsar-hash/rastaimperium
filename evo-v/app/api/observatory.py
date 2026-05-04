@@ -1,7 +1,16 @@
-"""Compatibility wrapper for legacy evo-v import paths."""
+"""Heartbeat compatibility wrapper.
+
+Expected packaging mode sets ``PYTHONPATH`` so ``app`` is importable (for example,
+project root containing ``app/``). Runtime state is resolved from
+``app.core.runtime_state`` first, with a legacy fallback to ``core.runtime_state``
+for dual-layout deployments.
+"""
 
 from app.health import health_state
-from core.runtime_state import get_engine, runtime_state
+try:
+    from app.core.runtime_state import get_engine, runtime_state
+except ModuleNotFoundError:
+    from core.runtime_state import get_engine, runtime_state
 
 
 async def heartbeat() -> dict:
