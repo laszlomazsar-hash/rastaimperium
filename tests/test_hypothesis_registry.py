@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from src.codex.hypothesis_registry import Hypothesis, HypothesisRegistry
+from codex.hypothesis_registry import Hypothesis, HypothesisRegistry
 
 
 def test_freeze_returns_immutable_value_snapshots() -> None:

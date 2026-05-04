@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from src.codex.canonical_json import canonicalize_float, dumps_canonical
-from src.codex.compliance import ComplianceEngine
+from codex.canonical_json import canonicalize_float, dumps_canonical
+from codex.compliance import ComplianceEngine
 
 
 @pytest.mark.parametrize(

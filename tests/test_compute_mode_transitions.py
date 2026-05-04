@@ -1,4 +1,4 @@
-from src.codex.compute_mode import (
+from codex.compute_mode import (
     DIAGNOSTICS_SCHEMA_VERSION,
     ComputeModeController,
     replay_mode_timeline,

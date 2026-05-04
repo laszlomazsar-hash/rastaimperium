@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from src.codex.hypothesis_recovery import HypothesisPolicy, HypothesisRecoveryEngine
+from codex.hypothesis_recovery import HypothesisPolicy, HypothesisRecoveryEngine
 
 
 def test_empty_state_bootstrap_recovers_to_policy_min_and_commits() -> None:

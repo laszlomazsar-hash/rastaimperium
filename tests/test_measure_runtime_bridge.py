@@ -1,4 +1,4 @@
-from src.codex.measure_runtime_bridge import FormalMeasure, MeasureRuntimeBridge
+from codex.measure_runtime_bridge import FormalMeasure, MeasureRuntimeBridge
 
 
 def test_round_trip_projection_has_bounded_error() -> None:

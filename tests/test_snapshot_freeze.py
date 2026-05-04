@@ -1,6 +1,6 @@
 import pytest
 
-from src.codex.snapshot_freeze import FrozenSnapshot, freeze_snapshot, snapshot_hash, snapshot_log, snapshot_replay
+from codex.snapshot_freeze import FrozenSnapshot, freeze_snapshot, snapshot_hash, snapshot_log, snapshot_replay
 
 
 def test_freeze_sorts_hypotheses_by_id_before_constructing_tuples() -> None:

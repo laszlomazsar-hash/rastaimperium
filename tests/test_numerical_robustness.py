@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 
-from src.codex.numerical import (
+from codex.numerical import (
     FiniteDifferenceScalePolicy,
     central_difference_estimate,
     replay_derivative_estimate,

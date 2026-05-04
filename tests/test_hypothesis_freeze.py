@@ -1,4 +1,4 @@
-from src.codex.hypothesis_freeze import CANONICAL_RAW_FIELDS, freeze_state
+from codex.hypothesis_freeze import CANONICAL_RAW_FIELDS, freeze_state
 
 
 def test_frozen_snapshot_schema_contains_only_canonical_raw_fields() -> None:
