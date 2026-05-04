@@ -45,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: changed-paths
     if: needs.changed-paths.outputs.backend == 'true'
+    env:
+      PYTHONPATH: backend/src
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -77,6 +79,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: changed-paths
     if: needs.changed-paths.outputs.core == 'true'
+    env:
+      PYTHONPATH: backend/src
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -132,6 +136,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: changed-paths
     if: needs.changed-paths.outputs.tests == 'true'
+    env:
+      PYTHONPATH: backend/src
     steps:
       - name: Checkout
         uses: actions/checkout@v4

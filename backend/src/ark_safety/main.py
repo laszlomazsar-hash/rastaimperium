@@ -6,7 +6,7 @@ from typing import Any
 
 from fastapi import FastAPI
 
-from src.codex.compliance import ComplianceEngine, ReplayResult
+from codex.compliance import ComplianceEngine, ReplayResult
 
 from backend.src.runtime_import_guard import install_legacy_import_guard
 
