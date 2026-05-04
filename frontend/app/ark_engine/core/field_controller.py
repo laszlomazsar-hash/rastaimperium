@@ -32,7 +32,12 @@ class Ark:
 
 
 class IFieldController:
-    def __init__(self) -> None:
+    def __init__(self, *, _container_token: object | None = None) -> None:
+        from app.core.container import is_container_token
+
+        if not is_container_token(_container_token):
+            raise RuntimeError("IFieldController must be created by AppContainer via get_container().")
+
         self.ark = Ark()
         self.nyabinghi_connected = False
         self.current_state = "ROOTS_GROUNDING"
@@ -258,7 +263,9 @@ def run_daily_reflection(controller: IFieldController, vibe: str) -> None:
 
 
 if __name__ == "__main__":
-    I_Field = IFieldController()
+    from app.core.container import get_container
+
+    I_Field = get_container().field_controller
     seed_the_ark(I_Field)
 
     run_daily_reflection(I_Field, "I feel great joy in the Zion vision for the network.")

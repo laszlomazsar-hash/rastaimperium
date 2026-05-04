@@ -8,6 +8,10 @@ from fastapi import FastAPI
 
 from src.codex.compliance import ComplianceEngine, ReplayResult
 
+from src.runtime_import_guard import install_legacy_import_guard
+
+install_legacy_import_guard()
+
 SCHEMA_VERSION = "1.1.0"
 
 

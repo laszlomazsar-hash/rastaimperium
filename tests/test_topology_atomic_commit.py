@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from src.codex.compliance import ComplianceEngine, TopologyValidationError
+from backend.src.codex.compliance import ComplianceEngine, TopologyValidationError
 
 
 @dataclass
