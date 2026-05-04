@@ -124,3 +124,10 @@ Branch protection should require only these scoped status checks from `.github/w
 - `tests-ci`
 
 Keep these check names stable to avoid branch protection drift.
+
+
+## Legacy runtime guard
+
+- `evo-v/` is deprecated as a non-runtime compatibility tree.
+- Runtime Python changes must land in `backend/src/` (or `evo-v-core/` where explicitly scoped).
+- CI fast-fails on Python runtime edits under legacy top-level trees using `infra/scripts/check_legacy_runtime_reintroduction.sh`.

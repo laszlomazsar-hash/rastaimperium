@@ -29,6 +29,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Legacy runtime guard
+        run: bash infra/scripts/check_legacy_runtime_reintroduction.sh
+
       - name: Setup Python
         uses: actions/setup-python@v5   # ✅ FIXED (was v3)
         with:

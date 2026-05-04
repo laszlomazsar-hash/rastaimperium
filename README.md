@@ -195,7 +195,7 @@ For deterministic Spaces builds in this monorepo, Hugging Face should build from
 ### Why this exists
 
 The repository contains multiple app surfaces (frontend, backend, docs, and legacy deployment files).  
-The root HF bridge prevents accidental coupling to unrelated root-level files while keeping EVO-V source canonical in `evo-v/`.
+The root HF bridge prevents accidental coupling to unrelated root-level files while keeping active runtime source canonical in `backend/src/` and `evo-v-core/`.
 
 ### Entrypoint precedence during HF build
 
@@ -217,6 +217,9 @@ To keep CI deterministic, Python workflow steps must always declare explicit `wo
   - Lint targets must be explicit (for example: `backend/src`, `tests`).
   - Test target must be explicit (for example: `pytest tests`).
   - Set `PYTHONPATH: src` for lint/test steps so imports resolve from `backend/src` without relying on implicit shell cwd behavior.
+
+- Legacy top-level runtime trees (`evo-v/`, `src/`, `app/`) are hard-deprecated for new Python runtime work; CI blocks reintroduction via `infra/scripts/check_legacy_runtime_reintroduction.sh`.
+
 - `evo-v-core` project:
   - Use `working-directory: evo-v-core` for project-local lint/test commands.
   - Prefer package-qualified imports rooted at the project package instead of cwd-sensitive imports like `from state import ...`.
