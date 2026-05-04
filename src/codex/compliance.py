@@ -7,7 +7,11 @@ from backend.src.codex.compliance import (
     ReproducibilityProfile,
 )
 
+# Backwards-compatible name used by older call sites.
+CodexEngine = ComplianceEngine
+
 __all__ = [
+    "CodexEngine",
     "ComplianceEngine",
     "ReplayResult",
     "ReproducibilityProfile",
