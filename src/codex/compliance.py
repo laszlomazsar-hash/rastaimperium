@@ -7,7 +7,11 @@ from backend.src.codex.compliance import (
     ReproducibilityProfile,
 )
 
+<<<<<<< codex/identify-root-causes-of-github-actions-failures-avqlfm
 # Backwards-compatible alias used by older call sites.
+=======
+# Backwards-compatible name used by older call sites.
+>>>>>>> main
 CodexEngine = ComplianceEngine
 
 __all__ = [
