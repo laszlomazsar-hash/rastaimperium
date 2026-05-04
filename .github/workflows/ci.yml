@@ -52,6 +52,9 @@ jobs:
       - name: Legacy runtime guard
         run: bash infra/scripts/check_legacy_runtime_reintroduction.sh
 
+      - name: Import policy guard
+        run: python scripts/check_import_policies.py
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -137,6 +140,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Import policy guard
+        run: python scripts/check_import_policies.py
 
       - name: Install test deps
         working-directory: backend
