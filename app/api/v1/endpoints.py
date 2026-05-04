@@ -8,8 +8,6 @@ from sqlalchemy.orm import Session
 
 from app.ark_engine.api.routers.divine_guidance import router as divine_router
 from app.ark_engine.api.routers.evolution import router as evolution_router
-from app.api.dependencies import get_evolutionary_optimizer, get_field_controller
-from app.core.config import settings
 from app.core.database import get_db
 from app.core.monitoring import monitoring_state
 from app.core.redis import redis_manager
