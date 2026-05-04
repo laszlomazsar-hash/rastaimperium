@@ -1,11 +1,14 @@
+"""Deprecated compatibility module for runtime container access.
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from app.ark_engine.core.field_controller import IFieldController
-from app.ark_engine.evo_v_nextgen import EvolutionaryCulturalOptimizer
+Use ``evo_v_core.runtime.container.get_container`` instead.
+"""
 
+from evo_v_core.runtime.container import get_container
 
+__all__ = ["get_container"]
 _CONTAINER_TOKEN = object()
 
 
