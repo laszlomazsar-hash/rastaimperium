@@ -125,17 +125,32 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Diagnose Python import path
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          python - <<'PY'
+          import importlib
+          import pprint
+          import sys
+
+          print("sys.path:")
+          pprint.pp(sys.path)
+          module = importlib.import_module("codex.compliance")
+          print(f"codex.compliance module: {module.__file__}")
+          PY
+
       - name: Install backend lint deps
-        working-directory: backend
         run: |
           python -m pip install --upgrade pip
           python -m pip install ruff
 
       - name: Backend compile + lint
-        working-directory: backend
+        env:
+          PYTHONPATH: backend/src
         run: |
-          python -m compileall src
-          ruff check src
+          python -m compileall backend/src
+          ruff check backend/src
 
   core-ci:
     name: core-ci
@@ -185,16 +200,14 @@ jobs:
           python-version: '3.11'
 
       - name: Install core lint deps
-        working-directory: evo-v-core
         run: |
           python -m pip install --upgrade pip
           python -m pip install ruff
 
       - name: Core compile + lint
-        working-directory: evo-v-core
         run: |
-          python -m compileall app
-          ruff check app
+          python -m compileall evo-v-core/app
+          ruff check evo-v-core/app
 
   frontend-ci:
     name: frontend-ci
@@ -309,9 +322,26 @@ jobs:
         run: python scripts/check_import_policies.py
 
       - name: Install test deps
-        working-directory: backend
         run: |
           python -m pip install --upgrade pip
+<<<<<<< codex/audit-and-normalize-workflow-files
+          python -m pip install -r backend/requirements-dev.txt
+
+      - name: Diagnose Python import path
+        env:
+          PYTHONPATH: backend/src
+        run: |
+          python - <<'PY'
+          import importlib
+          import pprint
+          import sys
+
+          print("sys.path:")
+          pprint.pp(sys.path)
+          module = importlib.import_module("codex.compliance")
+          print(f"codex.compliance module: {module.__file__}")
+          PY
+=======
           python -m pip install pytest
 
       - name: Run architecture enforcement
@@ -323,7 +353,9 @@ jobs:
         if: success()
         working-directory: backend
         run: python -m pip install -r requirements-dev.txt
+>>>>>>> main
 
       - name: Run tests domain
-        working-directory: tests
-        run: pytest
+        env:
+          PYTHONPATH: backend/src
+        run: pytest tests
