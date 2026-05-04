@@ -18,6 +18,7 @@ TARGET_DIRS = (
 FORBIDDEN_CALL_PATTERNS = (
     r"(?<!class\s)\bFieldController\(",
     r"(?<!class\s)\bEvolutionaryOptimizer\(",
+    r"(?<!class\s)\bEvolutionaryCulturalOptimizer\(",
     r"(?<!class\s)\bCodexEngine\(",
 )
 
