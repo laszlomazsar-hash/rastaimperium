@@ -8,6 +8,5 @@ COPY ./app ./app
 COPY ./scripts ./scripts
 COPY ./bootstrap.sh ./bootstrap.sh
 
-EXPOSE 7860
 
 CMD ["sh", "bootstrap.sh"]
