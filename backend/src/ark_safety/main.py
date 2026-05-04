@@ -137,6 +137,7 @@ def telemetry_coverage() -> dict[str, object]:
         "schema_version": OBSERVABILITY_SCHEMA_VERSION,
         "coverage": engine.trace_coverage_graph(),
         "rollback_ready": rollback_ready,
+        "likelihood_diagnostics": engine.likelihood_diagnostics(),
     }
 
 

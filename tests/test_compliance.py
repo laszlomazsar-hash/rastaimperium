@@ -110,3 +110,60 @@ def test_predicate_inputs_are_bounded_in_override_log() -> None:
     assert inputs["min_trace_coverage"] == 0.0
     assert inputs["error_rate_pct"] == 100.0
     assert inputs["p95_latency_ms"] == 60_000.0
+
+
+def test_register_likelihood_and_emit_diagnostics() -> None:
+    engine = ComplianceEngine()
+    engine.register_likelihood(
+        regime="steady_state",
+        model_class="classifier",
+        likelihood_form="bernoulli",
+        noise_model="label_noise<=5%",
+        parameter_bounds={"temperature": (0.5, 2.0)},
+    )
+    engine.calibrate_regime(
+        regime="steady_state",
+        model_class="classifier",
+        predicted_probabilities=[0.9, 0.8, 0.2, 0.1],
+        observed_outcomes=[1.0, 1.0, 0.0, 0.0],
+        bins=4,
+    )
+    diagnostics = engine.likelihood_diagnostics()
+    assert "steady_state:classifier" in diagnostics["specifications"]
+    assert diagnostics["calibration"]["steady_state:classifier"]["sample_size"] == 4
+    assert diagnostics["calibration"]["steady_state:classifier"]["reliability_curve"]
+    assert diagnostics["calibration"]["steady_state:classifier"]["nll"] >= 0
+
+
+def test_likelihood_specs_do_not_collide_within_same_regime() -> None:
+    engine = ComplianceEngine()
+    engine.register_likelihood(
+        regime="steady_state",
+        model_class="classifier",
+        likelihood_form="bernoulli",
+        noise_model="label_noise<=5%",
+    )
+    engine.register_likelihood(
+        regime="steady_state",
+        model_class="regressor",
+        likelihood_form="gaussian",
+        noise_model="residual~N(0,sigma)",
+        parameter_bounds={"sigma": (0.05, 0.2)},
+    )
+
+    classifier_diag = engine.calibrate_regime(
+        regime="steady_state",
+        model_class="classifier",
+        predicted_probabilities=[0.9, 0.8, 0.2, 0.1],
+        observed_outcomes=[1.0, 1.0, 0.0, 0.0],
+    )
+    regressor_diag = engine.calibrate_regime(
+        regime="steady_state",
+        model_class="regressor",
+        predicted_probabilities=[0.9, 0.8, 0.2, 0.1],
+        observed_outcomes=[1.0, 1.0, 0.0, 0.0],
+    )
+
+    assert classifier_diag["model_class"] == "classifier"
+    assert regressor_diag["model_class"] == "regressor"
+    assert classifier_diag["nll"] != regressor_diag["nll"]
