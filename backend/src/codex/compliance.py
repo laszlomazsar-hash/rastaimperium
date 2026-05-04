@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import math
 from collections import Counter
 from copy import deepcopy
 from dataclasses import dataclass
@@ -39,6 +40,28 @@ class LineageVerificationError(ValueError):
 
 LINEAGE_SCHEMA_VERSION = "1.0"
 DATASET_SNAPSHOT_FORMAT_VERSION = "1.0"
+
+
+LikelihoodForm = Literal["gaussian", "bernoulli"]
+
+
+@dataclass(frozen=True)
+class LikelihoodSpecification:
+    regime: str
+    model_class: str
+    likelihood_form: LikelihoodForm
+    noise_model: str
+    parameter_bounds: Dict[str, tuple[float, float]]
+
+
+@dataclass(frozen=True)
+class CalibrationBin:
+    bin_start: float
+    bin_end: float
+    predicted_mean: float
+    observed_frequency: float
+    absolute_error: float
+    sample_count: int
 
 
 @dataclass(frozen=True)
@@ -215,6 +238,8 @@ class ComplianceEngine:
         )
         self._active_profile = ReproducibilityProfile.BITWISE
         self._certified_profiles: Dict[str, Any] = {}
+        self._likelihood_specs: Dict[tuple[str, str], LikelihoodSpecification] = {}
+        self._calibration_results: Dict[tuple[str, str], Dict[str, object]] = {}
 
     def append_audit_record(
         self,
