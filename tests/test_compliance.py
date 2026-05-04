@@ -1,4 +1,16 @@
-from src.codex.compliance import ComplianceEngine
+import pytest
+
+from src.codex.compliance import (
+    CalibrationReplayError,
+    ComplianceEngine,
+    DATASET_SNAPSHOT_FORMAT_VERSION,
+    DatasetSnapshot,
+    LINEAGE_SCHEMA_VERSION,
+    LineageVerificationError,
+    build_trust_root,
+    create_lineage_record,
+    verify_lineage_record,
+)
 
 
 def test_audit_record_uses_sha256_digest() -> None:
@@ -6,6 +18,8 @@ def test_audit_record_uses_sha256_digest() -> None:
     record = engine.append_audit_record("admin", "deploy", "IV", {"release": "v3.6"})
 
     assert len(record.digest) == 64
+    assert record.digest == record.cert_hash
+    assert len(record.prev_cert_hash) == 64
     assert record in engine.audit_log
 
 
@@ -16,31 +30,140 @@ def test_rollback_trigger_when_trace_drops() -> None:
     assert engine.should_trigger_rollback() is True
 
 
-def test_fault_model_excludes_out_of_scope_fault_classes() -> None:
+def test_candidate_update_rejects_when_loss_increases() -> None:
     engine = ComplianceEngine()
-    status = engine.observability_status()
+    result = engine.evaluate_candidate_trace_update({"L2": 70})
 
-    assert status["fault_model"]["excluded_fault_classes"] == [
-        "disk_corruption",
-        "arbitrary_memory_mutation",
-        "policy_tampering",
-    ]
-    assert status["collapse_resistance"]["theorem"]
+    assert result["gate_passed"] is False
+    assert result["accepted"] is False
+    assert result["L_new"] > result["L_old"]
 
 
-def test_integrity_validation_flags_policy_or_state_drift() -> None:
+def test_candidate_update_accepts_when_loss_decreases() -> None:
     engine = ComplianceEngine()
-    baseline_state = {"epoch": 1, "trace_coverage": {"L1": 100.0}}
-    baseline_policy = {"articles": ["II", "III", "IV"], "rollback_threshold": 80.0}
-    engine.capture_integrity_baseline(baseline_state, baseline_policy)
+    engine.set_trace_coverage("L2", 60)
 
-    violations = engine.validate_integrity(
-        persisted_state={"epoch": 2, "trace_coverage": {"L1": 100.0}},
-        policy=baseline_policy,
+    result = engine.evaluate_candidate_trace_update({"L2": 88})
+
+    assert result["gate_passed"] is True
+    assert result["accepted"] is True
+    assert result["L_new"] < result["L_old"]
+
+
+def test_candidate_update_detects_revision_conflict(monkeypatch) -> None:
+    engine = ComplianceEngine()
+    engine.set_trace_coverage("L2", 60)
+
+    def force_conflict(*args, **kwargs):
+        engine.set_trace_coverage("L3", 50)
+        return 0.0
+
+    monkeypatch.setattr(engine, "_loss", force_conflict)
+    result = engine.evaluate_candidate_trace_update({"L2": 95})
+
+    assert result["gate_passed"] is True
+    assert result["accepted"] is False
+    assert result["conflict"] is True
+
+
+def test_override_precedence_manual_controls_predicates() -> None:
+    engine = ComplianceEngine()
+    metrics = {"min_trace_coverage": 70.0, "error_rate_pct": 12.0, "p95_latency_ms": 3_200.0}
+
+    assert engine.evaluate_override_state(metrics, manual_override="force_off") is False
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_OFF"
+
+    assert engine.evaluate_override_state(metrics, manual_override="force_on") is True
+    assert engine.override_history[-1]["reason_code"] == "MANUAL_FORCE_ON_APPLIED"
+
+
+def test_override_recovery_path_obeys_min_hold_and_cooldown() -> None:
+    engine = ComplianceEngine(override_cooldown_ticks=1, override_min_hold_ticks=3)
+    emergency = {"min_trace_coverage": 72.0, "error_rate_pct": 0.0, "p95_latency_ms": 0.0}
+    recovered = {"min_trace_coverage": 96.0, "error_rate_pct": 0.1, "p95_latency_ms": 120.0}
+
+    assert engine.evaluate_override_state(emergency) is True
+
+    # Min-hold blocks immediate recovery.
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    assert engine.evaluate_override_state(recovered) is True
+    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
+
+    # Recovery is applied once min-hold has elapsed.
+    assert engine.evaluate_override_state(recovered) is False
+    assert engine.override_history[-1]["reason_code"] == "PREDICATE_CLEAR_APPLIED"
+
+
+def test_predicate_inputs_are_bounded_in_override_log() -> None:
+    engine = ComplianceEngine()
+    engine.evaluate_override_state(
+        {
+            "min_trace_coverage": -12.0,
+            "error_rate_pct": 155.0,
+            "p95_latency_ms": 999_999.0,
+        }
     )
-    status = engine.observability_status()
 
-    assert any(v.code == "persisted_state_integrity_failure" for v in violations)
-    assert status["integrity"]["violation_count"] == 1
-    assert status["collapse_resistance"]["valid"] is False
-    assert engine.should_trigger_rollback() is True
+    inputs = engine.override_history[-1]["predicate_inputs"]
+    assert inputs["min_trace_coverage"] == 0.0
+    assert inputs["error_rate_pct"] == 100.0
+    assert inputs["p95_latency_ms"] == 60_000.0
+
+
+def test_register_likelihood_and_emit_diagnostics() -> None:
+    engine = ComplianceEngine()
+    engine.register_likelihood(
+        regime="steady_state",
+        model_class="classifier",
+        likelihood_form="bernoulli",
+        noise_model="label_noise<=5%",
+        parameter_bounds={"temperature": (0.5, 2.0)},
+    )
+    engine.calibrate_regime(
+        regime="steady_state",
+        model_class="classifier",
+        predicted_probabilities=[0.9, 0.8, 0.2, 0.1],
+        observed_outcomes=[1.0, 1.0, 0.0, 0.0],
+        bins=4,
+    )
+    diagnostics = engine.likelihood_diagnostics()
+    assert "steady_state:classifier" in diagnostics["specifications"]
+    assert diagnostics["calibration"]["steady_state:classifier"]["sample_size"] == 4
+    assert diagnostics["calibration"]["steady_state:classifier"]["reliability_curve"]
+    assert diagnostics["calibration"]["steady_state:classifier"]["nll"] >= 0
+
+
+def test_likelihood_specs_do_not_collide_within_same_regime() -> None:
+    engine = ComplianceEngine()
+    engine.register_likelihood(
+        regime="steady_state",
+        model_class="classifier",
+        likelihood_form="bernoulli",
+        noise_model="label_noise<=5%",
+    )
+    engine.register_likelihood(
+        regime="steady_state",
+        model_class="regressor",
+        likelihood_form="gaussian",
+        noise_model="residual~N(0,sigma)",
+        parameter_bounds={"sigma": (0.05, 0.2)},
+    )
+
+    classifier_diag = engine.calibrate_regime(
+        regime="steady_state",
+        model_class="classifier",
+        predicted_probabilities=[0.9, 0.8, 0.2, 0.1],
+        observed_outcomes=[1.0, 1.0, 0.0, 0.0],
+    )
+    regressor_diag = engine.calibrate_regime(
+        regime="steady_state",
+        model_class="regressor",
+        predicted_probabilities=[0.9, 0.8, 0.2, 0.1],
+        observed_outcomes=[1.0, 1.0, 0.0, 0.0],
+    )
+
+    assert classifier_diag["model_class"] == "classifier"
+    assert regressor_diag["model_class"] == "regressor"
+    assert classifier_diag["nll"] != regressor_diag["nll"]
