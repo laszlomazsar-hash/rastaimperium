@@ -17,8 +17,7 @@ def get_field_controller() -> IFieldController:
     return controller
 
 
-@lru_cache
 def get_evolutionary_optimizer() -> EvolutionaryCulturalOptimizer:
-    """Provide the EVO-V evolutionary optimizer."""
+    """Provide a fresh EVO-V evolutionary optimizer per request."""
 
     return EvolutionaryCulturalOptimizer()
