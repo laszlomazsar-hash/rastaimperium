@@ -45,6 +45,20 @@ jobs:
     - name: Validate architecture artifact versions
       run: |
         python infra/scripts/validate_architecture_version.py
+    - name: Diagnose Python import path
+      env:
+        PYTHONPATH: backend/src
+      run: |
+        python - <<'PY'
+        import importlib
+        import pprint
+        import sys
+
+        print("sys.path:")
+        pprint.pp(sys.path)
+        module = importlib.import_module("codex.compliance")
+        print(f"codex.compliance module: {module.__file__}")
+        PY
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -52,8 +66,12 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 backend/src evo-v-core/app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Enforce certification profile guardrails
+      env:
+        PYTHONPATH: backend/src
       run: |
         pytest tests/test_compliance.py -k "profile_c or certification"
     - name: Test with pytest
+      env:
+        PYTHONPATH: backend/src
       run: |
-        pytest
+        pytest tests
