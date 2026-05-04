@@ -1,4 +1,5 @@
-from src.codex.compliance import ComplianceEngine, PolicyState
+from codex.compliance import ComplianceEngine, PolicyState
+from backend.src.codex.compliance import ComplianceEngine, PolicyState
 
 
 def test_governance_diagnostics_confidence_formula_and_metadata_version() -> None:
