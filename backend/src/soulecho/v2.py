@@ -98,10 +98,10 @@ class SoulEchoStreamEngine:
         # Tunables are explicit constructor args so callers can override policy behavior.
         budget_state_provider: Callable[[int], TransportBudgetState] | None = None,
         policy_update_interval_seconds: int = 60,
-        ema_alpha: float = 0.25,
+        ema_alpha: float = 0.1,
         delta_limit: float = 1.0,
-        hysteresis_band: float = 0.2,
-        cooldown_seconds: int = 120,
+        hysteresis_band: float = 0.1,
+        cooldown_seconds: int = 30,
     ) -> None:
         # Defaults mirror the previous hard-coded policy tuning values.
         self._base_layer_score: Dict[int, float] = {layer: 95.0 for layer in range(1, 10)}
