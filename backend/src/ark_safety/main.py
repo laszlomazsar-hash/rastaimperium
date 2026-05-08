@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse, FileResponse
 
 from src.codex.compliance import ComplianceEngine, ReplayResult
 
@@ -159,3 +163,30 @@ def trigger_rollback(actor: str, reason: str) -> dict[str, object]:
         "ok": True,
         "audit_digest": record.digest,
     }
+
+
+# --- Static Frontend Serving ---
+STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "static"
+
+if STATIC_DIR.exists():
+    app.mount("/_next", StaticFiles(directory=str(STATIC_DIR / "_next")), name="next_assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend(request: Request, full_path: str):
+        # Try to serve the exact file
+        file_path = STATIC_DIR / full_path
+        if file_path.is_file():
+            return FileResponse(str(file_path))
+        # Try with .html extension
+        html_path = STATIC_DIR / f"{full_path}.html"
+        if html_path.is_file():
+            return FileResponse(str(html_path), media_type="text/html")
+        # Try as directory with index.html
+        index_path = STATIC_DIR / full_path / "index.html"
+        if index_path.is_file():
+            return FileResponse(str(index_path), media_type="text/html")
+        # Fallback to root index.html
+        root_index = STATIC_DIR / "index.html"
+        if root_index.is_file():
+            return FileResponse(str(root_index), media_type="text/html")
+        return HTMLResponse("<h1>404 — Not Found</h1>", status_code=404)
