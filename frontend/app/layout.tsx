@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/codex" className="hover:text-gold transition">Codex</Link>
               <Link href="/intelligence" className="hover:text-gold transition">Intelligence</Link>
               <Link href="/library" className="hover:text-gold transition">Library</Link>
+              <Link href="/witness" className="hover:text-gold transition">Witness</Link>
               <Link href="/consulting" className="hover:text-gold transition">Consulting</Link>
             </div>
           </nav>
