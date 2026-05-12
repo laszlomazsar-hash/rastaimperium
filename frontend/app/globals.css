@@ -1,40 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color-scheme: dark;
+  --rasta-red: #e01e1e;
+  --rasta-gold: #ffcc00;
+  --rasta-green: #107e3e;
+  --deep-earth: #0a0a0a;
+  --gold-sovereign: #B8860B;
 }
 
 body {
   margin: 0;
-  background: #111111;
+  background: var(--deep-earth);
+  position: relative;
+  overflow-x: hidden;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: Georgia, serif;
+/* Sacred Geometry Background — Seed of Life rotating overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(16, 126, 62, 0.06) 0%, transparent 60%),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" stroke="rgba(255,204,0,0.04)" fill="none" stroke-width="0.3"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="30" r="20"/><circle cx="50" cy="70" r="20"/><circle cx="33" cy="40" r="20"/><circle cx="67" cy="40" r="20"/><circle cx="33" cy="60" r="20"/><circle cx="67" cy="60" r="20"/></svg>');
+  background-size: 300px;
+  animation: sacredRotate 180s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.7;
 }
 
-p,
-a,
-li,
-input,
-button {
-  font-family: Calibri, sans-serif;
+@keyframes sacredRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-code,
-pre {
-  font-family: "Courier New", monospace;
+/* Ambient glow pulse */
+body::after {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(184, 134, 11, 0.04) 0%, transparent 70%);
+  animation: glowPulse 8s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
 }
 
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Ensure content sits above the sacred geometry */
+header, main, footer {
+  position: relative;
+  z-index: 10;
+}
+
+/* Typography — Cinzel for mythic, Raleway for operational */
+h1, h2, h3, h4 {
+  font-family: 'Cinzel', Georgia, serif;
+}
+
+p, a, li, input, button, span, td, th {
+  font-family: 'Raleway', Calibri, sans-serif;
+}
+
+code, pre, .font-courier {
+  font-family: 'Courier New', monospace;
+}
+
+/* Panel — glass-morphism with gold border glow */
 .panel {
-  @apply border border-[#B8860B]/30 rounded-xl bg-[#1A3A2A]/20;
+  @apply border rounded-xl;
+  border-color: rgba(184, 134, 11, 0.25);
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4), inset 0 0 1px rgba(184, 134, 11, 0.1);
+  transition: all 0.3s ease;
+}
+
+.panel:hover {
+  border-color: rgba(184, 134, 11, 0.45);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5), 0 0 15px rgba(184, 134, 11, 0.08);
 }
 
 .container-page {
   @apply mx-auto max-w-6xl px-4 py-12;
+}
+
+/* Gold gradient text — Green → Gold → Red */
+.text-gold-gradient {
+  background: linear-gradient(to right, var(--rasta-green), var(--rasta-gold), var(--rasta-red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Neon-soul glow on gold text */
+.text-gold {
+  text-shadow: 0 0 20px rgba(184, 134, 11, 0.15);
+}
+
+/* Sovereign emblem glow */
+.emblem-glow {
+  filter: drop-shadow(0 0 15px rgba(255, 204, 0, 0.3));
+}
+
+/* Fade-in animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.container-page > section,
+.container-page > div,
+.container-page > h2 {
+  animation: fadeUp 0.6s ease-out both;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--deep-earth); }
+::-webkit-scrollbar-thumb { background: rgba(184, 134, 11, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(184, 134, 11, 0.5); }
+
+/* Selection */
+::selection {
+  background: rgba(184, 134, 11, 0.3);
+  color: #fff;
 }

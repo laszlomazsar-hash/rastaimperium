@@ -46,7 +46,7 @@ export default function HomePage() {
       <section className="container-page py-20">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl text-gold leading-tight font-georgia">
+            <h1 className="text-4xl md:text-5xl text-gold-gradient leading-tight" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
               Deterministic Governance<br />for Civilization-Scale AI
             </h1>
             <p className="mt-4 text-zinc-300 text-xl">
