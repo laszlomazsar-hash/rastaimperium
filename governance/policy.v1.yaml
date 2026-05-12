@@ -1,0 +1,62 @@
+policy_version: "1.0"
+source:
+  human_policy: "AGENTS.md"
+  executable_policy: "governance/policy.v1.yaml"
+
+deterministic_bundle:
+  required_keys:
+    - schema_version
+    - ruleset_version
+    - governance_version
+    - canon_spec_version
+  optional_keys:
+    - cert_profile
+
+fsm:
+  states:
+    - INGESTED
+    - NORMALIZED
+    - VERIFIED
+    - CORRELATED
+    - ARCHIVED
+    - CONTESTED
+  legal_transitions:
+    - from: INGESTED
+      to: NORMALIZED
+    - from: NORMALIZED
+      to: VERIFIED
+    - from: VERIFIED
+      to: CORRELATED
+    - from: CORRELATED
+      to: ARCHIVED
+    - from: "*"
+      to: CONTESTED
+
+event_type_constraints:
+  lifecycle_mutation:
+    allowed_event_types:
+      - STATE_TRANSITION
+    rule: "Only STATE_TRANSITION events may mutate lifecycle state."
+  identity_creation:
+    allowed_event_types:
+      - RECORD_INSERT
+    rule: "RECORD_INSERT creates identity only."
+
+invariant_checks:
+  required:
+    - replay_parity
+    - audit_completeness
+    - snapshot_determinism
+    - ordering_integrity
+    - lineage_consistency
+
+escalation:
+  on_critical_invariant_failure:
+    - trigger_write_freeze
+    - emit_counterexample_artifact
+  when_integrity_uncertain:
+    - freeze_writes_or_recommend_freeze
+    - preserve_all_variants
+    - mark_affected_artifacts_contested
+    - generate_evidence_counterexample_package
+    - request_human_governance_review
