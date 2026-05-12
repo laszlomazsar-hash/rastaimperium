@@ -25,4 +25,3 @@
   "ruleset_version": "1.0.0",
   "schema_version": "1.0.0"
 }
-{"metadata":{"compiler_version":"1.0.0","generated_at":"2026-05-12T21:38:45.727Z","input_digest":"b48f1bce94f52ab948b73a8eddb07508d152610ebbf54c09e822ff6c8559796f","output_digest":"dc21cbf2e0881ffe2439a85af0a29da867a75345c0a210aa9d0b1e1c5dc0492d"},"policy":{"canon_spec_version":"1.0.0","cert_profile":null,"governance_version":"1.0.0","policy_id":"core-governance","ruleset_version":"1.0.0","schema_version":"1.0.0","states":["ARCHIVED","CONTESTED","CORRELATED","INGESTED","NORMALIZED","VERIFIED"],"transitions":[{"from":"ANY","to":"CONTESTED"},{"from":"CORRELATED","to":"ARCHIVED"},{"from":"INGESTED","to":"NORMALIZED"},{"from":"NORMALIZED","to":"VERIFIED"},{"from":"VERIFIED","to":"CORRELATED"}]}}
