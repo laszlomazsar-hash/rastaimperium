@@ -1,4 +1,4 @@
-.PHONY: test pytest ruff flake8 lint smoke smoke-backend smoke-evo-v ci
+.PHONY: test pytest ruff flake8 lint smoke smoke-backend smoke-evo-v policy-consistency ci
 
 # Shared environment defaults so local and CI use identical command contracts.
 PYTHONPATH_ROOT ?= .
@@ -32,4 +32,7 @@ smoke-backend:
 smoke-evo-v:
 	cd /workspace/rastaimperium/evo-v && PYTHONPATH="$(PYTHONPATH_EVO_V)" timeout "$(SMOKE_TIMEOUT_SECONDS)" uvicorn app.main:app --host "$(UVICORN_HOST)" --port "$(UVICORN_PORT_EVO_V)" || [ $$? -eq 124 ]
 
-ci: lint pytest smoke
+policy-consistency:
+	cd /workspace/rastaimperium && ./tools/check-policy-consistency
+
+ci: lint policy-consistency pytest smoke

@@ -3,7 +3,7 @@ import json
 import pytest
 
 from src.governance.runtime import PolicyLoadError, load_runtime_policy
-from src.codex.hypothesis_recovery import HypothesisRecoveryEngine
+from backend.src.codex.hypothesis_recovery import HypothesisRecoveryEngine
 
 
 def test_policy_loader_parses_manifest_and_materializes_guards() -> None:

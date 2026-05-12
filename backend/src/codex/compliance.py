@@ -209,7 +209,7 @@ PROFILE_SPECS: Dict[ReproducibilityProfile, ReproducibilityProfileSpec] = {
 class ComplianceEngine:
     """Article II-IV observability + audit logging + rollback triggers."""
 
-    CONFIDENCE_FORMULA_VERSION = "v1"
+    CONFIDENCE_FORMULA_VERSION = "policy_confidence.v1"
 
     def __init__(self, *, override_cooldown_ticks: int = 2, override_min_hold_ticks: int = 3) -> None:
         self._lock = RLock()
