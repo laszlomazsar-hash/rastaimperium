@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rastaimperium/governance/schemas/event.v1.json",
+  "title": "Governance Event Schema v1",
+  "description": "Versioned append-only event envelope for deterministic audit streams.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "global_sequence",
+    "plane",
+    "event_type",
+    "timestamp_utc",
+    "actor",
+    "version_bundle",
+    "payload",
+    "prev_event_hash",
+    "event_hash"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable event identifier for lineage and replay references."
+    },
+    "global_sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Globally ordered append-only sequence number."
+    },
+    "plane": {
+      "type": "string",
+      "enum": ["OUT_OF_TX", "TX"],
+      "description": "Emission plane for dual-plane event models."
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Domain event classification (for example STATE_TRANSITION)."
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$",
+      "description": "UTC ISO-8601 timestamp with millisecond precision."
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "operator_id",
+        "actor_key_id",
+        "service_principal"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "External request correlation identifier."
+        },
+        "operator_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human or system operator identity."
+        },
+        "actor_key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Cryptographic key identifier used by actor."
+        },
+        "service_principal": {
+          "type": ["string", "null"],
+          "description": "Service identity in delegated/automated operations; explicit null when absent."
+        }
+      }
+    },
+    "version_bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "ruleset_version",
+        "governance_version",
+        "canon_spec_version",
+        "cert_profile"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ruleset_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "governance_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canon_spec_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cert_profile": {
+          "type": ["string", "null"],
+          "description": "Certificate profile for proof-bearing events; explicit null when not applicable."
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-specific content, canonicalized prior to hash computation.",
+      "additionalProperties": true
+    },
+    "prev_event_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Fa-f0-9]{64}$",
+      "description": "SHA-256 hash of immediately previous global sequence event; explicit null for stream genesis.",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "global_sequence": { "const": 0 }
+            },
+            "required": ["global_sequence"]
+          },
+          "then": {
+            "const": null
+          }
+        }
+      ]
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^[A-Fa-f0-9]{64}$",
+      "description": "SHA-256 hash computed from canonical event material per governance/specs/event-hash.md."
+    }
+  }
+}
