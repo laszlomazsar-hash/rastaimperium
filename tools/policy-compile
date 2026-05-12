@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+python governance/compiler/policy_compiler.py \
+  --source governance/source.policy.json \
+  --schema governance/policy-ir.v1.json \
+  --output governance/generated/policy.ir.json
