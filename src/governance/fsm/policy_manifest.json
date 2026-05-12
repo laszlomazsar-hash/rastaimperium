@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "ruleset_version": "1.0.0",
+  "governance_version": "1.0.0",
+  "canon_spec_version": "1.0.0",
+  "states": [
+    "INGESTED",
+    "NORMALIZED",
+    "VERIFIED",
+    "CORRELATED",
+    "ARCHIVED",
+    "CONTESTED"
+  ],
+  "allowed_transitions": {
+    "INGESTED": ["NORMALIZED"],
+    "NORMALIZED": ["VERIFIED"],
+    "VERIFIED": ["CORRELATED"],
+    "CORRELATED": ["ARCHIVED"]
+  },
+  "any_to": ["CONTESTED"]
+}
