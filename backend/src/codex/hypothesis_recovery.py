@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Iterable, List, Sequence
 
+from src.governance.runtime import PolicyLoadError, load_runtime_policy
+
 
 @dataclass(frozen=True)
 class HypothesisPolicy:
@@ -25,9 +27,15 @@ class BootstrapState:
 
 
 class HypothesisRecoveryEngine:
-    def __init__(self, policy: HypothesisPolicy | None = None) -> None:
+    def __init__(
+        self,
+        policy: HypothesisPolicy | None = None,
+        *,
+        governance_manifest_path: str = "config/governance_manifest.json",
+    ) -> None:
         self.policy = policy or HypothesisPolicy()
         self._bootstrap_state = BootstrapState()
+        self._runtime_policy = load_runtime_policy(governance_manifest_path)
 
     def prune_hypotheses(self, hypotheses: Sequence[str]) -> List[str]:
         """Prune duplicate/empty values and preserve order."""
@@ -56,6 +64,13 @@ class HypothesisRecoveryEngine:
         - Otherwise, synthesize deterministic bootstrap hypotheses up to policy minimum.
         """
         current_time = now or datetime.now(timezone.utc)
+        self._runtime_policy.guards.validate_event_type("COMMIT_FINALIZED")
+        self._runtime_policy.guards.validate_version_bundle({
+            "schema_version": self._runtime_policy.schema_version,
+            "ruleset_version": self._runtime_policy.ruleset_version,
+            "governance_version": self._runtime_policy.governance_version,
+            "canon_spec_version": "1.0"
+        })
         pruned = self.prune_hypotheses(hypotheses)
 
         if len(pruned) >= self.policy.min_viable_hypotheses:

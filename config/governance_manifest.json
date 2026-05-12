@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "ruleset_version": "2026.05",
+  "governance_version": "v1",
+  "guards": {
+    "fsm_transitions": {
+      "INGESTED": ["NORMALIZED", "CONTESTED"],
+      "NORMALIZED": ["VERIFIED", "CONTESTED"],
+      "VERIFIED": ["CORRELATED", "CONTESTED"],
+      "CORRELATED": ["ARCHIVED", "CONTESTED"],
+      "ARCHIVED": ["CONTESTED"],
+      "CONTESTED": ["CONTESTED"]
+    },
+    "event_types": ["RECORD_INSERT", "STATE_TRANSITION", "COMMIT_FINALIZED"],
+    "required_version_bundle": [
+      "schema_version",
+      "ruleset_version",
+      "governance_version",
+      "canon_spec_version"
+    ],
+    "invariants": ["replay_parity", "audit_completeness", "ordering_integrity", "lineage_consistency"]
+  }
+}
