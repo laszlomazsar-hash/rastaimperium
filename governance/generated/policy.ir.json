@@ -1,0 +1,27 @@
+{
+  "canon_spec_version": "1.0.0",
+  "cert_profile": null,
+  "governance_version": "1.0.0",
+  "rules": [
+    {
+      "action": "require",
+      "condition": "event.type == 'COMMIT_FINALIZED'",
+      "id": "rule.audit.anchor",
+      "metadata": {
+        "domain": "audit"
+      },
+      "priority": 10
+    },
+    {
+      "action": "allow",
+      "condition": "event.type == 'STATE_TRANSITION'",
+      "id": "rule.fsm.lifecycle.transition",
+      "metadata": {
+        "domain": "fsm"
+      },
+      "priority": 20
+    }
+  ],
+  "ruleset_version": "1.0.0",
+  "schema_version": "1.0.0"
+}

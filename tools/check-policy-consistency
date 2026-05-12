@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SOURCE_FILE="$ROOT_DIR/governance/source/policy.rules.json"
+COMMITTED_IR="$ROOT_DIR/governance/generated/policy.ir.json"
+COMPILER="$ROOT_DIR/tools/compile_policy_ir.py"
+for required in "$SOURCE_FILE" "$COMMITTED_IR" "$COMPILER"; do
+  [[ -f "$required" ]] || { echo "missing required file: $required" >&2; exit 1; }
+done
+TMP_DIR="$(mktemp -d)"; trap 'rm -rf "$TMP_DIR"' EXIT
+FIRST_OUT="$TMP_DIR/policy.first.json"; SECOND_OUT="$TMP_DIR/policy.second.json"
+python "$COMPILER" --source "$SOURCE_FILE" --output "$FIRST_OUT"
+python "$COMPILER" --source "$SOURCE_FILE" --output "$SECOND_OUT"
+cmp -s "$FIRST_OUT" "$SECOND_OUT" || { echo "nondeterministic compiler output detected" >&2; exit 1; }
+cmp -s "$FIRST_OUT" "$COMMITTED_IR" || { echo "committed governance/generated/policy.ir.json is stale or mismatched" >&2; diff -u "$COMMITTED_IR" "$FIRST_OUT" || true; exit 1; }
+python - "$FIRST_OUT" <<'PY'
+import json, sys
+obj=json.load(open(sys.argv[1], encoding='utf-8'))
+required_top={"schema_version":str,"ruleset_version":str,"governance_version":str,"canon_spec_version":str,"rules":list}
+for key, typ in required_top.items():
+    if key not in obj or not isinstance(obj[key], typ):
+        raise SystemExit(f"schema validation error: {key} missing or invalid type")
+if "cert_profile" not in obj or not (isinstance(obj["cert_profile"], str) or obj["cert_profile"] is None):
+    raise SystemExit("schema validation error: cert_profile missing or invalid type")
+for i, rule in enumerate(obj["rules"]):
+    if not isinstance(rule, dict):
+        raise SystemExit(f"schema validation error: rule[{i}] must be object")
+    for key, typ in {"id":str,"condition":str,"action":str,"priority":int}.items():
+        if key not in rule or not isinstance(rule[key], typ):
+            raise SystemExit(f"schema validation error: rule[{i}].{key} missing or invalid type")
+    if "metadata" not in rule or not (isinstance(rule["metadata"], dict) or rule["metadata"] is None):
+        raise SystemExit(f"schema validation error: rule[{i}].metadata missing or invalid type")
+PY
+echo "policy consistency check passed"
