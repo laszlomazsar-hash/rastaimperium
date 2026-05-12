@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "ruleset_version",
+    "governance_version",
+    "canon_spec_version",
+    "cert_profile",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "ruleset_version": {"type": "string"},
+    "governance_version": {"type": "string"},
+    "canon_spec_version": {"type": "string"},
+    "cert_profile": {"type": ["string", "null"]},
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "condition", "action", "priority", "metadata"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "condition": {"type": "string", "minLength": 1},
+          "action": {"type": "string", "minLength": 1},
+          "priority": {"type": "integer"},
+          "metadata": {"type": ["object", "null"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,25 @@
+{
+  "ruleset_version": "1.0.0",
+  "governance_version": "1.0.0",
+  "cert_profile": null,
+  "rules": [
+    {
+      "id": "rule.audit.anchor",
+      "condition": "event.type == 'COMMIT_FINALIZED'",
+      "action": "require",
+      "priority": 10,
+      "metadata": {
+        "domain": "audit"
+      }
+    },
+    {
+      "id": "rule.fsm.lifecycle.transition",
+      "condition": "event.type == 'STATE_TRANSITION'",
+      "action": "allow",
+      "priority": 20,
+      "metadata": {
+        "domain": "fsm"
+      }
+    }
+  ]
+}
