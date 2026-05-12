@@ -39,21 +39,26 @@ const phases = [
   { num: "6", name: "Civilization-Scale Orchestration", status: "VISION" },
 ];
 
+const trustPillars = [
+  "Deterministic replay under identical inputs and event order",
+  "Append-only audit lineage with hash-linked chronology",
+  "FSM-governed lifecycle transitions with illegal-edge rejection",
+  "Counterexample generation for every critical invariant failure",
+];
+
 export default function HomePage() {
   return (
     <main>
-      {/* HERO — LEFT/RIGHT SPLIT */}
       <section className="container-page py-20">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl text-gold-gradient leading-tight" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
+            <p className="text-xs uppercase tracking-[0.2em] text-zinc-400">Constitutional Intelligence Infrastructure</p>
+            <h1 className="mt-3 text-4xl md:text-5xl text-gold-gradient leading-tight" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
               Deterministic Governance<br />for Civilization-Scale AI
             </h1>
-            <p className="mt-4 text-zinc-300 text-xl">
-              Replayable. Auditable. Sovereign.
-            </p>
+            <p className="mt-4 text-zinc-300 text-xl">Replayable. Auditable. Sovereign.</p>
             <p className="mt-6 text-zinc-400">
-              Rasta Imperium builds constitutional intelligence systems capable of enforcing epistemic integrity across autonomous infrastructures.
+              Rasta Imperium builds constitutional intelligence systems that preserve epistemic integrity across autonomous infrastructure.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/empire" className="rounded-md bg-gold text-black px-6 py-3 font-bold hover:bg-yellow-600 transition">
@@ -61,6 +66,9 @@ export default function HomePage() {
               </Link>
               <Link href="/witness" className="rounded-md border border-gold text-gold px-6 py-3 font-bold hover:bg-gold/10 transition">
                 View Replay Demo
+              </Link>
+              <Link href="/consulting" className="rounded-md border border-zinc-600 text-zinc-200 px-6 py-3 font-bold hover:border-gold hover:text-gold transition">
+                Book Governance Intake
               </Link>
             </div>
           </div>
@@ -81,7 +89,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CORE THESIS */}
+      <section className="container-page pb-2">
+        <div className="grid md:grid-cols-4 gap-3">
+          {trustPillars.map((pillar) => (
+            <div key={pillar} className="panel p-4">
+              <p className="text-sm text-zinc-200">{pillar}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="bg-green/10 border-y border-gold/20">
         <div className="container-page py-12 text-center">
           <p className="text-2xl md:text-3xl text-gold font-georgia italic max-w-4xl mx-auto">
@@ -90,7 +107,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CIVILIZATION STACK */}
       <section className="container-page">
         <h2 className="text-3xl text-gold text-center">The Civilization Stack</h2>
         <p className="text-center text-zinc-400 mt-2">9 layers of sovereign abstraction</p>
@@ -107,33 +123,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* THREE-FACE ARCHITECTURE */}
-      <section className="container-page">
-        <h2 className="text-3xl text-gold text-center">Three-Face Architecture</h2>
-        <p className="text-center text-zinc-400 mt-2">Three simultaneous realities, one coherent system</p>
-        <div className="grid md:grid-cols-3 gap-6 mt-8">
-          <div className="panel p-6 text-center">
-            <p className="text-3xl">🏛️</p>
-            <h3 className="text-gold text-xl mt-3">Institutional Face</h3>
-            <p className="text-sm text-zinc-400 mt-1">Trust + Governance</p>
-            <p className="text-sm text-zinc-300 mt-3">Governments, enterprise, compliance bodies, defense, healthcare, energy systems.</p>
-          </div>
-          <div className="panel p-6 text-center">
-            <p className="text-3xl">⚙️</p>
-            <h3 className="text-gold text-xl mt-3">Technical Face</h3>
-            <p className="text-sm text-zinc-400 mt-1">Systems Engineering</p>
-            <p className="text-sm text-zinc-300 mt-3">Researchers, developers, infrastructure architects. Kernels, graphs, causal systems, invariants.</p>
-          </div>
-          <div className="panel p-6 text-center">
-            <p className="text-3xl">🦁</p>
-            <h3 className="text-gold text-xl mt-3">Mythic Face</h3>
-            <p className="text-sm text-zinc-400 mt-1">Meaning + Civilization</p>
-            <p className="text-sm text-zinc-300 mt-3">The cosmological layer. Seven Articles, Alpha Song, symbolic governance, Lion of Judah.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* DARWIN KERNEL */}
       <section className="container-page">
         <h2 className="text-3xl text-gold text-center">The Darwin Kernel v7.2</h2>
         <p className="text-center text-zinc-400 mt-2">A multi-timescale deterministic governance kernel for admissible autonomous systems</p>
@@ -149,23 +138,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* REPLAY ENGINE */}
-      <section className="container-page">
-        <h2 className="text-3xl text-gold text-center">The Replay Engine</h2>
-        <p className="text-center text-zinc-400 mt-2">The Crown Jewel — deterministic truth verification</p>
-        <div className="panel p-8 mt-8">
-          <div className="grid md:grid-cols-5 gap-4 text-center">
-            <div><p className="text-gold font-bold text-sm">Input Hash</p><p className="text-xs text-zinc-400 mt-1">Submit any SHA-256</p></div>
-            <div><p className="text-gold font-bold text-sm">Retrieve State</p><p className="text-xs text-zinc-400 mt-1">Historical snapshot</p></div>
-            <div><p className="text-gold font-bold text-sm">Replay Timeline</p><p className="text-xs text-zinc-400 mt-1">Decision sequence</p></div>
-            <div><p className="text-gold font-bold text-sm">Inspect Violations</p><p className="text-xs text-zinc-400 mt-1">Invariant checks</p></div>
-            <div><p className="text-gold font-bold text-sm">Witness Causality</p><p className="text-xs text-zinc-400 mt-1">Full chain proof</p></div>
-          </div>
-          <p className="text-center text-zinc-400 mt-6 text-sm">This transforms mythology into legitimacy. Every claim is verifiable.</p>
-        </div>
-      </section>
-
-      {/* DETERMINISTIC GOVERNANCE AGENTS */}
       <section className="container-page">
         <h2 className="text-3xl text-gold text-center">Deterministic Governance Agents</h2>
         <p className="text-center text-zinc-400 mt-2">2,000+ agents within a bounded governance field</p>
@@ -180,48 +152,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* DOMAIN NETWORK */}
-      <section className="container-page">
-        <h2 className="text-3xl text-gold text-center">The Domain Empire</h2>
-        <div className="grid md:grid-cols-2 gap-4 mt-8">
-          <a href="https://jah.rastaimperium.com" className="panel p-6 hover:bg-green/40 transition-all">
-            <p className="text-xs font-courier text-zinc-500">jah.rastaimperium.com</p>
-            <h3 className="text-gold text-xl mt-2">The Intelligence Field</h3>
-            <p className="text-sm text-zinc-300 mt-2">AI systems, inference, orchestration, deterministic cognition. Intelligence without governance is entropy.</p>
-          </a>
-          <a href="https://codex.rastaimperium.com" className="panel p-6 hover:bg-green/40 transition-all">
-            <p className="text-xs font-courier text-zinc-500">codex.rastaimperium.com</p>
-            <h3 className="text-gold text-xl mt-2">The Constitutional Archive</h3>
-            <p className="text-sm text-zinc-300 mt-2">Formal law, doctrine, whitepapers, specifications, civilization memory. Vatican library meets cryptographic repository.</p>
-          </a>
-          <Link href="/consulting" className="panel p-6 hover:bg-green/40 transition-all">
-            <p className="text-xs font-courier text-zinc-500">consulting.rastaimperium.com</p>
-            <h3 className="text-gold text-xl mt-2">The Institutional Sanctum</h3>
-            <p className="text-sm text-zinc-300 mt-2">Enterprise onboarding, governance consulting, critical infrastructure integration. Zero mythology, pure institutional precision.</p>
-          </Link>
-          <Link href="/witness" className="panel p-6 hover:bg-green/40 transition-all">
-            <p className="text-xs font-courier text-zinc-500">rastaimperium.com/witness</p>
-            <h3 className="text-gold text-xl mt-2">The Witness Portal</h3>
-            <p className="text-sm text-zinc-300 mt-2">Real-time system state, coherence score, invariant topology, causal flow map, replay stream. Mission control for civilization.</p>
-          </Link>
-        </div>
-      </section>
-
-      {/* POSITIONING */}
-      <section className="container-page">
-        <h2 className="text-3xl text-gold text-center">Positioning</h2>
-        <div className="panel p-8 mt-6">
-          <p className="text-zinc-200 text-center text-lg">Competing in the future category of <span className="text-gold font-bold">Constitutional Intelligence Infrastructure</span></p>
-          <div className="grid md:grid-cols-4 gap-4 mt-6 text-center">
-            <div className="border border-gold/20 rounded-lg p-4"><p className="text-zinc-400 text-sm">Peer class</p><p className="text-gold mt-1">Palantir</p></div>
-            <div className="border border-gold/20 rounded-lg p-4"><p className="text-zinc-400 text-sm">Peer class</p><p className="text-gold mt-1">Anthropic Safety</p></div>
-            <div className="border border-gold/20 rounded-lg p-4"><p className="text-zinc-400 text-sm">Peer class</p><p className="text-gold mt-1">Helsing</p></div>
-            <div className="border border-gold/20 rounded-lg p-4"><p className="text-zinc-400 text-sm">Differentiation</p><p className="text-gold mt-1">Replayable Epistemic Governance</p></div>
-          </div>
-        </div>
-      </section>
-
-      {/* ROADMAP */}
       <section className="container-page">
         <h2 className="text-3xl text-gold text-center">Evolution Roadmap</h2>
         <div className="grid md:grid-cols-6 gap-3 mt-8">
@@ -235,26 +165,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PUBLISHED WORKS */}
-      <section className="container-page">
-        <h2 className="text-3xl text-gold text-center">Research & Publications</h2>
-        <div className="grid md:grid-cols-2 gap-4 mt-8">
-          <a href="https://amzn.eu/d/02iiTGT5" target="_blank" rel="noopener" className="panel p-6 hover:bg-green/40 transition-all">
-            <p className="text-xs text-zinc-500">December 2025</p>
-            <h3 className="text-gold text-xl mt-2">Rasta Codex</h3>
-            <p className="text-zinc-300 mt-1">A King&apos;s Guide to Energetic Sovereignty</p>
-            <p className="text-sm text-gold/70 mt-3">Amazon →</p>
-          </a>
-          <a href="https://www.amazon.co.uk/dp/B0GNFS1N62" target="_blank" rel="noopener" className="panel p-6 hover:bg-green/40 transition-all">
-            <p className="text-xs text-zinc-500">February 2026</p>
-            <h3 className="text-gold text-xl mt-2">RastafarAI: EVO-V</h3>
-            <p className="text-zinc-300 mt-1">The Jah Light of Contained Evolution</p>
-            <p className="text-sm text-gold/70 mt-3">Amazon →</p>
-          </a>
-        </div>
-      </section>
-
-      {/* OPEN SOURCE */}
       <section className="container-page pb-20 text-center">
         <h2 className="text-3xl text-gold">Open Source</h2>
         <p className="text-zinc-400 mt-2">Sovereign and verifiable</p>
@@ -262,7 +172,6 @@ export default function HomePage() {
           <a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank" rel="noopener" className="panel px-5 py-3 hover:bg-green/40 transition"><span className="text-gold">rastaimperium</span></a>
           <a href="https://github.com/laszlomazsar-hash/evo-v" target="_blank" rel="noopener" className="panel px-5 py-3 hover:bg-green/40 transition"><span className="text-gold">evo-v</span></a>
           <a href="https://github.com/laszlomazsar-hash/evo-v5-laplacian-shift" target="_blank" rel="noopener" className="panel px-5 py-3 hover:bg-green/40 transition"><span className="text-gold">evo-v5-laplacian-shift</span></a>
-          <a href="https://github.com/laszlomazsar-hash/evo-v-control-cloud" target="_blank" rel="noopener" className="panel px-5 py-3 hover:bg-green/40 transition"><span className="text-gold">evo-v-control-cloud</span></a>
         </div>
       </section>
     </main>
