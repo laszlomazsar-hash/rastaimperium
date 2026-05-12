@@ -1,0 +1,163 @@
+{
+  "ir_id": "governance.policy_ir",
+  "ir_version": "1.0.0",
+  "authoritative": true,
+  "description": "Authoritative machine-interpretable governance policy schema for deterministic enforcement.",
+  "version_bundle_requirements": {
+    "required": [
+      "schema_version",
+      "ruleset_version",
+      "governance_version",
+      "canon_spec_version"
+    ],
+    "optional": [
+      "cert_profile"
+    ],
+    "properties": {
+      "schema_version": {
+        "type": "string",
+        "min_length": 1
+      },
+      "ruleset_version": {
+        "type": "string",
+        "min_length": 1
+      },
+      "governance_version": {
+        "type": "string",
+        "min_length": 1
+      },
+      "canon_spec_version": {
+        "type": "string",
+        "min_length": 1
+      },
+      "cert_profile": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "min_length": 1
+      }
+    }
+  },
+  "fsm": {
+    "states": [
+      "INGESTED",
+      "NORMALIZED",
+      "VERIFIED",
+      "CORRELATED",
+      "ARCHIVED",
+      "CONTESTED"
+    ],
+    "transitions": [
+      {
+        "from": "INGESTED",
+        "to": "NORMALIZED",
+        "legal": true
+      },
+      {
+        "from": "NORMALIZED",
+        "to": "VERIFIED",
+        "legal": true
+      },
+      {
+        "from": "VERIFIED",
+        "to": "CORRELATED",
+        "legal": true
+      },
+      {
+        "from": "CORRELATED",
+        "to": "ARCHIVED",
+        "legal": true
+      },
+      {
+        "from": "ANY",
+        "to": "CONTESTED",
+        "legal": true,
+        "wildcard_from": true,
+        "wildcard_semantics": "matches_all_declared_states"
+      }
+    ],
+    "illegal_transition_behavior": {
+      "reject_transition": true,
+      "emit_failure_audit_event": true,
+      "counterexample_generation": "required_when_critical"
+    }
+  },
+  "event_constraints": {
+    "append_only": true,
+    "global_ordering": "required",
+    "hash_linking": "required",
+    "dual_plane": {
+      "allowed": true,
+      "planes": [
+        "OUT_OF_TX",
+        "TX"
+      ],
+      "unified_by": "global_sequence"
+    },
+    "state_mutability_rule": {
+      "only_event_type_allowed": "STATE_TRANSITION",
+      "description": "Only STATE_TRANSITION events may mutate lifecycle state."
+    },
+    "identity_creation_rule": {
+      "event_type": "RECORD_INSERT",
+      "description": "RECORD_INSERT creates identity only and must not mutate lifecycle state."
+    },
+    "commit_boundary": {
+      "required_event": "COMMIT_FINALIZED",
+      "description": "COMMIT_FINALIZED must anchor committed state transitions."
+    }
+  },
+  "invariants": [
+    {
+      "id": "replay_parity",
+      "critical": true
+    },
+    {
+      "id": "audit_completeness",
+      "critical": true
+    },
+    {
+      "id": "snapshot_determinism",
+      "critical": true
+    },
+    {
+      "id": "ordering_integrity",
+      "critical": true
+    },
+    {
+      "id": "lineage_consistency",
+      "critical": true
+    }
+  ],
+  "critical_invariant_failure_escalation": {
+    "write_freeze": "required",
+    "emit_counterexample_artifact": "required",
+    "mark_affected_artifacts_state": "CONTESTED",
+    "preserve_all_variants": true,
+    "request_human_governance_review": true
+  },
+  "canonicalization_requirements": {
+    "object_keys": {
+      "ordering": "lexicographic_sorted"
+    },
+    "null_handling": {
+      "explicit_nulls": true
+    },
+    "text_encoding": {
+      "encoding": "UTF-8",
+      "normalization": "NFC"
+    },
+    "numeric_text_forms": {
+      "fixed_numeric_representation": "repo_wide_standard",
+      "fixed_text_representation": "required"
+    },
+    "array_ordering": {
+      "rule": "stable_order_required",
+      "strategies": {
+        "unordered_semantic_sets": "sort_by_declared_canonical_key",
+        "ordered_sequences": "preserve_input_order"
+      }
+    }
+  }
+}
