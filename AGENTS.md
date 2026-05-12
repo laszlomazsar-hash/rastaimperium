@@ -6,6 +6,14 @@ Agents must preserve audit integrity, append-only lineage, and explicit state se
 
 ---
 
+
+## Policy Source Mapping
+
+- `governance/policy.v1.yaml` is the executable, machine-readable source of truth for governance enforcement.
+- `AGENTS.md` remains the human-readable policy document and explanatory text.
+
+---
+
 ## 1) Global Operating Mode
 
 ### Required behavior

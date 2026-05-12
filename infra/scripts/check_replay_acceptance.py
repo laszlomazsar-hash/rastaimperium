@@ -14,21 +14,33 @@ for entry in (BACKEND_SRC, REPO_ROOT):
         sys.path.insert(0, entry_str)
 
 from codex.compliance import ComplianceEngine, ReplayResult
-REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
-from backend.src.codex.compliance import ComplianceEngine, ReplayResult
+from src.governance.runtime import load_runtime_policy
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Profile-aware replay acceptance check.")
     parser.add_argument("--input", required=True, help="Path to replay metrics JSON file.")
+    parser.add_argument(
+        "--governance-manifest",
+        default="config/governance_manifest.json",
+        help="Path to executable governance manifest.",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    runtime_policy = load_runtime_policy(REPO_ROOT / args.governance_manifest)
+    runtime_policy.guards.validate_event_type("COMMIT_FINALIZED")
+    runtime_policy.guards.validate_version_bundle(
+        {
+            "schema_version": runtime_policy.schema_version,
+            "ruleset_version": runtime_policy.ruleset_version,
+            "governance_version": runtime_policy.governance_version,
+            "canon_spec_version": "1.0",
+        }
+    )
+
     payload = json.loads(Path(args.input).read_text())
 
     engine = ComplianceEngine()

@@ -1,0 +1,215 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import json
+import sys
+import unicodedata
+from pathlib import Path
+from typing import Any
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+EVO_CORE_APP = REPO_ROOT / "evo-v-core" / "app"
+if str(EVO_CORE_APP) not in sys.path:
+    sys.path.insert(0, str(EVO_CORE_APP))
+
+from core.replay import payload_hash, replay_state_hashes  # noqa: E402
+
+CRITICAL_INVARIANTS = (
+    "replay_parity",
+    "audit_completeness",
+    "snapshot_determinism",
+    "ordering_integrity",
+    "lineage_consistency",
+)
+
+
+def _nfc(value: str) -> str:
+    return unicodedata.normalize("NFC", value)
+
+
+def _normalize(value: Any) -> Any:
+    if isinstance(value, str):
+        return _nfc(value)
+    if isinstance(value, dict):
+        return {key: _normalize(value[key]) for key in sorted(value.keys())}
+    if isinstance(value, list):
+        return [_normalize(item) for item in value]
+    return value
+
+
+def _canonical_json(value: Any) -> str:
+    return json.dumps(_normalize(value), sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def _event_hash(event: dict[str, Any]) -> str:
+    filtered = {k: v for k, v in event.items() if k not in {"event_hash", "prev_event_hash"}}
+    return hashlib.sha256(_canonical_json(filtered).encode("utf-8")).hexdigest()
+
+
+def _build_counterexample(
+    *,
+    invariant: str,
+    divergence_index: int,
+    expected_hash: str | None,
+    actual_hash: str | None,
+    events: list[dict[str, Any]],
+    version_bundle: dict[str, Any],
+) -> dict[str, Any]:
+    window_start = max(0, divergence_index - 1)
+    window_end = min(len(events), divergence_index + 1)
+    return {
+        "violated_invariant": invariant,
+        "divergence_index": divergence_index,
+        "minimal_reproducer_slice": events[window_start:window_end],
+        "expected_vs_actual_hashes": {
+            "expected": expected_hash,
+            "actual": actual_hash,
+        },
+        "version_bundle_context": _normalize(version_bundle),
+        "replay_capsule_reference": f"global_sequence:{divergence_index}",
+    }
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Deterministic replay verifier over global_sequence-ordered events.")
+    parser.add_argument("--input", required=True, help="Path to replay payload JSON.")
+    parser.add_argument("--counterexample-out", help="Path to write divergence counterexample JSON.")
+    parser.add_argument("--start-sequence", type=int, help="Inclusive lower bound for global_sequence window.")
+    parser.add_argument("--end-sequence", type=int, help="Inclusive upper bound for global_sequence window.")
+    return parser.parse_args()
+
+
+def _filter_window(events: list[dict[str, Any]], start: int | None, end: int | None) -> list[dict[str, Any]]:
+    filtered = []
+    for event in events:
+        seq = int(event["global_sequence"])
+        if start is not None and seq < start:
+            continue
+        if end is not None and seq > end:
+            continue
+        filtered.append(event)
+    return filtered
+
+
+def main() -> int:
+    args = parse_args()
+    payload = json.loads(Path(args.input).read_text(encoding="utf-8"))
+
+    initial_state = payload.get("initial_state", {})
+    all_events = payload.get("events", [])
+    events = _filter_window(all_events, args.start_sequence, args.end_sequence)
+    proof_sequence = [event.get("proof", {}) for event in events]
+    expected_hashes = payload.get("expected_hashes")
+    version_bundle = payload.get("version_bundle", {})
+
+    reconstructed_hashes = replay_state_hashes(initial_state, proof_sequence)
+
+    failure: dict[str, Any] | None = None
+
+    for idx, event in enumerate(events):
+        expected_seq = idx + 1 if args.start_sequence is None else args.start_sequence + idx
+        actual_seq = int(event["global_sequence"])
+        if actual_seq != expected_seq:
+            failure = _build_counterexample(
+                invariant="ordering_integrity",
+                divergence_index=idx,
+                expected_hash=str(expected_seq),
+                actual_hash=str(actual_seq),
+                events=events,
+                version_bundle=version_bundle,
+            )
+            break
+
+    if failure is None:
+        transitions = sum(1 for event in events if event.get("event_type") == "STATE_TRANSITION")
+        commit_finalized = sum(1 for event in events if event.get("event_type") == "COMMIT_FINALIZED")
+        if transitions > 0 and commit_finalized == 0:
+            failure = _build_counterexample(
+                invariant="audit_completeness",
+                divergence_index=0,
+                expected_hash="COMMIT_FINALIZED",
+                actual_hash=None,
+                events=events,
+                version_bundle=version_bundle,
+            )
+
+    if failure is None:
+        for idx, event in enumerate(events):
+            if idx == 0:
+                continue
+            expected_prev = _event_hash(events[idx - 1])
+            actual_prev = event.get("prev_event_hash")
+            if actual_prev != expected_prev:
+                failure = _build_counterexample(
+                    invariant="lineage_consistency",
+                    divergence_index=idx,
+                    expected_hash=expected_prev,
+                    actual_hash=actual_prev,
+                    events=events,
+                    version_bundle=version_bundle,
+                )
+                break
+
+    if failure is None:
+        rerun_hashes = replay_state_hashes(copy.deepcopy(initial_state), copy.deepcopy(proof_sequence))
+        if reconstructed_hashes != rerun_hashes:
+            failure = _build_counterexample(
+                invariant="snapshot_determinism",
+                divergence_index=0,
+                expected_hash=payload_hash({"hashes": reconstructed_hashes}),
+                actual_hash=payload_hash({"hashes": rerun_hashes}),
+                events=events,
+                version_bundle=version_bundle,
+            )
+
+    if failure is None and expected_hashes is not None:
+        max_ticks = min(len(expected_hashes), len(reconstructed_hashes))
+        for tick in range(max_ticks):
+            if expected_hashes[tick] != reconstructed_hashes[tick]:
+                failure = _build_counterexample(
+                    invariant="replay_parity",
+                    divergence_index=tick,
+                    expected_hash=expected_hashes[tick],
+                    actual_hash=reconstructed_hashes[tick],
+                    events=events,
+                    version_bundle=version_bundle,
+                )
+                break
+        if failure is None and len(expected_hashes) != len(reconstructed_hashes):
+            failure = _build_counterexample(
+                invariant="replay_parity",
+                divergence_index=max_ticks,
+                expected_hash=str(len(expected_hashes)),
+                actual_hash=str(len(reconstructed_hashes)),
+                events=events,
+                version_bundle=version_bundle,
+            )
+
+    result = {
+        "success": failure is None,
+        "checked_invariants": list(CRITICAL_INVARIANTS),
+        "events_replayed": len(events),
+        "reconstructed_hashes": reconstructed_hashes,
+        "window": {
+            "start_sequence": args.start_sequence,
+            "end_sequence": args.end_sequence,
+        },
+    }
+
+    if failure is not None:
+        result["counterexample"] = failure
+        if args.counterexample_out:
+            Path(args.counterexample_out).write_text(
+                _canonical_json(failure) + "\n",
+                encoding="utf-8",
+            )
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if failure is None else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

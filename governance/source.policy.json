@@ -1,0 +1,16 @@
+{
+  "policy_id": "core-governance",
+  "schema_version": "1.0.0",
+  "ruleset_version": "1.0.0",
+  "governance_version": "1.0.0",
+  "canon_spec_version": "1.0.0",
+  "cert_profile": null,
+  "states": ["INGESTED", "NORMALIZED", "VERIFIED", "CORRELATED", "ARCHIVED", "CONTESTED"],
+  "transitions": [
+    {"from": "INGESTED", "to": "NORMALIZED"},
+    {"from": "NORMALIZED", "to": "VERIFIED"},
+    {"from": "VERIFIED", "to": "CORRELATED"},
+    {"from": "CORRELATED", "to": "ARCHIVED"},
+    {"from": "ANY", "to": "CONTESTED"}
+  ]
+}
