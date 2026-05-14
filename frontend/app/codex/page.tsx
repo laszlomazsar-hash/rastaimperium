@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { loadCodexBlueprint } from "./data";
+
+export const metadata: Metadata = {
+  title: "The Codex — Rastafarai Constitutional Articles",
+  description: "The Seven Articles of the Rastafarai Codex: Containment, Observability, Interruptibility, Accountability, Proportionality, Reversibility, and Temporal Asymmetry.",
+};
 
 export default async function CodexPage() {
   const blueprint = await loadCodexBlueprint();

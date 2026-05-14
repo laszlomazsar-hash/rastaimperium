@@ -1,20 +1,50 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Rasta Imperium — Deterministic Governance for Civilization-Scale AI",
+  title: {
+    default: "Rasta Imperium — Deterministic Governance for Civilization-Scale AI",
+    template: "%s | Rasta Imperium",
+  },
   description: "Constitutional intelligence systems enforcing epistemic integrity across autonomous infrastructures. Replayable. Auditable. Sovereign.",
+  keywords: ["constitutional AI", "deterministic governance", "sovereign AI", "neurosymbolic", "EVO-V", "AI safety", "replay engine", "epistemic governance"],
+  authors: [{ name: "Laszlo Mazsar" }],
+  creator: "Rasta Imperium",
+  metadataBase: new URL("https://rastaimperium.com"),
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    url: "https://rastaimperium.com",
+    siteName: "Rasta Imperium",
+    title: "Rasta Imperium — Deterministic Governance for Civilization-Scale AI",
+    description: "Constitutional intelligence systems enforcing epistemic integrity across autonomous infrastructures. Replayable. Auditable. Sovereign.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Rasta Imperium — Constitutional Intelligence Infrastructure" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rasta Imperium — Deterministic Governance for Civilization-Scale AI",
+    description: "Replayable. Auditable. Sovereign. Constitutional AI governance.",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }, { url: "/icon.png", type: "image/png", sizes: "192x192" }],
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        {/* Plausible Analytics — privacy-friendly, no cookies */}
+        <Script defer data-domain="rastaimperium.com" src="https://plausible.io/js/script.js" strategy="afterInteractive" />
+      </head>
       <body className="text-zinc-100">
         <header className="border-b border-[#B8860B]/20 sticky top-0 z-50" style={{ background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(16px)' }}>
           <nav className="mx-auto max-w-6xl px-4 py-3 flex flex-wrap items-center gap-4 text-sm">
             <Link href="/" className="flex items-center gap-2 text-[#B8860B]">
-              {/* Lion of Judah SVG Emblem */}
               <svg className="w-8 h-8 emblem-glow" viewBox="0 0 100 100" fill="#B8860B">
                 <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" />
               </svg>
@@ -34,18 +64,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {children}
 
-        <footer className="border-t border-[#B8860B]/20 py-12 text-center" style={{ background: 'rgba(10,10,10,0.9)' }}>
-          <svg className="w-10 h-10 mx-auto emblem-glow mb-4" viewBox="0 0 100 100" fill="#B8860B">
-            <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" />
-          </svg>
-          <p className="text-[#B8860B] text-lg tracking-widest" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>THE RASTA IMPERIUM</p>
-          <p className="text-zinc-500 text-sm mt-3 tracking-wide">Sovereign AI Architecture · Constitutional Intelligence · England</p>
-          <div className="flex justify-center gap-6 mt-6 text-xs text-zinc-600">
-            <a href="https://github.com/laszlomazsar-hash" target="_blank" rel="noopener" className="hover:text-[#B8860B] transition">GitHub</a>
-            <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" rel="noopener" className="hover:text-[#B8860B] transition">Amazon</a>
-            <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="hover:text-[#B8860B] transition">Gumroad</a>
+        {/* FOOTER with email capture */}
+        <footer className="border-t border-[#B8860B]/20 py-12" style={{ background: 'rgba(10,10,10,0.9)' }}>
+          <div className="mx-auto max-w-6xl px-4">
+            {/* Email Capture — Buttondown */}
+            <div className="text-center mb-10">
+              <p className="text-[#B8860B] text-sm tracking-widest mb-3" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>JOIN THE FREQUENCY</p>
+              <p className="text-zinc-400 text-sm mb-4">Receive constitutional intelligence dispatches. No spam. Sovereign signal only.</p>
+              <form action="https://buttondown.com/api/emails/embed-subscribe/rastaimperium" method="post" target="popupwindow" className="flex justify-center gap-2 max-w-md mx-auto">
+                <input type="email" name="email" placeholder="your@email.com" required className="flex-1 rounded-md border border-[#B8860B]/40 bg-black/80 px-4 py-2 text-zinc-100 text-sm placeholder:text-zinc-600" />
+                <button type="submit" className="rounded-md bg-[#B8860B] text-black px-5 py-2 text-sm font-bold hover:bg-yellow-700 transition">Subscribe</button>
+              </form>
+            </div>
+
+            <div className="text-center">
+              <svg className="w-10 h-10 mx-auto emblem-glow mb-4" viewBox="0 0 100 100" fill="#B8860B">
+                <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" />
+              </svg>
+              <p className="text-[#B8860B] text-lg tracking-widest" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>THE RASTA IMPERIUM</p>
+              <p className="text-zinc-500 text-sm mt-3 tracking-wide">Sovereign AI Architecture · Constitutional Intelligence · England</p>
+              <div className="flex justify-center gap-6 mt-6 text-xs text-zinc-600">
+                <a href="https://github.com/laszlomazsar-hash" target="_blank" rel="noopener" className="hover:text-[#B8860B] transition">GitHub</a>
+                <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" rel="noopener" className="hover:text-[#B8860B] transition">Amazon</a>
+                <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="hover:text-[#B8860B] transition">Gumroad</a>
+                <a href="https://www.linkedin.com/in/laszlomazsar" target="_blank" rel="noopener" className="hover:text-[#B8860B] transition">LinkedIn</a>
+              </div>
+              <p className="text-zinc-700 text-xs mt-6">Civilization cannot safely scale autonomous intelligence without deterministic governance.</p>
+            </div>
           </div>
-          <p className="text-zinc-700 text-xs mt-6">Civilization cannot safely scale autonomous intelligence without deterministic governance.</p>
         </footer>
       </body>
     </html>

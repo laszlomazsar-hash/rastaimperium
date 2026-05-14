@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "The Pillars — Seven Articles of Constitutional Governance",
+  description: "Hardware-enforced constitutional physics: Containment, Observability, Interruptibility, Accountability, Proportionality, Reversibility, and Temporal Asymmetry.",
+};
+
 export default function PillarsPage() {
   const articles = [
     { num: "I", title: "Containment", desc: "All recursive systems operate within verifiable and non-negotiable boundaries. Class A (Complete) through Class D (Treaty-Governed) isolation levels." },

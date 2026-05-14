@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Witness Portal — Constitutional Observatory",
+  description: "Real-time governance state, Replay Engine verification, invariant status for all Seven Articles, and live governance event stream.",
+};
+
 export default function WitnessPage() {
   return (
     <main className="container-page">

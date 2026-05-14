@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Library — Publications & Digital Artifacts",
+  description: "Published works: Rasta Codex and RastafarAI EVO-V. Digital artifacts: ARK Engine, Civilization Kernel, .evop proofs. Open source repositories.",
+};
+
 export default function LibraryPage() {
   const books = [
     { title: "Rasta Codex", subtitle: "A King's Guide to Energetic Sovereignty and Full-Spectrum Alignment", date: "December 2025", href: "https://amzn.eu/d/02iiTGT5", formats: "eBook · Paperback · Hardcover" },

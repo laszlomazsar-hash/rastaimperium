@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Intelligence — Jah Conciseness Pipeline",
+  description: "Encode, Constrain, Reason, Output. Neurosymbolic intelligence with Z3, NOTEARS, and Differentiable Relaxer. From £49 to Sovereign License.",
+};
+
 export default function IntelligencePage() {
   const pipeline = [
     { step: "Encode", desc: "Transform input into structured symbolic representation" },

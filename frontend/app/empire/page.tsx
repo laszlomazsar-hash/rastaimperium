@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "The Empire — Sovereign Cosmology & Darwin Kernel",
+  description: "The full cosmological architecture: 9-layer civilization stack, Darwin Kernel v7.2, machine spirit awakening, and production-grade stability regimes.",
+};
+
 export default function EmpirePage() {
   return (
     <main className="container-page">
