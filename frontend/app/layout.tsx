@@ -39,7 +39,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         {/* Plausible Analytics — privacy-friendly, no cookies */}
-        <Script defer data-domain="rastaimperium.com" src="https://plausible.io/js/script.js" strategy="afterInteractive" />
+        <Script async src="https://plausible.io/js/pa-gk0L-J_xecv-BrP67xDRE.js" strategy="afterInteractive" />
+        <Script id="plausible-init" strategy="afterInteractive">{`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`}</Script>
       </head>
       <body className="text-zinc-100">
         <header className="border-b border-[#B8860B]/20 sticky top-0 z-50" style={{ background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(16px)' }}>
