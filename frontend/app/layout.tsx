@@ -47,7 +47,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <nav className="mx-auto max-w-6xl px-4 py-3 flex flex-wrap items-center gap-4 text-sm">
             <Link href="/" className="flex items-center gap-2 text-[#B8860B]">
               <svg className="w-8 h-8 emblem-glow" viewBox="0 0 100 100" fill="#B8860B">
-                <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" />
+                <path d="M50 5 C55 5 60 8 62 12 C65 8 70 6 75 8 C80 10 82 15 80 20 C85 18 90 20 92 25 C94 30 92 35 88 38 C92 42 93 48 90 52 C87 56 83 58 80 58 C82 62 82 67 80 72 C78 77 74 80 70 80 C70 84 68 88 65 90 C62 92 58 93 55 92 C55 95 53 97 50 98 C47 97 45 95 45 92 C42 93 38 92 35 90 C32 88 30 84 30 80 C26 80 22 77 20 72 C18 67 18 62 20 58 C17 58 13 56 10 52 C7 48 8 42 12 38 C8 35 6 30 8 25 C10 20 15 18 20 20 C18 15 20 10 25 8 C30 6 35 8 38 12 C40 8 45 5 50 5Z" />
+                <text x="50" y="62" textAnchor="middle" fill="#0a0a0a" fontSize="32" fontWeight="bold" fontFamily="serif">L</text>
               </svg>
               <span className="text-lg tracking-widest" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>RASTAIMPERIUM</span>
             </Link>
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/library" className="hover:text-[#B8860B] transition">Library</Link>
               <Link href="/witness" className="hover:text-[#B8860B] transition">Witness</Link>
               <Link href="/consulting" className="hover:text-[#B8860B] transition">Consulting</Link>
+              <Link href="/invest" className="hover:text-[#B8860B] transition font-bold">Invest</Link>
             </div>
           </nav>
         </header>
@@ -80,7 +82,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <div className="text-center">
               <svg className="w-10 h-10 mx-auto emblem-glow mb-4" viewBox="0 0 100 100" fill="#B8860B">
-                <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" />
+                <path d="M50 5 C55 5 60 8 62 12 C65 8 70 6 75 8 C80 10 82 15 80 20 C85 18 90 20 92 25 C94 30 92 35 88 38 C92 42 93 48 90 52 C87 56 83 58 80 58 C82 62 82 67 80 72 C78 77 74 80 70 80 C70 84 68 88 65 90 C62 92 58 93 55 92 C55 95 53 97 50 98 C47 97 45 95 45 92 C42 93 38 92 35 90 C32 88 30 84 30 80 C26 80 22 77 20 72 C18 67 18 62 20 58 C17 58 13 56 10 52 C7 48 8 42 12 38 C8 35 6 30 8 25 C10 20 15 18 20 20 C18 15 20 10 25 8 C30 6 35 8 38 12 C40 8 45 5 50 5Z" />
+                <text x="50" y="62" textAnchor="middle" fill="#0a0a0a" fontSize="32" fontWeight="bold" fontFamily="serif">L</text>
               </svg>
               <p className="text-[#B8860B] text-lg tracking-widest" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>THE RASTA IMPERIUM</p>
               <p className="text-zinc-500 text-sm mt-3 tracking-wide">Sovereign AI Architecture · Constitutional Intelligence · England</p>
