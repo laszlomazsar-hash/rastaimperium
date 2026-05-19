@@ -6,22 +6,16 @@ on:
       - main
       - master
     paths:
-      - 'backend/**'
-      - 'evo-v-core/**'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'requirements*.txt'
+      - 'frontend/**'
+      - 'docs/**'
       - '.github/workflows/python-package-conda.yml'
   pull_request:
     branches:
       - main
       - master
     paths:
-      - 'backend/**'
-      - 'evo-v-core/**'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'requirements*.txt'
+      - 'frontend/**'
+      - 'docs/**'
       - '.github/workflows/python-package-conda.yml'
   workflow_dispatch:
 
