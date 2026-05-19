@@ -23,19 +23,53 @@ jobs:
   changed-paths:
     runs-on: ubuntu-latest
     outputs:
-      frontend_pages: ${{ steps.filter.outputs.frontend_pages }}
-      shared_infra: ${{ steps.filter.outputs.shared_infra }}
+      frontend_pages: ${{ steps.detect.outputs.frontend_pages }}
+      shared_infra: ${{ steps.detect.outputs.shared_infra }}
     steps:
       - uses: actions/checkout@v4
-      - id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            frontend_pages:
-              - 'frontend/app/**/page.tsx'
-            shared_infra:
-              - 'infra/**'
-              - '.github/workflows/**'
+      - name: Fetch full history for deterministic diff resolution
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --prune --tags
+          if [[ "$(git rev-parse --is-shallow-repository)" == "true" ]]; then
+            git fetch --unshallow || true
+          fi
+      - id: detect
+        name: Detect changed paths via guarded merge-base flow
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BASE="$(git merge-base origin/main HEAD || true)"
+          CHANGED_FILE_LIST="$(mktemp)"
+
+          if [[ -n "${BASE}" ]]; then
+            echo "Change detection mode: merge-base (${BASE}..HEAD)"
+            git diff --name-only "${BASE}..HEAD" > "${CHANGED_FILE_LIST}"
+          else
+            echo "Change detection mode: fallback full-scan (no merge-base found)"
+            cat <<'EOF' > "${CHANGED_FILE_LIST}"
+runtime/__fallback__.sentinel
+ledger/__fallback__.sentinel
+governance/__fallback__.sentinel
+tests/__fallback__.sentinel
+tools/__fallback__.sentinel
+scripts/__fallback__.sentinel
+EOF
+          fi
+
+          if rg -q '^frontend/app/.*/page\.tsx$' "${CHANGED_FILE_LIST}"; then
+            echo "frontend_pages=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "frontend_pages=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^(infra/|\.github/workflows/)' "${CHANGED_FILE_LIST}"; then
+            echo "shared_infra=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "shared_infra=false" >> "$GITHUB_OUTPUT"
+          fi
 
   build:
     runs-on: ubuntu-latest

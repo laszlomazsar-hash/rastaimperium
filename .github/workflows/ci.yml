@@ -3,12 +3,23 @@ name: CI
 on:
   pull_request:
     paths:
+      - 'runtime/**'
+      - 'ledger/**'
+      - 'governance/**'
+      - 'tests/**'
+      - 'docs/kernel/**'
+      - 'scripts/**'
+      - 'tools/**'
       - 'backend/src/**'
       - 'backend/requirements*.txt'
       - 'evo-v-core/**'
       - 'frontend/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'non-kernel/evo-v-core/**'
+      - 'non-kernel/frontend/**'
+      - 'non-kernel/package.json'
+      - 'non-kernel/pnpm-lock.yaml'
       - 'tests/**'
       - 'scripts/**'
       - 'tools/**'
@@ -20,14 +31,38 @@ jobs:
   changed-paths:
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      core: ${{ steps.filter.outputs.core }}
-      frontend: ${{ steps.filter.outputs.frontend }}
-      tests: ${{ steps.filter.outputs.tests }}
+      kernel_runtime: ${{ steps.filter.outputs.kernel_runtime }}
+      kernel_ledger: ${{ steps.filter.outputs.kernel_ledger }}
+      kernel_governance: ${{ steps.filter.outputs.kernel_governance }}
+      kernel_tests: ${{ steps.filter.outputs.kernel_tests }}
+      kernel_docs: ${{ steps.filter.outputs.kernel_docs }}
+      kernel_tools_scripts: ${{ steps.filter.outputs.kernel_tools_scripts }}
+      kernel_any: ${{ steps.filter.outputs.kernel_any }}
+      archival_core: ${{ steps.filter.outputs.archival_core }}
+      archival_frontend: ${{ steps.filter.outputs.archival_frontend }}
+      changed_detection_failed: ${{ steps.detect_guard.outputs.changed_detection_failed }}
+      kernel_any_detect: ${{ steps.detect.outputs.kernel_any }}
+      archival_core_detect: ${{ steps.detect.outputs.archival_core }}
+      archival_frontend_detect: ${{ steps.detect.outputs.archival_frontend }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Pre-filter ref synchronization
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --prune
+
+      - name: Fetch full history for deterministic diff resolution
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --prune --tags
+          if [[ "$(git rev-parse --is-shallow-repository)" == "true" ]]; then
+            git fetch --unshallow || true
+          fi
       - name: Print and verify commit identity
         shell: bash
         env:
@@ -59,27 +94,129 @@ jobs:
             echo "- Local compare command: \\`git rev-parse HEAD\\`"
           } >> "$GITHUB_STEP_SUMMARY"
       - id: filter
+        continue-on-error: true
         uses: dorny/paths-filter@v3
         with:
           filters: |
+            kernel_runtime:
+              - 'runtime/**'
+            kernel_ledger:
+              - 'ledger/**'
+            kernel_governance:
+              - 'governance/**'
+            kernel_tests:
+              - 'tests/**'
+            kernel_docs:
+              - 'docs/kernel/**'
+            kernel_tools_scripts:
+              - 'tools/**'
+              - 'scripts/**'
+            kernel_any:
+              - 'runtime/**'
+              - 'ledger/**'
+              - 'governance/**'
+              - 'tests/**'
+              - 'docs/kernel/**'
+              - 'tools/**'
+              - 'scripts/**'
+            archival_core:
+              - 'evo-v-core/**'
+            archival_frontend:
+              - 'frontend/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
             backend:
               - 'backend/src/**'
               - 'backend/requirements*.txt'
             core:
-              - 'evo-v-core/**'
+              - 'non-kernel/evo-v-core/**'
             frontend:
-              - 'frontend/**'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
+              - 'non-kernel/frontend/**'
+              - 'non-kernel/package.json'
+              - 'non-kernel/pnpm-lock.yaml'
             tests:
               - 'tests/**'
+      - id: detect
+        name: Detect changed paths via guarded merge-base flow
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BASE="$(git merge-base origin/main HEAD || true)"
+          CHANGED_FILE_LIST="$(mktemp)"
+
+          if [[ -n "${BASE}" ]]; then
+            echo "Change detection mode: merge-base (${BASE}..HEAD)"
+            git diff --name-only "${BASE}..HEAD" > "${CHANGED_FILE_LIST}"
+          else
+            echo "Change detection mode: fallback full-scan (no merge-base found)"
+            cat <<'EOF' > "${CHANGED_FILE_LIST}"
+backend/src/__fallback__.sentinel
+evo-v-core/__fallback__.sentinel
+frontend/__fallback__.sentinel
+tests/__fallback__.sentinel
+EOF
+
+            echo "changed-paths fallback activated: no merge base; treating kernel scopes as changed." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if rg -q '^(runtime/|ledger/|governance/|tests/|docs/kernel/|tools/|scripts/)' "${CHANGED_FILE_LIST}"; then
+            echo "kernel_any=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "kernel_any=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^evo-v-core/' "${CHANGED_FILE_LIST}"; then
+            echo "archival_core=true" >> "$GITHUB_OUTPUT"
+          if rg -q '^non-kernel/evo-v-core/' "${CHANGED_FILE_LIST}"; then
+            echo "core=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "archival_core=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^(frontend/|package\.json$|pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
+            echo "archival_frontend=true" >> "$GITHUB_OUTPUT"
+          if rg -q '^(non-kernel/frontend/|non-kernel/package\.json$|non-kernel/pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "frontend=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^tests/' "${CHANGED_FILE_LIST}"; then
+            echo "tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "archival_frontend=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - id: detect_guard
+        name: Record changed-path detection fallback state
+        if: always()
+        shell: bash
+        run: |
+          if [[ "${{ steps.filter.outcome }}" == "failure" ]]; then
+            echo "changed_detection_failed=true" >> "$GITHUB_OUTPUT"
+            echo "changed-path detection failed; fallback mode will run kernel validation defensively." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "changed_detection_failed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Changed-path detection fallback notice
+        if: always()
+        shell: bash
+        run: |
+          if [[ "${{ steps.detect_guard.outputs.changed_detection_failed }}" == "true" ]]; then
+            echo "::warning::Changed-path detection failed in changed-paths job; kernel validation will run in fallback mode."
+            echo "Fallback mode reason: dorny/paths-filter step outcome was '${{ steps.filter.outcome }}'." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Changed-path detection succeeded; fallback mode not required." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
 
-  governance-policy-ci:
-    name: governance-policy-ci
+  kernel-governance-policy-ci:
+    name: kernel-authoritative / governance policy CI
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && (needs.changed-paths.outputs.kernel_any == 'true' || needs.changed-paths.outputs.kernel_any_detect == 'true' || needs.changed-paths.outputs.changed_detection_failed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,13 +228,19 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Kernel transition replay gate
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest
+          PYTHONPATH=. pytest tests/test_governance_transition_replay.py
+
       - name: Verify policy IR determinism and freshness
         run: bash tools/check-policy-consistency
-  backend-ci:
-    name: backend-ci
+  kernel-runtime-ci:
+    name: kernel-authoritative / runtime CI
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.backend == 'true'
+    if: needs.changed-paths.outputs.kernel_any == 'true' || needs.changed-paths.outputs.kernel_any_detect == 'true' || needs.changed-paths.outputs.changed_detection_failed == 'true'
     env:
       PYTHONPATH: backend/src
     steps:
@@ -175,11 +318,12 @@ jobs:
           python -m compileall backend/src
           ruff check backend/src
 
-  core-ci:
-    name: core-ci
+  archival-core-ci:
+    name: non-kernel archival / evo-v core CI (non-blocking)
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.core == 'true'
+    if: needs.changed-paths.outputs.archival_core == 'true' || needs.changed-paths.outputs.archival_core_detect == 'true'
+    continue-on-error: true
     env:
       PYTHONPATH: backend/src
     steps:
@@ -231,14 +375,15 @@ jobs:
 
       - name: Core compile + lint
         run: |
-          python -m compileall evo-v-core/app
-          ruff check evo-v-core/app
+          python -m compileall non-kernel/evo-v-core/app
+          ruff check non-kernel/evo-v-core/app
 
-  frontend-ci:
-    name: frontend-ci
+  archival-frontend-ci:
+    name: non-kernel archival / frontend CI (non-blocking)
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.frontend == 'true'
+    if: needs.changed-paths.outputs.archival_frontend == 'true' || needs.changed-paths.outputs.archival_frontend_detect == 'true'
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -296,11 +441,11 @@ jobs:
         working-directory: frontend
         run: pnpm run lint
 
-  tests-ci:
-    name: tests-ci
+  kernel-tests-ci:
+    name: kernel-authoritative / tests CI
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.tests == 'true'
+    if: needs.changed-paths.outputs.kernel_any == 'true' || needs.changed-paths.outputs.kernel_any_detect == 'true' || needs.changed-paths.outputs.changed_detection_failed == 'true'
     env:
       PYTHONPATH: backend/src
     steps:
@@ -351,7 +496,6 @@ jobs:
       - name: Install test deps
         run: |
           python -m pip install --upgrade pip
-<<<<<<< codex/audit-and-normalize-workflow-files
           python -m pip install -r backend/requirements-dev.txt
 
       - name: Diagnose Python import path
@@ -368,7 +512,6 @@ jobs:
           module = importlib.import_module("codex.compliance")
           print(f"codex.compliance module: {module.__file__}")
           PY
-=======
           python -m pip install pytest
 
       - name: Run architecture enforcement
@@ -380,7 +523,11 @@ jobs:
         if: success()
         working-directory: backend
         run: python -m pip install -r requirements-dev.txt
->>>>>>> main
+
+      - name: Run codex compliance import-contract guard
+        env:
+          PYTHONPATH: backend/src
+        run: pytest tests/architecture/test_codex_compliance_import_contract.py -q
 
       - name: Run tests domain
         env:

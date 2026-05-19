@@ -1,24 +1,13 @@
 from __future__ import annotations
 
 import ast
-import importlib
-import pkgutil
 import re
 import sys
-from types import ModuleType
-from typing import Iterable
-
-from tests.architecture.policy import CANONICAL_RUNTIME_ROOT, FORBIDDEN_NAMESPACES
-
-
-def _ensure_codex_search_paths() -> None:
-    root = CANONICAL_RUNTIME_ROOT
-    for rel in ("backend/src", "src"):
-        candidate = root / rel
-        if candidate.exists() and str(candidate) not in sys.path:
-            sys.path.insert(0, str(candidate))
 from pathlib import Path
-from typing import Iterable
+
+from tests.architecture.policy import CANONICAL_RUNTIME_ROOT
+
+from tests.architecture.policy import CANONICAL_RUNTIME_ROOT
 
 POLICY_NAMESPACES = {
     "forbidden": (
@@ -30,6 +19,14 @@ POLICY_NAMESPACES = {
         "evo_v_core",
     ),
 }
+
+
+def _ensure_codex_search_paths() -> None:
+    root = CANONICAL_RUNTIME_ROOT
+    for rel in ("backend/src", "src"):
+        candidate = root / rel
+        if candidate.exists() and str(candidate) not in sys.path:
+            sys.path.insert(0, str(candidate))
 
 
 def _normalize_module_name(module: str) -> str:
@@ -48,10 +45,11 @@ def extract_imports(path: Path) -> list[tuple[int, str]]:
             imports.append((node.lineno, _normalize_module_name(node.module)))
 
     return imports
+
+
 def _module_tokens(module_name: str) -> tuple[str, ...]:
     normalized = module_name.strip().lower()
-    tokens = tuple(token for token in re.split(r"[./]", normalized) if token)
-    return tokens
+    return tuple(token for token in re.split(r"[./]", normalized) if token)
 
 
 def _matches_namespace(module_name: str, namespace: str) -> bool:
@@ -76,51 +74,35 @@ def _violates_policy(module_name: str) -> str | None:
     )
 
 
-def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
-    _ensure_codex_search_paths()
-    importlib.invalidate_caches()
-    codex = importlib.import_module("backend.src.codex")
-
-
+def _iter_python_files() -> list[Path]:
+    root = CANONICAL_RUNTIME_ROOT
+    files: list[Path] = []
 def _iter_python_files() -> Iterable[Path]:
     root = Path(__file__).resolve().parents[1]
     for base in (root / "backend" / "src", root / "tests"):
-        if not base.exists():
-            continue
-        yield from base.rglob("*.py")
+        if base.exists():
+            files.extend(base.rglob("*.py"))
+    return files
 
 
 def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
+    root = CANONICAL_RUNTIME_ROOT
+    violations: list[tuple[str, int, str, str]] = []
+    _ensure_codex_search_paths()
     root = Path(__file__).resolve().parents[1]
     violations: list[tuple[str, int, str]] = []
 
-        if any(modname.startswith(prefix) for prefix in FORBIDDEN_NAMESPACES):
-            forbidden = next(prefix for prefix in FORBIDDEN_NAMESPACES if modname.startswith(prefix))
-            violations.append(f"{modname} depends on {forbidden}")
-
-        for origin in _module_origins(module):
-            forbidden = next((prefix for prefix in FORBIDDEN_NAMESPACES if origin.startswith(prefix)), None)
     for py_file in _iter_python_files():
         rel_path = py_file.resolve().relative_to(root).as_posix()
         for lineno, imported_module in extract_imports(py_file):
-            forbidden = next(
-                (prefix for prefix in FORBIDDEN_PREFIXES if imported_module.startswith(prefix)),
-                None,
-            )
-        forbidden = _violates_policy(modname)
-        if forbidden:
-            violations.append(f"{modname} depends on {forbidden}")
-
-        for origin in _module_origins(module):
-            forbidden = _violates_policy(origin)
+            forbidden = _violates_policy(imported_module)
             if forbidden:
-                violations.append((rel_path, lineno, imported_module))
+                violations.append((rel_path, lineno, imported_module, forbidden))
 
     assert not violations, "\n".join(
-        f"{file}:{line} imports {imported_module}"
-        for file, line, imported_module in sorted(set(violations))
+        f"{path}:{line} imports {module} (forbidden namespace: {forbidden})"
+        for path, line, module, forbidden in sorted(set(violations))
     )
-    assert not violations, "\n".join(sorted(set(violations)))
 
 
 def test_import_policy_allows_evo_v_core_runtime_state() -> None:
