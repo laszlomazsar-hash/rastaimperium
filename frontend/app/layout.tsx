@@ -53,14 +53,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="text-lg tracking-widest" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>RASTAIMPERIUM</span>
             </Link>
             <div className="flex flex-wrap gap-4 ml-auto tracking-wide">
-              <Link href="/empire" className="hover:text-[#B8860B] transition">Empire</Link>
-              <Link href="/pillars" className="hover:text-[#B8860B] transition">Pillars</Link>
-              <Link href="/codex" className="hover:text-[#B8860B] transition">Codex</Link>
-              <Link href="/intelligence" className="hover:text-[#B8860B] transition">Intelligence</Link>
-              <Link href="/library" className="hover:text-[#B8860B] transition">Library</Link>
-              <Link href="/witness" className="hover:text-[#B8860B] transition">Witness</Link>
-              <Link href="/consulting" className="hover:text-[#B8860B] transition">Consulting</Link>
-              <Link href="/invest" className="hover:text-[#B8860B] transition font-bold">Invest</Link>
+              <Link href="/vision" className="hover:text-[#B8860B] transition">Vision</Link>
+              <Link href="/architecture" className="hover:text-[#B8860B] transition">Architecture</Link>
+              <Link href="/governance-model" className="hover:text-[#B8860B] transition">Governance Model</Link>
+              <Link href="/institutional-pilots" className="hover:text-[#B8860B] transition">Institutional Pilots</Link>
+              <Link href="/about-evo-v-kernel" className="hover:text-[#B8860B] transition font-bold">About EVO-V Kernel</Link>
             </div>
           </nav>
         </header>
