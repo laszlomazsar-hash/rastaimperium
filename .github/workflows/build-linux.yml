@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'backend/**'
-      - 'evo-v-core/**'
+      - 'non-kernel/evo-v-core/**'
       - 'tests/**'
       - 'scripts/**'
       - 'requirements*.txt'
@@ -12,7 +12,7 @@ on:
   pull_request:
     paths:
       - 'backend/**'
-      - 'evo-v-core/**'
+      - 'non-kernel/evo-v-core/**'
       - 'tests/**'
       - 'scripts/**'
       - 'requirements*.txt'

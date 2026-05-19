@@ -5,10 +5,10 @@ on:
     paths:
       - 'backend/src/**'
       - 'backend/requirements*.txt'
-      - 'evo-v-core/**'
-      - 'frontend/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
+      - 'non-kernel/evo-v-core/**'
+      - 'non-kernel/frontend/**'
+      - 'non-kernel/package.json'
+      - 'non-kernel/pnpm-lock.yaml'
       - 'tests/**'
       - 'scripts/**'
       - 'tools/**'
@@ -80,11 +80,11 @@ jobs:
               - 'backend/src/**'
               - 'backend/requirements*.txt'
             core:
-              - 'evo-v-core/**'
+              - 'non-kernel/evo-v-core/**'
             frontend:
-              - 'frontend/**'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
+              - 'non-kernel/frontend/**'
+              - 'non-kernel/package.json'
+              - 'non-kernel/pnpm-lock.yaml'
             tests:
               - 'tests/**'
       - id: detect
@@ -117,13 +117,13 @@ EOF
             echo "backend=false" >> "$GITHUB_OUTPUT"
           fi
 
-          if rg -q '^evo-v-core/' "${CHANGED_FILE_LIST}"; then
+          if rg -q '^non-kernel/evo-v-core/' "${CHANGED_FILE_LIST}"; then
             echo "core=true" >> "$GITHUB_OUTPUT"
           else
             echo "core=false" >> "$GITHUB_OUTPUT"
           fi
 
-          if rg -q '^(frontend/|package\.json$|pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
+          if rg -q '^(non-kernel/frontend/|non-kernel/package\.json$|non-kernel/pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
             echo "frontend=true" >> "$GITHUB_OUTPUT"
           else
             echo "frontend=false" >> "$GITHUB_OUTPUT"
@@ -315,8 +315,8 @@ EOF
 
       - name: Core compile + lint
         run: |
-          python -m compileall evo-v-core/app
-          ruff check evo-v-core/app
+          python -m compileall non-kernel/evo-v-core/app
+          ruff check non-kernel/evo-v-core/app
 
   frontend-ci:
     name: frontend-ci
