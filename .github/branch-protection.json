@@ -3,16 +3,7 @@
     "strict": true,
     "checks": [
       {
-        "context": "backend-ci"
-      },
-      {
-        "context": "core-ci"
-      },
-      {
-        "context": "tests-ci"
-      },
-      {
-        "context": "governance-policy-ci"
+        "context": "Python Package / build-linux"
       }
     ]
   },

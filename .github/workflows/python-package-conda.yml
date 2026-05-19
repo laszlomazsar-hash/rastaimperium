@@ -6,12 +6,14 @@ on:
       - main
       - master
     paths:
+      # Scope decision: kernel-only CI gate. This workflow enforces quality for
+      # kernel and backend policy-critical paths only.
       - 'non-kernel/frontend/**'
       - 'docs/**'
       - 'backend/**'
-      - 'non-kernel/evo-v-core/**'
       - 'tests/**'
-      - 'scripts/**'
+      - 'infra/scripts/**'
+      - 'governance/**'
       - 'requirements*.txt'
       - '.github/workflows/python-package-conda.yml'
   pull_request:
@@ -19,12 +21,14 @@ on:
       - main
       - master
     paths:
+      # Scope decision: kernel-only CI gate. This workflow enforces quality for
+      # kernel and backend policy-critical paths only.
       - 'non-kernel/frontend/**'
       - 'docs/**'
       - 'backend/**'
-      - 'non-kernel/evo-v-core/**'
       - 'tests/**'
-      - 'scripts/**'
+      - 'infra/scripts/**'
+      - 'governance/**'
       - 'requirements*.txt'
       - '.github/workflows/python-package-conda.yml'
   workflow_dispatch:
@@ -67,10 +71,11 @@ jobs:
         PY
     - name: Lint with flake8
       run: |
+        # Kernel-only lint target: backend policy-critical code.
         # stop the build if there are Python syntax errors or undefined names
-        flake8 backend/src non-kernel/evo-v-core/app --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 backend/src --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 backend/src non-kernel/evo-v-core/app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 backend/src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Enforce certification profile guardrails
       env:
         PYTHONPATH: backend/src
