@@ -4,7 +4,8 @@ import ast
 import re
 import sys
 from pathlib import Path
-from typing import Iterable
+
+from tests.architecture.policy import CANONICAL_RUNTIME_ROOT
 
 from tests.architecture.policy import CANONICAL_RUNTIME_ROOT
 
@@ -73,15 +74,20 @@ def _violates_policy(module_name: str) -> str | None:
     )
 
 
+def _iter_python_files() -> list[Path]:
+    root = CANONICAL_RUNTIME_ROOT
+    files: list[Path] = []
 def _iter_python_files() -> Iterable[Path]:
     root = Path(__file__).resolve().parents[1]
     for base in (root / "backend" / "src", root / "tests"):
-        if not base.exists():
-            continue
-        yield from base.rglob("*.py")
+        if base.exists():
+            files.extend(base.rglob("*.py"))
+    return files
 
 
 def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
+    root = CANONICAL_RUNTIME_ROOT
+    violations: list[tuple[str, int, str, str]] = []
     _ensure_codex_search_paths()
     root = Path(__file__).resolve().parents[1]
     violations: list[tuple[str, int, str]] = []
@@ -91,11 +97,11 @@ def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
         for lineno, imported_module in extract_imports(py_file):
             forbidden = _violates_policy(imported_module)
             if forbidden:
-                violations.append((rel_path, lineno, imported_module))
+                violations.append((rel_path, lineno, imported_module, forbidden))
 
     assert not violations, "\n".join(
-        f"{file}:{line} imports {imported_module}"
-        for file, line, imported_module in sorted(set(violations))
+        f"{path}:{line} imports {module} (forbidden namespace: {forbidden})"
+        for path, line, module, forbidden in sorted(set(violations))
     )
 
 
