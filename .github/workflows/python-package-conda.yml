@@ -6,7 +6,7 @@ on:
       - main
       - master
     paths:
-      - 'frontend/**'
+      - 'non-kernel/frontend/**'
       - 'docs/**'
       - 'backend/**'
       - 'non-kernel/evo-v-core/**'
@@ -19,7 +19,7 @@ on:
       - main
       - master
     paths:
-      - 'frontend/**'
+      - 'non-kernel/frontend/**'
       - 'docs/**'
       - 'backend/**'
       - 'non-kernel/evo-v-core/**'
