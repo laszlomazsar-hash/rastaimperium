@@ -3,32 +3,38 @@ name: CI
 on:
   pull_request:
     paths:
+      - 'runtime/**'
+      - 'ledger/**'
+      - 'governance/**'
+      - 'tests/**'
+      - 'docs/kernel/**'
+      - 'scripts/**'
+      - 'tools/**'
       - 'backend/src/**'
       - 'backend/requirements*.txt'
       - 'evo-v-core/**'
       - 'frontend/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'tools/**'
-      - 'governance/**'
-      - 'requirements*.txt'
       - '.github/workflows/ci.yml'
 
 jobs:
   changed-paths:
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      core: ${{ steps.filter.outputs.core }}
-      frontend: ${{ steps.filter.outputs.frontend }}
-      tests: ${{ steps.filter.outputs.tests }}
+      kernel_runtime: ${{ steps.filter.outputs.kernel_runtime }}
+      kernel_ledger: ${{ steps.filter.outputs.kernel_ledger }}
+      kernel_governance: ${{ steps.filter.outputs.kernel_governance }}
+      kernel_tests: ${{ steps.filter.outputs.kernel_tests }}
+      kernel_docs: ${{ steps.filter.outputs.kernel_docs }}
+      kernel_tools_scripts: ${{ steps.filter.outputs.kernel_tools_scripts }}
+      kernel_any: ${{ steps.filter.outputs.kernel_any }}
+      archival_core: ${{ steps.filter.outputs.archival_core }}
+      archival_frontend: ${{ steps.filter.outputs.archival_frontend }}
       changed_detection_failed: ${{ steps.detect_guard.outputs.changed_detection_failed }}
-      backend: ${{ steps.detect.outputs.backend }}
-      core: ${{ steps.detect.outputs.core }}
-      frontend: ${{ steps.detect.outputs.frontend }}
-      tests: ${{ steps.detect.outputs.tests }}
+      kernel_any_detect: ${{ steps.detect.outputs.kernel_any }}
+      archival_core_detect: ${{ steps.detect.outputs.archival_core }}
+      archival_frontend_detect: ${{ steps.detect.outputs.archival_frontend }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -76,17 +82,33 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            backend:
-              - 'backend/src/**'
-              - 'backend/requirements*.txt'
-            core:
+            kernel_runtime:
+              - 'runtime/**'
+            kernel_ledger:
+              - 'ledger/**'
+            kernel_governance:
+              - 'governance/**'
+            kernel_tests:
+              - 'tests/**'
+            kernel_docs:
+              - 'docs/kernel/**'
+            kernel_tools_scripts:
+              - 'tools/**'
+              - 'scripts/**'
+            kernel_any:
+              - 'runtime/**'
+              - 'ledger/**'
+              - 'governance/**'
+              - 'tests/**'
+              - 'docs/kernel/**'
+              - 'tools/**'
+              - 'scripts/**'
+            archival_core:
               - 'evo-v-core/**'
-            frontend:
+            archival_frontend:
               - 'frontend/**'
               - 'package.json'
               - 'pnpm-lock.yaml'
-            tests:
-              - 'tests/**'
       - id: detect
         name: Detect changed paths via guarded merge-base flow
         shell: bash
@@ -111,28 +133,22 @@ scripts/__fallback__.sentinel
 EOF
           fi
 
-          if rg -q '^(backend/src/|backend/requirements.*\.txt$)' "${CHANGED_FILE_LIST}"; then
-            echo "backend=true" >> "$GITHUB_OUTPUT"
+          if rg -q '^(runtime/|ledger/|governance/|tests/|docs/kernel/|tools/|scripts/)' "${CHANGED_FILE_LIST}"; then
+            echo "kernel_any=true" >> "$GITHUB_OUTPUT"
           else
-            echo "backend=false" >> "$GITHUB_OUTPUT"
+            echo "kernel_any=false" >> "$GITHUB_OUTPUT"
           fi
 
           if rg -q '^evo-v-core/' "${CHANGED_FILE_LIST}"; then
-            echo "core=true" >> "$GITHUB_OUTPUT"
+            echo "archival_core=true" >> "$GITHUB_OUTPUT"
           else
-            echo "core=false" >> "$GITHUB_OUTPUT"
+            echo "archival_core=false" >> "$GITHUB_OUTPUT"
           fi
 
           if rg -q '^(frontend/|package\.json$|pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
-            echo "frontend=true" >> "$GITHUB_OUTPUT"
+            echo "archival_frontend=true" >> "$GITHUB_OUTPUT"
           else
-            echo "frontend=false" >> "$GITHUB_OUTPUT"
-          fi
-
-          if rg -q '^tests/' "${CHANGED_FILE_LIST}"; then
-            echo "tests=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "tests=false" >> "$GITHUB_OUTPUT"
+            echo "archival_frontend=false" >> "$GITHUB_OUTPUT"
           fi
 
       - id: detect_guard
@@ -159,11 +175,11 @@ EOF
           fi
 
 
-  governance-policy-ci:
-    name: governance-policy-ci
+  kernel-governance-policy-ci:
+    name: kernel-authoritative / governance policy CI
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && (needs.changed-paths.outputs.kernel_any == 'true' || needs.changed-paths.outputs.kernel_any_detect == 'true' || needs.changed-paths.outputs.changed_detection_failed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -177,11 +193,11 @@ EOF
 
       - name: Verify policy IR determinism and freshness
         run: bash tools/check-policy-consistency
-  backend-ci:
-    name: backend-ci
+  kernel-runtime-ci:
+    name: kernel-authoritative / runtime CI
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.backend == 'true'
+    if: needs.changed-paths.outputs.kernel_any == 'true' || needs.changed-paths.outputs.kernel_any_detect == 'true' || needs.changed-paths.outputs.changed_detection_failed == 'true'
     env:
       PYTHONPATH: backend/src
     steps:
@@ -259,11 +275,12 @@ EOF
           python -m compileall backend/src
           ruff check backend/src
 
-  core-ci:
-    name: core-ci
+  archival-core-ci:
+    name: non-kernel archival / evo-v core CI (non-blocking)
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.core == 'true' || needs.changed-paths.outputs.changed_detection_failed == 'true'
+    if: needs.changed-paths.outputs.archival_core == 'true' || needs.changed-paths.outputs.archival_core_detect == 'true'
+    continue-on-error: true
     env:
       PYTHONPATH: backend/src
     steps:
@@ -318,11 +335,12 @@ EOF
           python -m compileall evo-v-core/app
           ruff check evo-v-core/app
 
-  frontend-ci:
-    name: frontend-ci
+  archival-frontend-ci:
+    name: non-kernel archival / frontend CI (non-blocking)
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.frontend == 'true'
+    if: needs.changed-paths.outputs.archival_frontend == 'true' || needs.changed-paths.outputs.archival_frontend_detect == 'true'
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -380,11 +398,11 @@ EOF
         working-directory: frontend
         run: pnpm run lint
 
-  tests-ci:
-    name: tests-ci
+  kernel-tests-ci:
+    name: kernel-authoritative / tests CI
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.tests == 'true'
+    if: needs.changed-paths.outputs.kernel_any == 'true' || needs.changed-paths.outputs.kernel_any_detect == 'true' || needs.changed-paths.outputs.changed_detection_failed == 'true'
     env:
       PYTHONPATH: backend/src
     steps:
