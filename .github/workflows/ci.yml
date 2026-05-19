@@ -25,10 +25,22 @@ jobs:
       frontend: ${{ steps.filter.outputs.frontend }}
       tests: ${{ steps.filter.outputs.tests }}
       changed_detection_failed: ${{ steps.detect_guard.outputs.changed_detection_failed }}
+      backend: ${{ steps.detect.outputs.backend }}
+      core: ${{ steps.detect.outputs.core }}
+      frontend: ${{ steps.detect.outputs.frontend }}
+      tests: ${{ steps.detect.outputs.tests }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Fetch full history for deterministic diff resolution
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --prune --tags
+          if [[ "$(git rev-parse --is-shallow-repository)" == "true" ]]; then
+            git fetch --unshallow || true
+          fi
       - name: Print and verify commit identity
         shell: bash
         env:
@@ -75,6 +87,53 @@ jobs:
               - 'pnpm-lock.yaml'
             tests:
               - 'tests/**'
+      - id: detect
+        name: Detect changed paths via guarded merge-base flow
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BASE="$(git merge-base origin/main HEAD || true)"
+          CHANGED_FILE_LIST="$(mktemp)"
+
+          if [[ -n "${BASE}" ]]; then
+            echo "Change detection mode: merge-base (${BASE}..HEAD)"
+            git diff --name-only "${BASE}..HEAD" > "${CHANGED_FILE_LIST}"
+          else
+            echo "Change detection mode: fallback full-scan (no merge-base found)"
+            cat <<'EOF' > "${CHANGED_FILE_LIST}"
+runtime/__fallback__.sentinel
+ledger/__fallback__.sentinel
+governance/__fallback__.sentinel
+tests/__fallback__.sentinel
+tools/__fallback__.sentinel
+scripts/__fallback__.sentinel
+EOF
+          fi
+
+          if rg -q '^(backend/src/|backend/requirements.*\.txt$)' "${CHANGED_FILE_LIST}"; then
+            echo "backend=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "backend=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^evo-v-core/' "${CHANGED_FILE_LIST}"; then
+            echo "core=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "core=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^(frontend/|package\.json$|pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "frontend=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^tests/' "${CHANGED_FILE_LIST}"; then
+            echo "tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "tests=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - id: detect_guard
         name: Record changed-path detection fallback state
@@ -376,7 +435,6 @@ jobs:
       - name: Install test deps
         run: |
           python -m pip install --upgrade pip
-<<<<<<< codex/audit-and-normalize-workflow-files
           python -m pip install -r backend/requirements-dev.txt
 
       - name: Diagnose Python import path
@@ -393,7 +451,6 @@ jobs:
           module = importlib.import_module("codex.compliance")
           print(f"codex.compliance module: {module.__file__}")
           PY
-=======
           python -m pip install pytest
 
       - name: Run architecture enforcement
@@ -405,7 +462,6 @@ jobs:
         if: success()
         working-directory: backend
         run: python -m pip install -r requirements-dev.txt
->>>>>>> main
 
       - name: Run tests domain
         env:

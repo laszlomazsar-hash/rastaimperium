@@ -11,3 +11,18 @@ GitHub evaluates pull request checks using workflow files from the pull request/
 - Re-run checks after updating required statuses; older pending checks may remain visible but no longer gate merge once required checks are aligned.
 
 Canonical replacement workflow: [`CI` (`.github/workflows/ci.yml`)](.github/workflows/ci.yml).
+
+## Branch Base Requirements
+
+Feature branches must be created from `main` and periodically rebased onto `main` while the PR is open. This preserves merge ancestry, keeps diff calculations stable, and avoids CI ambiguity.
+
+### Troubleshooting `no merge base`
+
+If CI or local tooling reports `no merge base`, run:
+
+- `git fetch origin main`
+- `git rebase origin/main`
+
+Then push your rebased branch and re-run checks.
+
+When ancestry is unavailable, CI may switch to a full-scan fallback. This mode is slower, but it is safe and intentionally conservative.
