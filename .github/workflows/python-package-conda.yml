@@ -72,6 +72,7 @@ jobs:
         PYTHONPATH: backend/src
       run: |
         python - <<'PY'
+        import importlib
         import os
         import pprint
         import sys
@@ -81,13 +82,19 @@ jobs:
         print("sys.path:")
         pprint.pp(sys.path)
 
+        print("Sub-step: importlib.import_module('codex.compliance')")
         try:
-            import codex.compliance as compliance
-        except Exception:
+            compliance = importlib.import_module("codex.compliance")
+        except Exception as exc:
             traceback.print_exc()
+            message = f"{type(exc).__name__}: {exc}".lower()
+            likely_cause = "circular import" if "circular" in message or "partially initialized module" in message else "shim inversion"
             with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
-                summary.write("- Import contract failed for `codex.compliance`; likely causes: circular import or shim inversion.\n")
-            raise
+                summary.write(
+                    f"- Import contract failed for `codex.compliance` "
+                    f"({type(exc).__name__}: {exc}); likely cause category: {likely_cause}.\n"
+                )
+            raise SystemExit(1)
 
         print(f"codex.compliance module: {compliance.__file__}")
         PY
