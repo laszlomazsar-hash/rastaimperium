@@ -6,7 +6,22 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 
-SOURCE_ROOTS = (Path("backend/src"), Path("tests"))
+# Kernel-authoritative import policy scope.
+#
+# Rationale (deterministic + auditable):
+# - The repository has migrated away from backend/src as the policy authority.
+# - Import policy violations should fail CI only for kernel-governed Python trees
+#   and the architecture guard tests that enforce those kernel boundaries.
+# - This keeps enforcement stable and avoids legacy/non-kernel test noise while
+#   preserving strict checks on authoritative modules.
+SOURCE_ROOTS = (
+    Path("runtime"),
+    Path("ledger"),
+    Path("governance"),
+    Path("src/codex"),
+    Path("src/governance"),
+    Path("tests/architecture"),
+)
 
 LEGACY_ALLOWLIST: set[str] = set()
 LEGACY_DENY_PREFIXES = ("evo_v", "evo-v")

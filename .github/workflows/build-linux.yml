@@ -3,26 +3,23 @@ name: build-linux
 on:
   push:
     paths:
-      - 'frontend/**'
-      - 'docs/**'
+      - 'runtime/**'
+      - 'ledger/**'
+      - 'governance/**'
+      - 'src/codex/**'
+      - 'src/governance/**'
+      - 'tests/architecture/**'
+      - 'scripts/**'
       - '.github/workflows/build-linux.yml'
   pull_request:
     paths:
-      - 'frontend/**'
-      - 'docs/**'
-      - 'backend/**'
-      - 'non-kernel/evo-v-core/**'
-      - 'tests/**'
+      - 'runtime/**'
+      - 'ledger/**'
+      - 'governance/**'
+      - 'src/codex/**'
+      - 'src/governance/**'
+      - 'tests/architecture/**'
       - 'scripts/**'
-      - 'requirements*.txt'
-      - '.github/workflows/build-linux.yml'
-  pull_request:
-    paths:
-      - 'backend/**'
-      - 'non-kernel/evo-v-core/**'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'requirements*.txt'
       - '.github/workflows/build-linux.yml'
 
 jobs:
