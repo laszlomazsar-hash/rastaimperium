@@ -10,6 +10,19 @@ on:
     paths:
       - 'frontend/**'
       - 'docs/**'
+      - 'backend/**'
+      - 'non-kernel/evo-v-core/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
+      - '.github/workflows/build-linux.yml'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - 'non-kernel/evo-v-core/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
       - '.github/workflows/build-linux.yml'
 
 jobs:
