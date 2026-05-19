@@ -55,14 +55,24 @@ jobs:
           PYTHONPATH: backend/src
         run: |
           python - <<'PY'
-          import importlib
           import pprint
           import sys
+          import os
+          import traceback
 
+          print("Validating codex import contract (codex.compliance must resolve from backend/src)")
           print("sys.path:")
           pprint.pp(sys.path)
-          module = importlib.import_module("codex.compliance")
-          print(f"codex.compliance module: {module.__file__}")
+
+          try:
+              import codex.compliance as compliance
+          except Exception:
+              traceback.print_exc()
+              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+                  summary.write("- Import contract failed for `codex.compliance`; likely causes: circular import or shim inversion.\n")
+              raise
+
+          print(f"codex.compliance module: {compliance.__file__}")
           PY
 
       - name: Run tests
