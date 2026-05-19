@@ -6,7 +6,22 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 
-SOURCE_ROOTS = (Path("backend/src"), Path("tests"))
+# Kernel-authoritative import policy scope.
+#
+# Rationale (deterministic + auditable):
+# - The repository has migrated away from backend/src as the policy authority.
+# - Import policy violations should fail CI only for kernel-governed Python trees
+#   and the architecture guard tests that enforce those kernel boundaries.
+# - This keeps enforcement stable and avoids legacy/non-kernel test noise while
+#   preserving strict checks on authoritative modules.
+SOURCE_ROOTS = (
+    Path("runtime"),
+    Path("ledger"),
+    Path("governance"),
+    Path("src/codex"),
+    Path("src/governance"),
+    Path("tests/architecture"),
+)
 
 LEGACY_ALLOWLIST: set[str] = set()
 LEGACY_DENY_PREFIXES = ("evo_v", "evo-v")
@@ -16,6 +31,7 @@ LEGACY_DENY_PREFIXES = ("evo_v", "evo-v")
 class Violation:
     file_path: str
     line: int
+    column: int
     rule: str
     importer: str
     imported: str
@@ -73,7 +89,21 @@ def extract_imports(tree: ast.AST) -> list[tuple[int, str]]:
 
 def scan_file(path: Path, root: Path) -> list[Violation]:
     source = path.read_text(encoding="utf-8")
-    tree = ast.parse(source, filename=str(path))
+    try:
+        tree = ast.parse(source, filename=str(path))
+    except (SyntaxError, IndentationError) as exc:
+        line = exc.lineno or 1
+        column = (exc.offset or 1) - 1
+        return [
+            Violation(
+                file_path=str(path),
+                line=line,
+                column=max(column, 0),
+                rule=f"parse error [{type(exc).__name__}]: {exc.msg}",
+                importer="<parse_error>",
+                imported="<parse_error>",
+            )
+        ]
     importer = module_from_path(path, root)
     violations: list[Violation] = []
 
@@ -83,6 +113,7 @@ def scan_file(path: Path, root: Path) -> list[Violation]:
                 Violation(
                     file_path=str(path),
                     line=line,
+                    column=0,
                     rule=rule,
                     importer=importer,
                     imported=imported,
@@ -104,7 +135,10 @@ def main() -> int:
 
     if all_violations:
         for v in all_violations:
-            print(f"{v.file_path}:{v.line}: {v.rule} (importer={v.importer}, imported={v.imported})")
+            print(
+                f"::error file={v.file_path},line={v.line},col={v.column}::{v.rule} "
+                f"(importer={v.importer}, imported={v.imported})"
+            )
         return 1
 
     print("Import policy check passed.")

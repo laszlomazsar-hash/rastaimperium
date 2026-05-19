@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import ast
 import re
+import sys
 from pathlib import Path
+
+from tests.architecture.policy import CANONICAL_RUNTIME_ROOT
 
 from tests.architecture.policy import CANONICAL_RUNTIME_ROOT
 
@@ -16,6 +19,14 @@ POLICY_NAMESPACES = {
         "evo_v_core",
     ),
 }
+
+
+def _ensure_codex_search_paths() -> None:
+    root = CANONICAL_RUNTIME_ROOT
+    for rel in ("backend/src", "src"):
+        candidate = root / rel
+        if candidate.exists() and str(candidate) not in sys.path:
+            sys.path.insert(0, str(candidate))
 
 
 def _normalize_module_name(module: str) -> str:
@@ -66,6 +77,8 @@ def _violates_policy(module_name: str) -> str | None:
 def _iter_python_files() -> list[Path]:
     root = CANONICAL_RUNTIME_ROOT
     files: list[Path] = []
+def _iter_python_files() -> Iterable[Path]:
+    root = Path(__file__).resolve().parents[1]
     for base in (root / "backend" / "src", root / "tests"):
         if base.exists():
             files.extend(base.rglob("*.py"))
@@ -75,6 +88,9 @@ def _iter_python_files() -> list[Path]:
 def test_codex_modules_do_not_reference_runtime_only_namespaces() -> None:
     root = CANONICAL_RUNTIME_ROOT
     violations: list[tuple[str, int, str, str]] = []
+    _ensure_codex_search_paths()
+    root = Path(__file__).resolve().parents[1]
+    violations: list[tuple[str, int, str]] = []
 
     for py_file in _iter_python_files():
         rel_path = py_file.resolve().relative_to(root).as_posix()
