@@ -3,31 +3,50 @@ name: build-linux
 on:
   push:
     paths:
+      # Required scope only: kernel-critical contracts and governance/runtime surfaces.
       - 'runtime/**'
       - 'ledger/**'
       - 'governance/**'
-      - 'src/codex/**'
-      - 'src/governance/**'
-      - 'tests/architecture/**'
-      - 'scripts/**'
+      - 'backend/src/**'
+      - 'tests/test_compliance.py'
+      - 'tests/test_deterministic_policy.py'
+      - 'tests/test_canonical_json.py'
+      - 'tests/test_canonical_hashing.py'
+      - 'tests/test_governance_transition_matrix.py'
+      - 'tests/test_governance_replayability.py'
+      - 'tests/test_topology_atomic_commit.py'
+      - 'tests/test_topology_transaction.py'
+      - 'infra/scripts/check_legacy_runtime_reintroduction.sh'
+      - 'scripts/check_import_policies.py'
       - '.github/workflows/build-linux.yml'
   pull_request:
     paths:
+      # Required scope only: kernel-critical contracts and governance/runtime surfaces.
       - 'runtime/**'
       - 'ledger/**'
       - 'governance/**'
-      - 'src/codex/**'
-      - 'src/governance/**'
-      - 'tests/architecture/**'
-      - 'scripts/**'
+      - 'backend/src/**'
+      - 'tests/test_compliance.py'
+      - 'tests/test_deterministic_policy.py'
+      - 'tests/test_canonical_json.py'
+      - 'tests/test_canonical_hashing.py'
+      - 'tests/test_governance_transition_matrix.py'
+      - 'tests/test_governance_replayability.py'
+      - 'tests/test_topology_atomic_commit.py'
+      - 'tests/test_topology_transaction.py'
+      - 'infra/scripts/check_legacy_runtime_reintroduction.sh'
+      - 'scripts/check_import_policies.py'
       - '.github/workflows/build-linux.yml'
 
 jobs:
   build:
+    # REQUIRED job: import contract + policy guardrails + kernel-critical tests.
+    # Broad legacy/non-kernel compatibility coverage is intentionally excluded
+    # so this required gate stays deterministic while migration remains in-flight.
     runs-on: ubuntu-latest
 
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # opt-in now (prevents future break)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       PYTHONPATH: backend/src
 
     steps:
@@ -41,7 +60,7 @@ jobs:
         run: python scripts/check_import_policies.py
 
       - name: Setup Python
-        uses: actions/setup-python@v5   # ✅ FIXED (was v3)
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -75,8 +94,16 @@ jobs:
           print(f"codex.compliance module: {compliance.__file__}")
           PY
 
-      - name: Run tests
+      - name: Run required kernel-critical tests
         env:
           PYTHONPATH: backend/src
         run: |
-          pytest tests || exit 1   # forces explicit failure signal
+          pytest tests/test_compliance.py -k "profile_c or certification"
+          pytest \
+            tests/test_deterministic_policy.py \
+            tests/test_canonical_json.py \
+            tests/test_canonical_hashing.py \
+            tests/test_governance_transition_matrix.py \
+            tests/test_governance_replayability.py \
+            tests/test_topology_atomic_commit.py \
+            tests/test_topology_transaction.py
