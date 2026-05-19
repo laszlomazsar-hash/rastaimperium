@@ -16,6 +16,15 @@ on:
       - 'frontend/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'non-kernel/evo-v-core/**'
+      - 'non-kernel/frontend/**'
+      - 'non-kernel/package.json'
+      - 'non-kernel/pnpm-lock.yaml'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'tools/**'
+      - 'governance/**'
+      - 'requirements*.txt'
       - '.github/workflows/ci.yml'
 
 jobs:
@@ -109,6 +118,17 @@ jobs:
               - 'frontend/**'
               - 'package.json'
               - 'pnpm-lock.yaml'
+            backend:
+              - 'backend/src/**'
+              - 'backend/requirements*.txt'
+            core:
+              - 'non-kernel/evo-v-core/**'
+            frontend:
+              - 'non-kernel/frontend/**'
+              - 'non-kernel/package.json'
+              - 'non-kernel/pnpm-lock.yaml'
+            tests:
+              - 'tests/**'
       - id: detect
         name: Detect changed paths via guarded merge-base flow
         shell: bash
@@ -141,12 +161,22 @@ EOF
 
           if rg -q '^evo-v-core/' "${CHANGED_FILE_LIST}"; then
             echo "archival_core=true" >> "$GITHUB_OUTPUT"
+          if rg -q '^non-kernel/evo-v-core/' "${CHANGED_FILE_LIST}"; then
+            echo "core=true" >> "$GITHUB_OUTPUT"
           else
             echo "archival_core=false" >> "$GITHUB_OUTPUT"
           fi
 
           if rg -q '^(frontend/|package\.json$|pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
             echo "archival_frontend=true" >> "$GITHUB_OUTPUT"
+          if rg -q '^(non-kernel/frontend/|non-kernel/package\.json$|non-kernel/pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "frontend=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^tests/' "${CHANGED_FILE_LIST}"; then
+            echo "tests=true" >> "$GITHUB_OUTPUT"
           else
             echo "archival_frontend=false" >> "$GITHUB_OUTPUT"
           fi
@@ -332,8 +362,8 @@ EOF
 
       - name: Core compile + lint
         run: |
-          python -m compileall evo-v-core/app
-          ruff check evo-v-core/app
+          python -m compileall non-kernel/evo-v-core/app
+          ruff check non-kernel/evo-v-core/app
 
   archival-frontend-ci:
     name: non-kernel archival / frontend CI (non-blocking)
