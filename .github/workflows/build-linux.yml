@@ -3,6 +3,13 @@ name: build-linux
 on:
   push:
     paths:
+      - 'frontend/**'
+      - 'docs/**'
+      - '.github/workflows/build-linux.yml'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - 'docs/**'
       - 'backend/**'
       - 'non-kernel/evo-v-core/**'
       - 'tests/**'
