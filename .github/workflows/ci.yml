@@ -20,6 +20,11 @@ jobs:
   changed-paths:
     runs-on: ubuntu-latest
     outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      core: ${{ steps.filter.outputs.core }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      tests: ${{ steps.filter.outputs.tests }}
+      changed_detection_failed: ${{ steps.detect_guard.outputs.changed_detection_failed }}
       backend: ${{ steps.detect.outputs.backend }}
       core: ${{ steps.detect.outputs.core }}
       frontend: ${{ steps.detect.outputs.frontend }}
@@ -66,6 +71,22 @@ jobs:
             echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
             echo "- Local compare command: \\`git rev-parse HEAD\\`"
           } >> "$GITHUB_STEP_SUMMARY"
+      - id: filter
+        continue-on-error: true
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            backend:
+              - 'backend/src/**'
+              - 'backend/requirements*.txt'
+            core:
+              - 'evo-v-core/**'
+            frontend:
+              - 'frontend/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+            tests:
+              - 'tests/**'
       - id: detect
         name: Detect changed paths via guarded merge-base flow
         shell: bash
@@ -112,6 +133,29 @@ EOF
             echo "tests=true" >> "$GITHUB_OUTPUT"
           else
             echo "tests=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - id: detect_guard
+        name: Record changed-path detection fallback state
+        if: always()
+        shell: bash
+        run: |
+          if [[ "${{ steps.filter.outcome }}" == "failure" ]]; then
+            echo "changed_detection_failed=true" >> "$GITHUB_OUTPUT"
+            echo "changed-path detection failed; fallback mode will run kernel validation defensively." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "changed_detection_failed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Changed-path detection fallback notice
+        if: always()
+        shell: bash
+        run: |
+          if [[ "${{ steps.detect_guard.outputs.changed_detection_failed }}" == "true" ]]; then
+            echo "::warning::Changed-path detection failed in changed-paths job; kernel validation will run in fallback mode."
+            echo "Fallback mode reason: dorny/paths-filter step outcome was '${{ steps.filter.outcome }}'." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Changed-path detection succeeded; fallback mode not required." >> "$GITHUB_STEP_SUMMARY"
           fi
 
 
@@ -219,7 +263,7 @@ EOF
     name: core-ci
     runs-on: ubuntu-latest
     needs: changed-paths
-    if: needs.changed-paths.outputs.core == 'true'
+    if: needs.changed-paths.outputs.core == 'true' || needs.changed-paths.outputs.changed_detection_failed == 'true'
     env:
       PYTHONPATH: backend/src
     steps:
@@ -391,7 +435,6 @@ EOF
       - name: Install test deps
         run: |
           python -m pip install --upgrade pip
-<<<<<<< codex/audit-and-normalize-workflow-files
           python -m pip install -r backend/requirements-dev.txt
 
       - name: Diagnose Python import path
@@ -408,7 +451,6 @@ EOF
           module = importlib.import_module("codex.compliance")
           print(f"codex.compliance module: {module.__file__}")
           PY
-=======
           python -m pip install pytest
 
       - name: Run architecture enforcement
@@ -420,7 +462,6 @@ EOF
         if: success()
         working-directory: backend
         run: python -m pip install -r requirements-dev.txt
->>>>>>> main
 
       - name: Run tests domain
         env:
