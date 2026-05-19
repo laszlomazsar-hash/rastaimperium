@@ -1,27 +1,40 @@
 # ARCHITECTURE
 
-## Architectural intent
-EVO-V is a deterministic governance kernel. Rastaimperium presents the system architecture in human-readable form for policy, technical, and institutional audiences.
+## Scope
+This document describes kernel-relevant architecture only: deterministic governance execution, audit lineage, and replay verification semantics.
 
-## Layer model
+For execution ordering, see [SYSTEM_FLOW](./SYSTEM_FLOW.md).
+For machine-checkable guarantees, see [INVARIANTS](./INVARIANTS.md).
+For canonical terms, see [GLOSSARY](./GLOSSARY.md).
 
-### 1) Narrative and constitutional layer (this site)
-- Defines public principles, invariants, and governance framing.
-- Explains design choices and operational guarantees.
-- Communicates institutional deployment pathways.
+## Kernel components
 
-### 2) Execution layer (separate EVO-V repository)
-- Executes deterministic state transitions.
-- Processes events and enforces governance constraints.
-- Implements replay, verification, and audit machinery.
+1. **Event Plane**
+   - Accepts append-only, globally ordered events.
+   - Preserves attribution and canonical input representation.
 
-## Core architectural assertions
-1. **EVO-V is not a chatbot or demo application.**
-2. **Deterministic replayability is a first-order requirement.**
-3. **Auditability and lineage integrity are mandatory.**
-4. **Constitutional constraints precede runtime convenience.**
+2. **Validation Plane**
+   - Enforces schema, canonicalization, identity, idempotency, and transition legality checks.
+   - Rejects illegal transitions and emits failure audit artifacts.
 
-## Audience-specific perspective
-- **Government/public institutions:** transparent and inspectable governance controls.
-- **Research/assurance teams:** replay contracts, invariant framing, and formal verification pathways.
-- **Engineering teams:** strict separation between explanatory surface and runtime kernel responsibilities.
+3. **State Transition Engine**
+   - Applies lifecycle mutation only through `STATE_TRANSITION` events.
+   - Enforces legal lifecycle matrix and explicit failure semantics.
+
+4. **Receipt Engine**
+   - Produces deterministic operation receipts with pre/post hashes and version-bundle context.
+
+5. **Ledger Engine**
+   - Maintains append-only, hash-linked lineage.
+   - Anchors committed transitions with `COMMIT_FINALIZED`.
+
+6. **Replay & Verification Engine**
+   - Reconstructs state purely from ordered lineage + fixed version bundle.
+   - Checks replay parity, ordering integrity, and audit completeness.
+
+## Kernel assertions
+
+1. Deterministic outcomes require identical inputs, version bundle, and event order.
+2. Lifecycle state mutation is explicit and event-bound (no hidden state writes).
+3. Ledger lineage is append-only and hash-linked.
+4. Replay is a first-class verification contract, not a best-effort diagnostic.
