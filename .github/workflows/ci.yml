@@ -518,6 +518,11 @@ EOF
         working-directory: backend
         run: python -m pip install -r requirements-dev.txt
 
+      - name: Run codex compliance import-contract guard
+        env:
+          PYTHONPATH: backend/src
+        run: pytest tests/architecture/test_codex_compliance_import_contract.py -q
+
       - name: Run tests domain
         env:
           PYTHONPATH: backend/src
