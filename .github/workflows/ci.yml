@@ -6,6 +6,7 @@ on:
       - 'backend/src/**'
       - 'backend/requirements*.txt'
       - 'evo-v-core/**'
+      - 'evo-v/**'
       - 'frontend/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
@@ -67,6 +68,7 @@ jobs:
               - 'backend/requirements*.txt'
             core:
               - 'evo-v-core/**'
+              - 'evo-v/**'
             frontend:
               - 'frontend/**'
               - 'package.json'
@@ -233,6 +235,11 @@ jobs:
         run: |
           python -m compileall evo-v-core/app
           ruff check evo-v-core/app
+
+      - name: Replay parity gate (kernel)
+        run: |
+          python -m pip install pytest
+          PYTHONPATH=. pytest evo-v/tests/replay_test.py
 
   frontend-ci:
     name: frontend-ci
