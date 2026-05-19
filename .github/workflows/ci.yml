@@ -20,14 +20,22 @@ jobs:
   changed-paths:
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      core: ${{ steps.filter.outputs.core }}
-      frontend: ${{ steps.filter.outputs.frontend }}
-      tests: ${{ steps.filter.outputs.tests }}
+      backend: ${{ steps.detect.outputs.backend }}
+      core: ${{ steps.detect.outputs.core }}
+      frontend: ${{ steps.detect.outputs.frontend }}
+      tests: ${{ steps.detect.outputs.tests }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Fetch full history for deterministic diff resolution
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --prune --tags
+          if [[ "$(git rev-parse --is-shallow-repository)" == "true" ]]; then
+            git fetch --unshallow || true
+          fi
       - name: Print and verify commit identity
         shell: bash
         env:
@@ -58,21 +66,53 @@ jobs:
             echo "- GitHub head ref: \\`${GITHUB_HEAD_REF:-}\\`"
             echo "- Local compare command: \\`git rev-parse HEAD\\`"
           } >> "$GITHUB_STEP_SUMMARY"
-      - id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            backend:
-              - 'backend/src/**'
-              - 'backend/requirements*.txt'
-            core:
-              - 'evo-v-core/**'
-            frontend:
-              - 'frontend/**'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
-            tests:
-              - 'tests/**'
+      - id: detect
+        name: Detect changed paths via guarded merge-base flow
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BASE="$(git merge-base origin/main HEAD || true)"
+          CHANGED_FILE_LIST="$(mktemp)"
+
+          if [[ -n "${BASE}" ]]; then
+            echo "Change detection mode: merge-base (${BASE}..HEAD)"
+            git diff --name-only "${BASE}..HEAD" > "${CHANGED_FILE_LIST}"
+          else
+            echo "Change detection mode: fallback full-scan (no merge-base found)"
+            cat <<'EOF' > "${CHANGED_FILE_LIST}"
+runtime/__fallback__.sentinel
+ledger/__fallback__.sentinel
+governance/__fallback__.sentinel
+tests/__fallback__.sentinel
+tools/__fallback__.sentinel
+scripts/__fallback__.sentinel
+EOF
+          fi
+
+          if rg -q '^(backend/src/|backend/requirements.*\.txt$)' "${CHANGED_FILE_LIST}"; then
+            echo "backend=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "backend=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^evo-v-core/' "${CHANGED_FILE_LIST}"; then
+            echo "core=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "core=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^(frontend/|package\.json$|pnpm-lock\.yaml$)' "${CHANGED_FILE_LIST}"; then
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "frontend=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if rg -q '^tests/' "${CHANGED_FILE_LIST}"; then
+            echo "tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "tests=false" >> "$GITHUB_OUTPUT"
+          fi
 
 
   governance-policy-ci:
