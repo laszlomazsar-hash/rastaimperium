@@ -33,6 +33,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Pre-filter ref synchronization
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --prune
+
       - name: Fetch full history for deterministic diff resolution
         shell: bash
         run: |
@@ -102,13 +109,13 @@ jobs:
           else
             echo "Change detection mode: fallback full-scan (no merge-base found)"
             cat <<'EOF' > "${CHANGED_FILE_LIST}"
-runtime/__fallback__.sentinel
-ledger/__fallback__.sentinel
-governance/__fallback__.sentinel
+backend/src/__fallback__.sentinel
+evo-v-core/__fallback__.sentinel
+frontend/__fallback__.sentinel
 tests/__fallback__.sentinel
-tools/__fallback__.sentinel
-scripts/__fallback__.sentinel
 EOF
+
+            echo "changed-paths fallback activated: no merge base; treating kernel scopes as changed." >> "$GITHUB_STEP_SUMMARY"
           fi
 
           if rg -q '^(backend/src/|backend/requirements.*\.txt$)' "${CHANGED_FILE_LIST}"; then
