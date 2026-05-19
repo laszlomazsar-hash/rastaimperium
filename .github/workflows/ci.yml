@@ -13,6 +13,7 @@ on:
       - 'backend/src/**'
       - 'backend/requirements*.txt'
       - 'evo-v-core/**'
+      - 'evo-v/**'
       - 'frontend/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
@@ -129,6 +130,8 @@ jobs:
               - 'backend/src/**'
               - 'backend/requirements*.txt'
             core:
+              - 'evo-v-core/**'
+              - 'evo-v/**'
               - 'non-kernel/evo-v-core/**'
             frontend:
               - 'non-kernel/frontend/**'
@@ -378,6 +381,13 @@ EOF
           python -m compileall non-kernel/evo-v-core/app
           ruff check non-kernel/evo-v-core/app
 
+      - name: Replay parity gate (kernel)
+        run: |
+          python -m pip install pytest
+          PYTHONPATH=. pytest evo-v/tests/replay_test.py
+
+  frontend-ci:
+    name: frontend-ci
   archival-frontend-ci:
     name: non-kernel archival / frontend CI (non-blocking)
     runs-on: ubuntu-latest
