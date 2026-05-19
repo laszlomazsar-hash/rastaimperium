@@ -8,6 +8,8 @@ on:
     paths:
       # Scope decision: kernel-only CI gate. This workflow enforces quality for
       # kernel and backend policy-critical paths only.
+      - 'non-kernel/frontend/**'
+      - 'docs/**'
       - 'backend/**'
       - 'tests/**'
       - 'infra/scripts/**'
@@ -21,6 +23,8 @@ on:
     paths:
       # Scope decision: kernel-only CI gate. This workflow enforces quality for
       # kernel and backend policy-critical paths only.
+      - 'non-kernel/frontend/**'
+      - 'docs/**'
       - 'backend/**'
       - 'tests/**'
       - 'infra/scripts/**'
