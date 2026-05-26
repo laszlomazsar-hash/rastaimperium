@@ -58,7 +58,7 @@ export default function Dashboard() {
 
   return (
     <DashboardShell>
-      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon name="dashboard" size="heading" decorative />SoulEcho Dashboard</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon capabilityKey="dashboard" size="heading" decorative />SoulEcho Dashboard</h1>
       <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
         <SovereignIcon icon="dashboard_global" className="w-8 h-8" />
         <span>SoulEcho Dashboard</span>
@@ -67,10 +67,11 @@ export default function Dashboard() {
       <p>Modern governance command center with cards, trend rows, and chart-driven insights.</p>
 
       <CardGrid>
-        <StatCard label="Active Users" value={String(realtime.activeUsers)} detail={`Updated ${new Date(realtime.updatedAt).toLocaleTimeString()}`} />
-        <StatCard label="WebSocket Latency" value={`${realtime.websocketLatencyMs}ms`} detail={`Transport: ${blueprint.platform.realtimeMetrics.transport}`} />
-        <StatCard label="Global Coherence" value={`${realtime.coherence}%`} detail={alertSummary} />
+        <StatCard priority="primary" label="Active Users" value={String(realtime.activeUsers)} detail={`Updated ${new Date(realtime.updatedAt).toLocaleTimeString()}`} />
+        <StatCard priority="telemetry" label="WebSocket Latency" value={`${realtime.websocketLatencyMs}ms`} detail={`Transport: ${blueprint.platform.realtimeMetrics.transport}`} />
+        <StatCard priority="primary" label="Global Coherence" value={`${realtime.coherence}%`} detail={alertSummary} />
         <StatCard
+          priority="secondary"
           label="Demo Access"
           value={blueprint.platform.realtimeMetrics.publicDemoAccess ? "Enabled" : "Disabled"}
           detail="Public demonstration endpoint"
@@ -78,7 +79,7 @@ export default function Dashboard() {
       </CardGrid>
 
       <CardGrid>
-        <PanelCard title="Realtime Trends" subtitle="Rolling coherence trend and operating health.">
+        <PanelCard priority="primary" title="Realtime Trends" subtitle="Rolling coherence trend and operating health.">
           <LineChart data={coherenceTrend} />
           <TrendRow label="Alert stream" value={alerts.length ? `${alerts.length} events` : "clear"} direction={alerts.length ? "down" : "up"} />
           <TrendRow label="Feed freshness" value={new Date(realtime.updatedAt).toLocaleTimeString()} direction="neutral" />
@@ -94,7 +95,7 @@ export default function Dashboard() {
       </CardGrid>
 
       <CardGrid>
-        <PanelCard title="Layer Coherence Distribution" subtitle="Blueprint-defined per-layer scores.">
+        <PanelCard priority="telemetry" title="Layer Coherence Distribution" subtitle="Blueprint-defined per-layer scores.">
           <div style={{ display: "grid", gap: "0.4rem" }}>
             {coherenceBars.map((layer) => (
               <TrendRow key={layer.label} label={layer.label} value={`${layer.value}%`} direction={layer.value >= 95 ? "up" : "down"} />
@@ -102,13 +103,13 @@ export default function Dashboard() {
           </div>
         </PanelCard>
 
-        <PanelCard title="Mutation Log Timeline" subtitle="EVO-V events displayed chronologically.">
+        <PanelCard priority="telemetry" title="Mutation Log Timeline" subtitle="EVO-V events displayed chronologically.">
           <Timeline entries={mutationTimeline} />
         </PanelCard>
       </CardGrid>
 
       <CardGrid>
-        <PanelCard title="Data & Governance" subtitle="Articles II-V implementation status.">
+        <PanelCard priority="critical" title="Data & Governance" subtitle="Articles II-V implementation status.">
           <div style={{ display: "grid", gap: "0.45rem" }}>
             <TrendRow label="Article II Trace Coverage" value={`${blueprint.telemetry.governance.articleIITraceCoverage}%`} direction="up" />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -120,7 +121,7 @@ export default function Dashboard() {
           </div>
         </PanelCard>
 
-        <PanelCard title="Subscription & Billing" subtitle="Plan catalog and production readiness flags.">
+        <PanelCard priority="secondary" title="Subscription & Billing" subtitle="Plan catalog and production readiness flags.">
           <div style={{ display: "grid", gap: "0.4rem" }}>
             {blueprint.stripe.subscriptionPlans.map((plan) => (
               <TrendRow key={plan.name} label={plan.name} value={`£${plan.price}/${plan.recurring}`} direction="neutral" />
@@ -135,7 +136,7 @@ export default function Dashboard() {
 
       <CardGrid>
         <AlertWidget alerts={alerts} compact />
-        <PanelCard title="Mutation Status Summary" subtitle="Current mutation states from system log.">
+        <PanelCard priority="critical" title="Mutation Status Summary" subtitle="Current mutation states from system log.">
           <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
             {blueprint.platform.mutationLog.map((event) => (
               <StatusChip key={event.id} label={`${event.event}`} status={mapSeverity(event.status)} />

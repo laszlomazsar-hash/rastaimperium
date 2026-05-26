@@ -2,6 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import { SYSTEM_STATE_VISUAL_MAP, semanticClass, type MotionSemantic } from "./motion/semantics";
+import { generateTelemetrySnapshot, telemetryStatusLabel } from "./motion/telemetry";
 import { SovereignIcon } from "../components/icons/SovereignIcon";
 import type { IconKey } from "../components/icons/iconMap";
 import type { Capability } from "../core/constitution/capabilities";
@@ -111,6 +113,15 @@ function useCounter(end: number, duration = 2000) {
   return { count, ref };
 }
 
+
+function SemanticMotion({ semantic, children, className = "" }: { semantic: MotionSemantic; children: React.ReactNode; className?: string }) {
+  return <div className={`${semanticClass(semantic, "container")} ${className}`}>{children}</div>;
+}
+
+function SemanticBadge({ semantic }: { semantic: MotionSemantic }) {
+  return <span className={`w-2 h-2 rounded-full ${semanticClass(semantic, "badge")} ${semanticClass(semantic, "accent")}`} />;
+}
+
 /* ── Fade-in on scroll ── */
 function FadeIn({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -123,7 +134,7 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
     return () => observer.disconnect();
   }, []);
   return (
-    <div ref={ref} className={`transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"} ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+    <div ref={ref} className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"} ${className}`} style={{ transitionDelay: `${delay}ms` }}>
       {children}
     </div>
   );
@@ -133,29 +144,27 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
 function LiveTerminal() {
   const [tick, setTick] = useState(0);
   useEffect(() => { const i = setInterval(() => setTick(t => t + 1), 3000); return () => clearInterval(i); }, []);
-  const coherence = (0.93 + Math.random() * 0.04).toFixed(3);
-  const drift = (0.001 + Math.random() * 0.003).toFixed(4);
-  const agents = 2048 + Math.floor(Math.random() * 20);
-  const block = 847291 + tick;
-  const hash = Math.random().toString(16).slice(2, 6) + "..." + Math.random().toString(16).slice(2, 6);
+  const snapshot = generateTelemetrySnapshot(tick, "darwin-kernel-v7.2");
+  const visual = SYSTEM_STATE_VISUAL_MAP[snapshot.systemState];
+
   return (
-    <div className="panel p-6 font-courier text-sm relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-green-500 via-gold to-red-500 animate-pulse" />
+    <SemanticMotion semantic={visual.motion} className="panel p-6 font-courier text-sm relative overflow-hidden">
+      <div className={`absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-green-500 via-gold to-red-500 ${semanticClass(visual.motion, "accent")}`} />
       <p className="text-gold text-xs mb-3 flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" /> LIVE GOVERNANCE STATE
+        <SemanticBadge semantic={visual.motion} /> LIVE GOVERNANCE STATE
       </p>
       <div className="space-y-1.5 text-zinc-300">
         <p>╔══ DARWIN KERNEL v7.2 ══╗</p>
-        <p>║ coherence: <span className="text-gold transition-all">{coherence}</span>     ║</p>
-        <p>║ invariants: <span className="text-green-400">HOLDING</span>   ║</p>
-        <p>║ drift_Δ: <span className="text-gold transition-all">{drift}</span>      ║</p>
-        <p>║ agents: <span className="text-gold">{agents.toLocaleString()}</span> active  ║</p>
+        <p>║ coherence: <span className="text-gold">{snapshot.coherence}</span>     ║</p>
+        <p>║ invariants: <span className={visual.color}>{telemetryStatusLabel(snapshot.systemState)}</span>   ║</p>
+        <p>║ drift_Δ: <span className="text-gold">{snapshot.drift}</span>      ║</p>
+        <p>║ agents: <span className="text-gold">{snapshot.agents.toLocaleString()}</span> active  ║</p>
         <p>║ replay: <span className="text-green-400">VERIFIED</span>     ║</p>
         <p>║ lyapunov: <span className="text-gold">dV/dt ≤ 0</span>   ║</p>
         <p>╚═══════════════════════╝</p>
-        <p className="text-xs text-zinc-500 mt-3">hash: {hash} | block: {block.toLocaleString()}</p>
+        <p className="text-xs text-zinc-500 mt-3">hash: {snapshot.hash} | block: {snapshot.block.toLocaleString()} | state: {snapshot.systemState}</p>
       </div>
-    </div>
+    </SemanticMotion>
   );
 }
 
@@ -259,8 +268,9 @@ export default function HomePage() {
           {trustPillars.map((pillar, i) => (
             <FadeIn key={pillar.text} delay={i * 100}>
               <div className="panel p-5 hover:scale-[1.02] transition-transform cursor-default">
-                <PlatformIcon type={pillar.icon} className="text-2xl mb-2 block leading-none" />
-                <div className="text-2xl mb-2"><SovereignIcon icon={pillar.icon} className="w-6 h-6" /></div>
+                <div className="mb-2">
+                  <SovereignIcon icon={pillar.icon} className="w-6 h-6" />
+                </div>
                 <p className="text-sm text-zinc-200">{pillar.text}</p>
               </div>
             </FadeIn>
@@ -312,7 +322,7 @@ export default function HomePage() {
                 className={`panel p-4 flex items-center gap-4 cursor-pointer transition-all hover:scale-[1.01] ${expandedLayer === layer.layer ? "border-gold/60 bg-gold/5" : ""}`}
                 onClick={() => setExpandedLayer(expandedLayer === layer.layer ? null : layer.layer)}
               >
-                <PlatformIcon type={layer.icon} className="text-2xl leading-none" />
+                <SovereignIcon icon={layer.icon} className="w-6 h-6 shrink-0" />
                 <span className="text-gold font-courier font-bold text-base w-10 shrink-0">{layer.layer}</span>
                 <div className="flex-1">
                   <span className="text-gold text-sm font-bold">{layer.name}</span>
@@ -395,7 +405,9 @@ export default function HomePage() {
           {agents.map((a, i) => (
             <FadeIn key={a.public} delay={i * 100}>
               <div className="panel p-5 hover:scale-105 transition-transform cursor-default group">
-                <PlatformIcon type={a.icon} className="text-3xl mb-3 block group-hover:scale-110 transition-transform leading-none" />
+                <div className="mb-3 group-hover:scale-110 transition-transform">
+                  <SovereignIcon icon={a.icon} className="w-7 h-7" />
+                </div>
                 <p className="text-gold font-bold text-sm">{a.public}</p>
                 <p className="text-xs text-zinc-500 font-courier mt-1">{a.internal}</p>
                 <p className="text-xs text-zinc-400 mt-2">{a.desc}</p>
