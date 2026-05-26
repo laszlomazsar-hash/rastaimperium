@@ -9,7 +9,7 @@ import {
   StatusChip,
 } from "../../components/DashboardLayout";
 import { useBlueprint } from "../../../hooks/useBlueprint";
-import { SemanticIcon } from "../../components/SemanticIcons";
+import { CapabilityIcon } from "../../../components/constitutional/CapabilityIcon";
 import { apiUrl } from "../../utils/api";
 import { SovereignIcon } from "../../../components/icons/SovereignIcon";
 
@@ -60,8 +60,8 @@ export default function AdminGovernanceControlPage() {
 
   return (
     <DashboardShell>
-      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon name="admin" size="heading" decorative />Admin Governance Control</h1>
-      <h1>️ Admin Governance Control</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><CapabilityIcon capability="admin" className="w-8 h-8" />Admin Governance Control</h1>
+      
       <p>Unified governance controls using the shared dashboard card language.</p>
 
       <CardGrid>
