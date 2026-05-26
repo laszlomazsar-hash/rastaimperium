@@ -1,5 +1,9 @@
 import { ReactNode } from "react";
 
+import { dashboardTokens, panelPriorityStyleMap, type PanelPriority } from "../design/tokens";
+
+export type { PanelPriority } from "../design/tokens";
+
 type TrendDirection = "up" | "down" | "neutral";
 
 type DataPoint = {
@@ -15,18 +19,11 @@ type TimelineEntry = {
 };
 
 const shellStyles = {
-  page: { padding: "2rem", display: "grid", gap: "1rem" },
-  grid: { display: "grid", gap: "0.75rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" },
-  card: {
-    border: "1px solid #e5e7eb",
-    borderRadius: "0.75rem",
-    padding: "1rem",
-    background: "#fff",
-    boxShadow: "0 2px 8px rgba(15,23,42,0.06)",
-  },
+  page: { padding: dashboardTokens.spacing.pagePadding, display: "grid", gap: dashboardTokens.spacing.sectionGap },
+  grid: { display: "grid", gap: dashboardTokens.spacing.gridGap, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" },
   chip: {
     fontSize: "0.75rem",
-    borderRadius: "999px",
+    borderRadius: dashboardTokens.radius.pill,
     padding: "0.2rem 0.6rem",
     border: "1px solid",
     display: "inline-flex",
@@ -34,6 +31,22 @@ const shellStyles = {
     gap: "0.35rem",
   },
 } as const;
+
+function panelStyle(priority: PanelPriority) {
+  const priorityStyle = panelPriorityStyleMap[priority];
+  return {
+    border: dashboardTokens.border[priorityStyle.border],
+    borderRadius: dashboardTokens.radius.panel,
+    padding: dashboardTokens.spacing.panelPadding,
+    background: dashboardTokens.color[priorityStyle.background],
+    boxShadow: dashboardTokens.shadow[priorityStyle.elevation],
+  } as const;
+}
+
+function panelTitleStyle(priority: PanelPriority) {
+  const priorityStyle = panelPriorityStyleMap[priority];
+  return { margin: 0, color: dashboardTokens.color.textStrong, fontWeight: dashboardTokens.typography[priorityStyle.titleWeight] } as const;
+}
 
 export function DashboardShell({ children }: { children: ReactNode }) {
   return <main style={shellStyles.page}>{children}</main>;
@@ -43,22 +56,22 @@ export function CardGrid({ children }: { children: ReactNode }) {
   return <section style={shellStyles.grid}>{children}</section>;
 }
 
-export function PanelCard({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
+export function PanelCard({ title, subtitle, children, priority = "secondary" }: { title: string; subtitle?: string; children: ReactNode; priority?: PanelPriority }) {
   return (
-    <section style={shellStyles.card}>
-      <h2 style={{ margin: 0 }}>{title}</h2>
-      {subtitle ? <p style={{ marginTop: "0.35rem", color: "#475569" }}>{subtitle}</p> : null}
+    <section style={panelStyle(priority)}>
+      <h2 style={panelTitleStyle(priority)}>{title}</h2>
+      {subtitle ? <p style={{ marginTop: dashboardTokens.spacing.subtitleMarginTop, color: dashboardTokens.color.textMuted }}>{subtitle}</p> : null}
       <div>{children}</div>
     </section>
   );
 }
 
-export function StatCard({ label, value, detail }: { label: string; value: string; detail?: string }) {
+export function StatCard({ label, value, detail, priority = "secondary" }: { label: string; value: string; detail?: string; priority?: PanelPriority }) {
   return (
-    <article style={shellStyles.card}>
-      <p style={{ margin: 0, fontSize: "0.85rem", color: "#475569" }}>{label}</p>
-      <p style={{ margin: "0.5rem 0", fontSize: "1.55rem", fontWeight: 700 }}>{value}</p>
-      {detail ? <p style={{ margin: 0, color: "#64748b", fontSize: "0.8rem" }}>{detail}</p> : null}
+    <article style={panelStyle(priority)}>
+      <p style={{ margin: 0, fontSize: "0.85rem", color: dashboardTokens.color.textMuted }}>{label}</p>
+      <p style={{ margin: "0.5rem 0", fontSize: "1.55rem", fontWeight: dashboardTokens.typography.bold }}>{value}</p>
+      {detail ? <p style={{ margin: 0, color: dashboardTokens.color.textSubtle, fontSize: "0.8rem" }}>{detail}</p> : null}
     </article>
   );
 }
@@ -83,7 +96,7 @@ export function StatusChip({ label, status }: { label: string; status: "ok" | "w
         ? { color: "#92400e", borderColor: "#fcd34d", background: "#fffbeb" }
         : status === "error"
           ? { color: "#991b1b", borderColor: "#fca5a5", background: "#fef2f2" }
-          : { color: "#1e293b", borderColor: "#cbd5e1", background: "#f8fafc" };
+          : { color: "#1e293b", borderColor: "#cbd5e1", background: dashboardTokens.color.surfaceMuted };
 
   return <span style={{ ...shellStyles.chip, ...tone }}>{label}</span>;
 }
