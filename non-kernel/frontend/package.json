@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "deploy": "bash scripts/deploy-pages.sh",
+    "check:route-emojis": "node scripts/check-route-emojis.mjs"
     "verify:no-emoji": "node scripts/verify-no-emoji.mjs"
   },
   "dependencies": {
