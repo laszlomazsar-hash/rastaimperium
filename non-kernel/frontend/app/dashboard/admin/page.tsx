@@ -10,6 +10,7 @@ import {
 } from "../../components/DashboardLayout";
 import { useBlueprint } from "../../../hooks/useBlueprint";
 import { apiUrl } from "../../utils/api";
+import { SovereignIcon } from "../../../components/icons/SovereignIcon";
 
 type PipelineStatus = {
   status: "new" | "qualified" | "discovery_booked" | "proposal_sent" | "won" | "lost";
