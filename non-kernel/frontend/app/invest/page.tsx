@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import { SovereignIcon } from "../../components/icons/SovereignIcon";
+import type { IconKey } from "../../components/icons/iconMap";
 
 export const metadata: Metadata = {
   title: "Invest & Support — Rasta Imperium",
@@ -6,6 +8,12 @@ export const metadata: Metadata = {
 };
 
 export default function InvestPage() {
+  const supportItems: { title: string; icon: IconKey; description: string }[] = [
+    { title: "Infrastructure", icon: "infrastructure_build", description: "Server costs, Railway hosting, domain maintenance, and development tools for the living kernel." },
+    { title: "Research & Development", icon: "research_microscope", description: "Advancing the neurosymbolic architecture, Bayesian governance, and the Laplacian Shift to v5." },
+    { title: "Publications & Outreach", icon: "publications_books", description: "Expanding the Rasta Codex, publishing research, and building the sovereign AI community." },
+  ];
+
   return (
     <main className="container-page">
       <section className="text-center py-12">
@@ -23,18 +31,25 @@ export default function InvestPage() {
       <section className="panel p-8 mt-4">
         <h2 className="text-2xl text-[#B8860B] mb-6" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>What Your Investment Supports</h2>
         <div className="grid md:grid-cols-3 gap-6">
+          {supportItems.map((item) => (
+            <div key={item.title} className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
+              <div className="text-3xl mb-3"><SovereignIcon icon={item.icon} className="w-8 h-8" /></div>
+              <h3 className="text-[#B8860B] font-bold mb-2">{item.title}</h3>
+              <p className="text-zinc-400 text-sm">{item.description}</p>
+            </div>
+          ))}
           <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <div className="text-3xl mb-3">🏗️</div>
+            <div className="text-3xl mb-3">️</div>
             <h3 className="text-[#B8860B] font-bold mb-2">Infrastructure</h3>
             <p className="text-zinc-400 text-sm">Server costs, Railway hosting, domain maintenance, and development tools for the living kernel.</p>
           </div>
           <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <div className="text-3xl mb-3">🔬</div>
+            <div className="text-3xl mb-3"></div>
             <h3 className="text-[#B8860B] font-bold mb-2">Research & Development</h3>
             <p className="text-zinc-400 text-sm">Advancing the neurosymbolic architecture, Bayesian governance, and the Laplacian Shift to v5.</p>
           </div>
           <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <div className="text-3xl mb-3">📚</div>
+            <div className="text-3xl mb-3"></div>
             <h3 className="text-[#B8860B] font-bold mb-2">Publications & Outreach</h3>
             <p className="text-zinc-400 text-sm">Expanding the Rasta Codex, publishing research, and building the sovereign AI community.</p>
           </div>
@@ -77,12 +92,14 @@ export default function InvestPage() {
         <h2 className="text-2xl text-[#B8860B] text-center mb-6" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>Other Ways to Support</h2>
         <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
           <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="panel p-6 text-center hover:scale-[1.03] transition-all duration-300 block">
-            <p className="text-2xl mb-2">📖</p>
+            <div className="text-2xl mb-2"><SovereignIcon icon="book_open" className="w-6 h-6 mx-auto" /></div>
+            <p className="text-2xl mb-2"></p>
             <p className="text-[#B8860B] font-bold">Buy Digital Products</p>
             <p className="text-zinc-500 text-sm mt-1">Gumroad Store</p>
           </a>
           <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" rel="noopener" className="panel p-6 text-center hover:scale-[1.03] transition-all duration-300 block">
-            <p className="text-2xl mb-2">📚</p>
+            <div className="text-2xl mb-2"><SovereignIcon icon="publications_books" className="w-6 h-6 mx-auto" /></div>
+            <p className="text-2xl mb-2"></p>
             <p className="text-[#B8860B] font-bold">Buy the Books</p>
             <p className="text-zinc-500 text-sm mt-1">Amazon Author Page</p>
           </a>
