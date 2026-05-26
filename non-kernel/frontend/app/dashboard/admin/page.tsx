@@ -59,10 +59,7 @@ export default function AdminGovernanceControlPage() {
 
   return (
     <DashboardShell>
-      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <SovereignIcon icon="recovery_shield" className="w-8 h-8" />
-        <span>Admin Governance Control</span>
-      </h1>
+      <h1>️ Admin Governance Control</h1>
       <p>Unified governance controls using the shared dashboard card language.</p>
 
       <CardGrid>

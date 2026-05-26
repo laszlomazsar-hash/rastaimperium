@@ -56,6 +56,7 @@ export default function EnterpriseDashboardPage() {
         <SovereignIcon icon="enterprise_building" className="w-8 h-8" />
         <span>Enterprise Dashboard</span>
       </h1>
+      <h1> Enterprise Dashboard</h1>
       <p>Enterprise governance telemetry using the shared card and status system.</p>
 
       <CardGrid>

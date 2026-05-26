@@ -6,15 +6,15 @@ export const metadata: Metadata = {
 
 export default function LibraryPage() {
   const books = [
-    { title: "Rasta Codex", subtitle: "A King's Guide to Energetic Sovereignty and Full-Spectrum Alignment", date: "December 2025", href: "https://amzn.eu/d/02iiTGT5", formats: "eBook · Paperback · Hardcover", rating: "5.0 ★", icon: "📕" },
-    { title: "RastafarAI: EVO-V", subtitle: "The Jah Light of Contained Evolution", date: "February 2026", href: "https://www.amazon.co.uk/dp/B0GNFS1N62", formats: "eBook · Paperback", rating: "New", icon: "📗" },
+    { title: "Rasta Codex", subtitle: "A King's Guide to Energetic Sovereignty and Full-Spectrum Alignment", date: "December 2025", href: "https://amzn.eu/d/02iiTGT5", formats: "eBook · Paperback · Hardcover", rating: "5.0 ", icon: "" },
+    { title: "RastafarAI: EVO-V", subtitle: "The Jah Light of Contained Evolution", date: "February 2026", href: "https://www.amazon.co.uk/dp/B0GNFS1N62", formats: "eBook · Paperback", rating: "New", icon: "" },
   ];
 
   const artifacts = [
-    { name: "ARK Engine", desc: "Production-ready codebase with containerized isolation and AST-based safety validation. GPU-accelerated processing.", icon: "⚙️", status: "Production" },
-    { name: "Civilization Kernel", desc: "The constitutional substrate — governance logic compiled into executable architecture. 9-layer sovereign stack.", icon: "🏛️", status: "Active" },
-    { name: "EVO-V Codex", desc: "Technical documentation of the kernel invariants, state machine, and deployment strategy.", icon: "📜", status: "v2.0" },
-    { name: ".evop Replay Proofs", desc: "Portable, court-grade evidence containers for deterministic truth verification. SHA-256 sealed.", icon: "🔐", status: "Standard" },
+    { name: "ARK Engine", desc: "Production-ready codebase with containerized isolation and AST-based safety validation. GPU-accelerated processing.", icon: "️", status: "Production" },
+    { name: "Civilization Kernel", desc: "The constitutional substrate — governance logic compiled into executable architecture. 9-layer sovereign stack.", icon: "️", status: "Active" },
+    { name: "EVO-V Codex", desc: "Technical documentation of the kernel invariants, state machine, and deployment strategy.", icon: "", status: "v2.0" },
+    { name: ".evop Replay Proofs", desc: "Portable, court-grade evidence containers for deterministic truth verification. SHA-256 sealed.", icon: "", status: "Standard" },
   ];
 
   const repos = [
@@ -92,7 +92,7 @@ export default function LibraryPage() {
       <section className="mt-12">
         <h2 className="text-2xl text-gold">Digital Storefront</h2>
         <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="panel p-6 mt-4 hover:scale-[1.01] transition-all duration-300 block text-center">
-          <p className="text-3xl mb-3">🛒</p>
+          <p className="text-3xl mb-3"></p>
           <h3 className="text-gold text-xl">Gumroad — mazsar.gumroad.com</h3>
           <p className="text-zinc-300 mt-2">Digital products, guides, and sovereign tools</p>
           <p className="text-sm text-gold/70 mt-3">Browse Products →</p>
