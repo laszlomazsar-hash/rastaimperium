@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`resolveStateTheme > returns deterministic tokens for NORMAL 1`] = `
+{
+  "color": "var(--state-normal-color, #22c55e)",
+  "glow": "0 0 18px rgba(34, 197, 94, 0.35)",
+  "motionIntensity": "steady",
+  "stroke": "var(--state-normal-stroke, #16a34a)",
+}
+`;
+
+exports[`resolveStateTheme > returns deterministic tokens for DRIFT 1`] = `
+{
+  "color": "var(--state-drift-color, #f59e0b)",
+  "glow": "0 0 20px rgba(245, 158, 11, 0.4)",
+  "motionIntensity": "elevated",
+  "stroke": "var(--state-drift-stroke, #d97706)",
+}
+`;
+
+exports[`resolveStateTheme > returns deterministic tokens for COMPROMISE 1`] = `
+{
+  "color": "var(--state-compromise-color, #f97316)",
+  "glow": "0 0 24px rgba(249, 115, 22, 0.45)",
+  "motionIntensity": "urgent",
+  "stroke": "var(--state-compromise-stroke, #ea580c)",
+}
+`;
+
+exports[`resolveStateTheme > returns deterministic tokens for RECOVERY 1`] = `
+{
+  "color": "var(--state-recovery-color, #38bdf8)",
+  "glow": "0 0 20px rgba(56, 189, 248, 0.4)",
+  "motionIntensity": "stabilizing",
+  "stroke": "var(--state-recovery-stroke, #0284c7)",
+}
+`;
+
+exports[`resolveStateTheme > returns deterministic tokens for LOCKDOWN 1`] = `
+{
+  "color": "var(--state-lockdown-color, #ef4444)",
+  "glow": "0 0 28px rgba(239, 68, 68, 0.5)",
+  "motionIntensity": "halted",
+  "stroke": "var(--state-lockdown-stroke, #b91c1c)",
+}
+`;
