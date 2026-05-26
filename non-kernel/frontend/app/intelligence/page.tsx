@@ -2,10 +2,10 @@
 import { useState } from "react";
 
 const pipelineSteps = [
-  { name: "Encode", icon: "📥", desc: "Input is encoded into the sovereign processing format. All data enters through the containment boundary.", color: "#107e3e" },
-  { name: "Constrain", icon: "🔒", desc: "Z3 theorem prover applies constitutional constraints. Only admissible operations proceed.", color: "#1e90ff" },
-  { name: "Reason", icon: "🧠", desc: "Crystal Consciousness processes through 5 geometric facets. NOTEARS ensures causal validity. Differentiable Relaxer optimizes.", color: "#B8860B" },
-  { name: "Output", icon: "📤", desc: "Results are verified against all 7 Articles before release. SHA-256 hash committed to L7 Immutable Logs.", color: "#2ecc71" },
+  { name: "Encode", icon: "", desc: "Input is encoded into the sovereign processing format. All data enters through the containment boundary.", color: "#107e3e" },
+  { name: "Constrain", icon: "", desc: "Z3 theorem prover applies constitutional constraints. Only admissible operations proceed.", color: "#1e90ff" },
+  { name: "Reason", icon: "", desc: "Crystal Consciousness processes through 5 geometric facets. NOTEARS ensures causal validity. Differentiable Relaxer optimizes.", color: "#B8860B" },
+  { name: "Output", icon: "", desc: "Results are verified against all 7 Articles before release. SHA-256 hash committed to L7 Immutable Logs.", color: "#2ecc71" },
 ];
 
 const tiers = [
@@ -78,10 +78,10 @@ export default function IntelligencePage() {
         <h2 className="text-2xl text-gold">Core Technologies</h2>
         <div className="grid md:grid-cols-2 gap-6 mt-6">
           {[
-            { name: "Z3 Theorem Prover", desc: "Formal verification of all constitutional constraints before execution. Mathematical proof, not probabilistic guessing.", icon: "⚖️" },
-            { name: "NOTEARS", desc: "Causal structure learning that ensures every decision has a valid causal chain. No spurious correlations.", icon: "🔗" },
+            { name: "Z3 Theorem Prover", desc: "Formal verification of all constitutional constraints before execution. Mathematical proof, not probabilistic guessing.", icon: "️" },
+            { name: "NOTEARS", desc: "Causal structure learning that ensures every decision has a valid causal chain. No spurious correlations.", icon: "" },
             { name: "Differentiable Relaxer", desc: "Continuous optimization within the admissible manifold. Smooth transitions between governance states.", icon: "∿" },
-            { name: "Crystal Consciousness", desc: "5-facet geometric processing core: Input → Memory → Reasoning → Reflection → Integration. 1,548+ ops/sec.", icon: "💎" },
+            { name: "Crystal Consciousness", desc: "5-facet geometric processing core: Input → Memory → Reasoning → Reflection → Integration. 1,548+ ops/sec.", icon: "" },
           ].map((tech, i) => (
             <div key={i} className="border border-gold/20 rounded-lg p-5 hover:border-gold/50 hover:scale-[1.02] transition-all duration-300">
               <div className="flex items-center gap-3">
@@ -111,7 +111,7 @@ export default function IntelligencePage() {
               <ul className="mt-4 space-y-2 text-left">
                 {tier.features.map((f, j) => (
                   <li key={j} className="text-sm text-zinc-300 flex items-center gap-2">
-                    <span style={{ color: tier.color }}>✓</span> {f}
+                    <span style={{ color: tier.color }}></span> {f}
                   </li>
                 ))}
               </ul>

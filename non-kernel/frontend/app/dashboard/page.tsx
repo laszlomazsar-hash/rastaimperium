@@ -56,7 +56,7 @@ export default function Dashboard() {
 
   return (
     <DashboardShell>
-      <h1>🌐 SoulEcho Dashboard</h1>
+      <h1> SoulEcho Dashboard</h1>
       <p>Modern governance command center with cards, trend rows, and chart-driven insights.</p>
 
       <CardGrid>

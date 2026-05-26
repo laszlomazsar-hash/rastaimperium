@@ -5,15 +5,15 @@ import { useState, useEffect, useRef } from "react";
 
 /* ── Data ── */
 const civilizationStack = [
-  { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning", icon: "🌌" },
-  { layer: "L8", name: "Constitutional Layer", desc: "Seven Articles — hardware-enforced governance physics", icon: "📜" },
-  { layer: "L7", name: "Identity + Trust Layer", desc: "Immutable replay ledger and cryptographic proofs", icon: "🔐" },
-  { layer: "L6", name: "Epistemic Governance Layer", desc: "Bayesian calibration and drift detection", icon: "🧠" },
-  { layer: "L5", name: "Deterministic Intelligence Layer", desc: "Causal modeling and symbolic reasoning", icon: "⚡" },
-  { layer: "L4", name: "Agentic Infrastructure Layer", desc: "Deep Seed agent orchestration", icon: "🤖" },
-  { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "⚙️" },
-  { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "🏛️" },
-  { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "👁️" },
+  { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning", icon: "" },
+  { layer: "L8", name: "Constitutional Layer", desc: "Seven Articles — hardware-enforced governance physics", icon: "" },
+  { layer: "L7", name: "Identity + Trust Layer", desc: "Immutable replay ledger and cryptographic proofs", icon: "" },
+  { layer: "L6", name: "Epistemic Governance Layer", desc: "Bayesian calibration and drift detection", icon: "" },
+  { layer: "L5", name: "Deterministic Intelligence Layer", desc: "Causal modeling and symbolic reasoning", icon: "" },
+  { layer: "L4", name: "Agentic Infrastructure Layer", desc: "Deep Seed agent orchestration", icon: "" },
+  { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "️" },
+  { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "️" },
+  { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "️" },
 ];
 
 const kernelLayers = [
@@ -27,11 +27,11 @@ const kernelLayers = [
 ];
 
 const agents = [
-  { internal: "Seed Clerk", public: "Intake Agent", desc: "High-volume administrative triage and onboarding ingress", icon: "📋" },
-  { internal: "Seed Judge", public: "Compliance Verifier", desc: "Policy conflict resolution and constitutional enforcement", icon: "⚖️" },
-  { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "🔍" },
-  { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "💎" },
-  { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "🛡️" },
+  { internal: "Seed Clerk", public: "Intake Agent", desc: "High-volume administrative triage and onboarding ingress", icon: "" },
+  { internal: "Seed Judge", public: "Compliance Verifier", desc: "Policy conflict resolution and constitutional enforcement", icon: "️" },
+  { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "" },
+  { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "" },
+  { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "️" },
 ];
 
 const phases = [
@@ -51,10 +51,10 @@ const benchmarks = [
 ];
 
 const trustPillars = [
-  { text: "Deterministic replay under identical inputs and event order", icon: "🔄" },
-  { text: "Append-only audit lineage with hash-linked chronology", icon: "📎" },
-  { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "🚫" },
-  { text: "Counterexample generation for every critical invariant failure", icon: "🧪" },
+  { text: "Deterministic replay under identical inputs and event order", icon: "" },
+  { text: "Append-only audit lineage with hash-linked chronology", icon: "" },
+  { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "" },
+  { text: "Counterexample generation for every critical invariant failure", icon: "" },
 ];
 
 /* ── Animated Counter Hook ── */

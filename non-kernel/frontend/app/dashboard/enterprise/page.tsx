@@ -51,7 +51,7 @@ export default function EnterpriseDashboardPage() {
 
   return (
     <DashboardShell>
-      <h1>🏢 Enterprise Dashboard</h1>
+      <h1> Enterprise Dashboard</h1>
       <p>Enterprise governance telemetry using the shared card and status system.</p>
 
       <CardGrid>
