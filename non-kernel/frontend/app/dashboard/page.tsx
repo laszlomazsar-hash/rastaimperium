@@ -58,7 +58,7 @@ export default function Dashboard() {
 
   return (
     <DashboardShell>
-      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon name="dashboard" size="heading" decorative />SoulEcho Dashboard</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon capabilityKey="dashboard" size="heading" decorative />SoulEcho Dashboard</h1>
       <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
         <SovereignIcon icon="dashboard_global" className="w-8 h-8" />
         <span>SoulEcho Dashboard</span>

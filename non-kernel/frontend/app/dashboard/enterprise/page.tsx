@@ -53,7 +53,7 @@ export default function EnterpriseDashboardPage() {
 
   return (
     <DashboardShell>
-      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon name="enterprise" size="heading" decorative />Enterprise Dashboard</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon capabilityKey="enterprise" size="heading" decorative />Enterprise Dashboard</h1>
       <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
         <SovereignIcon icon="enterprise_building" className="w-8 h-8" />
         <span>Enterprise Dashboard</span>
