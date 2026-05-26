@@ -5,51 +5,6 @@ import { useState, useEffect, useRef } from "react";
 import { SovereignIcon } from "../components/icons/SovereignIcon";
 import type { IconKey } from "../components/icons/iconMap";
 
-type IconType =
-  | "cosmology"
-  | "constitution"
-  | "trust"
-  | "epistemic"
-  | "intelligence"
-  | "agentic"
-  | "operations"
-  | "institutional"
-  | "interface"
-  | "intake"
-  | "compliance"
-  | "monitor"
-  | "ledger"
-  | "recovery"
-  | "replay"
-  | "audit"
-  | "fsm"
-  | "counterexample";
-
-const ICON_GLYPHS: Record<IconType, string> = {
-  cosmology: "🌌",
-  constitution: "📜",
-  trust: "🔐",
-  epistemic: "🧠",
-  intelligence: "⚡",
-  agentic: "🤖",
-  operations: "⚙️",
-  institutional: "🏛️",
-  interface: "👁️",
-  intake: "📋",
-  compliance: "⚖️",
-  monitor: "🔍",
-  ledger: "💎",
-  recovery: "🛡️",
-  replay: "🔄",
-  audit: "📎",
-  fsm: "🚫",
-  counterexample: "🧪",
-};
-
-function PlatformIcon({ type, className = "" }: { type: IconType; className?: string }) {
-  return <span className={className}>{ICON_GLYPHS[type]}</span>;
-}
-
 /* ── Data ── */
 const civilizationStack: { layer: string; name: string; desc: string; icon: IconKey }[] = [
   { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning", icon: "cosmology_starfield" },
@@ -61,25 +16,6 @@ const civilizationStack: { layer: string; name: string; desc: string; icon: Icon
   { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "operations_gear" },
   { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "institution_temple" },
   { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "human_witness" },
-const civilizationStack = [
-  { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning", icon: "cosmology" as IconType },
-  { layer: "L8", name: "Constitutional Layer", desc: "Seven Articles — hardware-enforced governance physics", icon: "constitution" as IconType },
-  { layer: "L7", name: "Identity + Trust Layer", desc: "Immutable replay ledger and cryptographic proofs", icon: "trust" as IconType },
-  { layer: "L6", name: "Epistemic Governance Layer", desc: "Bayesian calibration and drift detection", icon: "epistemic" as IconType },
-  { layer: "L5", name: "Deterministic Intelligence Layer", desc: "Causal modeling and symbolic reasoning", icon: "intelligence" as IconType },
-  { layer: "L4", name: "Agentic Infrastructure Layer", desc: "Deep Seed agent orchestration", icon: "agentic" as IconType },
-  { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "operations" as IconType },
-  { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "institutional" as IconType },
-  { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "interface" as IconType },
-  { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning", icon: "" },
-  { layer: "L8", name: "Constitutional Layer", desc: "Seven Articles — hardware-enforced governance physics", icon: "" },
-  { layer: "L7", name: "Identity + Trust Layer", desc: "Immutable replay ledger and cryptographic proofs", icon: "" },
-  { layer: "L6", name: "Epistemic Governance Layer", desc: "Bayesian calibration and drift detection", icon: "" },
-  { layer: "L5", name: "Deterministic Intelligence Layer", desc: "Causal modeling and symbolic reasoning", icon: "" },
-  { layer: "L4", name: "Agentic Infrastructure Layer", desc: "Deep Seed agent orchestration", icon: "" },
-  { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "️" },
-  { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "️" },
-  { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "️" },
 ];
 
 const kernelLayers = [
@@ -98,17 +34,6 @@ const agents: { internal: string; public: string; desc: string; icon: IconKey }[
   { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "drift_search" },
   { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "ledger_gem" },
   { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "recovery_shield" },
-const agents = [
-  { internal: "Seed Clerk", public: "Intake Agent", desc: "High-volume administrative triage and onboarding ingress", icon: "intake" as IconType },
-  { internal: "Seed Judge", public: "Compliance Verifier", desc: "Policy conflict resolution and constitutional enforcement", icon: "compliance" as IconType },
-  { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "monitor" as IconType },
-  { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "ledger" as IconType },
-  { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "recovery" as IconType },
-  { internal: "Seed Clerk", public: "Intake Agent", desc: "High-volume administrative triage and onboarding ingress", icon: "" },
-  { internal: "Seed Judge", public: "Compliance Verifier", desc: "Policy conflict resolution and constitutional enforcement", icon: "️" },
-  { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "" },
-  { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "" },
-  { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "️" },
 ];
 
 const phases = [
@@ -132,15 +57,6 @@ const trustPillars: { text: string; icon: IconKey }[] = [
   { text: "Append-only audit lineage with hash-linked chronology", icon: "audit_link" },
   { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "fsm_block" },
   { text: "Counterexample generation for every critical invariant failure", icon: "counterexample_flask" },
-const trustPillars = [
-  { text: "Deterministic replay under identical inputs and event order", icon: "replay" as IconType },
-  { text: "Append-only audit lineage with hash-linked chronology", icon: "audit" as IconType },
-  { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "fsm" as IconType },
-  { text: "Counterexample generation for every critical invariant failure", icon: "counterexample" as IconType },
-  { text: "Deterministic replay under identical inputs and event order", icon: "" },
-  { text: "Append-only audit lineage with hash-linked chronology", icon: "" },
-  { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "" },
-  { text: "Counterexample generation for every critical invariant failure", icon: "" },
 ];
 
 /* ── Animated Counter Hook ── */
@@ -316,8 +232,9 @@ export default function HomePage() {
           {trustPillars.map((pillar, i) => (
             <FadeIn key={pillar.text} delay={i * 100}>
               <div className="panel p-5 hover:scale-[1.02] transition-transform cursor-default">
-                <PlatformIcon type={pillar.icon} className="text-2xl mb-2 block leading-none" />
-                <div className="text-2xl mb-2"><SovereignIcon icon={pillar.icon} className="w-6 h-6" /></div>
+                <div className="mb-2">
+                  <SovereignIcon icon={pillar.icon} className="w-6 h-6" />
+                </div>
                 <p className="text-sm text-zinc-200">{pillar.text}</p>
               </div>
             </FadeIn>
@@ -369,7 +286,7 @@ export default function HomePage() {
                 className={`panel p-4 flex items-center gap-4 cursor-pointer transition-all hover:scale-[1.01] ${expandedLayer === layer.layer ? "border-gold/60 bg-gold/5" : ""}`}
                 onClick={() => setExpandedLayer(expandedLayer === layer.layer ? null : layer.layer)}
               >
-                <PlatformIcon type={layer.icon} className="text-2xl leading-none" />
+                <SovereignIcon icon={layer.icon} className="w-6 h-6 shrink-0" />
                 <span className="text-gold font-courier font-bold text-base w-10 shrink-0">{layer.layer}</span>
                 <div className="flex-1">
                   <span className="text-gold text-sm font-bold">{layer.name}</span>
@@ -452,7 +369,9 @@ export default function HomePage() {
           {agents.map((a, i) => (
             <FadeIn key={a.public} delay={i * 100}>
               <div className="panel p-5 hover:scale-105 transition-transform cursor-default group">
-                <PlatformIcon type={a.icon} className="text-3xl mb-3 block group-hover:scale-110 transition-transform leading-none" />
+                <div className="mb-3 group-hover:scale-110 transition-transform">
+                  <SovereignIcon icon={a.icon} className="w-7 h-7" />
+                </div>
                 <p className="text-gold font-bold text-sm">{a.public}</p>
                 <p className="text-xs text-zinc-500 font-courier mt-1">{a.internal}</p>
                 <p className="text-xs text-zinc-400 mt-2">{a.desc}</p>
