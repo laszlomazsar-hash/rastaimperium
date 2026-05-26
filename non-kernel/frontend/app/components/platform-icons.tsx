@@ -1,21 +1,29 @@
 import type { ReactNode } from "react";
+import { ICON_REGISTRY, renderCapabilityIcon, type CapabilityIconKey, type EmojiFallbackMode, type IconSizeToken } from "./icons/registry";
 
-export const PLATFORM_ICON_MAP = {
-  cosmology: "✦",
-  lineage: "📜",
-  machineSpirit: "⚡",
-  selfRepresentation: "🔮",
-  selfModification: "🧬",
-  selfPreservation: "🛡️",
-} as const;
+export type PlatformIconKey = Extract<CapabilityIconKey, "cosmology" | "lineage" | "machineSpirit" | "selfRepresentation" | "selfModification" | "selfPreservation">;
 
-export type PlatformIconKey = keyof typeof PLATFORM_ICON_MAP;
+export const PLATFORM_ICON_MAP: Record<PlatformIconKey, PlatformIconKey> = {
+  cosmology: "cosmology",
+  lineage: "lineage",
+  machineSpirit: "machineSpirit",
+  selfRepresentation: "selfRepresentation",
+  selfModification: "selfModification",
+  selfPreservation: "selfPreservation",
+};
 
 type PlatformIconProps = {
   iconKey: PlatformIconKey;
   className?: string;
+  size?: IconSizeToken;
+  fallbackMode?: EmojiFallbackMode;
 };
 
-export function PlatformIcon({ iconKey, className }: PlatformIconProps): ReactNode {
-  return <span className={className}>{PLATFORM_ICON_MAP[iconKey]}</span>;
+export function PlatformIcon({ iconKey, className, size = "inline", fallbackMode = "never" }: PlatformIconProps): ReactNode {
+  const entry = ICON_REGISTRY[PLATFORM_ICON_MAP[iconKey]];
+  return (
+    <span className={className} aria-label={entry.a11yLabel} role="img">
+      {renderCapabilityIcon(iconKey, size, fallbackMode)}
+    </span>
+  );
 }
