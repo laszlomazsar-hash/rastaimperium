@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { SovereignIcon } from "../components/icons/SovereignIcon";
+import { getTelemetrySample } from "../core/motion/deterministicTelemetry";
+import type { CapabilityMetadata, SystemState } from "../core/motion/profiles";
 import type { IconKey } from "../components/icons/iconMap";
 
 type IconType =
@@ -190,11 +192,12 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
 function LiveTerminal() {
   const [tick, setTick] = useState(0);
   useEffect(() => { const i = setInterval(() => setTick(t => t + 1), 3000); return () => clearInterval(i); }, []);
-  const coherence = (0.93 + Math.random() * 0.04).toFixed(3);
-  const drift = (0.001 + Math.random() * 0.003).toFixed(4);
-  const agents = 2048 + Math.floor(Math.random() * 20);
+  const systemState: SystemState = tick % 17 === 0 ? "CONTESTED" : tick % 11 === 0 ? "ARCHIVED" : "VERIFIED";
+  const capabilityRegistry: Record<string, CapabilityMetadata> = {
+    liveTerminal: { id: "liveTerminal", phase: systemState === "CONTESTED" ? "drift" : systemState === "ARCHIVED" ? "audit" : "stability" },
+  };
+  const telemetry = getTelemetrySample("live-terminal-seed-v1", tick, systemState, capabilityRegistry.liveTerminal);
   const block = 847291 + tick;
-  const hash = Math.random().toString(16).slice(2, 6) + "..." + Math.random().toString(16).slice(2, 6);
   return (
     <div className="panel p-6 font-courier text-sm relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-green-500 via-gold to-red-500 animate-pulse" />
@@ -203,14 +206,14 @@ function LiveTerminal() {
       </p>
       <div className="space-y-1.5 text-zinc-300">
         <p>╔══ DARWIN KERNEL v7.2 ══╗</p>
-        <p>║ coherence: <span className="text-gold transition-all">{coherence}</span>     ║</p>
+        <p>║ coherence: <span className="text-gold transition-all">{telemetry.coherence}</span>     ║</p>
         <p>║ invariants: <span className="text-green-400">HOLDING</span>   ║</p>
-        <p>║ drift_Δ: <span className="text-gold transition-all">{drift}</span>      ║</p>
-        <p>║ agents: <span className="text-gold">{agents.toLocaleString()}</span> active  ║</p>
+        <p>║ drift_Δ: <span className="text-gold transition-all">{telemetry.drift}</span>      ║</p>
+        <p>║ agents: <span className="text-gold">{telemetry.agents.toLocaleString()}</span> active  ║</p>
         <p>║ replay: <span className="text-green-400">VERIFIED</span>     ║</p>
         <p>║ lyapunov: <span className="text-gold">dV/dt ≤ 0</span>   ║</p>
         <p>╚═══════════════════════╝</p>
-        <p className="text-xs text-zinc-500 mt-3">hash: {hash} | block: {block.toLocaleString()}</p>
+        <p className="text-xs text-zinc-500 mt-3">hash: {telemetry.hash} | block: {block.toLocaleString()}</p>
       </div>
     </div>
   );
