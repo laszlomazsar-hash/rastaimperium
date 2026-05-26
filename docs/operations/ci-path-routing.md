@@ -131,3 +131,26 @@ Keep these check names stable to avoid branch protection drift.
 - `evo-v/` is deprecated as a non-runtime compatibility tree.
 - Runtime Python changes must land in `backend/src/` (or `evo-v-core/` where explicitly scoped).
 - CI fast-fails on Python runtime edits under legacy top-level trees using `infra/scripts/check_legacy_runtime_reintroduction.sh`.
+
+## Frontend static artifact refresh requirement
+
+When UI iconography or visible page content changes (for example, replacing emoji glyphs), regenerate and refresh shipped static artifacts as part of the same PR:
+
+1. From `non-kernel/frontend`, run `npm run build` to export static output.
+2. Sync generated HTML assets into `backend/static/` (including `backend/static/empire/index.html` and any other affected route pages).
+3. Verify no emoji code points remain in shipped HTML:
+
+```bash
+python - <<'PY'
+from pathlib import Path
+import re, sys
+pat = re.compile(r'[\U0001F300-\U0001FAFF\u2600-\u27BF]')
+hits = [str(p) for p in Path('backend/static').rglob('*.html') if pat.search(p.read_text(encoding='utf-8', errors='ignore'))]
+if hits:
+    print('\n'.join(hits))
+    sys.exit(1)
+print('no_emoji_in_backend_static_html')
+PY
+```
+
+Do not merge UI iconography changes until static artifacts and this verification check are both complete.

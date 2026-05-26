@@ -58,7 +58,7 @@ export default function AdminGovernanceControlPage() {
 
   return (
     <DashboardShell>
-      <h1>🛡️ Admin Governance Control</h1>
+      <h1>️ Admin Governance Control</h1>
       <p>Unified governance controls using the shared dashboard card language.</p>
 
       <CardGrid>
