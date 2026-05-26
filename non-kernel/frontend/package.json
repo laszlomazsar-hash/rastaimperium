@@ -9,11 +9,13 @@
     "lint": "next lint",
     "deploy": "bash scripts/deploy-pages.sh",
     "check:route-emojis": "node scripts/check-route-emojis.mjs"
+    "verify:no-emoji": "node scripts/verify-no-emoji.mjs"
   },
   "dependencies": {
     "next": "^15.0.7",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "lucide-react": "^0.468.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
