@@ -46,7 +46,7 @@ export default function WitnessPage() {
 
   function handleReplay() {
     if (!hashInput.trim()) return;
-    setReplayOutput(`Replaying state from hash: ${hashInput.slice(0,16)}...\n\n[BLOCK ${blocks}] State transition verified\n[INVARIANTS] 7/7 HOLDING\n[CAUSAL CHAIN] 14 nodes traversed\n[VERDICT] ✓ Deterministic replay confirmed\n[.evop] Court-grade evidence container sealed`);
+    setReplayOutput(`Replaying state from hash: ${hashInput.slice(0,16)}...\n\n[BLOCK ${blocks}] State transition verified\n[INVARIANTS] 7/7 HOLDING\n[CAUSAL CHAIN] 14 nodes traversed\n[VERDICT]  Deterministic replay confirmed\n[.evop] Court-grade evidence container sealed`);
   }
 
   return (
