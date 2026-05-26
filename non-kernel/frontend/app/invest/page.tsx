@@ -1,5 +1,22 @@
 import { Metadata } from "next";
 
+type PlatformIconKey = "infrastructure" | "research" | "publications" | "digitalProducts" | "books";
+
+const ICON_BY_KEY: Record<PlatformIconKey, string> = {
+  infrastructure: "🏗️",
+  research: "🔬",
+  publications: "📚",
+  digitalProducts: "📖",
+  books: "📚",
+};
+
+const SECTION_ICON_TOKEN = "text-3xl leading-none mb-3";
+const CARD_ICON_TOKEN = "text-2xl leading-none mb-2";
+
+function PlatformIcon({ iconKey, className }: { iconKey: PlatformIconKey; className: string }) {
+  return <span className={className}>{ICON_BY_KEY[iconKey]}</span>;
+}
+
 export const metadata: Metadata = {
   title: "Invest & Support — Rasta Imperium",
   description: "Support the development of sovereign AI infrastructure. Invest in the future of deterministic governance and constitutional intelligence.",
@@ -24,17 +41,17 @@ export default function InvestPage() {
         <h2 className="text-2xl text-[#B8860B] mb-6" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>What Your Investment Supports</h2>
         <div className="grid md:grid-cols-3 gap-6">
           <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <div className="text-3xl mb-3">🏗️</div>
+            <PlatformIcon iconKey="infrastructure" className={SECTION_ICON_TOKEN} />
             <h3 className="text-[#B8860B] font-bold mb-2">Infrastructure</h3>
             <p className="text-zinc-400 text-sm">Server costs, Railway hosting, domain maintenance, and development tools for the living kernel.</p>
           </div>
           <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <div className="text-3xl mb-3">🔬</div>
+            <PlatformIcon iconKey="research" className={SECTION_ICON_TOKEN} />
             <h3 className="text-[#B8860B] font-bold mb-2">Research & Development</h3>
             <p className="text-zinc-400 text-sm">Advancing the neurosymbolic architecture, Bayesian governance, and the Laplacian Shift to v5.</p>
           </div>
           <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <div className="text-3xl mb-3">📚</div>
+            <PlatformIcon iconKey="publications" className={SECTION_ICON_TOKEN} />
             <h3 className="text-[#B8860B] font-bold mb-2">Publications & Outreach</h3>
             <p className="text-zinc-400 text-sm">Expanding the Rasta Codex, publishing research, and building the sovereign AI community.</p>
           </div>
@@ -77,12 +94,12 @@ export default function InvestPage() {
         <h2 className="text-2xl text-[#B8860B] text-center mb-6" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>Other Ways to Support</h2>
         <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
           <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="panel p-6 text-center hover:scale-[1.03] transition-all duration-300 block">
-            <p className="text-2xl mb-2">📖</p>
+            <PlatformIcon iconKey="digitalProducts" className={CARD_ICON_TOKEN} />
             <p className="text-[#B8860B] font-bold">Buy Digital Products</p>
             <p className="text-zinc-500 text-sm mt-1">Gumroad Store</p>
           </a>
           <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" rel="noopener" className="panel p-6 text-center hover:scale-[1.03] transition-all duration-300 block">
-            <p className="text-2xl mb-2">📚</p>
+            <PlatformIcon iconKey="books" className={CARD_ICON_TOKEN} />
             <p className="text-[#B8860B] font-bold">Buy the Books</p>
             <p className="text-zinc-500 text-sm mt-1">Amazon Author Page</p>
           </a>
