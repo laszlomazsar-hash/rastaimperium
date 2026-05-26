@@ -4,28 +4,10 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { SovereignIcon } from "../components/icons/SovereignIcon";
 import type { IconKey } from "../components/icons/iconMap";
+import type { Capability } from "../core/constitution/capabilities";
+import type { SystemState } from "../core/constitution/system-state";
 
-type IconType =
-  | "cosmology"
-  | "constitution"
-  | "trust"
-  | "epistemic"
-  | "intelligence"
-  | "agentic"
-  | "operations"
-  | "institutional"
-  | "interface"
-  | "intake"
-  | "compliance"
-  | "monitor"
-  | "ledger"
-  | "recovery"
-  | "replay"
-  | "audit"
-  | "fsm"
-  | "counterexample";
-
-const ICON_GLYPHS: Record<IconType, string> = {
+const ICON_GLYPHS: Record<Capability, string> = {
   cosmology: "🌌",
   constitution: "📜",
   trust: "🔐",
@@ -46,7 +28,7 @@ const ICON_GLYPHS: Record<IconType, string> = {
   counterexample: "🧪",
 };
 
-function PlatformIcon({ type, className = "" }: { type: IconType; className?: string }) {
+function PlatformIcon({ type, className = "" }: { type: Capability; className?: string }) {
   return <span className={className}>{ICON_GLYPHS[type]}</span>;
 }
 
@@ -61,25 +43,6 @@ const civilizationStack: { layer: string; name: string; desc: string; icon: Icon
   { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "operations_gear" },
   { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "institution_temple" },
   { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "human_witness" },
-const civilizationStack = [
-  { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning", icon: "cosmology" as IconType },
-  { layer: "L8", name: "Constitutional Layer", desc: "Seven Articles — hardware-enforced governance physics", icon: "constitution" as IconType },
-  { layer: "L7", name: "Identity + Trust Layer", desc: "Immutable replay ledger and cryptographic proofs", icon: "trust" as IconType },
-  { layer: "L6", name: "Epistemic Governance Layer", desc: "Bayesian calibration and drift detection", icon: "epistemic" as IconType },
-  { layer: "L5", name: "Deterministic Intelligence Layer", desc: "Causal modeling and symbolic reasoning", icon: "intelligence" as IconType },
-  { layer: "L4", name: "Agentic Infrastructure Layer", desc: "Deep Seed agent orchestration", icon: "agentic" as IconType },
-  { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "operations" as IconType },
-  { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "institutional" as IconType },
-  { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "interface" as IconType },
-  { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning", icon: "" },
-  { layer: "L8", name: "Constitutional Layer", desc: "Seven Articles — hardware-enforced governance physics", icon: "" },
-  { layer: "L7", name: "Identity + Trust Layer", desc: "Immutable replay ledger and cryptographic proofs", icon: "" },
-  { layer: "L6", name: "Epistemic Governance Layer", desc: "Bayesian calibration and drift detection", icon: "" },
-  { layer: "L5", name: "Deterministic Intelligence Layer", desc: "Causal modeling and symbolic reasoning", icon: "" },
-  { layer: "L4", name: "Agentic Infrastructure Layer", desc: "Deep Seed agent orchestration", icon: "" },
-  { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "️" },
-  { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "️" },
-  { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "️" },
 ];
 
 const kernelLayers = [
@@ -98,20 +61,9 @@ const agents: { internal: string; public: string; desc: string; icon: IconKey }[
   { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "drift_search" },
   { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "ledger_gem" },
   { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "recovery_shield" },
-const agents = [
-  { internal: "Seed Clerk", public: "Intake Agent", desc: "High-volume administrative triage and onboarding ingress", icon: "intake" as IconType },
-  { internal: "Seed Judge", public: "Compliance Verifier", desc: "Policy conflict resolution and constitutional enforcement", icon: "compliance" as IconType },
-  { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "monitor" as IconType },
-  { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "ledger" as IconType },
-  { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "recovery" as IconType },
-  { internal: "Seed Clerk", public: "Intake Agent", desc: "High-volume administrative triage and onboarding ingress", icon: "" },
-  { internal: "Seed Judge", public: "Compliance Verifier", desc: "Policy conflict resolution and constitutional enforcement", icon: "️" },
-  { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "" },
-  { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "" },
-  { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "️" },
 ];
 
-const phases = [
+const phases: { num: string; name: string; status: SystemState }[] = [
   { num: "1", name: "Architecture Visibility", status: "ACTIVE" },
   { num: "2", name: "Replay Demonstrations", status: "BUILDING" },
   { num: "3", name: "Institutional Pilots", status: "NEXT" },
@@ -132,15 +84,6 @@ const trustPillars: { text: string; icon: IconKey }[] = [
   { text: "Append-only audit lineage with hash-linked chronology", icon: "audit_link" },
   { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "fsm_block" },
   { text: "Counterexample generation for every critical invariant failure", icon: "counterexample_flask" },
-const trustPillars = [
-  { text: "Deterministic replay under identical inputs and event order", icon: "replay" as IconType },
-  { text: "Append-only audit lineage with hash-linked chronology", icon: "audit" as IconType },
-  { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "fsm" as IconType },
-  { text: "Counterexample generation for every critical invariant failure", icon: "counterexample" as IconType },
-  { text: "Deterministic replay under identical inputs and event order", icon: "" },
-  { text: "Append-only audit lineage with hash-linked chronology", icon: "" },
-  { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "" },
-  { text: "Counterexample generation for every critical invariant failure", icon: "" },
 ];
 
 /* ── Animated Counter Hook ── */
