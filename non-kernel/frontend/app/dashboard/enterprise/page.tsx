@@ -9,6 +9,7 @@ import {
   TrendRow,
 } from "../../components/DashboardLayout";
 import { useBlueprint } from "../../../hooks/useBlueprint";
+import { SemanticIcon } from "../../components/SemanticIcons";
 
 const funnelStages = [
   { label: "New Leads", value: 1240 },
@@ -51,7 +52,7 @@ export default function EnterpriseDashboardPage() {
 
   return (
     <DashboardShell>
-      <h1>🏢 Enterprise Dashboard</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon name="enterprise" size="heading" decorative />Enterprise Dashboard</h1>
       <p>Enterprise governance telemetry using the shared card and status system.</p>
 
       <CardGrid>
