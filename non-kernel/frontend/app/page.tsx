@@ -6,6 +6,33 @@ import { SYSTEM_STATE_VISUAL_MAP, semanticClass, type MotionSemantic } from "./m
 import { generateTelemetrySnapshot, telemetryStatusLabel } from "./motion/telemetry";
 import { SovereignIcon } from "../components/icons/SovereignIcon";
 import type { IconKey } from "../components/icons/iconMap";
+import type { Capability } from "../core/constitution/capabilities";
+import type { SystemState } from "../core/constitution/system-state";
+
+const ICON_GLYPHS: Record<Capability, string> = {
+  cosmology: "🌌",
+  constitution: "📜",
+  trust: "🔐",
+  epistemic: "🧠",
+  intelligence: "⚡",
+  agentic: "🤖",
+  operations: "⚙️",
+  institutional: "🏛️",
+  interface: "👁️",
+  intake: "📋",
+  compliance: "⚖️",
+  monitor: "🔍",
+  ledger: "💎",
+  recovery: "🛡️",
+  replay: "🔄",
+  audit: "📎",
+  fsm: "🚫",
+  counterexample: "🧪",
+};
+
+function PlatformIcon({ type, className = "" }: { type: Capability; className?: string }) {
+  return <span className={className}>{ICON_GLYPHS[type]}</span>;
+}
 
 /* ── Data ── */
 const civilizationStack: { layer: string; name: string; desc: string; icon: IconKey }[] = [
@@ -38,7 +65,7 @@ const agents: { internal: string; public: string; desc: string; icon: IconKey }[
   { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "recovery_shield" },
 ];
 
-const phases = [
+const phases: { num: string; name: string; status: SystemState }[] = [
   { num: "1", name: "Architecture Visibility", status: "ACTIVE" },
   { num: "2", name: "Replay Demonstrations", status: "BUILDING" },
   { num: "3", name: "Institutional Pilots", status: "NEXT" },
