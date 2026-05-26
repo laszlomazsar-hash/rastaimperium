@@ -17,6 +17,7 @@ import {
 } from "../components/DashboardLayout";
 import { useBlueprint } from "../../hooks/useBlueprint";
 import { useRealtimeMetrics } from "../../hooks/useRealtimeMetrics";
+import { SovereignIcon } from "../../components/icons/SovereignIcon";
 import { mapCoherenceTrend, mapLayerCoherenceSeries, mapMutationTimeline, mapSeverity } from "./viewModels";
 
 const DASHBOARD_LAYER_COUNT = 9;
@@ -58,6 +59,11 @@ export default function Dashboard() {
   return (
     <DashboardShell>
       <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon name="dashboard" size="heading" decorative />SoulEcho Dashboard</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <SovereignIcon icon="dashboard_global" className="w-8 h-8" />
+        <span>SoulEcho Dashboard</span>
+      </h1>
+      <h1> SoulEcho Dashboard</h1>
       <p>Modern governance command center with cards, trend rows, and chart-driven insights.</p>
 
       <CardGrid>
