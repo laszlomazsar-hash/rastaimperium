@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "bash scripts/deploy-pages.sh"
+    "deploy": "bash scripts/deploy-pages.sh",
+    "verify:no-emoji": "node scripts/verify-no-emoji.mjs"
   },
   "dependencies": {
     "next": "^15.0.7",
