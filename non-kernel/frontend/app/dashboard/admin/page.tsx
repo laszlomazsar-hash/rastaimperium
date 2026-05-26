@@ -10,6 +10,7 @@ import {
 } from "../../components/DashboardLayout";
 import { useBlueprint } from "../../../hooks/useBlueprint";
 import { apiUrl } from "../../utils/api";
+import { SovereignIcon } from "../../../components/icons/SovereignIcon";
 
 type PipelineStatus = {
   status: "new" | "qualified" | "discovery_booked" | "proposal_sent" | "won" | "lost";
@@ -58,7 +59,7 @@ export default function AdminGovernanceControlPage() {
 
   return (
     <DashboardShell>
-      <h1>🛡️ Admin Governance Control</h1>
+      <h1>️ Admin Governance Control</h1>
       <p>Unified governance controls using the shared dashboard card language.</p>
 
       <CardGrid>
