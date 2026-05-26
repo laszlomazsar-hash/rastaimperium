@@ -9,7 +9,7 @@ import {
   StatusChip,
 } from "../../components/DashboardLayout";
 import { useBlueprint } from "../../../hooks/useBlueprint";
-import { SemanticIcon } from "../../components/SemanticIcons";
+import { CapabilityIcon } from "../../../components/constitutional/CapabilityIcon";
 import { apiUrl } from "../../utils/api";
 import { SovereignIcon } from "../../../components/icons/SovereignIcon";
 
@@ -60,17 +60,19 @@ export default function AdminGovernanceControlPage() {
 
   return (
     <DashboardShell>
-      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon name="admin" size="heading" decorative />Admin Governance Control</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><CapabilityIcon capability="admin" className="w-8 h-8" />Admin Governance Control</h1>
+      
+      <h1 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><SemanticIcon capabilityKey="admin" size="heading" decorative />Admin Governance Control</h1>
       <h1>️ Admin Governance Control</h1>
       <p>Unified governance controls using the shared dashboard card language.</p>
 
       <CardGrid>
-        <StatCard label="Dashboard Control" value={blueprint.admin.controls.dashboards ? "Enabled" : "Disabled"} />
-        <StatCard label="Subscription Tier Control" value={blueprint.admin.controls.subscriptionTiers ? "Enabled" : "Disabled"} />
-        <StatCard label="Codex Update Control" value={blueprint.admin.controls.codexUpdates ? "Enabled" : "Disabled"} />
+        <StatCard priority="critical" label="Dashboard Control" value={blueprint.admin.controls.dashboards ? "Enabled" : "Disabled"} />
+        <StatCard priority="secondary" label="Subscription Tier Control" value={blueprint.admin.controls.subscriptionTiers ? "Enabled" : "Disabled"} />
+        <StatCard priority="critical" label="Codex Update Control" value={blueprint.admin.controls.codexUpdates ? "Enabled" : "Disabled"} />
       </CardGrid>
 
-      <PanelCard title="Governance and Deployment Controls" subtitle="Critical admin capability toggles.">
+      <PanelCard priority="critical" title="Governance and Deployment Controls" subtitle="Critical admin capability toggles.">
         <div style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap" }}>
           <StatusChip label="Audit logs (Article IV)" status={blueprint.admin.auditLogs ? "ok" : "error"} />
           <StatusChip label="v3.5 trigger" status={blueprint.admin.deploymentControls.v35Triggers ? "ok" : "warn"} />

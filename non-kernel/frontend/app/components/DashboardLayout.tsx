@@ -1,6 +1,10 @@
 import { ReactNode } from "react";
 import { color, elevation, radius, spacing, stroke, typography } from "@/theme/tokens";
 
+import { dashboardTokens, panelPriorityStyleMap, type PanelPriority } from "../design/tokens";
+
+export type { PanelPriority } from "../design/tokens";
+
 type TrendDirection = "up" | "down" | "neutral";
 
 type DataPoint = {
@@ -30,11 +34,34 @@ const shellStyles = {
     borderRadius: radius.full,
     padding: `${spacing[1]} ${spacing[6]}`,
     border: `${stroke.thin} solid`,
+  page: { padding: dashboardTokens.spacing.pagePadding, display: "grid", gap: dashboardTokens.spacing.sectionGap },
+  grid: { display: "grid", gap: dashboardTokens.spacing.gridGap, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" },
+  chip: {
+    fontSize: "0.75rem",
+    borderRadius: dashboardTokens.radius.pill,
+    padding: "0.2rem 0.6rem",
+    border: "1px solid",
     display: "inline-flex",
     alignItems: "center",
     gap: spacing[3],
   },
 } as const;
+
+function panelStyle(priority: PanelPriority) {
+  const priorityStyle = panelPriorityStyleMap[priority];
+  return {
+    border: dashboardTokens.border[priorityStyle.border],
+    borderRadius: dashboardTokens.radius.panel,
+    padding: dashboardTokens.spacing.panelPadding,
+    background: dashboardTokens.color[priorityStyle.background],
+    boxShadow: dashboardTokens.shadow[priorityStyle.elevation],
+  } as const;
+}
+
+function panelTitleStyle(priority: PanelPriority) {
+  const priorityStyle = panelPriorityStyleMap[priority];
+  return { margin: 0, color: dashboardTokens.color.textStrong, fontWeight: dashboardTokens.typography[priorityStyle.titleWeight] } as const;
+}
 
 export function DashboardShell({ children }: { children: ReactNode }) {
   return <main style={shellStyles.page}>{children}</main>;
@@ -44,22 +71,29 @@ export function CardGrid({ children }: { children: ReactNode }) {
   return <section style={shellStyles.grid}>{children}</section>;
 }
 
-export function PanelCard({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
+export function PanelCard({ title, subtitle, children, priority = "secondary" }: { title: string; subtitle?: string; children: ReactNode; priority?: PanelPriority }) {
   return (
     <section style={shellStyles.card}>
       <h2 style={{ margin: spacing[0] }}>{title}</h2>
       {subtitle ? <p style={{ marginTop: spacing[3], color: color.text.muted }}>{subtitle}</p> : null}
+    <section style={panelStyle(priority)}>
+      <h2 style={panelTitleStyle(priority)}>{title}</h2>
+      {subtitle ? <p style={{ marginTop: dashboardTokens.spacing.subtitleMarginTop, color: dashboardTokens.color.textMuted }}>{subtitle}</p> : null}
       <div>{children}</div>
     </section>
   );
 }
 
-export function StatCard({ label, value, detail }: { label: string; value: string; detail?: string }) {
+export function StatCard({ label, value, detail, priority = "secondary" }: { label: string; value: string; detail?: string; priority?: PanelPriority }) {
   return (
     <article style={shellStyles.card}>
       <p style={{ margin: spacing[0], fontSize: typography.size.md, color: color.text.muted }}>{label}</p>
       <p style={{ margin: `${spacing[5]} ${spacing[0]}`, fontSize: typography.size.xl, fontWeight: typography.weight.bold }}>{value}</p>
       {detail ? <p style={{ margin: spacing[0], color: color.text.subtle, fontSize: typography.size.sm }}>{detail}</p> : null}
+    <article style={panelStyle(priority)}>
+      <p style={{ margin: 0, fontSize: "0.85rem", color: dashboardTokens.color.textMuted }}>{label}</p>
+      <p style={{ margin: "0.5rem 0", fontSize: "1.55rem", fontWeight: dashboardTokens.typography.bold }}>{value}</p>
+      {detail ? <p style={{ margin: 0, color: dashboardTokens.color.textSubtle, fontSize: "0.8rem" }}>{detail}</p> : null}
     </article>
   );
 }
@@ -85,6 +119,8 @@ export function StatusChip({ label, status }: { label: string; status: "ok" | "w
         : status === "error"
           ? { color: color.text.danger, borderColor: color.border.danger, background: color.surface.danger }
           : { color: color.text.primary, borderColor: color.border.neutral, background: color.surface.neutral };
+          ? { color: "#991b1b", borderColor: "#fca5a5", background: "#fef2f2" }
+          : { color: "#1e293b", borderColor: "#cbd5e1", background: dashboardTokens.color.surfaceMuted };
 
   return <span style={{ ...shellStyles.chip, ...tone }}>{label}</span>;
 }
