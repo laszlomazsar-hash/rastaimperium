@@ -2,14 +2,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { SYSTEM_STATE_VISUAL_MAP, semanticClass, type MotionSemantic } from "./motion/semantics";
+import { SYSTEM_STATE_VISUAL_MAP, semanticClass, type MotionSemantic, type SystemState as VisualSystemState } from "./motion/semantics";
 import { generateTelemetrySnapshot, telemetryStatusLabel } from "./motion/telemetry";
 import { SovereignIcon } from "../components/icons/SovereignIcon";
 import { getTelemetrySample } from "../core/motion/deterministicTelemetry";
-import type { CapabilityMetadata, SystemState } from "../core/motion/profiles";
+import type { CapabilityMetadata, SystemState as MotionSystemState } from "../core/motion/profiles";
 import type { IconKey } from "../components/icons/iconMap";
 import type { Capability } from "../core/constitution/capabilities";
-import type { SystemState } from "../core/constitution/system-state";
+import type { SystemState as ConstitutionSystemState } from "../core/constitution/system-state";
 
 const ICON_GLYPHS: Record<Capability, string> = {
   cosmology: "🌌",
@@ -67,7 +67,7 @@ const agents: { internal: string; public: string; desc: string; icon: IconKey }[
   { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "recovery_shield" },
 ];
 
-const phases: { num: string; name: string; status: SystemState }[] = [
+const phases: { num: string; name: string; status: ConstitutionSystemState }[] = [
   { num: "1", name: "Architecture Visibility", status: "ACTIVE" },
   { num: "2", name: "Replay Demonstrations", status: "BUILDING" },
   { num: "3", name: "Institutional Pilots", status: "NEXT" },
@@ -146,14 +146,15 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
 function LiveTerminal() {
   const [tick, setTick] = useState(0);
   useEffect(() => { const i = setInterval(() => setTick(t => t + 1), 3000); return () => clearInterval(i); }, []);
-  const systemState: SystemState = tick % 17 === 0 ? "CONTESTED" : tick % 11 === 0 ? "ARCHIVED" : "VERIFIED";
+  const systemState: MotionSystemState = tick % 17 === 0 ? "CONTESTED" : tick % 11 === 0 ? "ARCHIVED" : "VERIFIED";
   const capabilityRegistry: Record<string, CapabilityMetadata> = {
     liveTerminal: { id: "liveTerminal", phase: systemState === "CONTESTED" ? "drift" : systemState === "ARCHIVED" ? "audit" : "stability" },
   };
   const telemetry = getTelemetrySample("live-terminal-seed-v1", tick, systemState, capabilityRegistry.liveTerminal);
   const block = 847291 + tick;
   const snapshot = generateTelemetrySnapshot(tick, "darwin-kernel-v7.2");
-  const visual = SYSTEM_STATE_VISUAL_MAP[snapshot.systemState];
+  const visualState: VisualSystemState = snapshot.systemState;
+  const visual = SYSTEM_STATE_VISUAL_MAP[visualState];
 
   return (
     <SemanticMotion semantic={visual.motion} className="panel p-6 font-courier text-sm relative overflow-hidden">
@@ -172,13 +173,13 @@ function LiveTerminal() {
         <p>╚═══════════════════════╝</p>
         <p className="text-xs text-zinc-500 mt-3">hash: {telemetry.hash} | block: {block.toLocaleString()}</p>
         <p>║ coherence: <span className="text-gold">{snapshot.coherence}</span>     ║</p>
-        <p>║ invariants: <span className={visual.color}>{telemetryStatusLabel(snapshot.systemState)}</span>   ║</p>
+        <p>║ invariants: <span className={visual.color}>{telemetryStatusLabel(visualState)}</span>   ║</p>
         <p>║ drift_Δ: <span className="text-gold">{snapshot.drift}</span>      ║</p>
         <p>║ agents: <span className="text-gold">{snapshot.agents.toLocaleString()}</span> active  ║</p>
         <p>║ replay: <span className="text-green-400">VERIFIED</span>     ║</p>
         <p>║ lyapunov: <span className="text-gold">dV/dt ≤ 0</span>   ║</p>
         <p>╚═══════════════════════╝</p>
-        <p className="text-xs text-zinc-500 mt-3">hash: {snapshot.hash} | block: {snapshot.block.toLocaleString()} | state: {snapshot.systemState}</p>
+        <p className="text-xs text-zinc-500 mt-3">hash: {snapshot.hash} | block: {snapshot.block.toLocaleString()} | state: {visualState}</p>
       </div>
     </SemanticMotion>
   );
