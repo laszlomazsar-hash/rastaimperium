@@ -6,35 +6,10 @@ import { SYSTEM_STATE_VISUAL_MAP, semanticClass, type MotionSemantic } from "./m
 import { generateTelemetrySnapshot, telemetryStatusLabel } from "./motion/telemetry";
 import { SovereignIcon } from "../components/icons/SovereignIcon";
 import { getTelemetrySample } from "../core/motion/deterministicTelemetry";
-import type { CapabilityMetadata, SystemState } from "../core/motion/profiles";
+import type { CapabilityMetadata, SystemState as MotionSystemState } from "../core/motion/profiles";
 import type { IconKey } from "../components/icons/iconMap";
-import type { Capability } from "../core/constitution/capabilities";
-import type { SystemState } from "../core/constitution/system-state";
+import type { SystemState as PhaseSystemState } from "../core/constitution/system-state";
 
-const ICON_GLYPHS: Record<Capability, string> = {
-  cosmology: "🌌",
-  constitution: "📜",
-  trust: "🔐",
-  epistemic: "🧠",
-  intelligence: "⚡",
-  agentic: "🤖",
-  operations: "⚙️",
-  institutional: "🏛️",
-  interface: "👁️",
-  intake: "📋",
-  compliance: "⚖️",
-  monitor: "🔍",
-  ledger: "💎",
-  recovery: "🛡️",
-  replay: "🔄",
-  audit: "📎",
-  fsm: "🚫",
-  counterexample: "🧪",
-};
-
-function PlatformIcon({ type, className = "" }: { type: Capability; className?: string }) {
-  return <span className={className}>{ICON_GLYPHS[type]}</span>;
-}
 
 /* ── Data ── */
 const civilizationStack: { layer: string; name: string; desc: string; icon: IconKey }[] = [
@@ -67,7 +42,7 @@ const agents: { internal: string; public: string; desc: string; icon: IconKey }[
   { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "recovery_shield" },
 ];
 
-const phases: { num: string; name: string; status: SystemState }[] = [
+const phases: { num: string; name: string; status: PhaseSystemState }[] = [
   { num: "1", name: "Architecture Visibility", status: "ACTIVE" },
   { num: "2", name: "Replay Demonstrations", status: "BUILDING" },
   { num: "3", name: "Institutional Pilots", status: "NEXT" },
@@ -146,7 +121,7 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
 function LiveTerminal() {
   const [tick, setTick] = useState(0);
   useEffect(() => { const i = setInterval(() => setTick(t => t + 1), 3000); return () => clearInterval(i); }, []);
-  const systemState: SystemState = tick % 17 === 0 ? "CONTESTED" : tick % 11 === 0 ? "ARCHIVED" : "VERIFIED";
+  const systemState: MotionSystemState = tick % 17 === 0 ? "CONTESTED" : tick % 11 === 0 ? "ARCHIVED" : "VERIFIED";
   const capabilityRegistry: Record<string, CapabilityMetadata> = {
     liveTerminal: { id: "liveTerminal", phase: systemState === "CONTESTED" ? "drift" : systemState === "ARCHIVED" ? "audit" : "stability" },
   };
