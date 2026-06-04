@@ -7,6 +7,9 @@ import { generateTelemetrySnapshot, telemetryStatusLabel } from "./motion/teleme
 import { PlatformIcon } from "../components/ui/icons/platform-icon";
 import { getTelemetrySample } from "../core/motion/deterministicTelemetry";
 import type { CapabilityMetadata, SystemState as MotionSystemState } from "../core/motion/profiles";
+import type { IconKey } from "../components/icons/iconMap";
+import type { SystemState as PhaseSystemState } from "../core/constitution/system-state";
+
 import type { IconType } from "../components/ui/icons/platform-icons";
 import type { SystemState } from "../core/constitution/system-state";
 import type { IconKey } from "../components/icons/iconMap";
@@ -44,6 +47,7 @@ const agents: { internal: string; public: string; desc: string; icon: IconType }
   { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "archive" },
 ];
 
+const phases: { num: string; name: string; status: PhaseSystemState }[] = [
 const phases: { num: string; name: string; status: ConstitutionSystemState }[] = [
   { num: "1", name: "Architecture Visibility", status: "ACTIVE" },
   { num: "2", name: "Replay Demonstrations", status: "BUILDING" },

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { color, elevation, radius, spacing, stroke, typography } from "@/theme/tokens";
+import { color, radius, spacing, stroke, typography } from "@/theme/tokens";
 
 import { dashboardTokens, panelPriorityStyleMap, type PanelPriority } from "../design/tokens";
 
@@ -20,20 +20,6 @@ type TimelineEntry = {
 };
 
 const shellStyles = {
-  page: { padding: spacing[13], display: "grid", gap: spacing[12] },
-  grid: { display: "grid", gap: spacing[9], gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" },
-  card: {
-    border: `${stroke.thin} solid ${color.border.default}`,
-    borderRadius: radius.sm,
-    padding: spacing[12],
-    background: color.surface.base,
-    boxShadow: elevation.card,
-  },
-  chip: {
-    fontSize: typography.size.xs,
-    borderRadius: radius.full,
-    padding: `${spacing[1]} ${spacing[6]}`,
-    border: `${stroke.thin} solid`,
   page: { padding: dashboardTokens.spacing.pagePadding, display: "grid", gap: dashboardTokens.spacing.sectionGap },
   grid: { display: "grid", gap: dashboardTokens.spacing.gridGap, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" },
   chip: {
@@ -60,7 +46,11 @@ function panelStyle(priority: PanelPriority) {
 
 function panelTitleStyle(priority: PanelPriority) {
   const priorityStyle = panelPriorityStyleMap[priority];
-  return { margin: 0, color: dashboardTokens.color.textStrong, fontWeight: dashboardTokens.typography[priorityStyle.titleWeight] } as const;
+  return {
+    margin: 0,
+    color: dashboardTokens.color.textStrong,
+    fontWeight: dashboardTokens.typography[priorityStyle.titleWeight],
+  } as const;
 }
 
 export function DashboardShell({ children }: { children: ReactNode }) {
@@ -73,9 +63,6 @@ export function CardGrid({ children }: { children: ReactNode }) {
 
 export function PanelCard({ title, subtitle, children, priority = "secondary" }: { title: string; subtitle?: string; children: ReactNode; priority?: PanelPriority }) {
   return (
-    <section style={shellStyles.card}>
-      <h2 style={{ margin: spacing[0] }}>{title}</h2>
-      {subtitle ? <p style={{ marginTop: spacing[3], color: color.text.muted }}>{subtitle}</p> : null}
     <section style={panelStyle(priority)}>
       <h2 style={panelTitleStyle(priority)}>{title}</h2>
       {subtitle ? <p style={{ marginTop: dashboardTokens.spacing.subtitleMarginTop, color: dashboardTokens.color.textMuted }}>{subtitle}</p> : null}
@@ -86,10 +73,6 @@ export function PanelCard({ title, subtitle, children, priority = "secondary" }:
 
 export function StatCard({ label, value, detail, priority = "secondary" }: { label: string; value: string; detail?: string; priority?: PanelPriority }) {
   return (
-    <article style={shellStyles.card}>
-      <p style={{ margin: spacing[0], fontSize: typography.size.md, color: color.text.muted }}>{label}</p>
-      <p style={{ margin: `${spacing[5]} ${spacing[0]}`, fontSize: typography.size.xl, fontWeight: typography.weight.bold }}>{value}</p>
-      {detail ? <p style={{ margin: spacing[0], color: color.text.subtle, fontSize: typography.size.sm }}>{detail}</p> : null}
     <article style={panelStyle(priority)}>
       <p style={{ margin: 0, fontSize: "0.85rem", color: dashboardTokens.color.textMuted }}>{label}</p>
       <p style={{ margin: "0.5rem 0", fontSize: "1.55rem", fontWeight: dashboardTokens.typography.bold }}>{value}</p>
@@ -99,13 +82,11 @@ export function StatCard({ label, value, detail, priority = "secondary" }: { lab
 }
 
 export function TrendRow({ label, value, direction }: { label: string; value: string; direction: TrendDirection }) {
-  const icon = direction === "up" ? "↗" : direction === "down" ? "↘" : "→";
+  const indicator = direction === "up" ? "increase" : direction === "down" ? "decrease" : "steady";
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: `${spacing[4]} ${spacing[0]}` }}>
       <span>{label}</span>
-      <strong>
-        {icon} {value}
-      </strong>
+      <strong aria-label={`${indicator}: ${value}`}>{value}</strong>
     </div>
   );
 }
@@ -119,8 +100,6 @@ export function StatusChip({ label, status }: { label: string; status: "ok" | "w
         : status === "error"
           ? { color: color.text.danger, borderColor: color.border.danger, background: color.surface.danger }
           : { color: color.text.primary, borderColor: color.border.neutral, background: color.surface.neutral };
-          ? { color: "#991b1b", borderColor: "#fca5a5", background: "#fef2f2" }
-          : { color: "#1e293b", borderColor: "#cbd5e1", background: dashboardTokens.color.surfaceMuted };
 
   return <span style={{ ...shellStyles.chip, ...tone }}>{label}</span>;
 }
