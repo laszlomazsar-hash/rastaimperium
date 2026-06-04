@@ -1,4 +1,5 @@
 import { ICON_MAP, ICON_STYLES, type IconType } from './platform-icons';
+import { ICON_MAP, ICON_STYLES, IconType } from './platform-icons';
 
 type IconSize = keyof typeof ICON_STYLES;
 
