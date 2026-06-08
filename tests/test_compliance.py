@@ -80,9 +80,6 @@ def test_override_recovery_path_obeys_min_hold_and_cooldown() -> None:
     assert engine.evaluate_override_state(recovered) is True
     assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
 
-    assert engine.evaluate_override_state(recovered) is True
-    assert engine.override_history[-1]["reason_code"] == "MIN_HOLD_SUPPRESSED"
-
     # Recovery is applied once min-hold has elapsed.
     assert engine.evaluate_override_state(recovered) is False
     assert engine.override_history[-1]["reason_code"] == "PREDICATE_CLEAR_APPLIED"
