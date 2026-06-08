@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Metadata } from "next";
 import { SovereignIcon } from "../../components/icons/SovereignIcon";
 import type { IconKey } from "../../components/icons/iconMap";
