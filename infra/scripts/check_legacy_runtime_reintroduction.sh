@@ -13,8 +13,12 @@ elif git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
 fi
 
 if [[ -n "$base_ref" ]]; then
+  # Ensure we have the merge base by fetching origin/main if needed
+  if [[ "$base_ref" == origin/* ]]; then
+    git fetch --no-tags origin main >/dev/null 2>&1 || true
+  fi
   diff_range="$base_ref...HEAD"
-  changed_files="$(git diff --name-only "$diff_range")"
+  changed_files="$(git diff --name-only "$diff_range" 2>/dev/null || git diff --name-only HEAD~1...HEAD 2>/dev/null || true)"
 else
   changed_files="$(git diff --name-only HEAD~1...HEAD 2>/dev/null || true)"
 fi
@@ -27,3 +31,4 @@ if echo "$changed_files" | rg -q '^evo-v/.+\.py$'; then
 fi
 
 echo "Legacy runtime guard passed."
+

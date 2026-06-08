@@ -52,6 +52,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Legacy runtime guard
         run: bash infra/scripts/check_legacy_runtime_reintroduction.sh
@@ -114,3 +116,4 @@ jobs:
             tests/test_governance_replayability.py \
             tests/test_topology_atomic_commit.py \
             tests/test_topology_transaction.py
+
