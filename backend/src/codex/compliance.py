@@ -12,8 +12,8 @@ from enum import Enum
 from threading import RLock
 from typing import Any, Callable, Dict, List, Literal, Mapping, Optional, Protocol
 
-# Changed relative import to absolute import
-from codex.canonical_json import dumps_canonical
+# Fixed: use relative import from the same package
+from .canonical_json import dumps_canonical
 
 class TopologyOperation(Protocol):
     """Pure topology operation.
@@ -26,3 +26,4 @@ class TopologyOperation(Protocol):
         """Return a new topology candidate."""
 
 ...
+
