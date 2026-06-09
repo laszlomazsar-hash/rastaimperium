@@ -3,7 +3,6 @@ name: build-linux
 on:
   push:
     paths:
-      # Required scope only: kernel-critical contracts and governance/runtime surfaces.
       - 'runtime/**'
       - 'ledger/**'
       - 'governance/**'
@@ -21,7 +20,6 @@ on:
       - '.github/workflows/build-linux.yml'
   pull_request:
     paths:
-      # Required scope only: kernel-critical contracts and governance/runtime surfaces.
       - 'runtime/**'
       - 'ledger/**'
       - 'governance/**'
@@ -40,74 +38,47 @@ on:
 
 jobs:
   build:
-    # REQUIRED job: import contract + policy guardrails + kernel-critical tests.
-    # Broad legacy/non-kernel compatibility coverage is intentionally excluded
-    # so this required gate stays deterministic while migration remains in-flight.
     runs-on: ubuntu-latest
-
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       PYTHONPATH: backend/src
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Legacy runtime guard
         run: bash infra/scripts/check_legacy_runtime_reintroduction.sh
-
       - name: Import policy guard
         run: python scripts/check_import_policies.py
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
+          python-version: '3.11'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-
       - name: Diagnose Python import path
         env:
           PYTHONPATH: backend/src
         run: |
           python - <<'PY'
-          import importlib
-          import os
-          import pprint
-          import sys
-          import traceback
-
-          print("Validating codex import contract (codex.compliance must resolve from backend/src)")
-          print("sys.path:")
+          import importlib, os, pprint, sys, traceback
+          print('Validating codex import contract (codex.compliance must resolve from backend/src)')
           pprint.pp(sys.path)
-
-          print("Sub-step: importlib.import_module('codex.compliance')")
           try:
-              compliance = importlib.import_module("codex.compliance")
+              compliance = importlib.import_module('codex.compliance')
           except Exception as exc:
               traceback.print_exc()
-              message = f"{type(exc).__name__}: {exc}".lower()
-              likely_cause = "circular import" if "circular" in message or "partially initialized module" in message else "shim inversion"
-              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
-                  summary.write(
-                      f"- Import contract failed for `codex.compliance` "
-                      f"({type(exc).__name__}: {exc}); likely cause category: {likely_cause}.\n"
-                  )
               raise SystemExit(1)
-
-          print(f"codex.compliance module: {compliance.__file__}")
+          print(f'codex.compliance module: {compliance.__file__}')
           PY
-
       - name: Run required kernel-critical tests
         env:
           PYTHONPATH: backend/src
         run: |
-          pytest tests/test_compliance.py -k "profile_c or certification"
+          pytest tests/test_compliance.py
           pytest \
             tests/test_deterministic_policy.py \
             tests/test_canonical_json.py \
@@ -116,4 +87,3 @@ jobs:
             tests/test_governance_replayability.py \
             tests/test_topology_atomic_commit.py \
             tests/test_topology_transaction.py
-
