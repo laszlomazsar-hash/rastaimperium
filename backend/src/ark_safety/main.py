@@ -146,6 +146,16 @@ def telemetry_coverage() -> dict[str, object]:
         "coverage": engine.trace_coverage_graph(),
         "rollback_ready": rollback_ready,
         "likelihood_diagnostics": engine.likelihood_diagnostics(),
+        "violation_status": engine.violation_status(),
+    }
+
+
+@app.get("/telemetry/violations")
+def telemetry_violations() -> dict[str, object]:
+    fault = engine.fault_model_diagnostics()
+    return {
+        "schema_version": OBSERVABILITY_SCHEMA_VERSION,
+        **fault,
     }
 
 
