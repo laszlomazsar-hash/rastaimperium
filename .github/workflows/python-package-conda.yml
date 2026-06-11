@@ -6,8 +6,6 @@ on:
       - main
       - master
     paths:
-      # REQUIRED scope only: kernel-critical backend/governance contract surfaces.
-      # Non-kernel and broad compatibility suites run in optional/non-blocking CI.
       - 'backend/**'
       - 'governance/**'
       - 'tests/test_compliance.py'
@@ -26,8 +24,6 @@ on:
       - main
       - master
     paths:
-      # REQUIRED scope only: kernel-critical backend/governance contract surfaces.
-      # Non-kernel and broad compatibility suites run in optional/non-blocking CI.
       - 'backend/**'
       - 'governance/**'
       - 'tests/test_compliance.py'
@@ -45,8 +41,6 @@ on:
 
 jobs:
   build-linux:
-    # REQUIRED job: import contract + policy guardrails + kernel-critical tests.
-    # Optional legacy/non-kernel compatibility coverage remains non-blocking below.
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: backend/src
@@ -100,14 +94,13 @@ jobs:
         PY
     - name: Lint with flake8
       run: |
-        # Kernel-only lint target: backend policy-critical code.
         flake8 backend/src --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 backend/src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Enforce certification profile guardrails
       env:
         PYTHONPATH: backend/src
       run: |
-        pytest tests/test_compliance.py -k "profile_c or certification"
+        pytest tests/test_compliance.py
 
     - name: Run required kernel/core test subset
       env:
@@ -127,8 +120,6 @@ jobs:
       env:
         PYTHONPATH: backend/src
       run: |
-        # OPTIONAL scope: broad legacy/non-kernel compatibility checks.
-        # Non-blocking by design during migration to preserve required gate stability.
         pytest tests \
           --ignore=tests/test_compliance.py \
           --ignore=tests/test_deterministic_policy.py \
