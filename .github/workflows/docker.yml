@@ -1,0 +1,27 @@
+name: docker-build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t rastaimperium:ci .
+
+      - name: Verify image runs
+        run: |
+          docker run -d -p 8000:8000 --name test_app rastaimperium:ci
+          sleep 5
+          curl --fail http://localhost:8000/health || (docker logs test_app && exit 1)
+          docker stop test_app
