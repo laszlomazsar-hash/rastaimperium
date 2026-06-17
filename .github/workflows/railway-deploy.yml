@@ -18,8 +18,27 @@ jobs:
           curl -fsSL https://railway.app/install.sh | bash
           echo "$HOME/.railway/bin" >> $GITHUB_PATH
 
-      - name: Deploy to Railway
+      - name: Validate Railway secrets
+        shell: bash
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service ${{ secrets.RAILWAY_SERVICE }} --detach
+          set -euo pipefail
+
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "ERROR: RAILWAY_TOKEN secret is not configured"
+            exit 1
+          fi
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -n "${{ secrets.RAILWAY_SERVICE }}" ]; then
+            railway up --service "${{ secrets.RAILWAY_SERVICE }}" --detach
+          else
+            railway up --detach
+          fi
