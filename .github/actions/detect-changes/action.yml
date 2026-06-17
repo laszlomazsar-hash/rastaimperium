@@ -14,6 +14,12 @@ outputs:
   any_changed:
     description: 'Any relevant changes detected'
     value: ${{ steps.filter.outputs.any_changed }}
+  backend:
+    description: 'Backend changes'
+    value: ${{ steps.filter.outputs.backend }}
+  frontend:
+    description: 'Frontend changes'
+    value: ${{ steps.filter.outputs.frontend }}
 
 runs:
   using: 'composite'
@@ -35,4 +41,5 @@ runs:
       shell: bash
       run: |
         echo "Any changed: ${{ steps.filter.outputs.any_changed }}"
-        echo "Changed files: ${{ steps.filter.outputs.changes }}"
+        echo "Backend: ${{ steps.filter.outputs.backend }}"
+        echo "Frontend: ${{ steps.filter.outputs.frontend }}"
