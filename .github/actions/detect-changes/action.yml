@@ -1,0 +1,38 @@
+name: 'Detect Changes'
+description: 'Deterministic detection of changed paths using GitHub-native filters'
+
+inputs:
+  filters:
+    description: 'Path filters (YAML multiline)'
+    required: true
+  token:
+    description: 'GITHUB_TOKEN'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  any_changed:
+    description: 'Any relevant changes detected'
+    value: ${{ steps.filter.outputs.any_changed }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Detect changes
+      id: filter
+      uses: dorny/paths-filter@v3
+      with:
+        filters: ${{ inputs.filters }}
+        token: ${{ inputs.token }}
+        list-files: json
+
+    - name: Debug outputs
+      shell: bash
+      run: |
+        echo "Any changed: ${{ steps.filter.outputs.any_changed }}"
+        echo "Changed files: ${{ steps.filter.outputs.changes }}"
