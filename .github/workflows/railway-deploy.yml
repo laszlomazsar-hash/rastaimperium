@@ -1,44 +1,25 @@
-name: railway-deploy
+name: Railway Deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'Dockerfile'
+      - 'pyproject.toml'
+      - 'requirements.txt'
+      - 'railway.json'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Railway CLI
-        shell: bash
-        run: |
-          curl -fsSL https://railway.app/install.sh | bash
-          echo "$HOME/.railway/bin" >> $GITHUB_PATH
-
-      - name: Validate Railway secrets
-        shell: bash
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          set -euo pipefail
-
-          if [ -z "$RAILWAY_TOKEN" ]; then
-            echo "ERROR: RAILWAY_TOKEN secret is not configured"
-            exit 1
-          fi
-
       - name: Deploy to Railway
+        uses: railwayapp/railway-action@v1
+        with:
+          service: ${{ secrets.RAILWAY_SERVICE }}
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [ -n "${{ secrets.RAILWAY_SERVICE }}" ]; then
-            railway up --service "${{ secrets.RAILWAY_SERVICE }}" --detach
-          else
-            railway up --detach
-          fi
