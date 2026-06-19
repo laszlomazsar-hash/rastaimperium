@@ -44,9 +44,9 @@ ENV PORT=8000
 
 EXPOSE $PORT
 
-# Healthcheck (matches the existing /health endpoint)
+# Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:${PORT}/health || exit 1
+  CMD curl -f http://localhost:$PORT/health || exit 1
 
-# Production Uvicorn command with workers - use shell form for variable expansion
-CMD uvicorn src.rastaimperium.app:app --host 0.0.0.0 --port ${PORT} --workers 2
+# Production Uvicorn command with workers - shell form for env var
+CMD uvicorn src.rastaimperium.app:app --host 0.0.0.0 --port $PORT --workers 2
