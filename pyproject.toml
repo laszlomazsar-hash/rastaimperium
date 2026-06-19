@@ -1,0 +1,15 @@
+[project]
+name = "rastaimperium"
+version = "0.1.0"
+description = "Sovereign digital territory API"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+rastaimperium = "src.rastaimperium.app:main"
