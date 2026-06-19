@@ -4,9 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'frontend/app/**/page.tsx'
+      - 'non-kernel/frontend/**'
       - 'infra/**'
-      - 'infra/.github/workflows/deploy-pages.yml'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
@@ -50,16 +49,11 @@ jobs:
           else
             echo "Change detection mode: fallback full-scan (no merge-base found)"
             cat <<'EOF' > "${CHANGED_FILE_LIST}"
-runtime/__fallback__.sentinel
-ledger/__fallback__.sentinel
-governance/__fallback__.sentinel
-tests/__fallback__.sentinel
-tools/__fallback__.sentinel
-scripts/__fallback__.sentinel
+non-kernel/frontend/__fallback__.sentinel
 EOF
           fi
 
-          if rg -q '^frontend/app/.*/page\.tsx$' "${CHANGED_FILE_LIST}"; then
+          if rg -q '^non-kernel/frontend/' "${CHANGED_FILE_LIST}"; then
             echo "frontend_pages=true" >> "$GITHUB_OUTPUT"
           else
             echo "frontend_pages=false" >> "$GITHUB_OUTPUT"
@@ -89,14 +83,14 @@ EOF
         with:
           node-version: 20
           cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
+          cache-dependency-path: non-kernel/frontend/pnpm-lock.yaml
 
       - name: Install dependencies
-        working-directory: frontend
+        working-directory: non-kernel/frontend
         run: pnpm install --frozen-lockfile
 
       - name: Build static export
-        working-directory: frontend
+        working-directory: non-kernel/frontend
         env:
           NEXT_PUBLIC_API_URL: https://your-render-service.onrender.com
         run: pnpm run build
@@ -104,7 +98,7 @@ EOF
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/out
+          path: non-kernel/frontend/out
 
   deploy:
     runs-on: ubuntu-latest
