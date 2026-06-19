@@ -30,7 +30,7 @@ jobs:
               - 'requirements.txt'
               - 'pyproject.toml'
             frontend:
-              - 'frontend/**'
+              - 'non-kernel/frontend/**'
             docs:
               - 'docs/**'
               - '*.md'
