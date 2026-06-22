@@ -14,4 +14,4 @@ USER appuser
 EXPOSE 8000
 
 # Use shell form for proper environment variable expansion
-CMD uvicorn src.rastaimperium.main:app --host 0.0.0.0 --port ${PORT:-8000} --no-access-log
+CMD uvicorn src.ark_safety.main:app --host 0.0.0.0 --port ${PORT:-8000} --no-access-log
