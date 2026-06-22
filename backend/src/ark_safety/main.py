@@ -19,7 +19,6 @@ install_legacy_import_guard()
 SCHEMA_VERSION = "1.1.0"
 
 
-
 def _utc_iso_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -177,6 +176,9 @@ def trigger_rollback(actor: str, reason: str) -> dict[str, object]:
 
 # --- Static Frontend Serving ---
 STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "static"
+print(f"[STATIC] STATIC_DIR={STATIC_DIR}")
+print(f"[STATIC] EXISTS={STATIC_DIR.exists()}")
+print(f"[STATIC] INDEX={(STATIC_DIR / 'index.html').exists()}")
 
 if STATIC_DIR.exists():
     app.mount("/_next", StaticFiles(directory=str(STATIC_DIR / "_next")), name="next_assets")
@@ -200,3 +202,13 @@ if STATIC_DIR.exists():
         if root_index.is_file():
             return FileResponse(str(root_index), media_type="text/html")
         return HTMLResponse("<h1>404 — Not Found</h1>", status_code=404)
+
+@app.get("/", include_in_schema=False)
+async def serve_root():
+    root_index = STATIC_DIR / "index.html"
+    if root_index.is_file():
+        return FileResponse(str(root_index), media_type="text/html")
+    return HTMLResponse(
+        "<h1>Rasta Imperium</h1><p>index.html missing.</p>",
+        status_code=500,
+    )
