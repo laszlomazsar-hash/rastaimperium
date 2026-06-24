@@ -1,28 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EVO-V | Rasta Imperium</title>
-  <meta name="description" content="EVO-V system overview and constitutional computation model.">
+<link rel="stylesheet" href="/backend/static/shared/theme.css">
 </head>
 <body>
-  <nav>
-    <a href="/">Home</a> |
-    <a href="/empire">Empire</a> |
-    <a href="/pillars">Pillars</a> |
-    <a href="/codex">Codex</a> |
-    <a href="/architecture">Architecture</a> |
-    <a href="/evo-v">EVO-V</a>
-  </nav>
-
-  <main>
-    <h1>EVO-V</h1>
-    <p>EVO-V is the constitutional computation and deterministic governance kernel of the system, designed for replayability, auditability, and invariant enforcement.</p>
-  </main>
-
-  <footer>
-    <p>© Rasta Imperium</p>
-  </footer>
+<div id="nav"></div>
+<h1>EVO-V</h1>
+<!-- content -->
+<div id="footer"></div>
+<script>
+fetch("/backend/static/shared/nav.html").then(r => r.text()).then(html => document.getElementById("nav").innerHTML = html);
+fetch("/backend/static/shared/footer.html").then(r => r.text()).then(html => document.getElementById("footer").innerHTML = html);
+</script>
 </body>
 </html>

@@ -1,46 +1,18 @@
-/* Rasta Imperium Shared Theme - Constitutional Dark Aesthetic */
+/* Rasta Imperium Shared Theme */
 :root {
   --gold: #B8860B;
   --green: #2ECC71;
   --black: #0A0A0A;
   --surface: #121212;
   --text: #F4F4F5;
-  --text-muted: #A1A1AA;
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--black);
   color: var(--text);
-  margin: 0;
-  line-height: 1.6;
 }
-
 .glass {
   background: rgba(18, 18, 18, 0.85);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(184, 134, 11, 0.2);
-}
-
-.gold-gradient {
-  background: linear-gradient(90deg, #B8860B, #E2B13D, #B8860B);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.nav-link {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav-link:hover {
-  color: var(--gold) !important;
-  transform: translateY(-1px);
-}
-
-.panel {
-  background: rgba(18, 18, 18, 0.85);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(184, 134, 11, 0.2);
-  border-radius: 1rem;
-  padding: 1.5rem;
 }
