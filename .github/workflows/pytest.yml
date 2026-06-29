@@ -25,6 +25,9 @@ jobs:
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           fi
+          if [ -f backend/requirements-dev.txt ]; then
+            pip install -r backend/requirements-dev.txt
+          fi
           if [ -f pyproject.toml ]; then
             pip install -e .
           fi
@@ -32,7 +35,8 @@ jobs:
       - name: Run pytest
         run: |
           if [ -d "tests" ] || [ -d "test" ] || find . -name "*test*.py" | grep -q .; then
-            PYTHONPATH=. pytest --cov=. --cov-report=xml || echo "Tests failed or no tests found - continuing"
+            PYTHONPATH=. pytest || echo "Tests failed or no tests found - continuing"
           else
             echo "No tests directory found - skipping"
           fi
+
