@@ -1007,6 +1007,11 @@ class ComplianceEngine:
         self._override_engaged_tick: int | None = None
         self._override_cooldown_ticks = max(0, override_cooldown_ticks)
         self._override_min_hold_ticks = max(0, override_min_hold_ticks)
+        # Explicit FSM state: NORMAL → EMERGENCY → MIN_HOLD → COOLDOWN → LOCKED
+        self._override_state: str = "NORMAL"
+        self._override_hold_ticks: int = 0
+        self._override_min_hold_remaining: int = 0
+        self._override_cooldown_remaining: int = 0
         self._topology_registry: Dict[str, Any] = {"nodes": [], "edges": []}
         self._topology_policy_bounds: Dict[str, int] = {
             "min_nodes": 0,
@@ -1120,7 +1125,9 @@ class ComplianceEngine:
         manual_override: Literal["force_on", "force_off"] | None = None,
     ) -> bool:
         """
-        Evaluate emergency rollback override with anti-toggle controls.
+        Evaluate emergency rollback override using an explicit temporal FSM.
+
+        States: NORMAL → EMERGENCY → MIN_HOLD → COOLDOWN → LOCKED
 
         manual_override values:
           - ``force_on``: force emergency override on
@@ -1137,40 +1144,148 @@ class ComplianceEngine:
         predicates = self._evaluate_emergency_predicates(bounded_inputs)
         predicate_triggered = any(predicates.values())
 
-        reason_code = "PREDICATE_CLEAR"
-        desired_state = predicate_triggered
+        # --- Manual override short-circuits FSM ---
         if manual_override == "force_on":
-            desired_state = True
-            reason_code = "MANUAL_FORCE_ON"
-        elif manual_override == "force_off":
-            desired_state = False
-            reason_code = "MANUAL_FORCE_OFF"
-        elif predicate_triggered:
-            reason_code = "PREDICATE_TRIGGERED"
+            self._override_active = True
+            self._override_state = "EMERGENCY"
+            self._override_hold_ticks = 0
+            self._last_transition_tick = self._override_tick
+            self._override_engaged_tick = self._override_tick
+            self._override_history.append(
+                {
+                    "tick": self._override_tick,
+                    "override_active": True,
+                    "manual_override": manual_override,
+                    "reason_code": "MANUAL_FORCE_ON_APPLIED",
+                    "predicate_inputs": bounded_inputs,
+                    "predicates": predicates,
+                }
+            )
+            return True
 
-        elapsed_from_transition = self._override_tick - self._last_transition_tick
-        transitioned = False
-        if desired_state != self._override_active:
-            if elapsed_from_transition < self._override_cooldown_ticks:
-                reason_code = "COOLDOWN_SUPPRESSED"
-            elif self._override_active and desired_state is False:
-                held_ticks = self._override_tick - (self._override_engaged_tick or self._override_tick)
-                if held_ticks < self._override_min_hold_ticks:
-                    reason_code = "MIN_HOLD_SUPPRESSED"
-                else:
-                    self._override_active = False
-                    self._last_transition_tick = self._override_tick
-                    transitioned = True
-                    reason_code = f"{reason_code}_APPLIED"
-            else:
-                self._override_active = desired_state
+        if manual_override == "force_off":
+            self._override_active = False
+            self._override_state = "NORMAL"
+            self._override_hold_ticks = 0
+            self._override_min_hold_remaining = 0
+            self._override_cooldown_remaining = 0
+            self._last_transition_tick = self._override_tick
+            self._override_engaged_tick = None
+            self._override_history.append(
+                {
+                    "tick": self._override_tick,
+                    "override_active": False,
+                    "manual_override": manual_override,
+                    "reason_code": "MANUAL_FORCE_OFF",
+                    "predicate_inputs": bounded_inputs,
+                    "predicates": predicates,
+                }
+            )
+            return False
+
+        # --- Explicit FSM transitions ---
+        reason_code: str
+        result: bool
+
+        if self._override_state == "NORMAL":
+            if predicate_triggered:
+                # NORMAL → EMERGENCY
+                self._override_state = "EMERGENCY"
+                self._override_active = True
+                self._override_hold_ticks = 1
+                self._override_engaged_tick = self._override_tick
                 self._last_transition_tick = self._override_tick
-                transitioned = True
-                if self._override_active:
-                    self._override_engaged_tick = self._override_tick
+                reason_code = "PREDICATE_TRIGGERED"
+                result = True
+            else:
+                reason_code = "PREDICATE_CLEAR"
+                result = False
+
+        elif self._override_state == "EMERGENCY":
+            if predicate_triggered:
+                # Stay in EMERGENCY, accumulate hold ticks
+                self._override_hold_ticks += 1
+                reason_code = "PREDICATE_TRIGGERED"
+                result = True
+            else:
+                # Predicate cleared — transition to MIN_HOLD.
+                # The current tick counts as the first MIN_HOLD tick, so remaining
+                # = total required − ticks spent in EMERGENCY − 1 (this tick).
+                self._override_min_hold_remaining = max(0, self._override_min_hold_ticks - self._override_hold_ticks - 1)
+                self._override_state = "MIN_HOLD"
+                reason_code = "MIN_HOLD_SUPPRESSED"
+                result = True
+                # Eagerly drain MIN_HOLD → COOLDOWN → LOCKED within this tick
+                if self._override_min_hold_remaining == 0:
+                    self._override_cooldown_remaining = self._override_cooldown_ticks
+                    self._override_state = "COOLDOWN"
+                    if self._override_cooldown_remaining == 0:
+                        self._override_state = "LOCKED"
+                        self._override_active = False
+                        reason_code = "PREDICATE_CLEAR_APPLIED"
+                        result = False
+                    else:
+                        self._override_cooldown_remaining -= 1
+                        if self._override_cooldown_remaining == 0:
+                            self._override_state = "LOCKED"
+                            self._override_active = False
+                            reason_code = "PREDICATE_CLEAR_APPLIED"
+                            result = False
+
+        elif self._override_state == "MIN_HOLD":
+            if self._override_min_hold_remaining > 0:
+                self._override_min_hold_remaining -= 1
+                if self._override_min_hold_remaining == 0:
+                    # MIN_HOLD exhausted — transition to COOLDOWN
+                    self._override_cooldown_remaining = self._override_cooldown_ticks
+                    self._override_state = "COOLDOWN"
+                    # Eagerly drain COOLDOWN within this tick
+                    if self._override_cooldown_remaining == 0:
+                        self._override_state = "LOCKED"
+                        self._override_active = False
+                        reason_code = "PREDICATE_CLEAR_APPLIED"
+                        result = False
+                    else:
+                        self._override_cooldown_remaining -= 1
+                        if self._override_cooldown_remaining == 0:
+                            self._override_state = "LOCKED"
+                            self._override_active = False
+                            reason_code = "PREDICATE_CLEAR_APPLIED"
+                            result = False
+                        else:
+                            reason_code = "COOLDOWN_SUPPRESSED"
+                            result = True
                 else:
-                    self._override_engaged_tick = None
-                reason_code = f"{reason_code}_APPLIED"
+                    reason_code = "MIN_HOLD_SUPPRESSED"
+                    result = True
+            else:
+                # min_hold_remaining already 0 — should not normally reach here
+                self._override_cooldown_remaining = self._override_cooldown_ticks
+                self._override_state = "COOLDOWN"
+                reason_code = "COOLDOWN_SUPPRESSED"
+                result = True
+
+        elif self._override_state == "COOLDOWN":
+            if self._override_cooldown_remaining > 0:
+                self._override_cooldown_remaining -= 1
+                if self._override_cooldown_remaining == 0:
+                    self._override_state = "LOCKED"
+                    self._override_active = False
+                    reason_code = "PREDICATE_CLEAR_APPLIED"
+                    result = False
+                else:
+                    reason_code = "COOLDOWN_SUPPRESSED"
+                    result = True
+            else:
+                self._override_state = "LOCKED"
+                self._override_active = False
+                reason_code = "PREDICATE_CLEAR_APPLIED"
+                result = False
+
+        else:  # LOCKED
+            self._override_active = False
+            reason_code = "PREDICATE_CLEAR_APPLIED"
+            result = False
 
         self._override_history.append(
             {
@@ -1178,12 +1293,11 @@ class ComplianceEngine:
                 "override_active": self._override_active,
                 "manual_override": manual_override,
                 "reason_code": reason_code,
-                "transitioned": transitioned,
                 "predicate_inputs": bounded_inputs,
                 "predicates": predicates,
             }
         )
-        return self._override_active
+        return result
 
 
     def register_likelihood(
