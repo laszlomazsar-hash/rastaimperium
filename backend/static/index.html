@@ -3,55 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rasta Imperium — Sovereign Digital Territory</title>
+    <title>Rasta Imperium — Constitutional Infrastructure for Trustworthy AI</title>
     <link rel="stylesheet" href="/backend/static/shared/theme.css">
     <style>
+        /* Hero Section */
         .hero {
-            min-height: 60vh;
+            min-height: 70vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.08) 0%, rgba(46, 204, 113, 0.05) 100%);
             text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, rgba(184, 134, 11, 0.05) 0%, rgba(46, 204, 113, 0.05) 100%);
+        }
+        .hero-content {
+            max-width: 900px;
         }
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: 700;
             margin-bottom: 20px;
             color: #B8860B;
             font-family: Georgia, serif;
+            line-height: 1.2;
         }
-        .hero .subtitle {
-            font-size: 1.5rem;
-            color: #2ECC71;
-            margin-bottom: 30px;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-        .hero .tagline {
-            font-size: 1.1rem;
-            color: #a0a0a0;
+        .hero .subheading {
+            font-size: 1.2rem;
+            color: #b0b0b0;
             margin-bottom: 40px;
             line-height: 1.8;
-            max-width: 700px;
+            max-width: 750px;
             margin-left: auto;
             margin-right: auto;
         }
-        .cta-buttons {
+        .cta-group {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 40px;
+            margin-bottom: 30px;
         }
         .cta-button {
-            padding: 12px 32px;
+            padding: 14px 36px;
             border-radius: 4px;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
             border: 2px solid;
+            font-size: 1rem;
         }
         .cta-primary {
             background: #B8860B;
@@ -62,6 +61,7 @@
             background: #d4a017;
             border-color: #d4a017;
             transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(184, 134, 11, 0.2);
         }
         .cta-secondary {
             background: transparent;
@@ -72,39 +72,172 @@
             background: rgba(46, 204, 113, 0.1);
             transform: translateY(-2px);
         }
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            padding: 60px 20px;
+        .cta-tertiary {
+            background: transparent;
+            color: #888;
+            border-color: #888;
+        }
+        .cta-tertiary:hover {
+            color: #b0b0b0;
+            border-color: #b0b0b0;
+            background: rgba(176, 176, 176, 0.05);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 80px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
-        .feature-card {
+        section h2 {
+            font-size: 2.2rem;
+            color: #B8860B;
+            margin-bottom: 50px;
+            text-align: center;
+            font-family: Georgia, serif;
+        }
+
+        /* Core Pillars */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .pillar-card {
             padding: 30px;
             border: 1px solid #B8860B;
             border-radius: 4px;
             background: rgba(184, 134, 11, 0.05);
+            text-align: center;
         }
-        .feature-card h3 {
+        .pillar-card h3 {
             color: #B8860B;
             margin-bottom: 15px;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
-        .feature-card p {
-            color: #b0b0b0;
+        .pillar-card p {
+            color: #888;
             line-height: 1.6;
-        }
-        .status {
-            text-align: center;
-            padding: 20px;
-            color: #2ECC71;
             font-size: 0.95rem;
-            animation: pulse 2s infinite;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .project-card {
+            padding: 35px;
+            border: 1px solid #2ECC71;
+            border-radius: 4px;
+            background: rgba(46, 204, 113, 0.05);
+        }
+        .project-card h3 {
+            color: #2ECC71;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .project-card p {
+            color: #888;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        .project-card a {
+            color: #2ECC71;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        .project-card a:hover {
+            color: #34D399;
+        }
+
+        /* Roadmap Section */
+        .roadmap-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .roadmap-stage {
+            padding: 25px;
+            background: rgba(184, 134, 11, 0.08);
+            border-left: 4px solid #B8860B;
+            border-radius: 2px;
+        }
+        .roadmap-stage h4 {
+            color: #B8860B;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .roadmap-stage p {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Founder Section */
+        .founder-section {
+            background: rgba(184, 134, 11, 0.05);
+            border: 1px solid #B8860B;
+            border-radius: 4px;
+            padding: 50px;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .founder-section h3 {
+            color: #B8860B;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .founder-section p {
+            color: #b0b0b0;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+        .founder-section a {
+            display: inline-block;
+            color: #2ECC71;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .founder-section a:hover {
+            color: #34D399;
+        }
+
+        /* Partners Section */
+        .partners-section {
+            background: rgba(46, 204, 113, 0.05);
+            border: 1px solid #2ECC71;
+            border-radius: 4px;
+            padding: 50px;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .partners-section h3 {
+            color: #2ECC71;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .partners-section p {
+            color: #b0b0b0;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* Spacing */
+        .section-spacer {
+            height: 40px;
         }
     </style>
 </head>
@@ -112,39 +245,120 @@
     <div id="nav"></div>
     
     <main>
+        <!-- Hero Section -->
         <section class="hero">
-            <div>
-                <h1>Rasta Imperium</h1>
-                <p class="subtitle">Sovereign Digital Territory</p>
-                <p class="tagline">Deterministic Governance for Civilization-Scale AI</p>
-                <p style="color: #888; font-size: 0.95rem; margin-bottom: 30px;">Replayable • Auditable • Mythic-Technical Architecture</p>
+            <div class="hero-content">
+                <h1>Constitutional Infrastructure for Trustworthy AI Systems</h1>
+                <p class="subheading">Rasta Imperium is building auditable, deterministic governance infrastructure for large-scale autonomous systems. We design systems where every decision is verifiable, replayable, and aligned with constitutional principles.</p>
                 
-                <div class="cta-buttons">
-                    <a href="/about" class="cta-button cta-primary">About the Founder</a>
-                    <a href="/architecture" class="cta-button cta-secondary">Architecture</a>
-                    <a href="/evo-v" class="cta-button cta-secondary">EVO-V Kernel</a>
+                <div class="cta-group">
+                    <a href="/architecture" class="cta-button cta-primary">Explore Architecture</a>
+                    <a href="/vision" class="cta-button cta-secondary">Read the Vision</a>
+                </div>
+                <div class="cta-group">
+                    <a href="/about" class="cta-button cta-tertiary">Meet the Founder</a>
                 </div>
             </div>
         </section>
 
-        <section class="features">
-            <div class="feature-card">
-                <h3>Constitutional Intelligence</h3>
-                <p>Deterministic governance systems that enforce epistemic integrity across autonomous infrastructures.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Replayable & Auditable</h3>
-                <p>Every decision is verifiable, traceable, and reproducible — the foundation of trustworthy AI.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Mythic-Technical Synthesis</h3>
-                <p>Ancient wisdom patterns integrated with modern sovereign systems for civilization-scale impact.</p>
+        <!-- Core Pillars -->
+        <section>
+            <h2>Core Pillars</h2>
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <h3>Deterministic Execution</h3>
+                    <p>Every decision follows explicit rules. No hidden randomness. Full reproducibility across runs.</p>
+                </div>
+                <div class="pillar-card">
+                    <h3>Constitutional Governance</h3>
+                    <p>Systems enforce rules at the kernel level. Governance is embedded, not bolted on.</p>
+                </div>
+                <div class="pillar-card">
+                    <h3>Replayable Audit Trails</h3>
+                    <p>Complete decision history. Verify any outcome. Trace causality from input to decision.</p>
+                </div>
+                <div class="pillar-card">
+                    <h3>Epistemic Integrity</h3>
+                    <p>Truth-seeking systems that preserve independence and resist corruption of reasoning.</p>
+                </div>
             </div>
         </section>
 
-        <div class="status">
-            Core restored. Full experience loading...
-        </div>
+        <div class="section-spacer"></div>
+
+        <!-- Projects -->
+        <section>
+            <h2>Key Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>EVO-V Kernel</h3>
+                    <p>The deterministic governance layer. A replayable, auditable runtime for constitutional AI systems.</p>
+                    <a href="/evo-v">Learn more →</a>
+                </div>
+                <div class="project-card">
+                    <h3>MEFS Reality Engine</h3>
+                    <p>Multi-Entity Formal Simulation. Modeling civilization-scale systems with formal verification.</p>
+                    <a href="/codex">Explore →</a>
+                </div>
+                <div class="project-card">
+                    <h3>Witness Lab</h3>
+                    <p>Epistemic verification infrastructure. Tools for validating system integrity and decision provenance.</p>
+                    <a href="/applications">Discover →</a>
+                </div>
+                <div class="project-card">
+                    <h3>Governance & Codex</h3>
+                    <p>Constitutional frameworks and institutional knowledge. The narrative and policy layer.</p>
+                    <a href="/governance-model">Read →</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-spacer"></div>
+
+        <!-- Roadmap -->
+        <section>
+            <h2>Development Roadmap</h2>
+            <div class="roadmap-timeline">
+                <div class="roadmap-stage">
+                    <h4>Research</h4>
+                    <p>Foundational work on deterministic governance, formal verification, and constitutional alignment.</p>
+                </div>
+                <div class="roadmap-stage">
+                    <h4>Prototype</h4>
+                    <p>Building EVO-V kernel and core infrastructure. Proof of concept for replayable systems.</p>
+                </div>
+                <div class="roadmap-stage">
+                    <h4>Pilot Deployments</h4>
+                    <p>Real-world testing with research partners and institutional pilots.</p>
+                </div>
+                <div class="roadmap-stage">
+                    <h4>Production Platform</h4>
+                    <p>Scalable, production-ready infrastructure for autonomous systems governance.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-spacer"></div>
+
+        <!-- Founder -->
+        <section>
+            <div class="founder-section">
+                <h3>About the Founder</h3>
+                <p><strong>Laszlo Mazsar</strong> is an AI systems architect specializing in constitutional intelligence and deterministic governance. He designs infrastructure for trustworthy autonomous systems at civilization scale.</p>
+                <a href="/about">Read full biography →</a>
+            </div>
+        </section>
+
+        <div class="section-spacer"></div>
+
+        <!-- Partners -->
+        <section>
+            <div class="partners-section">
+                <h3>Collaboration & Partnerships</h3>
+                <p>We are actively seeking research collaborators, public-sector pilots, and strategic technology partners interested in advancing trustworthy AI governance.</p>
+            </div>
+        </section>
+
     </main>
 
     <div id="footer"></div>
