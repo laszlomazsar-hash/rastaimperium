@@ -1,185 +1,351 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Rasta Imperium — Constitutional AI Infrastructure</title>
-    <meta name="description" content="Rasta Imperium builds constitutional, deterministic AI infrastructure for auditable, replayable, and epistemically safe autonomous systems." />
-    <!-- OpenGraph -->
-    <meta property="og:title" content="Rasta Imperium — Constitutional AI Infrastructure" />
-    <meta property="og:description" content="Deterministic governance systems for civilization-scale AI. Replayable, auditable, and structured for epistemic integrity." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://rastaimperium.com/" />
-    <meta property="og:image" content="/og-image.png" />
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Rasta Imperium — Constitutional AI Infrastructure" />
-    <meta name="twitter:description" content="Deterministic governance systems for AI infrastructure." />
-    <meta name="twitter:image" content="/og-image.png" />
-    <!-- Favicon -->
-    <link rel="icon" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/icon.png" />
-    <!-- Styles -->
-    <link rel="stylesheet" href="/shared/theme.css" />
-    <!-- Structured Data -->
+    <meta name="description" content="Deterministic governance systems for civilization-scale AI. Replayable, auditable, and structured for epistemic integrity. Engineering truth into systems."/>
+    <meta property="og:title" content="Rasta Imperium — Constitutional AI Infrastructure"/>
+    <meta property="og:description" content="Deterministic governance systems for civilization-scale AI. Replayable, auditable, sovereign."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://rastaimperium.com/"/>
+    <meta property="og:image" content="/og-image.png"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Rasta Imperium — Constitutional AI Infrastructure"/>
+    <meta name="twitter:description" content="Deterministic governance systems for AI infrastructure."/>
+    <meta name="twitter:image" content="/og-image.png"/>
+    <link rel="icon" href="/favicon.svg"/>
+    <link rel="apple-touch-icon" href="/icon.png"/>
+    <link rel="stylesheet" href="/shared/theme.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Rasta Imperium",
-      "url": "https://rastaimperium.com",
-      "description": "Constitutional AI infrastructure for deterministic, auditable systems.",
-      "founder": {
-        "@type": "Person",
-        "name": "Laszlo Mazsar"
-      }
-    }
+    {"@context":"https://schema.org","@type":"Organization","name":"Rasta Imperium","url":"https://rastaimperium.com","description":"Constitutional AI infrastructure for deterministic, auditable systems.","founder":{"@type":"Person","name":"Laszlo Mazsar"}}
     </script>
     <style>
-        .hero { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px; background: linear-gradient(135deg, rgba(184, 134, 11, 0.08) 0%, rgba(46, 204, 113, 0.05) 100%); text-align: center; }
-        .hero-content { max-width: 900px; }
-        .hero h1 { font-size: 3.2rem; font-weight: 700; margin-bottom: 20px; color: #B8860B; font-family: Georgia, serif; line-height: 1.2; }
-        .hero .subheading { font-size: 1.2rem; color: #b0b0b0; margin-bottom: 40px; line-height: 1.8; max-width: 750px; margin-left: auto; margin-right: auto; }
-        .cta-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; }
-        .cta-button { padding: 14px 36px; border-radius: 4px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; border: 2px solid; font-size: 1rem; }
-        .cta-primary { background: #B8860B; color: #0a0e27; border-color: #B8860B; }
-        .cta-primary:hover { background: #d4a017; border-color: #d4a017; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(184, 134, 11, 0.2); }
-        .cta-secondary { background: transparent; color: #2ECC71; border-color: #2ECC71; }
-        .cta-secondary:hover { background: rgba(46, 204, 113, 0.1); transform: translateY(-2px); }
-        .cta-tertiary { background: transparent; color: #888; border-color: #888; }
-        .cta-tertiary:hover { color: #b0b0b0; border-color: #b0b0b0; background: rgba(176, 176, 176, 0.05); }
-        section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
-        section h2 { font-size: 2.2rem; color: #B8860B; margin-bottom: 50px; text-align: center; font-family: Georgia, serif; }
-        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .pillar-card { padding: 30px; border: 1px solid #B8860B; border-radius: 4px; background: rgba(184, 134, 11, 0.05); text-align: center; }
-        .pillar-card h3 { color: #B8860B; margin-bottom: 15px; font-size: 1.2rem; font-weight: 600; }
-        .pillar-card p { color: #888; line-height: 1.6; font-size: 0.95rem; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .project-card { padding: 35px; border: 1px solid #2ECC71; border-radius: 4px; background: rgba(46, 204, 113, 0.05); }
-        .project-card h3 { color: #2ECC71; margin-bottom: 12px; font-size: 1.3rem; font-weight: 600; }
-        .project-card p { color: #888; line-height: 1.6; font-size: 0.95rem; margin-bottom: 15px; }
-        .project-card a { color: #2ECC71; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.3s ease; }
-        .project-card a:hover { color: #34D399; }
-        .roadmap-timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px; }
-        .roadmap-stage { padding: 25px; background: rgba(184, 134, 11, 0.08); border-left: 4px solid #B8860B; border-radius: 2px; }
-        .roadmap-stage h4 { color: #B8860B; margin-bottom: 10px; font-size: 1.1rem; font-weight: 600; }
-        .roadmap-stage p { color: #888; font-size: 0.9rem; line-height: 1.5; }
-        .founder-section { background: rgba(184, 134, 11, 0.05); border: 1px solid #B8860B; border-radius: 4px; padding: 50px; text-align: center; max-width: 700px; margin: 0 auto; }
-        .founder-section h3 { color: #B8860B; margin-bottom: 20px; font-size: 1.5rem; }
-        .founder-section p { color: #b0b0b0; line-height: 1.8; margin-bottom: 25px; font-size: 0.95rem; }
-        .founder-section a { display: inline-block; color: #2ECC71; text-decoration: none; font-weight: 600; transition: color 0.3s ease; }
-        .founder-section a:hover { color: #34D399; }
-        .partners-section { background: rgba(46, 204, 113, 0.05); border: 1px solid #2ECC71; border-radius: 4px; padding: 50px; text-align: center; max-width: 700px; margin: 0 auto; }
-        .partners-section h3 { color: #2ECC71; margin-bottom: 20px; font-size: 1.5rem; }
-        .partners-section p { color: #b0b0b0; line-height: 1.8; font-size: 1rem; }
-        .section-spacer { height: 40px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--gold:#B8860B;--emerald:#2ECC71;--obsidian:#0a0a0a;--charcoal:#121212;--surface:#1a1a1a;--text:#f4f4f5;--muted:#a1a1aa;--dim:#71717a}
+        body{background:var(--obsidian);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.7;overflow-x:hidden}
+        h1,h2,h3{font-family:'Space Grotesk','Inter',sans-serif;font-weight:600}
+        #nav{position:sticky;top:0;z-index:1000}
+        .geo-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.035}
+        section{position:relative;z-index:1;padding:120px 24px}
+        .container{max-width:1100px;margin:0 auto}
+        .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:80px;position:relative;overflow:hidden}
+        .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(184,134,11,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(46,204,113,0.03) 0%,transparent 50%)}
+        .hero h1{font-size:clamp(2.5rem,6vw,4.5rem);letter-spacing:-0.02em;line-height:1.1;margin-bottom:24px;background:linear-gradient(135deg,#f4f4f5 0%,#B8860B 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero .subtitle{font-size:clamp(1rem,2vw,1.25rem);color:var(--muted);max-width:680px;margin:0 auto 48px;line-height:1.8}
+        .hero .badge{display:inline-block;padding:6px 16px;border:1px solid rgba(184,134,11,0.3);border-radius:100px;font-size:0.75rem;letter-spacing:0.15em;color:var(--gold);margin-bottom:32px;text-transform:uppercase}
+        .cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+        .btn{padding:14px 32px;border-radius:8px;font-weight:600;text-decoration:none;font-size:0.9rem;transition:all 0.3s;border:1.5px solid transparent}
+        .btn-primary{background:var(--gold);color:#000;border-color:var(--gold)}
+        .btn-primary:hover{background:#d4a017;transform:translateY(-2px);box-shadow:0 8px 24px rgba(184,134,11,0.25)}
+        .btn-secondary{background:transparent;color:var(--emerald);border-color:var(--emerald)}
+        .btn-secondary:hover{background:rgba(46,204,113,0.08);transform:translateY(-2px)}
+        .btn-ghost{background:transparent;color:var(--muted);border-color:rgba(161,161,170,0.3)}
+        .btn-ghost:hover{color:var(--text);border-color:rgba(244,244,245,0.3)}
+        .section-label{font-size:0.7rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;font-weight:600}
+        .section-title{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:20px;letter-spacing:-0.01em}
+        .section-desc{color:var(--muted);max-width:640px;font-size:1rem;line-height:1.8}
+        .card{background:rgba(26,26,26,0.7);backdrop-filter:blur(12px);border:1px solid rgba(184,134,11,0.12);border-radius:16px;padding:32px;transition:all 0.4s}
+        .card:hover{border-color:rgba(184,134,11,0.35);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+        .card h3{font-size:1.15rem;margin-bottom:12px;color:var(--text)}
+        .card p{color:var(--muted);font-size:0.9rem;line-height:1.7}
+        .card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;background:rgba(184,134,11,0.08);border:1px solid rgba(184,134,11,0.15)}
+        .card-icon svg{width:24px;height:24px;stroke:var(--gold);fill:none;stroke-width:1.5}
+        .grid-2{display:grid;grid-template-columns:1fr;gap:24px}
+        .grid-3{display:grid;grid-template-columns:1fr;gap:24px}
+        @media(min-width:640px){.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}}
+        @media(min-width:900px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+        .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .arch-stack{display:flex;flex-direction:column;gap:4px;max-width:600px;margin:40px auto 0}
+        .arch-layer{display:flex;align-items:center;gap:16px;padding:14px 20px;border-radius:8px;background:rgba(184,134,11,0.04);border:1px solid rgba(184,134,11,0.1);transition:all 0.3s}
+        .arch-layer:hover{background:rgba(184,134,11,0.08);border-color:rgba(184,134,11,0.3)}
+        .arch-layer .layer-id{font-size:0.75rem;font-weight:700;color:var(--gold);min-width:28px}
+        .arch-layer .layer-name{font-size:0.9rem;color:var(--text)}
+        .timeline{position:relative;padding-left:32px}
+        .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),var(--emerald),transparent)}
+        .timeline-item{position:relative;margin-bottom:40px}
+        .timeline-item::before{content:'';position:absolute;left:-28px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid var(--obsidian)}
+        .timeline-item.active::before{background:var(--emerald);box-shadow:0 0 12px rgba(46,204,113,0.4)}
+        .timeline-item h4{font-size:1rem;margin-bottom:4px}
+        .timeline-item p{color:var(--muted);font-size:0.875rem}
+        footer{border-top:1px solid rgba(184,134,11,0.15);padding:80px 24px 40px;text-align:center;position:relative;z-index:1}
+        .footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-bottom:32px}
+        .footer-links a{color:var(--dim);text-decoration:none;font-size:0.85rem;transition:color 0.3s}
+        .footer-links a:hover{color:var(--gold)}
+        .footer-copy{color:var(--dim);font-size:0.75rem;margin-top:24px}
+        .sep{width:60px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:0 auto 40px}
+        .alt-bg{background:rgba(184,134,11,0.02)}
+        .alt-bg2{background:rgba(46,204,113,0.015)}
+        @media(max-width:640px){section{padding:80px 16px}.hero{padding-top:60px}}
     </style>
 </head>
 <body>
-    <div id="nav"></div>
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Constitutional Infrastructure for Trustworthy AI Systems</h1>
-                <p class="subheading">Rasta Imperium is building auditable, deterministic governance infrastructure for large-scale autonomous systems. We design systems where every decision is verifiable, replayable, and aligned with constitutional principles.</p>
-                <div class="cta-group">
-                    <a href="/architecture" class="cta-button cta-primary">Explore Architecture</a>
-                    <a href="/vision" class="cta-button cta-secondary">Read the Vision</a>
-                </div>
-                <div class="cta-group">
-                    <a href="/about" class="cta-button cta-tertiary">Meet the Founder</a>
-                </div>
+<div id="nav"></div>
+
+<!-- Sacred Geometry Background -->
+<svg class="geo-canvas" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+    <defs>
+        <pattern id="hexgrid" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+            <path d="M30 0 L60 15 L60 37 L30 52 L0 37 L0 15 Z" fill="none" stroke="#B8860B" stroke-width="0.3"/>
+        </pattern>
+    </defs>
+    <rect width="1000" height="1000" fill="url(#hexgrid)"/>
+    <circle cx="500" cy="500" r="80" fill="none" stroke="#B8860B" stroke-width="0.3" opacity="0.5"/>
+    <circle cx="500" cy="420" r="80" fill="none" stroke="#B8860B" stroke-width="0.3" opacity="0.4"/>
+    <circle cx="569" cy="460" r="80" fill="none" stroke="#B8860B" stroke-width="0.3" opacity="0.3"/>
+    <circle cx="569" cy="540" r="80" fill="none" stroke="#B8860B" stroke-width="0.3" opacity="0.3"/>
+    <circle cx="500" cy="580" r="80" fill="none" stroke="#B8860B" stroke-width="0.3" opacity="0.4"/>
+    <circle cx="431" cy="540" r="80" fill="none" stroke="#B8860B" stroke-width="0.3" opacity="0.3"/>
+    <circle cx="431" cy="460" r="80" fill="none" stroke="#B8860B" stroke-width="0.3" opacity="0.3"/>
+</svg>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container" style="position:relative;z-index:2">
+        <div class="badge reveal">Constitutional Intelligence Infrastructure</div>
+        <h1 class="reveal">Engineering Truth<br/>Into Systems</h1>
+        <p class="subtitle reveal">Deterministic governance for civilization-scale AI. Every decision replayable. Every state auditable. Every agent constitutionally bound.</p>
+        <div class="cta-row reveal">
+            <a href="/evo-v" class="btn btn-primary">Explore EVO-V</a>
+            <a href="/architecture" class="btn btn-secondary">View Architecture</a>
+            <a href="/codex" class="btn btn-ghost">Read the Constitution</a>
+        </div>
+    </div>
+</section>
+
+<!-- VISION -->
+<section>
+    <div class="container">
+        <p class="section-label reveal">Vision</p>
+        <h2 class="section-title reveal">Governance Beyond Software</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal">We are building the constitutional physics for autonomous intelligence. Not to control AI — but to ensure it governs itself with the same integrity we demand of sovereign nations. Replayable. Auditable. Deterministic.</p>
+    </div>
+</section>
+
+<!-- WHAT IS EVO-V -->
+<section class="alt-bg">
+    <div class="container">
+        <p class="section-label reveal">Core System</p>
+        <h2 class="section-title reveal">What is EVO-V?</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal" style="margin-bottom:48px">EVO-V is a constitutional operating system for autonomous agents. It enforces deterministic governance at every layer — from hardware constraints to epistemic calibration. Not a chatbot. Not a wrapper. A governance engine.</p>
+        <div class="grid-3">
+            <div class="card reveal">
+                <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <h3>Deterministic Execution</h3>
+                <p>Every agent action is causally traceable. No stochastic drift. No hidden state mutations. Pure constitutional physics.</p>
             </div>
-        </section>
-        <section>
-            <h2>Core Pillars</h2>
-            <div class="pillars-grid">
-                <div class="pillar-card">
-                    <h3>Deterministic Execution</h3>
-                    <p>Every decision follows explicit rules. No hidden randomness. Full reproducibility across runs.</p>
-                </div>
-                <div class="pillar-card">
-                    <h3>Constitutional Governance</h3>
-                    <p>Systems enforce rules at the kernel level. Governance is embedded, not bolted on.</p>
-                </div>
-                <div class="pillar-card">
-                    <h3>Replayable Audit Trails</h3>
-                    <p>Complete decision history. Verify any outcome. Trace causality from input to decision.</p>
-                </div>
-                <div class="pillar-card">
-                    <h3>Epistemic Integrity</h3>
-                    <p>Truth-seeking systems that preserve independence and resist corruption of reasoning.</p>
-                </div>
+            <div class="card reveal">
+                <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <h3>Constitutional Enforcement</h3>
+                <p>Seven articles of governance enforced at the kernel level. No agent escapes the constitution. No decision bypasses the ledger.</p>
             </div>
-        </section>
-        <div class="section-spacer"></div>
-        <section>
-            <h2>Key Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>EVO-V Kernel</h3>
-                    <p>The deterministic governance layer. A replayable, auditable runtime for constitutional AI systems.</p>
-                    <a href="/evo-v">Learn more →</a>
-                </div>
-                <div class="project-card">
-                    <h3>MEFS Reality Engine</h3>
-                    <p>Multi-Entity Formal Simulation. Modeling civilization-scale systems with formal verification.</p>
-                    <a href="/codex">Explore →</a>
-                </div>
-                <div class="project-card">
-                    <h3>Witness Lab</h3>
-                    <p>Epistemic verification infrastructure. Tools for validating system integrity and decision provenance.</p>
-                    <a href="/applications">Discover →</a>
-                </div>
-                <div class="project-card">
-                    <h3>Governance & Codex</h3>
-                    <p>Constitutional frameworks and institutional knowledge. The narrative and policy layer.</p>
-                    <a href="/governance-model">Read →</a>
-                </div>
+            <div class="card reveal">
+                <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <h3>Immutable Replay</h3>
+                <p>Complete state history sealed cryptographically. Any moment in system history can be replayed and verified independently.</p>
             </div>
-        </section>
-        <div class="section-spacer"></div>
-        <section>
-            <h2>Development Roadmap</h2>
-            <div class="roadmap-timeline">
-                <div class="roadmap-stage">
-                    <h4>Research</h4>
-                    <p>Foundational work on deterministic governance, formal verification, and constitutional alignment.</p>
-                </div>
-                <div class="roadmap-stage">
-                    <h4>Prototype</h4>
-                    <p>Building EVO-V kernel and core infrastructure. Proof of concept for replayable systems.</p>
-                </div>
-                <div class="roadmap-stage">
-                    <h4>Pilot Deployments</h4>
-                    <p>Real-world testing with research partners and institutional pilots.</p>
-                </div>
-                <div class="roadmap-stage">
-                    <h4>Production Platform</h4>
-                    <p>Scalable, production-ready infrastructure for autonomous systems governance.</p>
-                </div>
-            </div>
-        </section>
-        <div class="section-spacer"></div>
-        <section>
-            <div class="founder-section">
-                <h3>About the Founder</h3>
-                <p><strong>Laszlo Mazsar</strong> is an AI systems architect specializing in constitutional intelligence and deterministic governance. He designs infrastructure for trustworthy autonomous systems at civilization scale.</p>
-                <a href="/about">Read full biography →</a>
-            </div>
-        </section>
-        <div class="section-spacer"></div>
-        <section>
-            <div class="partners-section">
-                <h3>Collaboration & Partnerships</h3>
-                <p>We are actively seeking research collaborators, public-sector pilots, and strategic technology partners interested in advancing trustworthy AI governance.</p>
-            </div>
-        </section>
-    </main>
-    <div id="footer"></div>
-    <script>
-        fetch("/shared/nav.html").then(r => r.text()).then(html => document.getElementById("nav").innerHTML = html);
-        fetch("/shared/footer.html").then(r => r.text()).then(html => document.getElementById("footer").innerHTML = html);
-    </script>
+        </div>
+    </div>
+</section>
+
+<!-- MEFS REALITY ENGINE -->
+<section>
+    <div class="container">
+        <p class="section-label reveal">Engine</p>
+        <h2 class="section-title reveal">MEFS Reality Engine</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal" style="margin-bottom:48px">The Multi-dimensional Epistemic Field System. A reality engine that models truth as a geometric manifold — where knowledge has shape, drift has direction, and governance has topology.</p>
+        <div class="grid-2">
+            <div class="card reveal"><h3>Epistemic Fields</h3><p>Knowledge represented as vector fields in calibrated space. Beliefs have magnitude, direction, and measurable uncertainty.</p></div>
+            <div class="card reveal"><h3>Drift Detection</h3><p>Real-time monitoring of epistemic drift using Lyapunov stability analysis. The system knows when it's losing coherence.</p></div>
+            <div class="card reveal"><h3>Causal Modeling</h3><p>Structural causal models enforced at the inference layer. No correlation masquerading as causation.</p></div>
+            <div class="card reveal"><h3>Geometric Constraints</h3><p>Identity maintained across transformations through manifold constraints. The core topology is preserved even under evolution.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="alt-bg2">
+    <div class="container">
+        <p class="section-label reveal">Capabilities</p>
+        <h2 class="section-title reveal">Built for Sovereignty</h2>
+        <div class="sep reveal"></div>
+        <div class="grid-3">
+            <div class="card reveal"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Cryptographic Sealing</h3><p>Every state transition sealed with cryptographic proofs. Tamper-evident by construction.</p></div>
+            <div class="card reveal"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Bayesian Calibration</h3><p>Continuous epistemic calibration. The system knows what it doesn't know — and quantifies it precisely.</p></div>
+            <div class="card reveal"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Real-time Invariants</h3><p>Constitutional invariants enforced in real-time. Violations detected and remediated before propagation.</p></div>
+            <div class="card reveal"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Multi-Agent Orchestration</h3><p>100+ governed agents operating within constitutional boundaries. Coordination without compromise.</p></div>
+            <div class="card reveal"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Witness Protocol</h3><p>External verification of internal states. Third-party auditors can independently verify system integrity.</p></div>
+            <div class="card reveal"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Open Constitutional APIs</h3><p>Programmatic access to governance primitives. Build constitutionally-bound applications on sovereign infrastructure.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section>
+    <div class="container">
+        <p class="section-label reveal">Infrastructure</p>
+        <h2 class="section-title reveal">Nine-Layer Civilization Stack</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal" style="margin-bottom:32px">From cosmological narrative to human interface — nine layers of deterministic governance, each enforcing constitutional constraints on the layer above.</p>
+        <div class="arch-stack reveal">
+            <div class="arch-layer"><span class="layer-id">L9</span><span class="layer-name">Cosmology Layer — Mythic narrative and civilizational meaning</span></div>
+            <div class="arch-layer"><span class="layer-id">L8</span><span class="layer-name">Constitutional Layer — Seven Articles, hardware-enforced</span></div>
+            <div class="arch-layer"><span class="layer-id">L7</span><span class="layer-name">Identity + Trust — Immutable replay ledger</span></div>
+            <div class="arch-layer"><span class="layer-id">L6</span><span class="layer-name">Epistemic Governance — Bayesian calibration, drift detection</span></div>
+            <div class="arch-layer"><span class="layer-id">L5</span><span class="layer-name">Deterministic Intelligence — Causal modeling, symbolic reasoning</span></div>
+            <div class="arch-layer"><span class="layer-id">L4</span><span class="layer-name">Agentic Infrastructure — Deep Seed orchestration</span></div>
+            <div class="arch-layer"><span class="layer-id">L3</span><span class="layer-name">Operational Systems — Real-time invariant enforcement</span></div>
+            <div class="arch-layer"><span class="layer-id">L2</span><span class="layer-name">Economic + Institutional — Enterprise integration</span></div>
+            <div class="arch-layer"><span class="layer-id">L1</span><span class="layer-name">Human Interface — Progressive initiation portals</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- PILLARS -->
+<section class="alt-bg">
+    <div class="container">
+        <p class="section-label reveal">Foundation</p>
+        <h2 class="section-title reveal">The Seven Pillars</h2>
+        <div class="sep reveal"></div>
+        <div class="grid-3" style="margin-top:40px">
+            <div class="card reveal"><h3>I. Determinism</h3><p>Every output traceable to its inputs. No hidden randomness.</p></div>
+            <div class="card reveal"><h3>II. Replayability</h3><p>Any state can be reconstructed from the ledger alone.</p></div>
+            <div class="card reveal"><h3>III. Auditability</h3><p>External verification without internal access.</p></div>
+            <div class="card reveal"><h3>IV. Sovereignty</h3><p>No external dependency can override constitutional law.</p></div>
+            <div class="card reveal"><h3>V. Epistemic Integrity</h3><p>Knowledge claims must be calibrated and falsifiable.</p></div>
+            <div class="card reveal"><h3>VI. Constitutional Supremacy</h3><p>No agent, no process, no human overrides the constitution.</p></div>
+            <div class="card reveal"><h3>VII. Graceful Degradation</h3><p>Under failure, the system contracts to safe states, never expands.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- WITNESS LAB -->
+<section>
+    <div class="container">
+        <p class="section-label reveal">Verification</p>
+        <h2 class="section-title reveal">Witness Lab</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal" style="margin-bottom:40px">Independent verification of constitutional compliance. Every claim is testable. Every state is observable. Trust manufactured through evidence, not assertion.</p>
+        <div class="grid-2">
+            <div class="card reveal"><h3>Replay Verification</h3><p>Submit any transaction hash. Receive a complete causal reconstruction of the decision chain.</p></div>
+            <div class="card reveal"><h3>Drift Monitoring</h3><p>Real-time dashboards showing epistemic drift metrics across all governed agents.</p></div>
+            <div class="card reveal"><h3>Compliance Proofs</h3><p>Cryptographic proofs of constitutional compliance generated for every governance cycle.</p></div>
+            <div class="card reveal"><h3>Audit Trails</h3><p>Complete, immutable audit trails structured for regulatory review and institutional due diligence.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- GOVERNANCE -->
+<section class="alt-bg2">
+    <div class="container">
+        <p class="section-label reveal">Governance Model</p>
+        <h2 class="section-title reveal">Constitutional Enforcement</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal" style="margin-bottom:40px">The governance model is not advisory. It is enforcement. Constitutional violations are detected, logged, and remediated in real-time. No exceptions. No overrides. No escape.</p>
+        <div class="grid-3">
+            <div class="card reveal"><h3>Detection</h3><p>Invariant monitors running at kernel frequency. Violations detected within one governance cycle.</p></div>
+            <div class="card reveal"><h3>Isolation</h3><p>Violating agents immediately isolated from the decision graph. Contamination cannot propagate.</p></div>
+            <div class="card reveal"><h3>Remediation</h3><p>Lyapunov-stable recovery protocols restore constitutional compliance. The system heals itself.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ROADMAP -->
+<section>
+    <div class="container">
+        <p class="section-label reveal">Trajectory</p>
+        <h2 class="section-title reveal">Roadmap</h2>
+        <div class="sep reveal"></div>
+        <div class="timeline reveal" style="margin-top:40px">
+            <div class="timeline-item active"><h4 style="color:var(--emerald)">Phase 1 — Architecture Visibility</h4><p>Public documentation, open architecture, constitutional framework published. Active.</p></div>
+            <div class="timeline-item active"><h4 style="color:var(--emerald)">Phase 2 — Replay Demonstrations</h4><p>Live replay engine demos. Deterministic execution proofs. Witness protocol beta.</p></div>
+            <div class="timeline-item"><h4>Phase 3 — Institutional Pilots</h4><p>Enterprise governance deployments. Regulatory compliance demonstrations. Audit partnerships.</p></div>
+            <div class="timeline-item"><h4>Phase 4 — Open Constitutional APIs</h4><p>Public APIs for constitutional governance primitives. Third-party integrations. Ecosystem growth.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- GITHUB -->
+<section class="alt-bg">
+    <div class="container" style="text-align:center">
+        <p class="section-label reveal">Open Source</p>
+        <h2 class="section-title reveal">Built in Public</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal" style="margin:0 auto 40px">The architecture is open. The constitution is public. The ledger is verifiable. Sovereignty requires transparency.</p>
+        <div class="cta-row reveal">
+            <a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank" rel="noopener" class="btn btn-primary">View Repository</a>
+            <a href="https://github.com/laszlomazsar-hash/evo-v" target="_blank" rel="noopener" class="btn btn-ghost">EVO-V Core</a>
+        </div>
+    </div>
+</section>
+
+<!-- BOOK -->
+<section>
+    <div class="container" style="text-align:center">
+        <p class="section-label reveal">Publication</p>
+        <h2 class="section-title reveal">The Rasta Codex</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal" style="margin:0 auto 40px">Two published works anchor the lineage: <em>Rasta Codex</em> (2025) and <em>RastafarAI: EVO-V</em> (2026). The doctrinal foundation for constitutional AI governance.</p>
+        <div class="cta-row reveal">
+            <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" rel="noopener" class="btn btn-primary">Amazon Author Page</a>
+            <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" class="btn btn-ghost">Digital Products</a>
+        </div>
+    </div>
+</section>
+
+<!-- APPLICATIONS -->
+<section class="alt-bg2">
+    <div class="container" style="text-align:center">
+        <p class="section-label reveal">Live Systems</p>
+        <h2 class="section-title reveal">Applications</h2>
+        <div class="sep reveal"></div>
+        <p class="section-desc reveal" style="margin:0 auto 40px">Sovereign applications powered by the EVO-V constitutional framework. Each operates under deterministic governance.</p>
+        <div class="grid-2 reveal">
+            <a href="https://evo-vcloudcon.lovable.app" target="_blank" rel="noopener" class="card" style="text-decoration:none"><h3>EVO-V Cloud Control</h3><p>Sovereign cloud orchestration with constitutional governance and real-time telemetry.</p></a>
+            <a href="https://virtualpowerplant.lovable.app" target="_blank" rel="noopener" class="card" style="text-decoration:none"><h3>Virtual Power Plant</h3><p>Decentralized energy governance under constitutional constraints.</p></a>
+            <a href="https://evo-vision-launch.lovable.app" target="_blank" rel="noopener" class="card" style="text-decoration:none"><h3>EVO-V Investment Portal</h3><p>Transparent investment interface for the EVO-V ecosystem.</p></a>
+            <a href="https://evo-vista-core.lovable.app" target="_blank" rel="noopener" class="card" style="text-decoration:none"><h3>Vista — 100 Governed Agents</h3><p>Multi-agent orchestration at scale within deterministic boundaries.</p></a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <svg width="48" height="48" viewBox="0 0 100 100" fill="#B8860B" style="margin:0 auto 24px;display:block;opacity:0.7">
+            <path d="M50 5 C55 5 60 8 62 12 C65 8 70 6 75 8 C80 10 82 15 80 20 C85 18 90 20 92 25 C94 30 92 35 88 38 C92 42 93 48 90 52 C87 56 83 58 80 58 C82 62 82 67 80 72 C78 77 74 80 70 80 C70 84 68 88 65 90 C62 92 58 93 55 92 C55 95 53 97 50 98 C47 97 45 95 45 92 C42 93 38 92 35 90 C32 88 30 84 30 80 C26 80 22 77 20 72 C18 67 18 62 20 58 C17 58 13 56 10 52 C7 48 8 42 12 38 C8 35 6 30 8 25 C10 20 15 18 20 20 C18 15 20 10 25 8 C30 6 35 8 38 12 C40 8 45 5 50 5Z"/>
+        </svg>
+        <div class="footer-links">
+            <a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank">Repository</a>
+            <a href="/architecture">Architecture</a>
+            <a href="/codex">Constitution</a>
+            <a href="/evo-v">EVO-V</a>
+            <a href="/applications">Applications</a>
+            <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank">Book</a>
+            <a href="https://www.linkedin.com/in/laszlomazsar" target="_blank">LinkedIn</a>
+            <a href="/invest">Invest</a>
+        </div>
+        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:8px;font-family:'Space Grotesk',sans-serif">RASTA IMPERIUM</p>
+        <p style="color:var(--dim);font-size:0.8rem">Sovereign AI Architecture · Constitutional Intelligence · England</p>
+        <p class="footer-copy">Civilization cannot safely scale autonomous intelligence without deterministic governance.</p>
+    </div>
+</footer>
+
+<script>
+fetch("/shared/nav.html").then(r=>r.text()).then(html=>{document.getElementById("nav").innerHTML=html});
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+const geo=document.querySelector('.geo-canvas');
+let ticking=false;
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{const y=window.scrollY;geo.style.transform='translateY('+y*0.15+'px)';ticking=false});ticking=true}});
+</script>
 </body>
 </html>
