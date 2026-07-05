@@ -23,7 +23,7 @@
   @media (min-width: 768px) { .grid-apps { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
-<body class="text-zinc-100">
+<body style="padding-top:72px" class="text-zinc-100">
 <header class="border-b border-[#B8860B]/20 sticky top-0 z-50" style="background:rgba(10,10,10,0.85);backdrop-filter:blur(16px)">
 <nav class="mx-auto max-w-6xl px-4 py-3 flex flex-wrap items-center gap-4 text-sm">
 <a class="flex items-center gap-2 text-[#B8860B]" href="/">
@@ -136,5 +136,5 @@ All applications operate under the EVO-V Constitutional Framework — seven arti
 </div>
 </div>
 </footer>
-</body>
+<script>fetch("/shared/nav.html").then(r=>r.text()).then(h=>{var old=document.querySelector("header");if(old){var d=document.createElement("div");d.innerHTML=h;old.replaceWith(d.firstElementChild)}else{var d=document.createElement("div");d.innerHTML=h;document.body.prepend(d.firstElementChild)}});</script></body>
 </html>

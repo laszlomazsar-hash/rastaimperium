@@ -6,7 +6,7 @@
   <title>Architecture | Rasta Imperium</title>
   <meta name="description" content="System architecture overview of Rasta Imperium platform.">
 </head>
-<body>
+<body style="padding-top:72px">
   <nav>
     <a href="/">Home</a> |
     <a href="/empire">Empire</a> |
@@ -24,5 +24,5 @@
   <footer>
     <p>© Rasta Imperium</p>
   </footer>
-</body>
+<script>fetch("/shared/nav.html").then(r=>r.text()).then(h=>{var old=document.querySelector("header");if(old){var d=document.createElement("div");d.innerHTML=h;old.replaceWith(d.firstElementChild)}else{var d=document.createElement("div");d.innerHTML=h;document.body.prepend(d.firstElementChild)}});</script></body>
 </html>
