@@ -4,296 +4,357 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Rasta Imperium — The Operating System for Trust</title>
-<meta name="description" content="Constitutional intelligence infrastructure. Deterministic governance for civilization-scale AI. Every decision replayable. Every state auditable."/>
+<meta name="description" content="Constitutional intelligence infrastructure. Deterministic governance for civilization-scale AI."/>
 <meta property="og:title" content="Rasta Imperium — The Operating System for Trust"/>
 <meta property="og:description" content="Deterministic governance for civilization-scale AI."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://rastaimperium.com/"/>
 <meta property="og:image" content="/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Rasta Imperium"/>
-<meta name="twitter:image" content="/og-image.png"/>
 <link rel="icon" href="/favicon.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0B0B0D;--surface:#111113;--border:rgba(184,134,11,0.12);--gold:#B8860B;--gold-dim:rgba(184,134,11,0.6);--emerald:#2ECC71;--text:#EAEAEA;--muted:#888;--dim:#555}
+:root{--bg:#050506;--surface:#0a0a0c;--card:#0f0f12;--border:rgba(184,134,11,0.1);--gold:#C9A227;--gold-glow:rgba(201,162,39,0.15);--emerald:#34D399;--text:#F0F0F0;--muted:#9CA3AF;--dim:#6B7280}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-family:'Space Grotesk','Inter',sans-serif;font-weight:600;letter-spacing:-0.02em}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-0.03em}
 a{color:inherit;text-decoration:none}
+::selection{background:rgba(201,162,39,0.3)}
 
-/* NAV — minimal, 5 items */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(11,11,13,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(184,134,11,0.06)}
-.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;letter-spacing:0.12em;color:var(--gold);font-weight:600}
-.nav-logo svg{width:32px;height:32px}
-.nav-links{display:flex;gap:32px;font-size:0.82rem;font-weight:500;color:var(--muted)}
-.nav-links a{transition:color 0.3s}
-.nav-links a:hover{color:var(--gold)}
-.nav-cta{padding:8px 20px;border:1px solid var(--gold);border-radius:6px;font-size:0.8rem;font-weight:600;color:var(--gold);transition:all 0.3s}
-.nav-cta:hover{background:var(--gold);color:#000}
-@media(max-width:768px){nav{padding:16px 20px}.nav-links{gap:16px;font-size:0.75rem}.nav-cta{display:none}}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,6,0.7);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid rgba(201,162,39,0.04);transition:all 0.4s}
+.n-logo{display:flex;align-items:center;gap:12px}
+.n-logo svg{width:28px;height:28px;opacity:0.9}
+.n-logo span{font-family:'Space Grotesk',sans-serif;font-size:0.75rem;letter-spacing:0.18em;color:var(--gold);font-weight:600}
+.n-links{display:flex;gap:36px;font-size:0.78rem;font-weight:500;color:var(--dim)}
+.n-links a{position:relative;transition:color 0.3s}
+.n-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s}
+.n-links a:hover{color:var(--text)}
+.n-links a:hover::after{width:100%}
+.n-cta{padding:9px 22px;border:1px solid rgba(201,162,39,0.4);border-radius:100px;font-size:0.75rem;font-weight:600;color:var(--gold);transition:all 0.4s;letter-spacing:0.04em}
+.n-cta:hover{background:var(--gold);color:#000;box-shadow:0 0 30px rgba(201,162,39,0.2)}
+@media(max-width:768px){nav{padding:14px 20px}.n-links{display:none}}
 
-/* HERO — full screen, one story */
+/* HERO */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.hero-content{position:relative;z-index:3;text-align:center;max-width:800px;padding:0 24px}
-.hero h1{font-size:clamp(2.8rem,7vw,5.5rem);line-height:1.05;margin-bottom:24px;color:#fff}
-.hero h1 span{background:linear-gradient(135deg,var(--gold) 0%,#d4a017 50%,var(--emerald) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:clamp(1rem,1.8vw,1.2rem);color:var(--muted);max-width:560px;margin:0 auto 48px;line-height:1.8;font-weight:300}
-.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-.btn-hero{padding:16px 36px;border-radius:8px;font-size:0.9rem;font-weight:600;transition:all 0.4s;cursor:pointer}
-.btn-gold{background:var(--gold);color:#000;border:none}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(184,134,11,0.3)}
-.btn-outline{background:transparent;color:var(--text);border:1.5px solid rgba(255,255,255,0.15)}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.hero-canvas{position:absolute;inset:0;z-index:1}
+.hero-glow{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(201,162,39,0.06) 0%,rgba(52,211,153,0.02) 40%,transparent 70%);z-index:1;animation:pulse 8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
+.hero-content{position:relative;z-index:10;text-align:center;max-width:860px;padding:0 24px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(201,162,39,0.2);border-radius:100px;font-size:0.7rem;letter-spacing:0.1em;color:var(--gold);margin-bottom:40px;background:rgba(201,162,39,0.04)}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-size:clamp(3.2rem,8vw,6.5rem);font-weight:700;line-height:1;margin-bottom:28px;color:#fff}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--gold) 0%,#E8D48B 50%,var(--emerald) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(1rem,1.6vw,1.15rem);color:var(--muted);max-width:520px;margin:0 auto 52px;line-height:1.9;font-weight:300}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn{padding:16px 40px;border-radius:100px;font-size:0.85rem;font-weight:600;transition:all 0.4s;cursor:pointer;letter-spacing:0.02em}
+.btn-primary{background:var(--gold);color:#000;border:none;box-shadow:0 4px 20px rgba(201,162,39,0.2)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,162,39,0.35)}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid rgba(255,255,255,0.1)}
+.btn-ghost:hover{border-color:rgba(201,162,39,0.4);color:var(--gold);transform:translateY(-2px)}
+.hero-visual{margin-top:80px;position:relative;display:flex;justify-content:center}
+.hero-ring{width:320px;height:320px;border:1px solid rgba(201,162,39,0.12);border-radius:50%;position:relative;animation:rotate 40s linear infinite}
+.hero-ring::before{content:'';position:absolute;top:-2px;left:50%;width:4px;height:4px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.hero-ring-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border:1px solid rgba(52,211,153,0.1);border-radius:50%;animation:rotate 25s linear infinite reverse}
+.hero-ring-inner::before{content:'';position:absolute;bottom:-2px;left:50%;width:4px;height:4px;border-radius:50%;background:var(--emerald);box-shadow:0 0 12px var(--emerald)}
+.hero-ring-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border:1px solid rgba(201,162,39,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.hero-ring-core::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 20px var(--gold),0 0 60px rgba(201,162,39,0.3)}
+@keyframes rotate{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.hero-ring{transform:none;animation:spin 40s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.hero-ring-inner{animation:spin 25s linear infinite reverse}
 
-/* Hero background layers */
-.hero-bg{position:absolute;inset:0;z-index:0}
-.hero-gradient{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(184,134,11,0.04) 0%,transparent 70%)}
-.hero-noise{position:absolute;inset:0;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* SECTIONS */
+section{padding:140px 24px;position:relative}
+.sec{max-width:1080px;margin:0 auto}
+.tag{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:600}
+.title{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:700;margin-bottom:16px;color:#fff;line-height:1.15}
+.subtitle{color:var(--muted);font-size:1.05rem;max-width:560px;line-height:1.9;font-weight:300}
+.divider{width:48px;height:1.5px;background:linear-gradient(90deg,var(--gold),transparent);margin:28px 0}
 
-/* Living system graphic — orbital rings */
-.system-graphic{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(700px,90vw);height:min(700px,90vw);z-index:1;opacity:0.15}
-.orbit{position:absolute;border:1px solid;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);animation:spin linear infinite}
-.orbit-1{width:200px;height:200px;border-color:rgba(184,134,11,0.4);animation-duration:20s}
-.orbit-2{width:350px;height:350px;border-color:rgba(46,204,113,0.25);animation-duration:35s;animation-direction:reverse}
-.orbit-3{width:500px;height:500px;border-color:rgba(184,134,11,0.15);animation-duration:50s}
-.orbit-4{width:650px;height:650px;border-color:rgba(255,255,255,0.04);animation-duration:70s;animation-direction:reverse}
-.node{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px rgba(184,134,11,0.5)}
-.node-g{background:var(--emerald);box-shadow:0 0 12px rgba(46,204,113,0.5)}
-@keyframes spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+/* GRID */
+.grid-3{display:grid;grid-template-columns:1fr;gap:1px;margin-top:64px;background:var(--border)}
+@media(min-width:768px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.cell{background:var(--card);padding:44px 32px;position:relative;transition:all 0.5s}
+.cell::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform 0.6s;transform-origin:left}
+.cell:hover{background:rgba(201,162,39,0.02)}
+.cell:hover::after{transform:scaleX(1)}
+.cell-num{font-size:0.6rem;color:var(--gold);letter-spacing:0.25em;margin-bottom:20px;font-weight:700;font-family:'Space Grotesk',monospace}
+.cell h3{font-size:0.95rem;font-weight:600;margin-bottom:10px;color:var(--text)}
+.cell p{font-size:0.8rem;color:var(--dim);line-height:1.8}
 
-/* Particle canvas */
-#particles{position:absolute;inset:0;z-index:1}
+/* STACK */
+.stack{margin-top:64px;display:flex;flex-direction:column;gap:0}
+.stack-row{display:flex;align-items:center;padding:18px 28px;border-left:2px solid transparent;transition:all 0.4s;border-bottom:1px solid rgba(201,162,39,0.04)}
+.stack-row:hover{border-left-color:var(--gold);background:rgba(201,162,39,0.02);padding-left:36px}
+.stack-id{font-size:0.7rem;font-weight:700;color:var(--gold);width:32px;flex-shrink:0;font-family:'Space Grotesk',monospace}
+.stack-name{font-size:0.88rem;color:var(--text);font-weight:500;flex:1}
+.stack-meta{font-size:0.72rem;color:var(--dim);display:none}
+@media(min-width:768px){.stack-meta{display:block}}
 
-/* Sections */
-section{padding:160px 24px;position:relative}
-.section-inner{max-width:1000px;margin:0 auto}
-.label{font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600}
-.heading{font-size:clamp(2rem,4vw,3rem);margin-bottom:20px;color:#fff}
-.desc{color:var(--muted);font-size:1.05rem;max-width:580px;line-height:1.9;font-weight:300}
-.sep{width:40px;height:2px;background:var(--gold);margin:32px 0;opacity:0.5}
+/* CARDS */
+.cards{display:grid;grid-template-columns:1fr;gap:20px;margin-top:64px}
+@media(min-width:640px){.cards{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 32px;transition:all 0.5s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.5s}
+.card:hover{border-color:rgba(201,162,39,0.25);transform:translateY(-4px);box-shadow:0 24px 80px rgba(0,0,0,0.5)}
+.card:hover::before{opacity:1}
+.card h3{font-size:1.05rem;font-weight:600;margin-bottom:10px}
+.card p{font-size:0.82rem;color:var(--dim);line-height:1.8}
+.card-link{display:inline-flex;align-items:center;gap:6px;margin-top:20px;font-size:0.78rem;color:var(--gold);font-weight:500;transition:gap 0.3s}
+.card-link:hover{gap:10px}
 
-/* System in Motion section */
-.system-grid{display:grid;grid-template-columns:1fr;gap:2px;margin-top:60px}
-@media(min-width:768px){.system-grid{grid-template-columns:repeat(3,1fr)}}
-.sys-cell{background:var(--surface);border:1px solid var(--border);padding:40px 28px;transition:all 0.5s;position:relative;overflow:hidden}
-.sys-cell::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform 0.5s;transform-origin:left}
-.sys-cell:hover::before{transform:scaleX(1)}
-.sys-cell:hover{background:rgba(184,134,11,0.03);border-color:rgba(184,134,11,0.25)}
-.sys-cell h3{font-size:0.95rem;margin-bottom:10px;color:var(--text)}
-.sys-cell p{font-size:0.82rem;color:var(--dim);line-height:1.7}
-.sys-num{font-size:0.6rem;color:var(--gold-dim);letter-spacing:0.2em;margin-bottom:16px;font-weight:600}
+/* FOOTER */
+footer{padding:80px 24px 48px;border-top:1px solid rgba(201,162,39,0.06)}
+.f-inner{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px}
+.f-brand{font-family:'Space Grotesk',sans-serif;font-size:0.75rem;letter-spacing:0.15em;color:var(--gold)}
+.f-nav{display:flex;flex-wrap:wrap;gap:24px}
+.f-nav a{font-size:0.75rem;color:var(--dim);transition:color 0.3s}
+.f-nav a:hover{color:var(--gold)}
+.f-copy{width:100%;text-align:center;margin-top:40px;font-size:0.65rem;color:var(--dim);letter-spacing:0.05em}
 
-/* Architecture section */
-.arch-visual{margin-top:60px;display:flex;flex-direction:column;gap:1px}
-.arch-row{display:flex;align-items:center;padding:20px 24px;background:var(--surface);border-left:3px solid transparent;transition:all 0.4s;cursor:default}
-.arch-row:hover{border-left-color:var(--gold);background:rgba(184,134,11,0.03)}
-.arch-id{font-size:0.7rem;font-weight:700;color:var(--gold);width:36px;flex-shrink:0;font-family:'Space Grotesk',monospace}
-.arch-name{font-size:0.9rem;color:var(--text);font-weight:500}
-.arch-desc{font-size:0.78rem;color:var(--dim);margin-left:auto;padding-left:20px;display:none}
-@media(min-width:768px){.arch-desc{display:block}}
-
-/* Platform section */
-.platform-cards{display:grid;grid-template-columns:1fr;gap:20px;margin-top:60px}
-@media(min-width:640px){.platform-cards{grid-template-columns:repeat(2,1fr)}}
-.p-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:36px 28px;transition:all 0.4s}
-.p-card:hover{border-color:rgba(184,134,11,0.3);transform:translateY(-3px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
-.p-card h3{font-size:1rem;margin-bottom:8px}
-.p-card p{font-size:0.85rem;color:var(--dim);line-height:1.7}
-.p-card .p-link{display:inline-block;margin-top:16px;font-size:0.8rem;color:var(--gold);font-weight:500;transition:opacity 0.3s}
-.p-card .p-link:hover{opacity:0.7}
-
-/* Footer */
-footer{padding:80px 24px 40px;border-top:1px solid rgba(184,134,11,0.08);text-align:center}
-.f-links{display:flex;flex-wrap:wrap;justify-content:center;gap:28px;margin-bottom:40px}
-.f-links a{font-size:0.8rem;color:var(--dim);transition:color 0.3s}
-.f-links a:hover{color:var(--gold)}
-.f-copy{font-size:0.7rem;color:var(--dim);letter-spacing:0.05em}
-
-/* Reveal */
-.r{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease}
-.r.v{opacity:1;transform:translateY(0)}
-.r-delay-1{transition-delay:0.1s}
-.r-delay-2{transition-delay:0.2s}
-.r-delay-3{transition-delay:0.3s}
+/* REVEAL */
+[data-r]{opacity:0;transform:translateY(20px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+[data-r].show{opacity:1;transform:translateY(0)}
+[data-r="1"]{transition-delay:0.1s}
+[data-r="2"]{transition-delay:0.2s}
+[data-r="3"]{transition-delay:0.3s}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-    <a href="/" class="nav-logo">
-        <svg viewBox="0 0 100 100" fill="#B8860B"><path d="M50 5 C55 5 60 8 62 12 C65 8 70 6 75 8 C80 10 82 15 80 20 C85 18 90 20 92 25 C94 30 92 35 88 38 C92 42 93 48 90 52 C87 56 83 58 80 58 C82 62 82 67 80 72 C78 77 74 80 70 80 C70 84 68 88 65 90 C62 92 58 93 55 92 C55 95 53 97 50 98 C47 97 45 95 45 92 C42 93 38 92 35 90 C32 88 30 84 30 80 C26 80 22 77 20 72 C18 67 18 62 20 58 C17 58 13 56 10 52 C7 48 8 42 12 38 C8 35 6 30 8 25 C10 20 15 18 20 20 C18 15 20 10 25 8 C30 6 35 8 38 12 C40 8 45 5 50 5Z"/></svg>
-        RASTA IMPERIUM
-    </a>
-    <div class="nav-links">
-        <a href="/architecture">Architecture</a>
-        <a href="/evo-v">EVO-V</a>
-        <a href="/codex">Constitution</a>
-        <a href="/applications">Platform</a>
-        <a href="/about">About</a>
-    </div>
-    <a href="/invest" class="nav-cta">Invest</a>
+<a href="/" class="n-logo">
+<svg viewBox="0 0 100 100" fill="#C9A227"><path d="M50 5 C55 5 60 8 62 12 C65 8 70 6 75 8 C80 10 82 15 80 20 C85 18 90 20 92 25 C94 30 92 35 88 38 C92 42 93 48 90 52 C87 56 83 58 80 58 C82 62 82 67 80 72 C78 77 74 80 70 80 C70 84 68 88 65 90 C62 92 58 93 55 92 C55 95 53 97 50 98 C47 97 45 95 45 92 C42 93 38 92 35 90 C32 88 30 84 30 80 C26 80 22 77 20 72 C18 67 18 62 20 58 C17 58 13 56 10 52 C7 48 8 42 12 38 C8 35 6 30 8 25 C10 20 15 18 20 20 C18 15 20 10 25 8 C30 6 35 8 38 12 C40 8 45 5 50 5Z"/></svg>
+<span>RASTA IMPERIUM</span>
+</a>
+<div class="n-links">
+<a href="/architecture">Architecture</a>
+<a href="/evo-v">EVO-V</a>
+<a href="/codex">Constitution</a>
+<a href="/applications">Platform</a>
+<a href="/about">About</a>
+</div>
+<a href="/invest" class="n-cta">Invest</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-    <div class="hero-bg">
-        <div class="hero-gradient"></div>
-        <div class="hero-noise"></div>
-    </div>
-    <div class="system-graphic">
-        <div class="orbit orbit-1"><div class="node" style="top:0;left:50%"></div></div>
-        <div class="orbit orbit-2"><div class="node node-g" style="top:50%;right:0"></div></div>
-        <div class="orbit orbit-3"><div class="node" style="bottom:0;left:50%"></div></div>
-        <div class="orbit orbit-4"><div class="node node-g" style="top:50%;left:0"></div></div>
-    </div>
-    <canvas id="particles"></canvas>
-    <div class="hero-content">
-        <h1 class="r"><span>Engineering Reality</span></h1>
-        <p class="r r-delay-1">The constitutional operating system for autonomous intelligence. Deterministic. Replayable. Sovereign.</p>
-        <div class="hero-btns r r-delay-2">
-            <a href="/evo-v" class="btn-hero btn-gold">Explore EVO-V</a>
-            <a href="/architecture" class="btn-hero btn-outline">View Architecture</a>
-        </div>
-    </div>
+<div class="hero-glow"></div>
+<canvas class="hero-canvas" id="geo"></canvas>
+<div class="hero-content">
+<div class="hero-badge" data-r>CONSTITUTIONAL AI · LIVE SYSTEM</div>
+<h1 data-r="1">Engineering<br/><em>Reality</em></h1>
+<p class="hero-sub" data-r="2">The deterministic operating system for autonomous intelligence. Every decision replayable. Every state sovereign.</p>
+<div class="hero-actions" data-r="3">
+<a href="/evo-v" class="btn btn-primary">Explore EVO-V</a>
+<a href="/architecture" class="btn btn-ghost">View Architecture</a>
+</div>
+<div class="hero-visual" data-r="3">
+<div class="hero-ring">
+<div class="hero-ring-inner">
+<div class="hero-ring-core"></div>
+</div>
+</div>
+</div>
+</div>
 </section>
 
 <!-- SYSTEM IN MOTION -->
 <section>
-    <div class="section-inner">
-        <p class="label r">System in Motion</p>
-        <h2 class="heading r">Nine layers of deterministic governance</h2>
-        <p class="desc r">From cosmological narrative to human interface. Each layer enforces constitutional constraints on the layer above. No exceptions. No overrides.</p>
-        <div class="system-grid">
-            <div class="sys-cell r"><div class="sys-num">01</div><h3>Deterministic Execution</h3><p>Every decision follows explicit causal chains. Full reproducibility across runs.</p></div>
-            <div class="sys-cell r"><div class="sys-num">02</div><h3>Constitutional Enforcement</h3><p>Governance embedded at the kernel level. Seven articles. Hardware-enforced.</p></div>
-            <div class="sys-cell r"><div class="sys-num">03</div><h3>Immutable Replay</h3><p>Complete state history sealed cryptographically. Any moment verifiable.</p></div>
-            <div class="sys-cell r"><div class="sys-num">04</div><h3>Epistemic Integrity</h3><p>Truth-seeking systems that preserve independence and resist reasoning corruption.</p></div>
-            <div class="sys-cell r"><div class="sys-num">05</div><h3>Drift Detection</h3><p>Lyapunov stability analysis monitors coherence in real-time.</p></div>
-            <div class="sys-cell r"><div class="sys-num">06</div><h3>Multi-Agent Orchestration</h3><p>100+ governed agents within constitutional boundaries.</p></div>
-            <div class="sys-cell r"><div class="sys-num">07</div><h3>Witness Protocol</h3><p>External verification of internal states. Third-party auditable.</p></div>
-            <div class="sys-cell r"><div class="sys-num">08</div><h3>Cryptographic Sealing</h3><p>Every state transition sealed. Tamper-evident by construction.</p></div>
-            <div class="sys-cell r"><div class="sys-num">09</div><h3>Open Constitutional APIs</h3><p>Programmatic access to governance primitives.</p></div>
-        </div>
-    </div>
+<div class="sec">
+<p class="tag" data-r>System in Motion</p>
+<h2 class="title" data-r>Nine layers of<br/>deterministic governance</h2>
+<div class="divider" data-r></div>
+<p class="subtitle" data-r>From cosmological narrative to human interface. Each layer enforces constitutional constraints. No exceptions.</p>
+<div class="grid-3">
+<div class="cell" data-r><div class="cell-num">01</div><h3>Deterministic Execution</h3><p>Every decision follows explicit causal chains. Full reproducibility.</p></div>
+<div class="cell" data-r><div class="cell-num">02</div><h3>Constitutional Enforcement</h3><p>Governance at the kernel level. Seven articles. Hardware-enforced.</p></div>
+<div class="cell" data-r><div class="cell-num">03</div><h3>Immutable Replay</h3><p>Complete state history sealed cryptographically. Any moment verifiable.</p></div>
+<div class="cell" data-r><div class="cell-num">04</div><h3>Epistemic Integrity</h3><p>Truth-seeking systems that resist reasoning corruption.</p></div>
+<div class="cell" data-r><div class="cell-num">05</div><h3>Drift Detection</h3><p>Lyapunov stability monitors coherence in real-time.</p></div>
+<div class="cell" data-r><div class="cell-num">06</div><h3>Multi-Agent Orchestration</h3><p>100+ governed agents within constitutional boundaries.</p></div>
+<div class="cell" data-r><div class="cell-num">07</div><h3>Witness Protocol</h3><p>External verification. Third-party auditable.</p></div>
+<div class="cell" data-r><div class="cell-num">08</div><h3>Cryptographic Sealing</h3><p>Every state transition sealed. Tamper-evident.</p></div>
+<div class="cell" data-r><div class="cell-num">09</div><h3>Open Constitutional APIs</h3><p>Programmatic access to governance primitives.</p></div>
+</div>
+</div>
 </section>
 
 <!-- ARCHITECTURE -->
 <section style="background:var(--surface)">
-    <div class="section-inner">
-        <p class="label r">Architecture</p>
-        <h2 class="heading r">The Civilization Stack</h2>
-        <p class="desc r">Nine layers. One constitution. Zero escape.</p>
-        <div class="arch-visual r">
-            <div class="arch-row"><span class="arch-id">L9</span><span class="arch-name">Cosmology</span><span class="arch-desc">Mythic narrative and civilizational meaning</span></div>
-            <div class="arch-row"><span class="arch-id">L8</span><span class="arch-name">Constitution</span><span class="arch-desc">Seven Articles, hardware-enforced</span></div>
-            <div class="arch-row"><span class="arch-id">L7</span><span class="arch-name">Identity</span><span class="arch-desc">Immutable replay ledger</span></div>
-            <div class="arch-row"><span class="arch-id">L6</span><span class="arch-name">Epistemic</span><span class="arch-desc">Bayesian calibration, drift detection</span></div>
-            <div class="arch-row"><span class="arch-id">L5</span><span class="arch-name">Intelligence</span><span class="arch-desc">Causal modeling, symbolic reasoning</span></div>
-            <div class="arch-row"><span class="arch-id">L4</span><span class="arch-name">Agentic</span><span class="arch-desc">Deep Seed orchestration</span></div>
-            <div class="arch-row"><span class="arch-id">L3</span><span class="arch-name">Operational</span><span class="arch-desc">Real-time invariant enforcement</span></div>
-            <div class="arch-row"><span class="arch-id">L2</span><span class="arch-name">Economic</span><span class="arch-desc">Enterprise integration layer</span></div>
-            <div class="arch-row"><span class="arch-id">L1</span><span class="arch-name">Interface</span><span class="arch-desc">Progressive initiation portals</span></div>
-        </div>
-    </div>
+<div class="sec">
+<p class="tag" data-r>Architecture</p>
+<h2 class="title" data-r>The Civilization Stack</h2>
+<div class="divider" data-r></div>
+<p class="subtitle" data-r>Nine layers. One constitution. Zero escape.</p>
+<div class="stack" data-r>
+<div class="stack-row"><span class="stack-id">L9</span><span class="stack-name">Cosmology</span><span class="stack-meta">Mythic narrative layer</span></div>
+<div class="stack-row"><span class="stack-id">L8</span><span class="stack-name">Constitution</span><span class="stack-meta">Seven Articles, hardware-enforced</span></div>
+<div class="stack-row"><span class="stack-id">L7</span><span class="stack-name">Identity</span><span class="stack-meta">Immutable replay ledger</span></div>
+<div class="stack-row"><span class="stack-id">L6</span><span class="stack-name">Epistemic</span><span class="stack-meta">Bayesian calibration, drift detection</span></div>
+<div class="stack-row"><span class="stack-id">L5</span><span class="stack-name">Intelligence</span><span class="stack-meta">Causal modeling, symbolic reasoning</span></div>
+<div class="stack-row"><span class="stack-id">L4</span><span class="stack-name">Agentic</span><span class="stack-meta">Deep Seed orchestration</span></div>
+<div class="stack-row"><span class="stack-id">L3</span><span class="stack-name">Operational</span><span class="stack-meta">Real-time invariant enforcement</span></div>
+<div class="stack-row"><span class="stack-id">L2</span><span class="stack-name">Economic</span><span class="stack-meta">Enterprise integration</span></div>
+<div class="stack-row"><span class="stack-id">L1</span><span class="stack-name">Interface</span><span class="stack-meta">Progressive initiation portals</span></div>
+</div>
+</div>
 </section>
 
 <!-- CONSTITUTION -->
 <section>
-    <div class="section-inner" style="text-align:center">
-        <p class="label r">Constitution</p>
-        <h2 class="heading r">Seven Pillars of Governance</h2>
-        <div class="sep r" style="margin:32px auto"></div>
-        <p class="desc r" style="margin:0 auto 60px">The non-negotiable principles that bind every agent, every process, every decision.</p>
-        <div class="system-grid">
-            <div class="sys-cell r"><div class="sys-num">I</div><h3>Determinism</h3><p>Every output traceable to its inputs.</p></div>
-            <div class="sys-cell r"><div class="sys-num">II</div><h3>Replayability</h3><p>Any state reconstructed from the ledger.</p></div>
-            <div class="sys-cell r"><div class="sys-num">III</div><h3>Auditability</h3><p>External verification without internal access.</p></div>
-            <div class="sys-cell r"><div class="sys-num">IV</div><h3>Sovereignty</h3><p>No external override of constitutional law.</p></div>
-            <div class="sys-cell r"><div class="sys-num">V</div><h3>Epistemic Integrity</h3><p>Claims must be calibrated and falsifiable.</p></div>
-            <div class="sys-cell r"><div class="sys-num">VI</div><h3>Supremacy</h3><p>Nothing overrides the constitution.</p></div>
-            <div class="sys-cell r"><div class="sys-num">VII</div><h3>Graceful Degradation</h3><p>Under failure, contract to safe states.</p></div>
-        </div>
-    </div>
+<div class="sec" style="text-align:center">
+<p class="tag" data-r>Constitution</p>
+<h2 class="title" data-r>Seven Pillars</h2>
+<div class="divider" data-r style="margin:28px auto"></div>
+<p class="subtitle" data-r style="margin:0 auto 60px">The non-negotiable principles binding every agent, every process, every decision.</p>
+<div class="grid-3">
+<div class="cell" data-r><div class="cell-num">I</div><h3>Determinism</h3><p>Every output traceable to its inputs.</p></div>
+<div class="cell" data-r><div class="cell-num">II</div><h3>Replayability</h3><p>Any state reconstructed from the ledger.</p></div>
+<div class="cell" data-r><div class="cell-num">III</div><h3>Auditability</h3><p>External verification without internal access.</p></div>
+<div class="cell" data-r><div class="cell-num">IV</div><h3>Sovereignty</h3><p>No external override of constitutional law.</p></div>
+<div class="cell" data-r><div class="cell-num">V</div><h3>Epistemic Integrity</h3><p>Claims must be calibrated and falsifiable.</p></div>
+<div class="cell" data-r><div class="cell-num">VI</div><h3>Supremacy</h3><p>Nothing overrides the constitution.</p></div>
+<div class="cell" data-r><div class="cell-num">VII</div><h3>Graceful Degradation</h3><p>Under failure, contract to safe states.</p></div>
+</div>
+</div>
 </section>
 
 <!-- EVO-V PLATFORM -->
 <section style="background:var(--surface)">
-    <div class="section-inner">
-        <p class="label r">Platform</p>
-        <h2 class="heading r">EVO-V</h2>
-        <p class="desc r">Not a product. An operating system for trust. Constitutional computing at civilization scale.</p>
-        <div class="platform-cards">
-            <a href="https://evo-vcloudcon.lovable.app" target="_blank" class="p-card r"><h3>Cloud Control</h3><p>Sovereign cloud orchestration with constitutional governance and real-time telemetry.</p><span class="p-link">Launch →</span></a>
-            <a href="https://virtualpowerplant.lovable.app" target="_blank" class="p-card r"><h3>Virtual Power Plant</h3><p>Decentralized energy governance under constitutional constraints.</p><span class="p-link">Launch →</span></a>
-            <a href="https://evo-vision-launch.lovable.app" target="_blank" class="p-card r"><h3>Investment Portal</h3><p>Transparent investment interface for the EVO-V ecosystem.</p><span class="p-link">Launch →</span></a>
-            <a href="https://evo-vista-core.lovable.app" target="_blank" class="p-card r"><h3>Vista — 100 Agents</h3><p>Multi-agent orchestration at scale within deterministic boundaries.</p><span class="p-link">Launch →</span></a>
-        </div>
-    </div>
+<div class="sec">
+<p class="tag" data-r>Platform</p>
+<h2 class="title" data-r>EVO-V</h2>
+<div class="divider" data-r></div>
+<p class="subtitle" data-r>Not a product. An operating system for trust.</p>
+<div class="cards">
+<a href="https://evo-vcloudcon.lovable.app" target="_blank" class="card" data-r><h3>Cloud Control</h3><p>Sovereign cloud orchestration with constitutional governance and real-time telemetry.</p><span class="card-link">Launch →</span></a>
+<a href="https://virtualpowerplant.lovable.app" target="_blank" class="card" data-r><h3>Virtual Power Plant</h3><p>Decentralized energy governance under constitutional constraints.</p><span class="card-link">Launch →</span></a>
+<a href="https://evo-vision-launch.lovable.app" target="_blank" class="card" data-r><h3>Investment Portal</h3><p>Transparent investment interface for the EVO-V ecosystem.</p><span class="card-link">Launch →</span></a>
+<a href="https://evo-vista-core.lovable.app" target="_blank" class="card" data-r><h3>Vista — 100 Agents</h3><p>Multi-agent orchestration at scale within deterministic boundaries.</p><span class="card-link">Launch →</span></a>
+</div>
+</div>
 </section>
 
 <!-- WITNESS LAB -->
 <section>
-    <div class="section-inner">
-        <p class="label r">Verification</p>
-        <h2 class="heading r">Witness Lab</h2>
-        <p class="desc r" style="margin-bottom:60px">Where trust is manufactured through evidence. Every claim testable. Every state observable.</p>
-        <div class="system-grid">
-            <div class="sys-cell r"><div class="sys-num">REPLAY</div><h3>Causal Reconstruction</h3><p>Submit any hash. Receive the complete decision chain.</p></div>
-            <div class="sys-cell r"><div class="sys-num">DRIFT</div><h3>Coherence Monitoring</h3><p>Real-time epistemic drift across all governed agents.</p></div>
-            <div class="sys-cell r"><div class="sys-num">PROOF</div><h3>Compliance Proofs</h3><p>Cryptographic proofs generated every governance cycle.</p></div>
-        </div>
-    </div>
+<div class="sec">
+<p class="tag" data-r>Verification</p>
+<h2 class="title" data-r>Witness Lab</h2>
+<div class="divider" data-r></div>
+<p class="subtitle" data-r style="margin-bottom:60px">Where trust is manufactured through evidence.</p>
+<div class="grid-3">
+<div class="cell" data-r><div class="cell-num">REPLAY</div><h3>Causal Reconstruction</h3><p>Submit any hash. Receive the complete decision chain.</p></div>
+<div class="cell" data-r><div class="cell-num">DRIFT</div><h3>Coherence Monitoring</h3><p>Real-time epistemic drift across all governed agents.</p></div>
+<div class="cell" data-r><div class="cell-num">PROOF</div><h3>Compliance Proofs</h3><p>Cryptographic proofs generated every governance cycle.</p></div>
+</div>
+</div>
 </section>
 
-<!-- DOCUMENTATION / BOOKS -->
+<!-- DOCUMENTATION -->
 <section style="background:var(--surface)">
-    <div class="section-inner" style="text-align:center">
-        <p class="label r">Documentation</p>
-        <h2 class="heading r">The Rasta Codex</h2>
-        <div class="sep r" style="margin:32px auto"></div>
-        <p class="desc r" style="margin:0 auto 48px">Published doctrinal foundation. <em>Rasta Codex</em> (2025) and <em>RastafarAI: EVO-V</em> (2026).</p>
-        <div class="hero-btns r">
-            <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" class="btn-hero btn-gold">Amazon</a>
-            <a href="https://mazsar.gumroad.com" target="_blank" class="btn-hero btn-outline">Gumroad</a>
-            <a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank" class="btn-hero btn-outline">GitHub</a>
-        </div>
-    </div>
+<div class="sec" style="text-align:center">
+<p class="tag" data-r>Documentation</p>
+<h2 class="title" data-r>The Rasta Codex</h2>
+<div class="divider" data-r style="margin:28px auto"></div>
+<p class="subtitle" data-r style="margin:0 auto 48px">Published doctrinal foundation. <em>Rasta Codex</em> and <em>RastafarAI: EVO-V</em>.</p>
+<div class="hero-actions" data-r>
+<a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" class="btn btn-primary">Amazon</a>
+<a href="https://mazsar.gumroad.com" target="_blank" class="btn btn-ghost">Gumroad</a>
+<a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank" class="btn btn-ghost">GitHub</a>
+</div>
+</div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-    <div class="f-links">
-        <a href="/architecture">Architecture</a>
-        <a href="/evo-v">EVO-V</a>
-        <a href="/codex">Constitution</a>
-        <a href="/applications">Platform</a>
-        <a href="/invest">Invest</a>
-        <a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank">GitHub</a>
-        <a href="https://www.linkedin.com/in/laszlomazsar" target="_blank">LinkedIn</a>
-    </div>
-    <p class="f-copy">RASTA IMPERIUM · Sovereign AI Architecture · England · 2026</p>
+<div class="f-inner">
+<span class="f-brand">RASTA IMPERIUM</span>
+<div class="f-nav">
+<a href="/architecture">Architecture</a>
+<a href="/evo-v">EVO-V</a>
+<a href="/codex">Constitution</a>
+<a href="/applications">Platform</a>
+<a href="/invest">Invest</a>
+<a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank">GitHub</a>
+<a href="https://www.linkedin.com/in/laszlomazsar" target="_blank">LinkedIn</a>
+</div>
+<p class="f-copy">Sovereign AI Architecture · England · 2026</p>
+</div>
 </footer>
 
 <script>
-// Scroll reveal
-const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');obs.unobserve(e.target)}})},{threshold:0.08,rootMargin:'0px 0px -60px 0px'});
-document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+// Reveal on scroll
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}})},{threshold:0.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('[data-r]').forEach(el=>io.observe(el));
 
-// Particle field
+// Sacred geometry canvas — Flower of Life pattern
 (function(){
-const c=document.getElementById('particles');
-const ctx=c.getContext('2d');
-let w,h,particles=[];
+const c=document.getElementById('geo'),ctx=c.getContext('2d');
+let w,h,t=0;
 function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}
 window.addEventListener('resize',resize);resize();
-for(let i=0;i<60;i++){particles.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,r:Math.random()*1.5+0.5,a:Math.random()*0.4+0.1})}
-function draw(){ctx.clearRect(0,0,w,h);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(184,134,11,'+p.a+')';ctx.fill()});requestAnimationFrame(draw)}
-draw();
+
+function drawFlower(cx,cy,r,alpha){
+ctx.strokeStyle=`rgba(201,162,39,${alpha})`;
+ctx.lineWidth=0.5;
+// Center circle
+ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+// 6 surrounding circles
+for(let i=0;i<6;i++){
+const a=i*Math.PI/3+t*0.0003;
+const x=cx+r*Math.cos(a);
+const y=cy+r*Math.sin(a);
+ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke();
+}
+}
+
+function drawParticles(){
+ctx.fillStyle='rgba(201,162,39,0.4)';
+for(let i=0;i<40;i++){
+const x=(Math.sin(t*0.001+i*0.7)*0.4+0.5)*w;
+const y=(Math.cos(t*0.0008+i*1.1)*0.4+0.5)*h;
+const s=Math.sin(t*0.002+i)*0.8+1;
+ctx.beginPath();ctx.arc(x,y,s,0,Math.PI*2);ctx.fill();
+}
+}
+
+function frame(){
+t++;
+ctx.clearRect(0,0,w,h);
+// Draw multiple flower of life patterns
+const r=60;
+drawFlower(w*0.5,h*0.4,r,0.04);
+drawFlower(w*0.3,h*0.6,r*0.7,0.025);
+drawFlower(w*0.7,h*0.3,r*0.8,0.03);
+// Hexagonal grid
+ctx.strokeStyle='rgba(201,162,39,0.015)';
+ctx.lineWidth=0.5;
+const size=80;
+for(let row=-1;row<h/size+1;row++){
+for(let col=-1;col<w/size+1;col++){
+const x=col*size*1.5+((row%2)*size*0.75);
+const y=row*size*0.866;
+ctx.beginPath();
+for(let i=0;i<6;i++){
+const a=i*Math.PI/3;
+const px=x+size*0.4*Math.cos(a);
+const py=y+size*0.4*Math.sin(a);
+i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+}
+ctx.closePath();ctx.stroke();
+}
+}
+drawParticles();
+requestAnimationFrame(frame);
+}
+frame();
 })();
 </script>
 </body>
