@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from threading import Lock
 from typing import Any
 
-from src.soulecho.topology import commit_transaction
+from soulecho.topology import commit_transaction
 
 
 @dataclass
