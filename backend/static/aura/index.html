@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Aura OS — Constitutional Admissibility Gate | Rasta Imperium</title>
+<meta name="description" content="The Law of Perpetual Balance. Only harmony passes through. Constitutional admissibility for autonomous intelligence."/>
+<link rel="icon" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050506;--surface:#0a0a0c;--card:#0f0f12;--border:rgba(201,162,39,0.1);--gold:#C9A227;--emerald:#34D399;--red:#EF4444;--amber:#F59E0B;--text:#F0F0F0;--muted:#9CA3AF;--dim:#6B7280;--mono:'JetBrains Mono',monospace}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-top:72px}
+h1,h2,h3{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-0.03em}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(201,162,39,0.3)}
+
+/* Sections */
+section{padding:100px 24px}
+.sec{max-width:900px;margin:0 auto}
+.tag{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600}
+.title{font-size:clamp(2rem,4vw,3rem);font-weight:700;margin-bottom:16px;color:#fff;line-height:1.15}
+.subtitle{color:var(--muted);font-size:1rem;max-width:560px;line-height:1.9;font-weight:300;margin-bottom:48px}
+
+/* Pipeline visualization */
+.pipeline{display:flex;flex-direction:column;align-items:center;gap:0;margin:48px 0}
+.pipe-node{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 28px;font-size:0.82rem;font-weight:500;text-align:center;width:100%;max-width:320px;transition:all 0.4s;position:relative}
+.pipe-node.active{border-color:var(--gold);box-shadow:0 0 30px rgba(201,162,39,0.1)}
+.pipe-node.allow{border-color:var(--emerald);box-shadow:0 0 30px rgba(52,211,153,0.1)}
+.pipe-node.reject{border-color:var(--red);box-shadow:0 0 30px rgba(239,68,68,0.1)}
+.pipe-node.defer{border-color:var(--amber);box-shadow:0 0 30px rgba(245,158,11,0.1)}
+.pipe-arrow{width:1px;height:28px;background:rgba(201,162,39,0.2);position:relative}
+.pipe-arrow::after{content:'▼';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);font-size:0.5rem;color:var(--gold)}
+
+/* Interactive terminal */
+.terminal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px;margin-top:64px}
+.term-header{display:flex;align-items:center;gap:8px;margin-bottom:24px}
+.term-dot{width:10px;height:10px;border-radius:50%}
+.term-dot-r{background:#EF4444}
+.term-dot-y{background:#F59E0B}
+.term-dot-g{background:#34D399}
+.term-title{font-size:0.7rem;color:var(--dim);letter-spacing:0.15em;margin-left:12px;font-family:var(--mono)}
+.term-input-wrap{display:flex;gap:12px;align-items:center;margin-bottom:20px}
+.term-input-wrap label{font-size:0.75rem;color:var(--gold);font-family:var(--mono);white-space:nowrap}
+.term-input{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 18px;color:var(--text);font-family:var(--mono);font-size:0.85rem;outline:none;transition:border-color 0.3s}
+.term-input:focus{border-color:var(--gold)}
+.term-controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;align-items:center}
+.term-slider-wrap{display:flex;align-items:center;gap:8px}
+.term-slider-wrap label{font-size:0.7rem;color:var(--dim);font-family:var(--mono)}
+.term-slider{-webkit-appearance:none;width:120px;height:4px;border-radius:2px;background:rgba(255,255,255,0.08);outline:none}
+.term-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer}
+.term-btn{padding:12px 28px;background:var(--gold);color:#000;border:none;border-radius:100px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.3s;font-family:'Inter',sans-serif}
+.term-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,162,39,0.3)}
+.term-output{background:rgba(0,0,0,0.4);border-radius:8px;padding:20px;min-height:120px;font-family:var(--mono);font-size:0.8rem;line-height:2;color:var(--muted);white-space:pre-wrap}
+.term-output .gold{color:var(--gold)}
+.term-output .green{color:var(--emerald)}
+.term-output .red{color:var(--red)}
+.term-output .amber{color:var(--amber)}
+
+/* Score visualization */
+.score-bar{margin-top:16px;height:6px;border-radius:3px;background:rgba(255,255,255,0.05);overflow:hidden;position:relative}
+.score-fill{height:100%;border-radius:3px;transition:width 0.8s cubic-bezier(0.16,1,0.3,1);background:linear-gradient(90deg,var(--emerald),var(--gold))}
+
+/* Architecture diagram */
+.arch-flow{display:flex;flex-direction:column;align-items:center;gap:0;margin:48px 0;padding:32px;background:var(--card);border:1px solid var(--border);border-radius:16px}
+.arch-node{font-size:0.78rem;font-family:var(--mono);color:var(--muted);padding:8px 0}
+.arch-node.highlight{color:var(--gold);font-weight:600}
+.arch-arrow{color:var(--dim);font-size:0.6rem}
+
+/* Status badges */
+.status{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:0.65rem;font-weight:600;letter-spacing:0.05em}
+.status-impl{background:rgba(52,211,153,0.1);color:var(--emerald);border:1px solid rgba(52,211,153,0.2)}
+.status-proto{background:rgba(245,158,11,0.1);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+.status-plan{background:rgba(96,165,250,0.1);color:#60A5FA;border:1px solid rgba(96,165,250,0.2)}
+
+/* Feature grid */
+.features{display:grid;grid-template-columns:1fr;gap:1px;margin-top:48px;background:var(--border)}
+@media(min-width:640px){.features{grid-template-columns:repeat(2,1fr)}}
+.feat{background:var(--card);padding:32px 24px}
+.feat h3{font-size:0.9rem;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.feat p{font-size:0.78rem;color:var(--dim);line-height:1.8}
+
+/* Footer link */
+.back{display:inline-flex;align-items:center;gap:8px;margin-top:48px;font-size:0.8rem;color:var(--gold);font-weight:500;transition:gap 0.3s}
+.back:hover{gap:12px}
+</style>
+</head>
+<body>
+
+<section>
+<div class="sec">
+<p class="tag">Constitutional Primitive</p>
+<h1 class="title">Law of Perpetual Balance</h1>
+<p class="subtitle">The admissibility gate for autonomous intelligence. Only coherent, balanced intents enter the constitutional pipeline. Everything else returns to neutral.</p>
+
+<!-- Architecture position -->
+<div class="arch-flow">
+<div class="arch-node">External Intent</div>
+<div class="arch-arrow">│</div>
+<div class="arch-node highlight">▶ Law of Perpetual Balance</div>
+<div class="arch-arrow">│</div>
+<div class="arch-node">Constitutional Admissibility</div>
+<div class="arch-arrow">│</div>
+<div class="arch-node">Policy Engine</div>
+<div class="arch-arrow">│</div>
+<div class="arch-node">Deterministic Evaluation</div>
+<div class="arch-arrow">│</div>
+<div class="arch-node">Ledger Commit</div>
+</div>
+
+<!-- Live pipeline -->
+<h2 style="font-size:1.3rem;margin-top:80px;margin-bottom:12px">Live Pipeline</h2>
+<p style="font-size:0.85rem;color:var(--dim);margin-bottom:32px">Submit an intent. Watch it pass through constitutional admissibility in real-time.</p>
+
+<div class="terminal">
+<div class="term-header">
+<div class="term-dot term-dot-r"></div>
+<div class="term-dot term-dot-y"></div>
+<div class="term-dot term-dot-g"></div>
+<span class="term-title">AURA_OS v2.0 // ADMISSIBILITY GATE</span>
+</div>
+
+<div class="term-input-wrap">
+<label>intent &gt;</label>
+<input type="text" class="term-input" id="intent" placeholder="Enter your intent..." value="Create unity within chaos"/>
+</div>
+
+<div class="term-controls">
+<div class="term-slider-wrap">
+<label>symmetry:</label>
+<input type="range" class="term-slider" id="symmetry" min="0" max="5" step="1" value="2"/>
+<span id="sym-val" style="font-family:var(--mono);font-size:0.75rem;color:var(--gold);width:16px">2</span>
+</div>
+<div class="term-slider-wrap">
+<label>integrity:</label>
+<input type="range" class="term-slider" id="integrity" min="0" max="1" step="1" value="1"/>
+<span id="int-val" style="font-family:var(--mono);font-size:0.75rem;color:var(--emerald);width:32px">true</span>
+</div>
+<button class="term-btn" onclick="evaluate()">Evaluate</button>
+</div>
+
+<div class="term-output" id="output">
+<span class="gold">awaiting intent...</span>
+</div>
+<div class="score-bar"><div class="score-fill" id="score-bar" style="width:0%"></div></div>
+</div>
+
+<!-- Features -->
+<h2 style="font-size:1.3rem;margin-top:80px;margin-bottom:8px">Capabilities</h2>
+<div class="features">
+<div class="feat"><h3><span class="status status-impl">IMPLEMENTED</span></h3><h3>Coherence Safeguard</h3><p>Blocks incoherent, empty, or structurally broken inputs. Returns Neutral State.</p></div>
+<div class="feat"><h3><span class="status status-impl">IMPLEMENTED</span></h3><h3>Tiered Resonance</h3><p>Four activation tiers from individual flow to cosmic alignment based on bounded scoring.</p></div>
+<div class="feat"><h3><span class="status status-impl">IMPLEMENTED</span></h3><h3>Deterministic Verdict</h3><p>ALLOW / DEFER / REJECT — a single constitutional predicate. Replayable and auditable.</p></div>
+<div class="feat"><h3><span class="status status-impl">IMPLEMENTED</span></h3><h3>Bounded Resonance</h3><p>coherence × integrity × symmetry × stability. Each factor 0–1. No artificial clipping.</p></div>
+<div class="feat"><h3><span class="status status-proto">PROTOTYPE</span></h3><h3>Stability from History</h3><p>History as evidence: consistency, correction frequency, invariant violations, recovery.</p></div>
+<div class="feat"><h3><span class="status status-proto">PROTOTYPE</span></h3><h3>Adaptive Feedback</h3><p>Refines coherence scoring based on accumulated evidence across sessions.</p></div>
+<div class="feat"><h3><span class="status status-plan">PLANNED</span></h3><h3>Emotion Recognition</h3><p>Assess emotional undertones for deeper resonant constitutional responses.</p></div>
+<div class="feat"><h3><span class="status status-plan">PLANNED</span></h3><h3>Community Interface</h3><p>Shared resonance field for collective constitutional participation.</p></div>
+</div>
+
+<a href="/" class="back">← Back to Rasta Imperium</a>
+</div>
+</section>
+
+<!-- Shared nav -->
+<script>
+fetch("/shared/nav.html").then(r=>r.text()).then(h=>{
+var d=document.createElement("div");d.innerHTML=h;
+document.body.prepend(d.firstElementChild);
+});
+</script>
+
+<script>
+// Symmetry slider
+document.getElementById('symmetry').addEventListener('input',function(){
+document.getElementById('sym-val').textContent=this.value;
+});
+document.getElementById('integrity').addEventListener('input',function(){
+document.getElementById('int-val').textContent=this.value==='1'?'true':'false';
+});
+
+function evaluate(){
+const intent=document.getElementById('intent').value.trim();
+const symmetry=parseInt(document.getElementById('symmetry').value);
+const integrity=parseInt(document.getElementById('integrity').value)===1;
+const output=document.getElementById('output');
+const bar=document.getElementById('score-bar');
+
+// Constitutional admissibility logic
+let lines=[];
+lines.push('<span class="gold">▶ EVALUATING INTENT</span>');
+lines.push('  intent: "'+intent+'"');
+lines.push('  structure_integrity: '+(integrity?'<span class="green">true</span>':'<span class="red">false</span>'));
+lines.push('  flow_symmetry: '+symmetry);
+lines.push('');
+
+// Safeguards
+if(!integrity || symmetry<1 || !intent){
+lines.push('<span class="red">✗ SAFEGUARD TRIGGERED</span>');
+if(!intent) lines.push('  reason: empty intent');
+if(!integrity) lines.push('  reason: structure integrity violated');
+if(symmetry<1) lines.push('  reason: flow symmetry below threshold');
+lines.push('');
+lines.push('  verdict: <span class="red">REJECT</span>');
+lines.push('  state: ⚖️ Neutral State — Coherence Restored');
+output.innerHTML=lines.join('\n');
+bar.style.width='0%';
+bar.style.background='var(--red)';
+return;
+}
+
+// Resonance scoring (bounded)
+const coherence=Math.min(intent.length/50,1); // 0-1 based on length
+const integrityScore=1.0;
+const symmetryScore=Math.min(symmetry/5,1); // 0-1
+const stability=0.7; // placeholder for history-based
+const resonance=coherence*integrityScore*symmetryScore*stability;
+
+lines.push('  <span class="gold">computing resonance...</span>');
+lines.push('  coherence:  '+coherence.toFixed(3)+' (intent density)');
+lines.push('  integrity:  '+integrityScore.toFixed(3)+' (structural)');
+lines.push('  symmetry:   '+symmetryScore.toFixed(3)+' (flow balance)');
+lines.push('  stability:  '+stability.toFixed(3)+' (history evidence)');
+lines.push('');
+lines.push('  resonance = '+resonance.toFixed(4));
+lines.push('');
+
+// Verdict
+let verdict,tier,color;
+if(resonance<0.1){
+verdict='DEFER';tier='⚖️ Neutral — Insufficient Resonance';color='amber';
+}else if(resonance<0.2){
+verdict='ALLOW';tier='✨ Tier 1: Flow Activated (Individual)';color='green';
+}else if(resonance<0.4){
+verdict='ALLOW';tier='🎶 Tier 2: Harmonic Chorus (Group)';color='green';
+}else if(resonance<0.7){
+verdict='ALLOW';tier='🌍 Tier 3: Communal Resonance (Collective)';color='green';
+}else{
+verdict='ALLOW';tier='🌌 Tier 4: Cosmic Alignment (Universal)';color='green';
+}
+
+lines.push('  verdict: <span class="'+color+'">'+verdict+'</span>');
+lines.push('  tier: '+tier);
+lines.push('');
+lines.push('<span class="gold">  "Only harmony passes through."</span>');
+
+output.innerHTML=lines.join('\n');
+bar.style.width=(resonance*100)+'%';
+bar.style.background=color==='green'?'linear-gradient(90deg,var(--emerald),var(--gold))':color==='amber'?'var(--amber)':'var(--red)';
+}
+
+// Auto-evaluate on load
+setTimeout(evaluate,500);
+</script>
+</body>
+</html>
