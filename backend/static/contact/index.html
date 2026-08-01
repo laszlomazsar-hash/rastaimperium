@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contact — Rasta Imperium</title>
+<meta name="description" content="Get in touch with Rasta Imperium. Inquiries about EVO-V, constitutional AI, investment, partnerships, and collaboration."/>
+<link rel="icon" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050506;--surface:#0a0a0c;--card:#0f0f12;--border:rgba(201,162,39,0.1);--gold:#C9A227;--emerald:#34D399;--text:#F0F0F0;--muted:#9CA3AF;--dim:#6B7280;--mono:'JetBrains Mono',monospace}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-top:72px}
+h1,h2,h3{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-0.03em}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(201,162,39,0.3)}
+
+section{padding:100px 24px}
+.sec{max-width:720px;margin:0 auto}
+.tag{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600}
+.title{font-size:clamp(2rem,4vw,3rem);font-weight:700;margin-bottom:16px;color:#fff;line-height:1.15}
+.subtitle{color:var(--muted);font-size:1rem;max-width:560px;line-height:1.9;font-weight:300;margin-bottom:48px}
+
+.channels{display:grid;grid-template-columns:1fr;gap:1px;margin-bottom:64px;background:var(--border)}
+@media(min-width:640px){.channels{grid-template-columns:repeat(2,1fr)}}
+.ch{background:var(--card);padding:36px 28px;transition:all 0.4s;position:relative}
+.ch::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform 0.5s;transform-origin:left}
+.ch:hover{background:rgba(201,162,39,0.02)}
+.ch:hover::after{transform:scaleX(1)}
+.ch-label{font-size:0.65rem;letter-spacing:0.2em;color:var(--dim);margin-bottom:12px;text-transform:uppercase}
+.ch h3{font-size:0.95rem;font-weight:600;margin-bottom:8px}
+.ch p{font-size:0.82rem;color:var(--muted);line-height:1.7}
+.ch a{color:var(--gold);transition:opacity 0.3s}
+.ch a:hover{opacity:0.7}
+
+.form-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 32px}
+.form-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.form-sub{font-size:0.82rem;color:var(--dim);margin-bottom:32px}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px;font-weight:500}
+.field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 18px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.3s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold)}
+.field textarea{resize:vertical;min-height:120px}
+.field select{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239CA3AF' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.field select option{background:var(--card);color:var(--text)}
+.submit-btn{padding:14px 36px;background:var(--gold);color:#000;border:none;border-radius:100px;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.4s;font-family:'Inter',sans-serif}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,162,39,0.3)}
+.form-note{font-size:0.7rem;color:var(--dim);margin-top:16px}
+
+.success{display:none;text-align:center;padding:40px}
+.success h3{color:var(--emerald);margin-bottom:12px}
+.success p{color:var(--muted);font-size:0.85rem}
+
+.socials{display:flex;flex-wrap:wrap;gap:16px;margin-top:48px}
+.social-link{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:1px solid var(--border);border-radius:100px;font-size:0.78rem;font-weight:500;color:var(--muted);transition:all 0.3s}
+.social-link:hover{border-color:var(--gold);color:var(--gold)}
+
+.back{display:inline-flex;align-items:center;gap:8px;margin-top:48px;font-size:0.8rem;color:var(--gold);font-weight:500;transition:gap 0.3s}
+.back:hover{gap:12px}
+</style>
+</head>
+<body>
+
+<section>
+<div class="sec">
+<p class="tag">Connect</p>
+<h1 class="title">Contact</h1>
+<p class="subtitle">Inquiries about EVO-V, constitutional AI infrastructure, investment, partnerships, or collaboration. Direct channels below.</p>
+
+<div class="channels">
+<div class="ch">
+<div class="ch-label">Email</div>
+<h3>General Inquiries</h3>
+<p><a href="mailto:laszlo@rastaimperium.com">laszlo@rastaimperium.com</a></p>
+</div>
+<div class="ch">
+<div class="ch-label">Investment</div>
+<h3>Funding & Partnerships</h3>
+<p><a href="/invest">View Investment Page →</a></p>
+</div>
+<div class="ch">
+<div class="ch-label">LinkedIn</div>
+<h3>Professional Network</h3>
+<p><a href="https://www.linkedin.com/in/laszlomazsar" target="_blank">linkedin.com/in/laszlomazsar</a></p>
+</div>
+<div class="ch">
+<div class="ch-label">GitHub</div>
+<h3>Open Source</h3>
+<p><a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank">laszlomazsar-hash/rastaimperium</a></p>
+</div>
+</div>
+
+<div class="form-wrap" id="form-wrap">
+<h2 class="form-title">Send a Message</h2>
+<p class="form-sub">All inquiries receive a response within 48 hours.</p>
+<form id="contact-form" onsubmit="handleSubmit(event)">
+<div class="field">
+<label>NAME</label>
+<input type="text" name="name" required placeholder="Your name"/>
+</div>
+<div class="field">
+<label>EMAIL</label>
+<input type="email" name="email" required placeholder="your@email.com"/>
+</div>
+<div class="field">
+<label>SUBJECT</label>
+<select name="subject" required>
+<option value="">Select a topic...</option>
+<option value="Investment & Funding">Investment & Funding</option>
+<option value="Partnership & Collaboration">Partnership & Collaboration</option>
+<option value="Technical Inquiry">Technical Inquiry</option>
+<option value="Consulting">Consulting</option>
+<option value="Media & Press">Media & Press</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div class="field">
+<label>MESSAGE</label>
+<textarea name="message" required placeholder="Your message..."></textarea>
+</div>
+<button type="submit" class="submit-btn">Send Message</button>
+<p class="form-note">Your data is handled with constitutional integrity. No third-party sharing.</p>
+</form>
+<div class="success" id="success">
+<h3>Message Sent</h3>
+<p>Thank you. Your inquiry has been received and will be reviewed within 48 hours.</p>
+</div>
+</div>
+
+<div class="socials">
+<a href="https://www.linkedin.com/in/laszlomazsar" target="_blank" class="social-link">LinkedIn</a>
+<a href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank" class="social-link">GitHub</a>
+<a href="https://mazsar.gumroad.com" target="_blank" class="social-link">Gumroad</a>
+<a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" class="social-link">Amazon</a>
+</div>
+
+<a href="/" class="back">← Back to Rasta Imperium</a>
+</div>
+</section>
+
+<script>
+fetch("/shared/nav.html").then(r=>r.text()).then(h=>{
+var d=document.createElement("div");d.innerHTML=h;
+document.body.prepend(d.firstElementChild);
+});
+</script>
+
+<script>
+function handleSubmit(e){
+e.preventDefault();
+const form=document.getElementById('contact-form');
+const data=new FormData(form);
+const subject=data.get('subject');
+const name=data.get('name');
+const email=data.get('email');
+const message=data.get('message');
+const body='Name: '+name+'\nEmail: '+email+'\nSubject: '+subject+'\n\n'+message;
+window.location.href='mailto:laszlo@rastaimperium.com?subject='+encodeURIComponent('[Rasta Imperium] '+subject)+'&body='+encodeURIComponent(body);
+document.getElementById('contact-form').style.display='none';
+document.getElementById('success').style.display='block';
+}
+</script>
+</body>
+</html>
