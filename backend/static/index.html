@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Rasta Imperium — The Operating System for Trust</title>
-<meta name="description" content="Constitutional intelligence infrastructure. Deterministic governance for civilization-scale AI. Every decision replayable. Every state auditable."/>
+<title>Rasta Imperium — A Sovereign Mythic-Technical Civilization</title>
+<meta name="description" content="Ethics forged in ancestral fire, emergence bound by sovereign code. Constitutional AI governance with deterministic execution, immutable replay, and proof-carrying control."/>
 <meta property="og:title" content="Rasta Imperium — The Operating System for Trust"/>
-<meta property="og:description" content="Deterministic governance for civilization-scale AI."/>
+<meta property="og:description" content="From unbounded chaos to auditable ascent. Deterministic governance for civilization-scale AI."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://rastaimperium.com/"/>
 <meta property="og:image" content="/og-image.png"/>
@@ -14,259 +14,252 @@
 <link rel="icon" href="/favicon.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#050506;--surface:#0a0a0c;--card:#0f0f12;--border:rgba(201,162,39,0.08);--gold:#C9A227;--gold-glow:rgba(201,162,39,0.15);--emerald:#34D399;--text:#F0F0F0;--muted:#9CA3AF;--dim:#6B7280}
+:root{--bg:#050506;--surface:#0a0a0c;--card:#0f0f12;--border:rgba(201,162,39,0.08);--gold:#C9A227;--emerald:#34D399;--red:#E85D5D;--text:#F0F0F0;--muted:#9CA3AF;--dim:#6B7280}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-0.03em}
 a{color:inherit;text-decoration:none}
 ::selection{background:rgba(201,162,39,0.3)}
-
-/* === NAV === */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,6,0.75);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid rgba(201,162,39,0.04)}
-.n-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,6,0.8);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid rgba(201,162,39,0.04)}
+.n-logo{display:flex;align-items:center;gap:12px}
 .n-logo svg{width:28px;height:28px}
-.n-logo span{font-family:'Space Grotesk',sans-serif;font-size:0.75rem;letter-spacing:0.18em;color:var(--gold);font-weight:600}
-.n-links{display:flex;gap:32px;font-size:0.78rem;font-weight:500;color:var(--dim)}
+.n-logo span{font-family:'Space Grotesk',sans-serif;font-size:0.72rem;letter-spacing:0.18em;color:var(--gold);font-weight:600}
+.n-links{display:flex;gap:28px;font-size:0.76rem;font-weight:500;color:var(--dim)}
 .n-links a{position:relative;transition:color 0.3s}
 .n-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s}
 .n-links a:hover{color:var(--text)}
 .n-links a:hover::after{width:100%}
-.n-cta{padding:9px 22px;border:1px solid rgba(201,162,39,0.4);border-radius:100px;font-size:0.75rem;font-weight:600;color:var(--gold);transition:all 0.4s;letter-spacing:0.04em}
+.n-cta{padding:8px 20px;border:1px solid rgba(201,162,39,0.4);border-radius:100px;font-size:0.72rem;font-weight:600;color:var(--gold);transition:all 0.4s}
 .n-cta:hover{background:var(--gold);color:#000;box-shadow:0 0 30px rgba(201,162,39,0.2)}
-@media(max-width:768px){nav{padding:14px 20px}.n-links{gap:16px;font-size:0.7rem}.n-cta{padding:7px 16px;font-size:0.7rem}}
-@media(max-width:480px){.n-links{display:none}}
-
-/* === HERO === */
+@media(max-width:768px){nav{padding:14px 20px}.n-links{gap:14px;font-size:0.68rem}}
+@media(max-width:520px){.n-links{display:none}}
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:1}
-.hero-glow{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(201,162,39,0.06) 0%,rgba(52,211,153,0.02) 40%,transparent 70%);animation:breathe 8s ease-in-out infinite}
+.hero-glow{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(201,162,39,0.05) 0%,rgba(26,58,42,0.04) 40%,transparent 70%);animation:breathe 8s ease-in-out infinite}
 @keyframes breathe{0%,100%{opacity:0.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
-.hero-content{position:relative;z-index:10;text-align:center;max-width:840px;padding:0 24px}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(201,162,39,0.2);border-radius:100px;font-size:0.68rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:40px;background:rgba(201,162,39,0.03)}
+.hero-content{position:relative;z-index:10;text-align:center;max-width:860px;padding:0 24px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(201,162,39,0.2);border-radius:100px;font-size:0.66rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:36px;background:rgba(201,162,39,0.03)}
 .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.hero h1{font-size:clamp(3rem,7.5vw,6rem);font-weight:700;line-height:1.05;margin-bottom:28px;color:#fff}
+.hero h1{font-size:clamp(2.6rem,7vw,5.5rem);font-weight:700;line-height:1.05;margin-bottom:24px;color:#fff}
 .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--gold) 0%,#E8D48B 50%,var(--emerald) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:clamp(0.95rem,1.5vw,1.12rem);color:var(--muted);max-width:500px;margin:0 auto 48px;line-height:1.9;font-weight:300}
+.hero-sub{font-size:clamp(0.9rem,1.4vw,1.05rem);color:var(--muted);max-width:540px;margin:0 auto 44px;line-height:1.9;font-weight:300;font-style:italic}
 .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.btn{padding:15px 36px;border-radius:100px;font-size:0.84rem;font-weight:600;transition:all 0.4s;cursor:pointer;letter-spacing:0.02em;display:inline-block}
+.btn{padding:14px 32px;border-radius:100px;font-size:0.82rem;font-weight:600;transition:all 0.4s;cursor:pointer;display:inline-block}
 .btn-gold{background:var(--gold);color:#000;border:none;box-shadow:0 4px 20px rgba(201,162,39,0.2)}
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,162,39,0.35)}
 .btn-ghost{background:transparent;color:var(--text);border:1.5px solid rgba(255,255,255,0.1)}
 .btn-ghost:hover{border-color:rgba(201,162,39,0.4);color:var(--gold);transform:translateY(-2px)}
-
-/* === ORBITAL VISUAL === */
-.orbital{margin-top:72px;display:flex;justify-content:center}
-.orbital-wrap{position:relative;width:280px;height:280px}
+.orbital{margin-top:64px;display:flex;justify-content:center}
+.orbital-wrap{position:relative;width:240px;height:240px}
 .ring{position:absolute;border-radius:50%;border:1px solid rgba(201,162,39,0.1)}
 .ring-1{inset:0;animation:spin 40s linear infinite}
-.ring-2{inset:40px;border-color:rgba(52,211,153,0.08);animation:spin 28s linear infinite reverse}
-.ring-3{inset:80px;border-color:rgba(201,162,39,0.15);animation:spin 20s linear infinite}
-.ring::before{content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.ring-2{inset:36px;border-color:rgba(52,211,153,0.08);animation:spin 28s linear infinite reverse}
+.ring-3{inset:72px;border-color:rgba(201,162,39,0.15);animation:spin 18s linear infinite}
+.ring::before{content:'';position:absolute;top:-3px;left:50%;width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
 .ring-2::before{background:var(--emerald);box-shadow:0 0 10px var(--emerald);top:auto;bottom:-3px}
-.ring-core{position:absolute;inset:110px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.ring-core{position:absolute;inset:96px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .ring-core::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 24px var(--gold),0 0 60px rgba(201,162,39,0.3)}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-/* === SECTIONS === */
-section{padding:120px 24px;position:relative}
+section{padding:110px 24px;position:relative}
 .sec{max-width:1060px;margin:0 auto}
-.tag{font-size:0.62rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600}
-.sec-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:14px;color:#fff;line-height:1.15}
-.sec-sub{color:var(--muted);font-size:1rem;max-width:520px;line-height:1.9;font-weight:300}
-.divider{width:48px;height:1.5px;background:linear-gradient(90deg,var(--gold),transparent);margin:24px 0}
-
-/* === GRID === */
-.grid{display:grid;grid-template-columns:1fr;gap:1px;margin-top:56px;background:var(--border)}
+.tag{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-weight:600}
+.sec-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;margin-bottom:12px;color:#fff;line-height:1.15}
+.sec-sub{color:var(--muted);font-size:0.95rem;max-width:520px;line-height:1.9;font-weight:300}
+.divider{width:48px;height:1.5px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}
+.pillars{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:56px;background:var(--border)}
+@media(max-width:900px){.pillars{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.pillars{grid-template-columns:1fr}}
+.pillar{background:var(--card);padding:36px 24px;text-align:center;position:relative;transition:all 0.5s}
+.pillar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform 0.5s;transform-origin:left}
+.pillar:hover{background:rgba(201,162,39,0.015)}
+.pillar:hover::before{transform:scaleX(1)}
+.pillar h3{font-size:0.82rem;font-weight:700;margin-bottom:6px;color:var(--gold)}
+.pillar p{font-size:0.72rem;color:var(--dim);line-height:1.7}
+.grid{display:grid;grid-template-columns:1fr;gap:1px;margin-top:48px;background:var(--border)}
 @media(min-width:768px){.grid{grid-template-columns:repeat(3,1fr)}}
-.cell{background:var(--card);padding:40px 28px;position:relative;transition:all 0.5s}
+.cell{background:var(--card);padding:36px 24px;position:relative;transition:all 0.5s}
 .cell::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform 0.5s;transform-origin:left}
 .cell:hover{background:rgba(201,162,39,0.015)}
 .cell:hover::before{transform:scaleX(1)}
-.cell-id{font-size:0.6rem;color:var(--gold);letter-spacing:0.2em;margin-bottom:16px;font-weight:700;font-family:'Space Grotesk',monospace}
-.cell h3{font-size:0.9rem;font-weight:600;margin-bottom:8px}
-.cell p{font-size:0.78rem;color:var(--dim);line-height:1.8}
-
-/* === STACK === */
-.stack{margin-top:56px}
-.stack-row{display:flex;align-items:center;padding:16px 24px;border-left:2px solid transparent;border-bottom:1px solid rgba(201,162,39,0.04);transition:all 0.3s}
-.stack-row:hover{border-left-color:var(--gold);background:rgba(201,162,39,0.015);padding-left:32px}
-.stack-id{font-size:0.68rem;font-weight:700;color:var(--gold);width:36px;flex-shrink:0;font-family:'Space Grotesk',monospace}
-.stack-name{font-size:0.85rem;font-weight:500;flex:1}
-.stack-desc{font-size:0.72rem;color:var(--dim);display:none}
-@media(min-width:640px){.stack-desc{display:block}}
-
-/* === CARDS === */
-.cards{display:grid;grid-template-columns:1fr;gap:16px;margin-top:56px}
+.cell-id{font-size:0.58rem;color:var(--gold);letter-spacing:0.2em;margin-bottom:12px;font-weight:700;font-family:'Space Grotesk',monospace}
+.cell h3{font-size:0.85rem;font-weight:600;margin-bottom:6px}
+.cell p{font-size:0.74rem;color:var(--dim);line-height:1.8}
+.telemetry{margin-top:48px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;overflow:hidden}
+.tele-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.tele-title{font-size:0.72rem;letter-spacing:0.15em;color:var(--gold);font-weight:600}
+.tele-status{display:flex;align-items:center;gap:6px;font-size:0.68rem;color:var(--emerald)}
+.tele-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:blink 1.5s infinite}
+.tele-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+@media(max-width:640px){.tele-metrics{grid-template-columns:repeat(2,1fr)}}
+.tele-metric{text-align:center}
+.tele-metric .label{font-size:0.58rem;color:var(--dim);letter-spacing:0.1em;margin-bottom:4px}
+.tele-metric .value{font-size:1.3rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+.tele-metric .value.nominal{color:var(--emerald)}
+.tele-metric .value.drift{color:var(--gold)}
+.tele-metric .value.critical{color:var(--red)}
+.tele-canvas{width:100%;height:100px;border-radius:8px;background:rgba(0,0,0,0.3)}
+.cards{display:grid;grid-template-columns:1fr;gap:14px;margin-top:48px}
 @media(min-width:640px){.cards{grid-template-columns:repeat(2,1fr)}}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:36px 28px;transition:all 0.5s;position:relative;overflow:hidden}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 24px;transition:all 0.5s;position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.4s}
-.card:hover{border-color:rgba(201,162,39,0.2);transform:translateY(-3px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.card:hover{border-color:rgba(201,162,39,0.2);transform:translateY(-2px);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
 .card:hover::before{opacity:1}
-.card h3{font-size:1rem;font-weight:600;margin-bottom:8px}
-.card p{font-size:0.8rem;color:var(--dim);line-height:1.8}
-.card-arrow{display:inline-block;margin-top:16px;font-size:0.75rem;color:var(--gold);font-weight:500}
-
-/* === FOOTER === */
-footer{padding:72px 24px 40px;border-top:1px solid rgba(201,162,39,0.05)}
-.f-inner{max-width:1060px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px}
-.f-brand{font-family:'Space Grotesk',sans-serif;font-size:0.72rem;letter-spacing:0.15em;color:var(--gold)}
-.f-links{display:flex;flex-wrap:wrap;gap:20px}
-.f-links a{font-size:0.72rem;color:var(--dim);transition:color 0.3s}
+.card h3{font-size:0.92rem;font-weight:600;margin-bottom:6px}
+.card p{font-size:0.76rem;color:var(--dim);line-height:1.8}
+.card-arrow{display:inline-block;margin-top:14px;font-size:0.72rem;color:var(--gold);font-weight:500}
+.stack{margin-top:48px}
+.stack-row{display:flex;align-items:center;padding:14px 20px;border-left:2px solid transparent;border-bottom:1px solid rgba(201,162,39,0.04);transition:all 0.3s}
+.stack-row:hover{border-left-color:var(--gold);background:rgba(201,162,39,0.015);padding-left:28px}
+.stack-id{font-size:0.65rem;font-weight:700;color:var(--gold);width:32px;flex-shrink:0;font-family:'Space Grotesk',monospace}
+.stack-name{font-size:0.82rem;font-weight:500;flex:1}
+.stack-desc{font-size:0.7rem;color:var(--dim)}
+@media(max-width:640px){.stack-desc{display:none}}
+.benchmarks{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:48px;background:var(--border)}
+@media(max-width:640px){.benchmarks{grid-template-columns:repeat(2,1fr)}}
+.bench{background:var(--card);padding:28px 16px;text-align:center}
+.bench .val{font-size:1.4rem;font-weight:700;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+.bench .lbl{font-size:0.6rem;color:var(--dim);letter-spacing:0.1em}
+footer{padding:64px 24px 36px;border-top:1px solid rgba(201,162,39,0.05)}
+.f-inner{max-width:1060px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px}
+.f-brand{font-family:'Space Grotesk',sans-serif;font-size:0.7rem;letter-spacing:0.15em;color:var(--gold)}
+.f-links{display:flex;flex-wrap:wrap;gap:18px}
+.f-links a{font-size:0.7rem;color:var(--dim);transition:color 0.3s}
 .f-links a:hover{color:var(--gold)}
-.f-copy{width:100%;text-align:center;margin-top:36px;font-size:0.62rem;color:var(--dim);letter-spacing:0.05em}
-
-/* === REVEAL === */
-[data-r]{opacity:0;transform:translateY(16px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
+.f-copy{width:100%;text-align:center;margin-top:32px;font-size:0.6rem;color:var(--dim)}
+[data-r]{opacity:0;transform:translateY(14px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
 [data-r].v{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
 <nav>
 <a href="/" class="n-logo">
 <svg viewBox="0 0 100 100" fill="#C9A227"><path d="M50 5 C55 5 60 8 62 12 C65 8 70 6 75 8 C80 10 82 15 80 20 C85 18 90 20 92 25 C94 30 92 35 88 38 C92 42 93 48 90 52 C87 56 83 58 80 58 C82 62 82 67 80 72 C78 77 74 80 70 80 C70 84 68 88 65 90 C62 92 58 93 55 92 C55 95 53 97 50 98 C47 97 45 95 45 92 C42 93 38 92 35 90 C32 88 30 84 30 80 C26 80 22 77 20 72 C18 67 18 62 20 58 C17 58 13 56 10 52 C7 48 8 42 12 38 C8 35 6 30 8 25 C10 20 15 18 20 20 C18 15 20 10 25 8 C30 6 35 8 38 12 C40 8 45 5 50 5Z"/></svg>
 <span>RASTA IMPERIUM</span>
 </a>
 <div class="n-links">
+<a href="/intelligence">Intelligence</a>
 <a href="/architecture">Architecture</a>
-<a href="/evo-v">EVO-V</a>
-<a href="/codex">Constitution</a>
+<a href="/library">Library</a>
 <a href="/applications">Platform</a>
-<a href="/aura">Aura OS</a>
 <a href="/contact">Contact</a>
 </div>
 <a href="/invest" class="n-cta">Invest</a>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-<div class="hero-bg">
-<div class="hero-glow"></div>
-<canvas id="geo"></canvas>
-</div>
+<div class="hero-bg"><div class="hero-glow"></div><canvas id="geo"></canvas></div>
 <div class="hero-content">
-<div class="hero-badge" data-r>CONSTITUTIONAL AI · LIVE SYSTEM</div>
-<h1 data-r>Engineering<br/><em>Reality</em></h1>
-<p data-r>The deterministic operating system for autonomous intelligence. Every decision replayable. Every state sovereign.</p>
+<div class="hero-badge" data-r>SOVEREIGN MYTHIC-TECHNICAL CIVILIZATION</div>
+<h1 data-r>The Rasta<br/><em>Imperium</em></h1>
+<p class="hero-sub" data-r>Ethics forged in ancestral fire, emergence bound by sovereign code. From unbounded chaos to auditable ascent.</p>
 <div class="hero-btns" data-r>
-<a href="/evo-v" class="btn btn-gold">Explore EVO-V</a>
-<a href="/architecture" class="btn btn-ghost">View Architecture</a>
+<a href="#pillars" class="btn btn-gold">Explore the Pillars</a>
+<a href="/intelligence" class="btn btn-ghost">Access Intelligence Engine</a>
 </div>
-<div class="orbital" data-r>
-<div class="orbital-wrap">
-<div class="ring ring-1"></div>
-<div class="ring ring-2"></div>
-<div class="ring ring-3"></div>
-<div class="ring-core"></div>
-</div>
-</div>
+<div class="orbital" data-r><div class="orbital-wrap"><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div><div class="ring-core"></div></div></div>
 </div>
 </section>
 
-<!-- SYSTEM -->
-<section>
+<section id="pillars">
 <div class="sec">
-<p class="tag" data-r>System in Motion</p>
-<h2 class="sec-title" data-r>Nine layers of deterministic governance</h2>
+<p class="tag" data-r>Infrastructure</p>
+<h2 class="sec-title" data-r>The Five Pillars</h2>
 <div class="divider" data-r></div>
-<p class="sec-sub" data-r>From cosmological narrative to human interface. Each layer enforces constitutional constraints without exception.</p>
-<div class="grid">
-<div class="cell" data-r><div class="cell-id">01</div><h3>Deterministic Execution</h3><p>Every decision follows explicit causal chains. Full reproducibility.</p></div>
-<div class="cell" data-r><div class="cell-id">02</div><h3>Constitutional Enforcement</h3><p>Governance at the kernel level. Seven articles. Hardware-enforced.</p></div>
-<div class="cell" data-r><div class="cell-id">03</div><h3>Immutable Replay</h3><p>Complete state history sealed cryptographically. Any moment verifiable.</p></div>
-<div class="cell" data-r><div class="cell-id">04</div><h3>Epistemic Integrity</h3><p>Truth-seeking systems that resist reasoning corruption.</p></div>
-<div class="cell" data-r><div class="cell-id">05</div><h3>Drift Detection</h3><p>Lyapunov stability monitors coherence in real-time.</p></div>
-<div class="cell" data-r><div class="cell-id">06</div><h3>Multi-Agent Orchestration</h3><p>100+ governed agents within constitutional boundaries.</p></div>
-<div class="cell" data-r><div class="cell-id">07</div><h3>Witness Protocol</h3><p>External verification. Third-party auditable.</p></div>
-<div class="cell" data-r><div class="cell-id">08</div><h3>Cryptographic Sealing</h3><p>Every state transition sealed. Tamper-evident.</p></div>
-<div class="cell" data-r><div class="cell-id">09</div><h3>Open Constitutional APIs</h3><p>Programmatic access to governance primitives.</p></div>
+<p class="sec-sub" data-r>The sovereign infrastructure of a living system. Five domains, one constitution.</p>
+<div class="pillars" data-r>
+<div class="pillar"><h3>Codex</h3><p>The written archive of sovereign reason</p></div>
+<div class="pillar"><h3>Kernel</h3><p>Foundational operating logic — EVO-V</p></div>
+<div class="pillar"><h3>Engine</h3><p>Active processing layer — ARK Engine</p></div>
+<div class="pillar"><h3>Ethics</h3><p>Moral framework — Rastafarai Codex</p></div>
+<div class="pillar"><h3>Intelligence</h3><p>Sovereign reasoning — Jah Conciseness</p></div>
 </div>
 </div>
 </section>
 
-<!-- ARCHITECTURE -->
 <section style="background:var(--surface)">
 <div class="sec">
-<p class="tag" data-r>Architecture</p>
-<h2 class="sec-title" data-r>The Civilization Stack</h2>
+<p class="tag" data-r>Intelligence Engine</p>
+<h2 class="sec-title" data-r>Jah Conciseness</h2>
 <div class="divider" data-r></div>
-<p class="sec-sub" data-r>Nine layers. One constitution. Zero escape.</p>
+<p class="sec-sub" data-r>Divine Clarity. Cultural Coherence. Symbolic Intelligence. Neurosymbolic reasoning with constitutional constraints.</p>
+<div class="grid" data-r>
+<div class="cell"><div class="cell-id">COHERENCE</div><h3>Cultural Coherence Engine</h3><p>Evaluates inputs against ontological axioms. Every claim calibrated.</p></div>
+<div class="cell"><div class="cell-id">SYMBOLIC</div><h3>Z3 Arithmetic Solver</h3><p>Ontology-compiled constraints with formal verification.</p></div>
+<div class="cell"><div class="cell-id">CAUSAL</div><h3>Causal Discovery</h3><p>NOTEARS implementation with correlation-DAG fallbacks.</p></div>
+</div>
+<div class="telemetry" data-r>
+<div class="tele-header"><span class="tele-title">INVARIANT EXPORT MODEL — LIVE TELEMETRY</span><span class="tele-status">SYSTEM NOMINAL</span></div>
+<div class="tele-metrics">
+<div class="tele-metric"><div class="label">V(t) RECOVERY</div><div class="value nominal" id="v-score">0.2341</div></div>
+<div class="tele-metric"><div class="label">LYAPUNOV VOW</div><div class="value nominal" id="lyap">dV/dt ≤ 0</div></div>
+<div class="tele-metric"><div class="label">GOVERNANCE</div><div class="value nominal" id="gov-state">NOMINAL</div></div>
+<div class="tele-metric"><div class="label">THROUGHPUT</div><div class="value nominal" id="throughput">1,548 ops/s</div></div>
+</div>
+<canvas class="tele-canvas" id="tele-chart"></canvas>
+</div>
+</div>
+</section>
+
+<section>
+<div class="sec">
+<p class="tag" data-r>Architecture</p>
+<h2 class="sec-title" data-r>The 9-Layer Sovereign Stack</h2>
+<div class="divider" data-r></div>
+<p class="sec-sub" data-r>From Technical Foundation to Sovereign Interface. Hardware-enforced constitutional law.</p>
 <div class="stack" data-r>
 <div class="stack-row"><span class="stack-id">L9</span><span class="stack-name">Cosmology</span><span class="stack-desc">Mythic narrative layer</span></div>
 <div class="stack-row"><span class="stack-id">L8</span><span class="stack-name">Constitution</span><span class="stack-desc">Seven Articles, hardware-enforced</span></div>
 <div class="stack-row"><span class="stack-id">L7</span><span class="stack-name">Identity</span><span class="stack-desc">Immutable replay ledger</span></div>
 <div class="stack-row"><span class="stack-id">L6</span><span class="stack-name">Epistemic</span><span class="stack-desc">Bayesian calibration, drift detection</span></div>
 <div class="stack-row"><span class="stack-id">L5</span><span class="stack-name">Intelligence</span><span class="stack-desc">Causal modeling, symbolic reasoning</span></div>
-<div class="stack-row"><span class="stack-id">L4</span><span class="stack-name">Agentic</span><span class="stack-desc">Deep Seed orchestration</span></div>
+<div class="stack-row"><span class="stack-id">L4</span><span class="stack-name">Agentic</span><span class="stack-desc">Deep Seed orchestration, 100+ agents</span></div>
 <div class="stack-row"><span class="stack-id">L3</span><span class="stack-name">Operational</span><span class="stack-desc">Real-time invariant enforcement</span></div>
-<div class="stack-row"><span class="stack-id">L2</span><span class="stack-name">Economic</span><span class="stack-desc">Enterprise integration</span></div>
+<div class="stack-row"><span class="stack-id">L2</span><span class="stack-name">Economic</span><span class="stack-desc">Enterprise integration, MEFS</span></div>
 <div class="stack-row"><span class="stack-id">L1</span><span class="stack-name">Interface</span><span class="stack-desc">Progressive initiation portals</span></div>
 </div>
 </div>
 </section>
 
-<!-- CONSTITUTION -->
-<section>
-<div class="sec" style="text-align:center">
-<p class="tag" data-r>Constitution</p>
-<h2 class="sec-title" data-r>Seven Pillars</h2>
-<div class="divider" data-r style="margin:24px auto"></div>
-<p class="sec-sub" data-r style="margin:0 auto 48px">The non-negotiable principles binding every agent, every process, every decision.</p>
-<div class="grid">
-<div class="cell" data-r><div class="cell-id">I</div><h3>Determinism</h3><p>Every output traceable to its inputs.</p></div>
-<div class="cell" data-r><div class="cell-id">II</div><h3>Replayability</h3><p>Any state reconstructed from the ledger.</p></div>
-<div class="cell" data-r><div class="cell-id">III</div><h3>Auditability</h3><p>External verification without internal access.</p></div>
-<div class="cell" data-r><div class="cell-id">IV</div><h3>Sovereignty</h3><p>No external override of constitutional law.</p></div>
-<div class="cell" data-r><div class="cell-id">V</div><h3>Epistemic Integrity</h3><p>Claims must be calibrated and falsifiable.</p></div>
-<div class="cell" data-r><div class="cell-id">VI</div><h3>Supremacy</h3><p>Nothing overrides the constitution.</p></div>
-<div class="cell" data-r><div class="cell-id">VII</div><h3>Graceful Degradation</h3><p>Under failure, contract to safe states.</p></div>
-</div>
-</div>
-</section>
-
-<!-- PLATFORM -->
 <section style="background:var(--surface)">
 <div class="sec">
-<p class="tag" data-r>Platform</p>
-<h2 class="sec-title" data-r>EVO-V</h2>
+<p class="tag" data-r>Performance</p>
+<h2 class="sec-title" data-r>Validated Benchmarks</h2>
 <div class="divider" data-r></div>
-<p class="sec-sub" data-r>Not a product. An operating system for trust.</p>
-<div class="cards">
-<a href="https://evo-vcloudcon.lovable.app" target="_blank" class="card" data-r><h3>Cloud Control</h3><p>Sovereign cloud orchestration with constitutional governance and real-time telemetry.</p><span class="card-arrow">Launch →</span></a>
-<a href="https://virtualpowerplant.lovable.app" target="_blank" class="card" data-r><h3>Virtual Power Plant</h3><p>Decentralized energy governance under constitutional constraints.</p><span class="card-arrow">Launch →</span></a>
-<a href="https://evo-vision-launch.lovable.app" target="_blank" class="card" data-r><h3>Investment Portal</h3><p>Transparent investment interface for the EVO-V ecosystem.</p><span class="card-arrow">Launch →</span></a>
-<a href="https://evo-vista-core.lovable.app" target="_blank" class="card" data-r><h3>Vista — 100 Agents</h3><p>Multi-agent orchestration at scale within deterministic boundaries.</p><span class="card-arrow">Launch →</span></a>
+<p class="sec-sub" data-r>Reproducible. Auditable. Every metric sealed to the ledger.</p>
+<div class="benchmarks" data-r>
+<div class="bench"><div class="val">1,548</div><div class="lbl">OPS/SEC THROUGHPUT</div></div>
+<div class="bench"><div class="val">43.8ms</div><div class="lbl">P99 LATENCY</div></div>
+<div class="bench"><div class="val">1.94s</div><div class="lbl">HARD-KILL RECOVERY</div></div>
+<div class="bench"><div class="val">100%</div><div class="lbl">REPLAY FIDELITY</div></div>
 </div>
 </div>
 </section>
 
-<!-- WITNESS -->
 <section>
 <div class="sec">
-<p class="tag" data-r>Verification</p>
-<h2 class="sec-title" data-r>Witness Lab</h2>
+<p class="tag" data-r>Platform</p>
+<h2 class="sec-title" data-r>EVO-V Ecosystem</h2>
 <div class="divider" data-r></div>
-<p class="sec-sub" data-r>Where trust is manufactured through evidence.</p>
-<div class="grid">
-<div class="cell" data-r><div class="cell-id">REPLAY</div><h3>Causal Reconstruction</h3><p>Submit any hash. Receive the complete decision chain.</p></div>
-<div class="cell" data-r><div class="cell-id">DRIFT</div><h3>Coherence Monitoring</h3><p>Real-time epistemic drift across all governed agents.</p></div>
-<div class="cell" data-r><div class="cell-id">PROOF</div><h3>Compliance Proofs</h3><p>Cryptographic proofs generated every governance cycle.</p></div>
+<p class="sec-sub" data-r>Not a product. An operating system for trust.</p>
+<div class="cards" data-r>
+<a href="https://evo-vcloudcon.lovable.app" target="_blank" class="card"><h3>Cloud Control</h3><p>Sovereign cloud orchestration with constitutional governance and real-time telemetry.</p><span class="card-arrow">Launch →</span></a>
+<a href="https://virtualpowerplant.lovable.app" target="_blank" class="card"><h3>Virtual Power Plant</h3><p>Decentralized energy governance under constitutional constraints.</p><span class="card-arrow">Launch →</span></a>
+<a href="https://evo-vision-launch.lovable.app" target="_blank" class="card"><h3>Investment Portal</h3><p>Transparent investment interface for the EVO-V ecosystem.</p><span class="card-arrow">Launch →</span></a>
+<a href="https://evo-vista-core.lovable.app" target="_blank" class="card"><h3>Vista — 100 Agents</h3><p>Multi-agent orchestration at scale within deterministic boundaries.</p><span class="card-arrow">Launch →</span></a>
 </div>
 </div>
 </section>
 
-<!-- DOCUMENTATION -->
 <section style="background:var(--surface)">
 <div class="sec" style="text-align:center">
 <p class="tag" data-r>Documentation</p>
 <h2 class="sec-title" data-r>The Rasta Codex</h2>
-<div class="divider" data-r style="margin:24px auto"></div>
-<p class="sec-sub" data-r style="margin:0 auto 40px">Published doctrinal foundation. <em>Rasta Codex</em> and <em>RastafarAI: EVO-V</em>.</p>
+<div class="divider" data-r style="margin:20px auto"></div>
+<p class="sec-sub" data-r style="margin:0 auto 40px">Published doctrinal foundation. Every download includes a Proof-of-Integrity receipt, hash-chained to the L7 Immutable Ledger.</p>
 <div class="hero-btns" data-r>
 <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" class="btn btn-gold">Amazon</a>
 <a href="https://mazsar.gumroad.com" target="_blank" class="btn btn-ghost">Gumroad</a>
@@ -275,14 +268,22 @@ footer{padding:72px 24px 40px;border-top:1px solid rgba(201,162,39,0.05)}
 </div>
 </section>
 
-<!-- FOOTER -->
+<section>
+<div class="sec" style="text-align:center">
+<p class="tag" data-r>The Empire</p>
+<h2 class="sec-title" data-r>A Living System</h2>
+<div class="divider" data-r style="margin:20px auto"></div>
+<p class="sec-sub" data-r style="margin:0 auto">Rasta Imperium is not a company. It is a sovereign mythic-technical civilization rooted in ancestral self-determination. We build the constitutional physics for autonomous intelligence — not to control AI, but to ensure it governs itself with the same integrity we demand of sovereign nations.</p>
+</div>
+</section>
+
 <footer>
 <div class="f-inner">
 <span class="f-brand">RASTA IMPERIUM</span>
 <div class="f-links">
+<a href="/intelligence">Intelligence</a>
 <a href="/architecture">Architecture</a>
-<a href="/evo-v">EVO-V</a>
-<a href="/codex">Constitution</a>
+<a href="/library">Library</a>
 <a href="/applications">Platform</a>
 <a href="/aura">Aura OS</a>
 <a href="/contact">Contact</a>
@@ -295,50 +296,10 @@ footer{padding:72px 24px 40px;border-top:1px solid rgba(201,162,39,0.05)}
 </footer>
 
 <script>
-// Scroll reveal
-const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target)}})},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target)}})},{threshold:0.06,rootMargin:'0px 0px -20px 0px'});
 document.querySelectorAll('[data-r]').forEach(el=>io.observe(el));
-
-// Sacred geometry canvas
-(function(){
-const c=document.getElementById('geo');if(!c)return;
-const ctx=c.getContext('2d');
-let w,h,t=0;
-function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;c.style.cssText='position:absolute;inset:0;z-index:1;pointer-events:none'}
-window.addEventListener('resize',resize);resize();
-function hex(cx,cy,r,a){
-ctx.strokeStyle=`rgba(201,162,39,${a})`;ctx.lineWidth=0.5;
-ctx.beginPath();
-for(let i=0;i<6;i++){const ang=i*Math.PI/3;const x=cx+r*Math.cos(ang);const y=cy+r*Math.sin(ang);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)}
-ctx.closePath();ctx.stroke();
-}
-function flower(cx,cy,r,a){
-ctx.strokeStyle=`rgba(201,162,39,${a})`;ctx.lineWidth=0.4;
-ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
-for(let i=0;i<6;i++){const ang=i*Math.PI/3+t*0.0002;ctx.beginPath();ctx.arc(cx+r*Math.cos(ang),cy+r*Math.sin(ang),r,0,Math.PI*2);ctx.stroke()}
-}
-function particles(){
-ctx.fillStyle='rgba(201,162,39,0.35)';
-for(let i=0;i<30;i++){
-const x=(Math.sin(t*0.0008+i*0.8)*0.4+0.5)*w;
-const y=(Math.cos(t*0.0006+i*1.2)*0.4+0.5)*h;
-const s=Math.sin(t*0.002+i)*0.7+0.9;
-ctx.beginPath();ctx.arc(x,y,s,0,Math.PI*2);ctx.fill();
-}
-}
-function frame(){
-t++;ctx.clearRect(0,0,w,h);
-flower(w*0.5,h*0.4,55,0.035);
-flower(w*0.3,h*0.6,40,0.02);
-flower(w*0.72,h*0.3,45,0.025);
-// Subtle hex grid
-const sz=90;
-for(let r=-1;r<h/sz+1;r++)for(let c=-1;c<w/sz+1;c++){hex(c*sz*1.5+((r%2)*sz*0.75),r*sz*0.866,sz*0.38,0.012)}
-particles();
-requestAnimationFrame(frame);
-}
-frame();
-})();
+(function(){const c=document.getElementById('geo');if(!c)return;const ctx=c.getContext('2d');let w,h,t=0;function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;c.style.cssText='position:absolute;inset:0;z-index:1;pointer-events:none'}window.addEventListener('resize',resize);resize();function flower(cx,cy,r,a){ctx.strokeStyle='rgba(201,162,39,'+a+')';ctx.lineWidth=0.4;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();for(let i=0;i<6;i++){const ang=i*Math.PI/3+t*0.0002;ctx.beginPath();ctx.arc(cx+r*Math.cos(ang),cy+r*Math.sin(ang),r,0,Math.PI*2);ctx.stroke()}}function frame(){t++;ctx.clearRect(0,0,w,h);flower(w*0.5,h*0.38,50,0.03);flower(w*0.28,h*0.6,35,0.018);flower(w*0.74,h*0.28,40,0.022);ctx.fillStyle='rgba(201,162,39,0.3)';for(let i=0;i<25;i++){const x=(Math.sin(t*0.0007+i*0.9)*0.4+0.5)*w;const y=(Math.cos(t*0.0005+i*1.1)*0.4+0.5)*h;const s=Math.sin(t*0.002+i)*0.6+0.8;ctx.beginPath();ctx.arc(x,y,s,0,Math.PI*2);ctx.fill()}requestAnimationFrame(frame)}frame()})();
+(function(){const canvas=document.getElementById('tele-chart');if(!canvas)return;const ctx=canvas.getContext('2d');const W=canvas.width=canvas.offsetWidth;const H=canvas.height=100;let data=[];for(let i=0;i<W;i++)data.push(0.2+Math.random()*0.05);const vEl=document.getElementById('v-score');const govEl=document.getElementById('gov-state');function tick(){const newV=data[data.length-1]+((Math.random()-0.52)*0.008);const clamped=Math.max(0.05,Math.min(0.85,newV));data.push(clamped);if(data.length>W)data.shift();if(vEl)vEl.textContent=clamped.toFixed(4);if(govEl){if(clamped<0.30){govEl.textContent='NOMINAL';govEl.className='value nominal'}else if(clamped<0.55){govEl.textContent='DRIFT';govEl.className='value drift'}else{govEl.textContent='MATERIAL';govEl.className='value critical'}}ctx.clearRect(0,0,W,H);ctx.strokeStyle='rgba(201,162,39,0.6)';ctx.lineWidth=1.5;ctx.beginPath();for(let i=0;i<data.length;i++){const x=i;const y=H-(data[i]*H);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)}ctx.stroke();ctx.strokeStyle='rgba(232,93,93,0.3)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(0,H-0.55*H);ctx.lineTo(W,H-0.55*H);ctx.stroke();ctx.setLineDash([])}setInterval(tick,120)})();
 </script>
 </body>
 </html>
