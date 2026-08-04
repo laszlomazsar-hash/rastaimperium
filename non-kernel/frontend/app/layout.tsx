@@ -29,9 +29,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="text-zinc-100">
         {children}
         <footer className="border-t border-[#B8860B]/20 py-12" style={{ background: 'rgba(10,10,10,0.9)' }}>
-          <div className="mx-auto max-w-6xl px-4 text-center">
-            <p className="text-[#B8860B] text-lg tracking-widest">THE RASTA IMPERIUM</p>
-            <p className="text-zinc-500 text-sm mt-3 tracking-wide">Sovereign AI Architecture · Constitutional Intelligence · England</p>
+          <div className="mx-auto max-w-6xl px-4">
+            <div className="grid gap-8 text-sm sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <p className="text-[#B8860B] text-lg tracking-widest">THE RASTA IMPERIUM</p>
+                <p className="text-zinc-500 text-sm mt-3 tracking-wide">Sovereign AI Architecture · Constitutional Intelligence · England</p>
+              </div>
+              <nav aria-label="Technology footer navigation">
+                <p className="text-[#B8860B] text-xs uppercase tracking-[0.24em]">Technology</p>
+                <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li><Link className="hover:text-[#B8860B] transition" href="/technology/evo-v">EVO-V</Link></li>
+                  <li><Link className="hover:text-[#B8860B] transition" href="/systems/evo-g">EVO-G</Link></li>
+                  <li><Link className="hover:text-[#B8860B] transition" href="/architecture">ARK Engine</Link></li>
+                </ul>
+              </nav>
+              <nav aria-label="Knowledge footer navigation">
+                <p className="text-[#B8860B] text-xs uppercase tracking-[0.24em]">Knowledge</p>
+                <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li><Link className="hover:text-[#B8860B] transition" href="/governance/codex">Codex</Link></li>
+                  <li><Link className="hover:text-[#B8860B] transition" href="/research">Research</Link></li>
+                  <li><Link className="hover:text-[#B8860B] transition" href="/library">Documentation</Link></li>
+                </ul>
+              </nav>
+              <nav aria-label="Company footer navigation">
+                <p className="text-[#B8860B] text-xs uppercase tracking-[0.24em]">Company</p>
+                <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li><Link className="hover:text-[#B8860B] transition" href="/vision">Vision</Link></li>
+                  <li><Link className="hover:text-[#B8860B] transition" href="/contact">Contact</Link></li>
+                  <li><Link className="hover:text-[#B8860B] transition" href="/privacy">Privacy</Link></li>
+                  <li><Link className="hover:text-[#B8860B] transition" href="/terms">Terms</Link></li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </footer>
       </body>
