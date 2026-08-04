@@ -1,0 +1,194 @@
+{
+  "architectureVersion": "3.7.0-website-ia",
+  "canonicalTopLevelPages": [
+    {
+      "component": "/app/page.tsx",
+      "href": "/",
+      "label": "Home",
+      "path": "/",
+      "title": "Home"
+    },
+    {
+      "component": "/app/vision/page.tsx",
+      "href": "/vision",
+      "label": "Vision",
+      "path": "/vision",
+      "title": "Vision"
+    },
+    {
+      "component": "/app/technology/page.tsx",
+      "href": "/technology",
+      "label": "Technology",
+      "path": "/technology",
+      "title": "Technology"
+    },
+    {
+      "component": "/app/systems/page.tsx",
+      "href": "/systems",
+      "label": "Systems",
+      "path": "/systems",
+      "title": "Systems"
+    },
+    {
+      "component": "/app/governance/page.tsx",
+      "href": "/governance",
+      "label": "Governance",
+      "path": "/governance",
+      "title": "Governance"
+    },
+    {
+      "component": "/app/research/page.tsx",
+      "href": "/research",
+      "label": "Research",
+      "path": "/research",
+      "title": "Research"
+    },
+    {
+      "component": "/app/lab/page.tsx",
+      "href": "/lab",
+      "label": "Lab",
+      "path": "/lab",
+      "title": "Lab"
+    },
+    {
+      "component": "/app/contact/page.tsx",
+      "href": "/contact",
+      "label": "Contact",
+      "path": "/contact",
+      "title": "Contact"
+    }
+  ],
+  "legacyRouteHandling": {
+    "defaultStrategy": "deterministic_redirect_or_410",
+    "rules": [
+      {
+        "from": "/codex",
+        "statusCode": 308,
+        "strategy": "permanent_redirect",
+        "to": "/governance"
+      },
+      {
+        "from": "/consulting",
+        "statusCode": 308,
+        "strategy": "permanent_redirect",
+        "to": "/contact"
+      },
+      {
+        "from": "/dashboard",
+        "statusCode": 307,
+        "strategy": "authenticated_redirect",
+        "to": "/lab"
+      },
+      {
+        "from": "/dashboard/admin",
+        "statusCode": 307,
+        "strategy": "authenticated_redirect",
+        "to": "/governance"
+      },
+      {
+        "from": "/dashboard/enterprise",
+        "statusCode": 307,
+        "strategy": "authenticated_redirect",
+        "to": "/systems"
+      }
+    ],
+    "unmappedLegacyRoutes": {
+      "response": "410 Gone",
+      "strategy": "explicit_deprecation"
+    }
+  },
+  "metadata": {
+    "artifactRole": "versioned-website-ia-blueprint",
+    "createdAt": "2026-08-02T00:00:00.000Z",
+    "governanceVersion": "policy.v1",
+    "lineage": {
+      "derivedFrom": [
+        {
+          "metadataPath": "/metadata",
+          "path": "config/blueprint-v3.5.json",
+          "version": "3.6.0"
+        }
+      ],
+      "replacementMode": "additive_versioned_artifact",
+      "supersedes": []
+    },
+    "ordering": {
+      "arrayOrder": "canonical_website_information_architecture_order",
+      "keyOrder": "lexicographic"
+    },
+    "schemaVersion": "1.0.0",
+    "sourceOfTruth": "config/blueprint-v3.5.json",
+    "versionBundle": {
+      "canonSpecVersion": "canonical-json-v1",
+      "certProfile": null,
+      "governanceVersion": "policy.v1",
+      "rulesetVersion": "website-ia-v3",
+      "schemaVersion": "1.0.0"
+    }
+  },
+  "navigation": [
+    {
+      "href": "/vision",
+      "label": "Vision"
+    },
+    {
+      "href": "/technology",
+      "label": "Technology"
+    },
+    {
+      "href": "/systems",
+      "label": "Systems"
+    },
+    {
+      "href": "/governance",
+      "label": "Governance"
+    },
+    {
+      "href": "/research",
+      "label": "Research"
+    },
+    {
+      "href": "/lab",
+      "label": "Lab"
+    },
+    {
+      "href": "/contact",
+      "label": "Contact"
+    }
+  ],
+  "routeComponentMappings": [
+    {
+      "component": "/app/page.tsx",
+      "route": "/"
+    },
+    {
+      "component": "/app/vision/page.tsx",
+      "route": "/vision"
+    },
+    {
+      "component": "/app/technology/page.tsx",
+      "route": "/technology"
+    },
+    {
+      "component": "/app/systems/page.tsx",
+      "route": "/systems"
+    },
+    {
+      "component": "/app/governance/page.tsx",
+      "route": "/governance"
+    },
+    {
+      "component": "/app/research/page.tsx",
+      "route": "/research"
+    },
+    {
+      "component": "/app/lab/page.tsx",
+      "route": "/lab"
+    },
+    {
+      "component": "/app/contact/page.tsx",
+      "route": "/contact"
+    }
+  ],
+  "version": "3.7.0"
+}
