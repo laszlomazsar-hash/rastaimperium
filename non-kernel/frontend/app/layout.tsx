@@ -46,38 +46,81 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         {children}
-        <footer className="border-t border-[#B8860B]/20 py-12" style={{ background: 'rgba(10,10,10,0.9)' }}>
-          <div className="mx-auto max-w-6xl px-4">
-            <div className="grid gap-8 text-sm sm:grid-cols-2 lg:grid-cols-4">
-              <div>
-                <p className="text-[#B8860B] text-lg tracking-widest">THE RASTA IMPERIUM</p>
-                <p className="text-zinc-500 text-sm mt-3 tracking-wide">Sovereign AI Architecture · Constitutional Intelligence · England</p>
+        <footer className="border-t border-[#B8860B]/20 bg-[#090a09] py-14">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-10 text-sm sm:grid-cols-2 xl:grid-cols-[1.25fr_0.8fr_0.8fr_1fr]">
+              <div className="max-w-sm">
+                <Link href="/" className="text-lg tracking-[0.18em] text-[#D4AF37] transition hover:text-[#F2D675]">THE RASTA IMPERIUM</Link>
+                <p className="mt-4 leading-6 text-zinc-400">Sovereign AI architecture for constitutional intelligence, verifiable systems, and accountable autonomy.</p>
+                <nav aria-label="Official social profiles" className="mt-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Follow the work</p>
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                    <a className="text-zinc-300 transition hover:text-[#F2D675]" href="https://www.linkedin.com/in/laszlo-mazsar-97744aa4?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noreferrer">LinkedIn</a>
+                    <a className="text-zinc-300 transition hover:text-[#F2D675]" href="https://www.facebook.com/share/1FuruSZYsy/?mibextid=wwXIfr" target="_blank" rel="noreferrer">Facebook</a>
+                    <a className="text-zinc-300 transition hover:text-[#F2D675]" href="https://codexbylaszlo.substack.com" target="_blank" rel="noreferrer">Substack</a>
+                    <a className="text-zinc-300 transition hover:text-[#F2D675]" href="https://github.com/laszlomazsar-hash" target="_blank" rel="noreferrer">GitHub</a>
+                  </div>
+                </nav>
               </div>
+
               <nav aria-label="Technology footer navigation">
-                <p className="text-[#B8860B] text-xs uppercase tracking-[0.24em]">Technology</p>
-                <ul className="mt-4 space-y-2 text-zinc-400">
-                  <li><Link className="hover:text-[#B8860B] transition" href="/technology/evo-v">EVO-V</Link></li>
-                  <li><Link className="hover:text-[#B8860B] transition" href="/systems/evo-g">EVO-G</Link></li>
-                  <li><Link className="hover:text-[#B8860B] transition" href="/architecture">ARK Engine</Link></li>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Technology</p>
+                <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li><Link className="transition hover:text-[#F2D675]" href="/technology/evo-v">EVO-V architecture</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/systems/evo-g">EVO-G systems</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/architecture">ARK engine</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/governance">Governance</Link></li>
                 </ul>
               </nav>
+
               <nav aria-label="Knowledge footer navigation">
-                <p className="text-[#B8860B] text-xs uppercase tracking-[0.24em]">Knowledge</p>
-                <ul className="mt-4 space-y-2 text-zinc-400">
-                  <li><Link className="hover:text-[#B8860B] transition" href="/governance/codex">Codex</Link></li>
-                  <li><Link className="hover:text-[#B8860B] transition" href="/research">Research</Link></li>
-                  <li><Link className="hover:text-[#B8860B] transition" href="/library">Documentation</Link></li>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Knowledge</p>
+                <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li><Link className="transition hover:text-[#F2D675]" href="/governance/codex">Rasta Codex</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/research">Research</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/library">Documentation</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/contact">Engagement desk</Link></li>
                 </ul>
               </nav>
-              <nav aria-label="Company footer navigation">
-                <p className="text-[#B8860B] text-xs uppercase tracking-[0.24em]">Company</p>
-                <ul className="mt-4 space-y-2 text-zinc-400">
-                  <li><Link className="hover:text-[#B8860B] transition" href="/vision">Vision</Link></li>
-                  <li><Link className="hover:text-[#B8860B] transition" href="/contact">Contact</Link></li>
-                  <li><Link className="hover:text-[#B8860B] transition" href="/privacy">Privacy</Link></li>
-                  <li><Link className="hover:text-[#B8860B] transition" href="/terms">Terms</Link></li>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Publications & store</p>
+                <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li><a className="transition hover:text-[#F2D675]" href="https://amzn.eu/d/0iNaEqMU" target="_blank" rel="noreferrer">Rasta Codex on Amazon</a></li>
+                  <li><a className="transition hover:text-[#F2D675]" href="https://amzn.eu/d/0fi2uUre" target="_blank" rel="noreferrer">RastafarAI: EVO-V on Amazon</a></li>
+                  <li><a className="transition hover:text-[#F2D675]" href="https://mazsar.gumroad.com/l/igggtj" target="_blank" rel="noreferrer">Daily Resonance</a></li>
+                  <li><a className="transition hover:text-[#F2D675]" href="https://gumroad.com/products" target="_blank" rel="noreferrer">Online store</a></li>
                 </ul>
-              </nav>
+              </div>
+            </div>
+
+            <details className="group mt-12 border-y border-[#B8860B]/20 py-5">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold text-zinc-200 marker:content-none">
+                <span>EVO-V applications, command centres & public prototypes</span>
+                <span aria-hidden="true" className="text-[#D4AF37] transition group-open:rotate-45">+</span>
+              </summary>
+              <div className="mt-5 grid gap-x-8 gap-y-3 text-sm text-zinc-400 sm:grid-cols-2 lg:grid-cols-3">
+                <a className="transition hover:text-[#F2D675]" href="https://evo-veck.lovable.app" target="_blank" rel="noreferrer">EVO VECK applications</a>
+                <a className="transition hover:text-[#F2D675]" href="https://evo-vcommacentre.lovable.app/?utm_id=97760_v0_s00_e0_tv4" target="_blank" rel="noreferrer">Adaptive Server Command Center</a>
+                <a className="transition hover:text-[#F2D675]" href="https://evo-cosmos-core.lovable.app" target="_blank" rel="noreferrer">Kernel Console — 2,000 agents</a>
+                <a className="transition hover:text-[#F2D675]" href="https://evo-vcloudcon.lovable.app" target="_blank" rel="noreferrer">EVO-V Cloud Control</a>
+                <a className="transition hover:text-[#F2D675]" href="https://virtualpowerplant.lovable.app" target="_blank" rel="noreferrer">Virtual Power Plant</a>
+                <a className="transition hover:text-[#F2D675]" href="https://evo-vision-launch.lovable.app" target="_blank" rel="noreferrer">EVO-V Investment App</a>
+                <a className="transition hover:text-[#F2D675]" href="https://evo-vista-core.lovable.app" target="_blank" rel="noreferrer">EVO-V Vista — 100 governed agents</a>
+                <a className="transition hover:text-[#F2D675]" href="https://evo-core-constitution.lovable.app" target="_blank" rel="noreferrer">Core Constitution</a>
+                <a className="transition hover:text-[#F2D675]" href="https://github.com/laszlomazsar-hash/evo-v" target="_blank" rel="noreferrer">EVO-V open-source repository</a>
+                <a className="transition hover:text-[#F2D675]" href="https://claude.ai/public/artifacts/f2602d8e-f749-455b-81ba-0f23d41f65de" target="_blank" rel="noreferrer">V5 Laplacian Shift</a>
+                <a className="transition hover:text-[#F2D675]" href="https://claude.ai/public/artifacts/42917a65-12ec-4ec5-b1f5-f7a5a10704ce" target="_blank" rel="noreferrer">Cloudie</a>
+              </div>
+            </details>
+
+            <div className="flex flex-col gap-3 pt-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
+              <p>© 2026 Rasta Imperium. All rights reserved.</p>
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
+                <Link className="transition hover:text-zinc-200" href="/privacy">Privacy</Link>
+                <Link className="transition hover:text-zinc-200" href="/terms">Terms</Link>
+                <a className="transition hover:text-zinc-200" href="mailto:lazzlowtuning@me.com">lazzlowtuning@me.com</a>
+              </div>
             </div>
           </div>
         </footer>
