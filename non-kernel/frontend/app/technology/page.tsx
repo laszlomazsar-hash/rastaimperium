@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EvoVArchitectureDiagram } from "@/components/technology/EvoVArchitectureDiagram";
+import { MotionCodexGallery } from "@/components/technology/MotionCodexGallery";
 
 export const metadata: Metadata = {
   title: "Technology — EVO-V Architecture",
@@ -134,9 +135,9 @@ export default function TechnologyPage() {
           </p>
         </div>
 
-        <EvoVArchitectureDiagram />
+                <EvoVArchitectureDiagram />
       </section>
-
+      <MotionCodexGallery />
       <section className="border-y border-[#B8860B]/15 bg-black/25">
         <div className="container-page py-20 lg:py-24">
           <div className="max-w-2xl">
