@@ -20,9 +20,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy to Railway
-        uses: railwayapp/railway-action@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          service: ${{ secrets.RAILWAY_SERVICE }}
+          node-version: 22
+
+      - name: Install Railway CLI
+        run: npm install --global @railway/cli
+
+      - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
+        run: railway up --ci --service "$RAILWAY_SERVICE"
