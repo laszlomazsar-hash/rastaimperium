@@ -1,6 +1,6 @@
 # Visual Regression Testing
 
-The repository includes an automated visual regression gate for the **published static website**. It discovers every `index.html` page under `backend/static`, asserts that the published inventory contains **42 routes**, and captures each route at two fixed responsive viewports.
+The repository includes an automated visual regression gate for the **published static website**. It discovers every `index.html` page under `backend/static`, asserts that the published inventory contains **40 routes**, and captures each route at two fixed responsive viewports.
 
 | Viewport | Dimensions | Purpose |
 | --- | ---: | --- |
@@ -21,7 +21,7 @@ On failure, the runner exits non-zero and writes the current and diff images ben
 
 ## Updating an approved layout
 
-Do **not** regenerate snapshots merely to make an unexpected failure disappear. First inspect the affected route and diff image. When the visual change is intentional and approved, run the baseline refresh from the repository’s **Visual Regression** workflow using the `update_baselines` input. That workflow regenerates all 84 screenshots and commits the revised baseline set as a dedicated change.
+Do **not** regenerate snapshots merely to make an unexpected failure disappear. First inspect the affected route and diff image. When the visual change is intentional and approved, run the baseline refresh from the repository’s **Visual Regression** workflow using the `update_baselines` input. That workflow regenerates all 80 screenshots and commits the revised baseline set as a dedicated change.
 
 > The validation workflow runs on pull requests and pushes that modify the served static site, the frontend, or the visual-testing workflow itself. A baseline refresh is manual and explicit so a regression cannot silently approve itself.
 

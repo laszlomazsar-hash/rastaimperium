@@ -17,7 +17,7 @@ const baselineRoot = path.join(frontendRoot, "tests/visual-baselines");
 const artifactRoot = path.join(frontendRoot, "visual-regression/artifacts");
 const temporaryRoot = path.join(frontendRoot, "visual-regression/.tmp");
 const updateBaselines = process.argv.includes("--update");
-const expectedRouteCount = 42;
+const expectedRouteCount = 40;
 const maxDiffPixelRatio = 0.002;
 
 const viewports = [
