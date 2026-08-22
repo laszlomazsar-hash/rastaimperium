@@ -1,0 +1,88 @@
+name: Visual Regression
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/static/**"
+      - "non-kernel/frontend/**"
+      - ".github/workflows/visual-regression.yml"
+  push:
+    branches: [main]
+    paths:
+      - "backend/static/**"
+      - "non-kernel/frontend/**"
+      - ".github/workflows/visual-regression.yml"
+  workflow_dispatch:
+    inputs:
+      update_baselines:
+        description: "Regenerate and commit approved screenshots for the current published static output"
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: non-kernel/frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: non-kernel/frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Locate Chromium
+        id: chromium
+        shell: bash
+        run: |
+          executable="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          test -n "$executable"
+          echo "executable=$executable" >> "$GITHUB_OUTPUT"
+
+      - name: Run visual regression suite
+        working-directory: non-kernel/frontend
+        env:
+          VISUAL_CHROMIUM_EXECUTABLE: ${{ steps.chromium.outputs.executable }}
+        run: |
+          if [ "${{ inputs.update_baselines }}" = "true" ]; then
+            npm run test:visual:update
+          else
+            npm run test:visual
+          fi
+
+      - name: Upload visual diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-diffs
+          path: non-kernel/frontend/visual-regression/artifacts
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Commit approved baseline refresh
+        if: github.event_name == 'workflow_dispatch' && inputs.update_baselines == true
+        shell: bash
+        run: |
+          if git diff --quiet -- non-kernel/frontend/tests/visual-baselines; then
+            echo "No baseline changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add non-kernel/frontend/tests/visual-baselines
+          git commit -m "test: refresh visual regression baselines"
+          git push

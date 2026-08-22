@@ -10,7 +10,9 @@
     "deploy": "bash scripts/deploy-pages.sh",
     "check:route-emojis": "node scripts/check-route-emojis.mjs",
     "verify:no-emoji": "node scripts/verify-no-emoji.mjs",
-    "check:semantic-icons": "node scripts/check-semantic-emoji-literals.mjs"
+    "check:semantic-icons": "node scripts/check-semantic-emoji-literals.mjs",
+    "test:visual": "node scripts/visual-regression.mjs",
+    "test:visual:update": "node scripts/visual-regression.mjs --update"
   },
   "dependencies": {
     "next": "^15.0.7",
@@ -25,6 +27,9 @@
     "typescript": "^5.7.2",
     "@types/node": "^22.10.2",
     "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1"
+    "@types/react-dom": "^18.3.1",
+    "@playwright/test": "^1.54.2",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0"
   }
 }

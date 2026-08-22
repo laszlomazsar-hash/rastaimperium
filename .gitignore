@@ -63,3 +63,7 @@ migrations/versions/__pycache__/
 node_modules/
 .next/
 out/
+
+# Visual regression test output (approved baselines remain tracked)
+non-kernel/frontend/visual-regression/artifacts/
+non-kernel/frontend/visual-regression/.tmp/
