@@ -10,6 +10,8 @@ on:
       - 'pyproject.toml'
       - 'requirements.txt'
       - 'railway.json'
+      - '.github/workflows/railway-deploy.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:
