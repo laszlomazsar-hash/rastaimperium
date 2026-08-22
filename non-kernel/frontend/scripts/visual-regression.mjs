@@ -25,6 +25,19 @@ const viewports = [
   { name: "mobile", width: 390, height: 844 },
 ];
 
+const visualRegressionOverlay = `
+<style id="visual-regression-overlay">
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    caret-color: transparent !important;
+  }
+</style>
+<script>
+  Math.random = () => 0.5;
+  Date.now = () => 1704067200000;
+</script>`;
+
 const contentTypes = {
   ".avif": "image/avif",
   ".css": "text/css; charset=utf-8",
@@ -90,8 +103,8 @@ async function isFile(candidate) {
 
 function startStaticServer() {
   const server = createServer(async (request, response) => {
-    const pathname = new URL(request.url ?? "/", "http://127.0.0.1").pathname;
-    const safePath = safeStaticPath(pathname);
+    const requestUrl = new URL(request.url ?? "/", "http://127.0.0.1");
+    const safePath = safeStaticPath(requestUrl.pathname);
     if (safePath === null) {
       response.writeHead(400).end("Bad request");
       return;
@@ -107,10 +120,18 @@ function startStaticServer() {
       return;
     }
 
+    const extension = path.extname(filePath).toLowerCase();
     response.writeHead(200, {
       "cache-control": "no-store",
-      "content-type": contentTypes[path.extname(filePath).toLowerCase()] ?? "application/octet-stream",
+      "content-type": contentTypes[extension] ?? "application/octet-stream",
     });
+
+    if (extension === ".html" && requestUrl.searchParams.get("__visual_regression") === "1") {
+      const html = await readFile(filePath, "utf8");
+      response.end(html.replace("</head>", `${visualRegressionOverlay}</head>`));
+      return;
+    }
+
     createReadStream(filePath).pipe(response);
   });
 
@@ -126,7 +147,7 @@ function stopCaptureProcess(child) {
 
 async function captureViewport(browserExecutable, route, viewport, outputPath) {
   await rm(outputPath, { force: true });
-  const targetUrl = `http://127.0.0.1:4180${route}`;
+  const targetUrl = `http://127.0.0.1:4180${route}?__visual_regression=1`;
   const child = spawn(browserExecutable, [
     "--headless=new",
     "--no-sandbox",
