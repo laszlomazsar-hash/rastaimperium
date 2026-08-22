@@ -31,7 +31,7 @@ const engagementPaths = [
 ];
 
 function inquiryHref(subject: string) {
-  return `mailto:contact@rastafarai.com?subject=${encodeURIComponent(subject)}`;
+  return `mailto:lazzlowtuning@me.com?subject=${encodeURIComponent(subject)}`;
 }
 
 export default function ContactPage() {
