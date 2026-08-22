@@ -33,8 +33,9 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
         run: |
-          if [ -n "$RAILWAY_SERVICE" ]; then
-            railway up --ci --service "$RAILWAY_SERVICE"
-          else
-            railway up --ci
+          if [ -z "$RAILWAY_SERVICE" ]; then
+            echo "::error title=Missing Railway service::Set the RAILWAY_SERVICE GitHub Actions secret to the exact Railway service name (for example: Rasta Imperium)."
+            exit 1
           fi
+
+          railway up --ci --service "$RAILWAY_SERVICE"
