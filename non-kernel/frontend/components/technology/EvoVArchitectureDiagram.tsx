@@ -2,6 +2,12 @@
 
 import { KeyboardEvent, useState } from "react";
 
+type GovernanceMetric = {
+  label: string;
+  target: string;
+  question: string;
+};
+
 type ArchitectureLayer = {
   id: string;
   title: string;
@@ -9,6 +15,7 @@ type ArchitectureLayer = {
   description: string;
   evidence: string;
   color: string;
+  metrics: GovernanceMetric[];
 };
 
 const layers: ArchitectureLayer[] = [
@@ -19,6 +26,11 @@ const layers: ArchitectureLayer[] = [
     description: "The civilizational frame that keeps long-term purpose, human responsibility, and system direction visible.",
     evidence: "Narrative intent and institutional charter",
     color: "from-[#107e3e]/35 via-[#107e3e]/10 to-transparent",
+    metrics: [
+      { label: "Charter alignment", target: "Decision rationale remains attributable to declared institutional purpose.", question: "Which stated purpose makes this action legitimate?" },
+      { label: "Horizon conflict", target: "Tensions between immediate optimisation and long-term responsibility are surfaced.", question: "What future obligation could this decision compromise?" },
+      { label: "Human-impact review", target: "Material impacts on people and institutions are represented in the governing frame.", question: "Whose agency or dignity must remain protected?" },
+    ],
   },
   {
     id: "L8",
@@ -27,6 +39,11 @@ const layers: ArchitectureLayer[] = [
     description: "The non-negotiable articles, permissions, and prohibitions that define admissible action before execution begins.",
     evidence: "Versioned policy bundle and transition rules",
     color: "from-[#2d7f58]/35 via-[#2d7f58]/10 to-transparent",
+    metrics: [
+      { label: "Policy coverage", target: "High-consequence state transitions map to an explicit governing rule.", question: "Which rule authorises or blocks this action?" },
+      { label: "Conflict resolution", target: "Competing rules have a documented priority or escalation path.", question: "What happens when two valid rules point in different directions?" },
+      { label: "Override discipline", target: "Exceptions require an accountable authority and leave a durable record.", question: "Who may override the rule, under what conditions, and with what evidence?" },
+    ],
   },
   {
     id: "L7",
@@ -35,6 +52,11 @@ const layers: ArchitectureLayer[] = [
     description: "A durable record of authority, provenance, and change history that anchors the system to a verifiable identity.",
     evidence: "Hash-linked lineage and signed state history",
     color: "from-[#64813d]/35 via-[#64813d]/10 to-transparent",
+    metrics: [
+      { label: "Provenance completeness", target: "Critical inputs and changes preserve an attributable origin.", question: "Can each material input be traced to a responsible source?" },
+      { label: "Signature validation", target: "Authority-bearing events can be checked against their issuer and scope.", question: "Was this event issued by an approved identity with the right authority?" },
+      { label: "Replay continuity", target: "The chain of relevant events remains sufficient to reconstruct a decision path.", question: "Can the record be replayed without unexplained gaps?" },
+    ],
   },
   {
     id: "L6",
@@ -43,6 +65,11 @@ const layers: ArchitectureLayer[] = [
     description: "Calibration, uncertainty, and drift checks that keep claims proportionate to evidence and expose when confidence must change.",
     evidence: "Confidence state, calibration signal, and drift posture",
     color: "from-[#9a8b23]/35 via-[#9a8b23]/10 to-transparent",
+    metrics: [
+      { label: "Calibration gap", target: "Reported confidence is continuously compared with observed reliability.", question: "How far is the system’s confidence from what the evidence warrants?" },
+      { label: "Uncertainty exposure", target: "Material unknowns remain visible at the point of decision.", question: "What uncertainty should the operator see before acting?" },
+      { label: "Drift detection", target: "Changes in data, context, or behaviour trigger a review posture.", question: "What signal tells us that prior assumptions are no longer stable?" },
+    ],
   },
   {
     id: "L5",
@@ -51,14 +78,24 @@ const layers: ArchitectureLayer[] = [
     description: "A bounded intelligence layer for structured inference, causal reasoning, and decisions that can be traced back to their conditions.",
     evidence: "Canonical inputs, evaluated constraints, and decision trace",
     color: "from-[#b8860b]/35 via-[#b8860b]/10 to-transparent",
+    metrics: [
+      { label: "Constraint satisfaction", target: "Each decision is evaluated against the active constitutional constraints.", question: "Which constraints were satisfied, rejected, or unresolved?" },
+      { label: "Trace completeness", target: "The reasoning path preserves the inputs, conditions, and material branches involved.", question: "Can a reviewer understand how this output was reached?" },
+      { label: "Counterfactual coverage", target: "Relevant alternative actions can be examined when a decision needs challenge or review.", question: "What admissible alternative was considered and why was it not chosen?" },
+    ],
   },
   {
     id: "L4",
     title: "Agentic Infrastructure",
     eyebrow: "Coordinated agency",
-    description: "Orchestration for specialized agents that assigns roles, restricts authority, and preserves accountable coordination.",
+    description: "Orchestration for specialised agents that assigns roles, restricts authority, and preserves accountable coordination.",
     evidence: "Role scope, task assignment, and approved handoff record",
     color: "from-[#bf7a14]/35 via-[#bf7a14]/10 to-transparent",
+    metrics: [
+      { label: "Scope adherence", target: "Agent activity remains inside its assigned role, task, and permitted resources.", question: "Did this agent stay within the scope it was granted?" },
+      { label: "Handoff integrity", target: "Transfers of responsibility preserve context, authority, and required approvals.", question: "What context and accountability moved with the task?" },
+      { label: "Authority budget", target: "Delegated capability is limited by explicit action and escalation boundaries.", question: "What is this agent permitted to decide without further approval?" },
+    ],
   },
   {
     id: "L3",
@@ -67,6 +104,11 @@ const layers: ArchitectureLayer[] = [
     description: "The real-time layer where policy is applied to state transitions, health signals, exceptions, and controlled recovery paths.",
     evidence: "Transition log, invariant status, and recovery event",
     color: "from-[#be5d1b]/35 via-[#be5d1b]/10 to-transparent",
+    metrics: [
+      { label: "Invariant pass rate", target: "Material invariants are evaluated at the transitions where they matter.", question: "Which safety or governance conditions must hold before the system proceeds?" },
+      { label: "Transition validity", target: "State changes follow defined legal paths and reject impermissible edges.", question: "Was this transition allowed from the system’s prior state?" },
+      { label: "Recovery readiness", target: "Exceptions have defined containment, remediation, and witness pathways.", question: "How does the system return to an admissible state after failure?" },
+    ],
   },
   {
     id: "L2",
@@ -75,6 +117,11 @@ const layers: ArchitectureLayer[] = [
     description: "The integration layer connecting governed capability to organisations, incentives, obligations, and real-world operating contexts.",
     evidence: "Institutional mandate and compliance context",
     color: "from-[#ab3f24]/35 via-[#ab3f24]/10 to-transparent",
+    metrics: [
+      { label: "Mandate coverage", target: "Use of capability remains connected to an authorised institutional purpose.", question: "Which organisational mandate supports this use case?" },
+      { label: "Obligation mapping", target: "Applicable legal, fiduciary, and operational obligations are visible in context.", question: "What duty or commitment must this workflow satisfy?" },
+      { label: "Exception accountability", target: "Material exceptions identify an owner, rationale, and review route.", question: "Who is responsible for reviewing this non-standard outcome?" },
+    ],
   },
   {
     id: "L1",
@@ -83,12 +130,24 @@ const layers: ArchitectureLayer[] = [
     description: "The interface through which people can understand, challenge, direct, and review the governed system without losing context.",
     evidence: "Decision view, intervention route, and audit receipt",
     color: "from-[#9e2830]/35 via-[#9e2830]/10 to-transparent",
+    metrics: [
+      { label: "Explanation coverage", target: "Material decisions expose the reason, constraint, and evidence relevant to the operator.", question: "Can a person understand what happened without reconstructing the runtime?" },
+      { label: "Intervention availability", target: "Operators can access the approved pause, challenge, or escalation path when needed.", question: "What is the practical route to intervene in this decision?" },
+      { label: "Receipt clarity", target: "The audit record is presented in a form that supports review and accountable follow-up.", question: "Does the decision receipt identify what changed and who must respond?" },
+    ],
   },
 ];
 
 export function EvoVArchitectureDiagram() {
   const [selectedIndex, setSelectedIndex] = useState(4);
+  const [selectedMetricIndex, setSelectedMetricIndex] = useState(0);
   const selected = layers[selectedIndex];
+  const selectedMetric = selected.metrics[selectedMetricIndex];
+
+  function selectLayer(index: number) {
+    setSelectedIndex(index);
+    setSelectedMetricIndex(0);
+  }
 
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
     if (!["ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
@@ -100,7 +159,7 @@ export function EvoVArchitectureDiagram() {
     if (event.key === "Home") nextIndex = 0;
     if (event.key === "End") nextIndex = layers.length - 1;
 
-    setSelectedIndex(nextIndex);
+    selectLayer(nextIndex);
     document.getElementById(`evo-v-layer-${layers[nextIndex].id}`)?.focus();
   }
 
@@ -114,7 +173,7 @@ export function EvoVArchitectureDiagram() {
               <p className="font-courier text-[0.68rem] uppercase tracking-[0.24em] text-[#D4AF37]">Interactive architecture map</p>
               <h3 id="evo-v-diagram-title" className="mt-3 text-2xl text-zinc-100 sm:text-3xl">EVO-V: nine layers of governed intelligence</h3>
             </div>
-            <p className="max-w-sm text-sm leading-6 text-zinc-500">Select a layer to inspect its responsibility and the evidence it contributes to a governed decision.</p>
+            <p className="max-w-sm text-sm leading-6 text-zinc-500">Select a layer to inspect its responsibility, evidence trail, and governance metrics.</p>
           </div>
 
           <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)] lg:items-stretch">
@@ -129,7 +188,7 @@ export function EvoVArchitectureDiagram() {
                       id={`evo-v-layer-${layer.id}`}
                       type="button"
                       aria-pressed={isSelected}
-                      onClick={() => setSelectedIndex(index)}
+                      onClick={() => selectLayer(index)}
                       onKeyDown={(event) => handleKeyDown(event, index)}
                       className={`group relative grid w-full grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 overflow-hidden border px-4 py-3 text-left transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2D675] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090a09] sm:grid-cols-[4rem_minmax(0,1fr)_auto] sm:px-5 ${isSelected ? "border-[#D4AF37]/80 bg-[#D4AF37]/10 shadow-[0_0_24px_rgba(184,134,11,0.11)]" : "border-zinc-800/90 bg-[#0d0e0d]/80 hover:border-[#B8860B]/45 hover:bg-[#131613]"}`}
                     >
@@ -146,7 +205,7 @@ export function EvoVArchitectureDiagram() {
               </div>
             </div>
 
-            <aside className="relative flex min-h-72 flex-col border border-[#B8860B]/25 bg-black/30 p-6 sm:p-7" aria-live="polite">
+            <aside className="relative flex min-h-[38rem] flex-col border border-[#B8860B]/25 bg-black/30 p-6 sm:p-7" aria-live="polite">
               <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${selected.color}`} aria-hidden="true" />
               <p className="font-courier text-[0.68rem] uppercase tracking-[0.24em] text-[#D4AF37]">Selected layer</p>
               <div className="mt-6 flex items-start justify-between gap-4">
@@ -157,14 +216,43 @@ export function EvoVArchitectureDiagram() {
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-[#D4AF37]/30 font-courier text-sm text-[#D4AF37]">{selected.id}</span>
               </div>
               <p className="mt-6 text-base leading-7 text-zinc-300">{selected.description}</p>
-              <div className="mt-auto border-t border-[#B8860B]/20 pt-5">
+              <div className="mt-6 border-t border-[#B8860B]/20 pt-5">
                 <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-zinc-500">Governance evidence</p>
                 <p className="mt-2 text-sm leading-6 text-[#F2D675]">{selected.evidence}</p>
+              </div>
+
+              <div className="mt-7 border-t border-[#B8860B]/20 pt-5">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-zinc-500">Governance metrics</p>
+                  <span className="font-courier text-[0.64rem] text-[#D4AF37]">{selected.id} / 03</span>
+                </div>
+                <div className="mt-4 grid gap-2" role="group" aria-label={`${selected.title} governance metrics`}>
+                  {selected.metrics.map((metric, index) => {
+                    const isMetricSelected = selectedMetricIndex === index;
+                    return (
+                      <button
+                        key={metric.label}
+                        type="button"
+                        aria-pressed={isMetricSelected}
+                        onClick={() => setSelectedMetricIndex(index)}
+                        className={`flex items-center justify-between gap-4 border px-3.5 py-3 text-left text-sm transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2D675] ${isMetricSelected ? "border-[#D4AF37]/75 bg-[#D4AF37]/10 text-[#F2D675]" : "border-zinc-800 bg-[#0c0d0c]/70 text-zinc-300 hover:border-[#B8860B]/50 hover:bg-[#131613]"}`}
+                      >
+                        <span>{metric.label}</span>
+                        <span className={`h-1.5 w-1.5 rounded-full ${isMetricSelected ? "bg-[#F2D675] shadow-[0_0_8px_#D4AF37]" : "bg-zinc-700"}`} aria-hidden="true" />
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="mt-4 border-l-2 border-[#D4AF37]/70 bg-[#D4AF37]/[0.06] px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#F2D675]">{selectedMetric.label}</p>
+                  <p className="mt-2 text-sm leading-6 text-zinc-300">{selectedMetric.target}</p>
+                  <p className="mt-4 text-xs leading-5 text-zinc-500"><span className="font-semibold text-zinc-400">Control question:</span> {selectedMetric.question}</p>
+                </div>
               </div>
             </aside>
           </div>
 
-          <p className="mt-6 text-xs leading-5 text-zinc-500">Use the arrow keys, Home, or End while focused on a layer to navigate the stack without a pointer.</p>
+          <p className="mt-6 text-xs leading-5 text-zinc-500">Use the arrow keys, Home, or End while focused on a layer to navigate the stack without a pointer. Select a metric to examine its governance intent and control question.</p>
         </div>
       </div>
     </section>
