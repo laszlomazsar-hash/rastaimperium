@@ -28,14 +28,20 @@ jobs:
       - name: Install Railway CLI
         run: npm install --global @railway/cli
 
-      - name: Deploy to Railway
+      - name: Deploy to Railway production
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
+          RAILWAY_ENVIRONMENT: production
         run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "::error title=Missing Railway token::Set the RAILWAY_TOKEN GitHub Actions secret to a valid Railway project token."
+            exit 1
+          fi
+
           if [ -z "$RAILWAY_SERVICE" ]; then
             echo "::error title=Missing Railway service::Set the RAILWAY_SERVICE GitHub Actions secret to the exact Railway service name (for example: Rasta Imperium)."
             exit 1
           fi
 
-          railway up --ci --service "$RAILWAY_SERVICE"
+          railway up --ci --service "$RAILWAY_SERVICE" --environment "$RAILWAY_ENVIRONMENT"
