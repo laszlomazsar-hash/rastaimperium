@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EvoVArchitectureDiagram } from "@/components/technology/EvoVArchitectureDiagram";
 
 export const metadata: Metadata = {
   title: "Technology — EVO-V Architecture",
@@ -133,19 +134,7 @@ export default function TechnologyPage() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-2">
-          {architectureLayers.map((layer) => (
-            <article key={layer.id} className={`group border-l-2 ${layer.tone} bg-[#0d0e0d]/80 p-7 transition duration-300 hover:-translate-y-1 hover:bg-[#121512] sm:p-8`}>
-              <div className="flex items-start justify-between gap-6">
-                <p className="font-courier text-sm text-[#D4AF37]">{layer.id}</p>
-                <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">{layer.label}</p>
-              </div>
-              <h3 className="mt-10 text-2xl text-zinc-100">{layer.title}</h3>
-              <p className="mt-4 max-w-md leading-7 text-zinc-400">{layer.description}</p>
-              <div className="mt-8 h-px w-10 bg-zinc-600 transition-all duration-300 group-hover:w-20 group-hover:bg-[#D4AF37]" />
-            </article>
-          ))}
-        </div>
+        <EvoVArchitectureDiagram />
       </section>
 
       <section className="border-y border-[#B8860B]/15 bg-black/25">
