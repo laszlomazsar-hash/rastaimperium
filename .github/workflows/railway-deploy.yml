@@ -32,4 +32,9 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
-        run: railway up --ci --service "$RAILWAY_SERVICE"
+        run: |
+          if [ -n "$RAILWAY_SERVICE" ]; then
+            railway up --ci --service "$RAILWAY_SERVICE"
+          else
+            railway up --ci
+          fi
