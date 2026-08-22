@@ -1,0 +1,51 @@
+name: Build Static Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "non-kernel/frontend/**"
+      - ".github/workflows/build-static-site.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  export-static-site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: non-kernel/frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: non-kernel/frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Build static export
+        working-directory: non-kernel/frontend
+        run: npm run build
+
+      - name: Publish static export to repository
+        shell: bash
+        run: |
+          rsync -a --delete non-kernel/frontend/out/ backend/static/
+          if test -z "$(git status --porcelain -- backend/static)"; then
+            echo "Static output is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backend/static
+          git commit -m "build: refresh static website export"
+          git push
