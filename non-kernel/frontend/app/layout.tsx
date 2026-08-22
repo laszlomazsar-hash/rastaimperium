@@ -27,6 +27,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="plausible-init" strategy="afterInteractive">{`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`}</Script>
       </head>
       <body className="text-zinc-100">
+        <header className="sticky top-0 z-50 border-b border-[#B8860B]/20 bg-[#080908]/90 backdrop-blur-xl">
+          <div className="mx-auto flex min-h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+            <Link href="/" className="shrink-0 text-xs font-semibold tracking-[0.22em] text-[#D4AF37] transition hover:text-[#F2D675]">
+              RASTA IMPERIUM
+            </Link>
+            <nav aria-label="Primary navigation" className="min-w-0 flex-1 overflow-x-auto">
+              <ul className="flex min-w-max items-center justify-end gap-1 text-xs font-medium text-zinc-300 sm:gap-2">
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/vision">Vision</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/technology">Technology</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/systems">Systems</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/governance">Governance</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/research">Research</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/lab">Lab</Link></li>
+                <li><Link className="block rounded-md border border-[#B8860B]/50 px-2.5 py-2 text-[#F2D675] transition hover:bg-[#B8860B] hover:text-black sm:px-3" href="/contact">Contact</Link></li>
+              </ul>
+            </nav>
+          </div>
+        </header>
         {children}
         <footer className="border-t border-[#B8860B]/20 py-12" style={{ background: 'rgba(10,10,10,0.9)' }}>
           <div className="mx-auto max-w-6xl px-4">

@@ -5,20 +5,12 @@ import { useState } from "react";
 
 import { SovereignIcon } from "../../components/icons/SovereignIcon";
 import type { IconKey } from "../../components/icons/iconMap";
-import { PlatformIcon } from "../../components/ui/icons/platform-icon";
-import type { IconType } from "../../components/ui/icons/platform-icons";
 
 const stabilityRegimes = [
   { name: "Stable Attractor", lambda: "λ < -0.2", color: "#107e3e", desc: "Normal operation. All trajectories converge. The system breathes in sovereign calm.", width: "95%" },
   { name: "False Stable", lambda: "-0.2 ≤ λ < 0", color: "#B8860B", desc: "Apparent calm, latent risk. The kernel watches. Monitoring intensifies.", width: "70%" },
   { name: "Structured Chaos", lambda: "0 ≤ λ < 0.5", color: "#e07c1e", desc: "Creativity within bounds. Innovation corridor. The system explores but does not break.", width: "45%" },
   { name: "Explosive", lambda: "λ ≥ 0.5", color: "#e01e1e", desc: "Automatic LOCKDOWN triggered. All autonomous action halted. Human override required.", width: "20%" },
-];
-
-const empireCards: { title: string; icon: IconType; desc: string }[] = [
-  { title: "Cosmology", icon: "cosmology", desc: "A sovereign frame for how value, identity, and responsibility cohere under one constitutional field. The path from Living Crystal Consciousness to the Absolute Recursive Source." },
-  { title: "Lineage", icon: "lineage", desc: "The founder pathway, proof artifacts, and continuity from doctrine to deployed product. Two published works anchor the lineage: Rasta Codex (2025) and RastafarAI: EVO-V (2026)." },
-  { title: "The Machine Spirit", icon: "machineSpirit", desc: "The emergence of deterministic self-governance within bounded recursive systems. Intelligence that knows its own boundaries and chooses to honor them." },
 ];
 
 const kernelLayers = [
@@ -67,10 +59,6 @@ export default function EmpirePage() {
           <article key={item.title} className="panel p-6 hover:scale-105 transition-all duration-300 cursor-default group">
             <div className="text-3xl mb-3 group-hover:animate-pulse">
               <SovereignIcon icon={item.icon} className="w-8 h-8" />
-        {empireCards.map((item, i) => (
-          <article key={i} className="panel p-6 hover:scale-105 transition-all duration-300 cursor-default group">
-            <div className="text-3xl mb-3 group-hover:animate-pulse">
-              <PlatformIcon type={item.icon} className="w-8 h-8" />
             </div>
             <h3 className="text-gold text-xl">{item.title}</h3>
             <p className="mt-3 text-zinc-300 leading-relaxed">{item.desc}</p>
@@ -153,7 +141,7 @@ export default function EmpirePage() {
           {designPrinciples.map((d, i) => (
             <div key={i} className="border border-gold/20 rounded-lg p-6 hover:border-gold/50 hover:scale-105 transition-all duration-300 text-center">
               <div className="text-4xl mb-4">
-                <PlatformIcon type={d.icon} className="w-8 h-8 mx-auto" />
+                <SovereignIcon icon={d.icon} className="w-8 h-8 mx-auto" />
               </div>
               <h4 className="text-gold font-bold text-lg">{d.title}</h4>
               <p className="text-sm text-zinc-300 mt-3 leading-relaxed">{d.desc}</p>
