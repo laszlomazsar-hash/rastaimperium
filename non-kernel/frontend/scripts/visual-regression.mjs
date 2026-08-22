@@ -32,6 +32,8 @@ const visualRegressionOverlay = `
     transition: none !important;
     caret-color: transparent !important;
   }
+  .opacity-0 { opacity: 1 !important; }
+  .translate-y-8 { transform: none !important; }
 </style>
 <script>
   Math.random = () => 0.5;
