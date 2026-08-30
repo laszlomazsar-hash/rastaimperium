@@ -78,6 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <nav aria-label="Knowledge footer navigation">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Knowledge</p>
                 <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li><Link className="transition hover:text-[#F2D675]" href="/blueprint">Sovereign AI Blueprint</Link></li>
                   <li><Link className="transition hover:text-[#F2D675]" href="/governance/codex">Rasta Codex</Link></li>
                   <li><Link className="transition hover:text-[#F2D675]" href="/research">Research</Link></li>
                   <li><Link className="transition hover:text-[#F2D675]" href="/library">Documentation</Link></li>
