@@ -301,6 +301,18 @@ export default function HomePage() {
             </div>
           </FadeIn>
         </div>
+        <FadeIn delay={150}>
+          <div className="mt-10 text-center">
+            <Link
+              href="/blueprint"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#D4AF37] px-7 py-3.5 text-sm font-bold text-black transition hover:-translate-y-0.5 hover:bg-[#F2D675] hover:shadow-lg hover:shadow-[#B8860B]/20"
+            >
+              Read the full Sovereign AI Blueprint
+              <span aria-hidden="true">→</span>
+            </Link>
+            <p className="mt-3 text-sm text-zinc-500">EVO-V v9 · Constitutional Computation · 21 pages</p>
+          </div>
+        </FadeIn>
       </section>
 
       {/* ── CIVILIZATION STACK — Interactive ── */}
@@ -475,7 +487,7 @@ export default function HomePage() {
             <a href="https://amzn.eu/d/02iiTGT5" target="_blank" rel="noopener" className="panel p-6 hover:scale-[1.03] transition-transform block group">
               <p className="text-xs text-zinc-500 uppercase tracking-wider">December 2025</p>
               <h3 className="text-xl text-gold mt-2 group-hover:text-yellow-400 transition-colors" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>Rasta Codex</h3>
-              <p className="text-sm text-zinc-400 mt-1">A King&apos;s Guide to Energetic Sovereignty and Full-Spectrum Alignment</p>
+              <p className="text-sm text-zinc-400 mt-1">A King's Guide to Energetic Sovereignty and Full-Spectrum Alignment</p>
               <p className="text-gold text-sm mt-4">Read on Amazon →</p>
             </a>
           </FadeIn>
