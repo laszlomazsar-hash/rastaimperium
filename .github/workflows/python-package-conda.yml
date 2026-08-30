@@ -7,6 +7,7 @@ on:
       - master
     paths:
       - 'backend/**'
+      - 'src/**'
       - 'governance/**'
       - 'tests/test_compliance.py'
       - 'tests/test_deterministic_policy.py'
@@ -25,6 +26,7 @@ on:
       - master
     paths:
       - 'backend/**'
+      - 'src/**'
       - 'governance/**'
       - 'tests/test_compliance.py'
       - 'tests/test_deterministic_policy.py'
@@ -43,7 +45,8 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     env:
-      PYTHONPATH: backend/src
+      # Root src/ (src.governance.fsm, src.codex) + backend/src (codex.compliance)
+      PYTHONPATH: .:backend/src
     strategy:
       max-parallel: 5
 
@@ -63,7 +66,7 @@ jobs:
         python infra/scripts/validate_architecture_version.py
     - name: Diagnose Python import path
       env:
-        PYTHONPATH: backend/src
+        PYTHONPATH: .:backend/src
       run: |
         python - <<'PY'
         import importlib
@@ -72,7 +75,7 @@ jobs:
         import sys
         import traceback
 
-        print("Validating codex import contract (codex.compliance must resolve from backend/src)")
+        print("Validating import contracts")
         print("sys.path:")
         pprint.pp(sys.path)
 
@@ -91,6 +94,10 @@ jobs:
             raise SystemExit(1)
 
         print(f"codex.compliance module: {compliance.__file__}")
+
+        print("Sub-step: importlib.import_module('src.governance.fsm.transition_matrix')")
+        fsm = importlib.import_module("src.governance.fsm.transition_matrix")
+        print(f"src.governance.fsm.transition_matrix module: {fsm.__file__}")
         PY
     - name: Lint with flake8
       run: |
@@ -98,13 +105,13 @@ jobs:
         flake8 backend/src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Enforce certification profile guardrails
       env:
-        PYTHONPATH: backend/src
+        PYTHONPATH: .:backend/src
       run: |
         pytest tests/test_compliance.py
 
     - name: Run required kernel/core test subset
       env:
-        PYTHONPATH: backend/src
+        PYTHONPATH: .:backend/src
       run: |
         pytest \
           tests/test_deterministic_policy.py \
@@ -118,7 +125,7 @@ jobs:
     - name: Run optional legacy/non-kernel compatibility suite
       continue-on-error: true
       env:
-        PYTHONPATH: backend/src
+        PYTHONPATH: .:backend/src
       run: |
         pytest tests \
           --ignore=tests/test_compliance.py \

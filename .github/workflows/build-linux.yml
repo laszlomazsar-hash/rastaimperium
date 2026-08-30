@@ -6,6 +6,7 @@ on:
       - 'runtime/**'
       - 'ledger/**'
       - 'governance/**'
+      - 'src/**'
       - 'backend/src/**'
       - 'tests/test_compliance.py'
       - 'tests/test_deterministic_policy.py'
@@ -23,6 +24,7 @@ on:
       - 'runtime/**'
       - 'ledger/**'
       - 'governance/**'
+      - 'src/**'
       - 'backend/src/**'
       - 'tests/test_compliance.py'
       - 'tests/test_deterministic_policy.py'
@@ -41,7 +43,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      PYTHONPATH: backend/src
+      # Root src/ (src.governance.fsm, src.codex) + backend/src (codex.compliance)
+      PYTHONPATH: .:backend/src
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -61,11 +64,11 @@ jobs:
           pip install -r backend/requirements.txt
       - name: Diagnose Python import path
         env:
-          PYTHONPATH: backend/src
+          PYTHONPATH: .:backend/src
         run: |
           python - <<'PY'
           import importlib, os, pprint, sys, traceback
-          print('Validating codex import contract (codex.compliance must resolve from backend/src)')
+          print('Validating import contracts')
           pprint.pp(sys.path)
           try:
               compliance = importlib.import_module('codex.compliance')
@@ -73,10 +76,12 @@ jobs:
               traceback.print_exc()
               raise SystemExit(1)
           print(f'codex.compliance module: {compliance.__file__}')
+          fsm = importlib.import_module('src.governance.fsm.transition_matrix')
+          print(f'src.governance.fsm.transition_matrix module: {fsm.__file__}')
           PY
       - name: Run required kernel-critical tests
         env:
-          PYTHONPATH: backend/src
+          PYTHONPATH: .:backend/src
         run: |
           pytest tests/test_compliance.py
           pytest \
