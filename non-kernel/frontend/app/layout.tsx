@@ -27,10 +27,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="plausible-init" strategy="afterInteractive">{`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`}</Script>
       </head>
       <body className="text-zinc-100">
-        <header className="sticky top-0 z-50 border-b border-[#B8860B]/20 bg-[#080908]/90 backdrop-blur-xl">
+        <header className="royal-header sticky top-0 z-50 border-b border-[#B8860B]/20 bg-[#080908]/90 backdrop-blur-xl">
           <div className="mx-auto flex min-h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-            <Link href="/" className="shrink-0 text-xs font-semibold tracking-[0.22em] text-[#D4AF37] transition hover:text-[#F2D675]">
-              RASTA IMPERIUM
+            <Link href="/" className="royal-brand shrink-0 text-xs font-semibold tracking-[0.22em] text-[#D4AF37] transition hover:text-[#F2D675]">
+              <span className="royal-brand-mark" aria-hidden="true">RI</span>
+              <span>RASTA IMPERIUM</span>
             </Link>
             <nav aria-label="Primary navigation" className="min-w-0 flex-1 overflow-x-auto">
               <ul className="flex min-w-max items-center justify-end gap-1 text-xs font-medium text-zinc-300 sm:gap-2">
@@ -46,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         {children}
-        <footer className="border-t border-[#B8860B]/20 bg-[#090a09] py-14">
+        <footer className="royal-footer border-t border-[#B8860B]/20 bg-[#090a09] py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-10 text-sm sm:grid-cols-2 xl:grid-cols-[1.25fr_0.8fr_0.8fr_1fr]">
               <div className="max-w-sm">
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Technology</p>
                 <ul className="mt-4 space-y-2.5 text-zinc-400">
                   <li><Link className="transition hover:text-[#F2D675]" href="/technology/evo-v">EVO-V architecture</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/technology">Rasta Kernel</Link></li>
                   <li><Link className="transition hover:text-[#F2D675]" href="/systems/evo-g">EVO-G systems</Link></li>
                   <li><Link className="transition hover:text-[#F2D675]" href="/architecture">ARK engine</Link></li>
                   <li><Link className="transition hover:text-[#F2D675]" href="/governance">Governance</Link></li>

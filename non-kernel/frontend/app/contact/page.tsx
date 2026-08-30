@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import EnquiryForm from "./EnquiryForm";
 
 export const metadata: Metadata = {
   title: "Contact — Rasta Imperium",
@@ -101,6 +102,10 @@ export default function ContactPage() {
             ))}
           </div>
         </div>
+      </section>
+
+      <section className="relative mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
+        <EnquiryForm />
       </section>
 
       <section className="relative mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">

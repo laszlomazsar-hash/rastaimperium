@@ -128,18 +128,19 @@ function LiveTerminal() {
   };
   const telemetry = getTelemetrySample("live-terminal-seed-v1", tick, systemState, capabilityRegistry.liveTerminal);
   const block = 847291 + tick;
-  const snapshot = generateTelemetrySnapshot(tick, "darwin-kernel-v7.2");
+  const snapshot = generateTelemetrySnapshot(tick, "rasta-kernel-v7.2");
   const visualState: VisualSystemState = snapshot.systemState;
   const visual = SYSTEM_STATE_VISUAL_MAP[visualState];
 
   return (
-    <SemanticMotion semantic={visual.motion} className="panel p-6 font-courier text-sm relative overflow-hidden">
+    <SemanticMotion semantic={visual.motion} className="panel royal-panel royal-terminal p-6 font-courier text-sm relative overflow-hidden">
       <div className={`absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-green-500 via-gold to-red-500 ${semanticClass(visual.motion, "accent")}`} />
-      <p className="text-gold text-xs mb-3 flex items-center gap-2">
-        <SemanticBadge semantic={visual.motion} /> LIVE GOVERNANCE STATE
+      <p className="text-gold text-xs mb-2 flex items-center gap-2">
+        <SemanticBadge semantic={visual.motion} /> RASTA KERNEL // REPLAY DEMONSTRATION
       </p>
+      <p className="royal-microcopy mb-4">Synthetic telemetry · local visual proof · not production monitoring</p>
       <div className="space-y-1.5 text-zinc-300">
-        <p>╔══ DARWIN KERNEL v7.2 ══╗</p>
+        <p>╔══ RASTA KERNEL v7.2 ══╗</p>
         <p>║ coherence: <span className="text-gold transition-all">{telemetry.coherence}</span>     ║</p>
         <p>║ invariants: <span className="text-green-400">HOLDING</span>   ║</p>
         <p>║ drift_Δ: <span className="text-gold transition-all">{telemetry.drift}</span>      ║</p>
@@ -187,33 +188,33 @@ export default function HomePage() {
   const [expandedLayer, setExpandedLayer] = useState<string | null>(null);
 
   return (
-    <main>
+    <main className="royal-page">
       {/* ── HERO ── */}
-      <section className="container-page pt-24 pb-16">
+      <section className="container-page royal-hero pt-24 pb-16">
         <FadeIn>
           <div className="text-center mb-12">
-            <Image src="/images/logo-lm.jpg" alt="Rasta Imperium" width={140} height={140} className="mx-auto rounded-2xl emblem-glow mb-6" />
+            <div className="royal-seal-wrap mx-auto mb-6"><Image src="/images/logo-lm.jpg" alt="Rasta Imperium" width={140} height={140} className="royal-seal emblem-glow rounded-2xl" /></div>
           </div>
         </FadeIn>
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <FadeIn>
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gold/60">Constitutional Intelligence Infrastructure</p>
-              <h1 className="mt-4 text-4xl md:text-6xl text-gold-gradient leading-tight" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
+              <p className="royal-kicker text-xs uppercase tracking-[0.3em] text-gold/60">The Rasta Royal Intelligence House</p>
+              <h1 className="royal-title mt-4 text-4xl md:text-6xl text-gold-gradient leading-tight" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
                 Deterministic Governance<br />for Civilization-Scale AI
               </h1>
-              <p className="mt-5 text-zinc-300 text-xl tracking-wide">Replayable. Auditable. Sovereign.</p>
-              <p className="mt-6 text-zinc-400 text-lg leading-relaxed">
+              <p className="royal-subtitle mt-5 text-zinc-300 text-xl tracking-wide">Replayable. Auditable. Sovereign.</p>
+              <p className="royal-lede mt-6 text-zinc-400 text-lg leading-relaxed">
                 Rasta Imperium builds constitutional intelligence systems that preserve epistemic integrity across autonomous infrastructure.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
-                <Link href="/empire" className="group rounded-lg bg-gold text-black px-7 py-3.5 font-bold hover:bg-yellow-500 transition-all hover:scale-105 hover:shadow-lg hover:shadow-gold/20">
+                <Link href="/empire" className="royal-button royal-button-primary group rounded-lg bg-gold text-black px-7 py-3.5 font-bold hover:bg-yellow-500 transition-all hover:scale-105 hover:shadow-lg hover:shadow-gold/20">
                   Explore Architecture <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
-                <Link href="/witness" className="rounded-lg border border-gold text-gold px-7 py-3.5 font-bold hover:bg-gold/10 transition-all hover:scale-105">
+                <Link href="/witness" className="royal-button royal-button-ghost rounded-lg border border-gold text-gold px-7 py-3.5 font-bold hover:bg-gold/10 transition-all hover:scale-105">
                   View Replay Demo
                 </Link>
-                <Link href="/consulting" className="rounded-lg border border-zinc-600 text-zinc-200 px-7 py-3.5 font-bold hover:border-gold hover:text-gold transition-all hover:scale-105">
+                <Link href="/consulting" className="royal-button royal-button-ghost rounded-lg border border-zinc-600 text-zinc-200 px-7 py-3.5 font-bold hover:border-gold hover:text-gold transition-all hover:scale-105">
                   Book Governance Intake
                 </Link>
               </div>
@@ -229,25 +230,25 @@ export default function HomePage() {
       <section className="container-page py-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <FadeIn delay={0}>
-            <div ref={ops.ref} className="panel p-6 text-center hover:scale-105 transition-transform cursor-default">
+            <div ref={ops.ref} className="panel royal-panel royal-stat p-6 text-center hover:scale-105 transition-transform cursor-default">
               <p className="text-3xl md:text-4xl font-bold text-gold">{ops.count.toLocaleString()}+</p>
               <p className="text-xs text-zinc-400 mt-2 uppercase tracking-wider">Ops / Second</p>
             </div>
           </FadeIn>
           <FadeIn delay={100}>
-            <div ref={reliability.ref} className="panel p-6 text-center hover:scale-105 transition-transform cursor-default">
+            <div ref={reliability.ref} className="panel royal-panel royal-stat p-6 text-center hover:scale-105 transition-transform cursor-default">
               <p className="text-3xl md:text-4xl font-bold text-green-400">{(reliability.count / 10).toFixed(1)}%</p>
               <p className="text-xs text-zinc-400 mt-2 uppercase tracking-wider">Reliability</p>
             </div>
           </FadeIn>
           <FadeIn delay={200}>
-            <div className="panel p-6 text-center hover:scale-105 transition-transform cursor-default">
+            <div className="panel royal-panel royal-stat p-6 text-center hover:scale-105 transition-transform cursor-default">
               <p className="text-3xl md:text-4xl font-bold text-gold">≤45ms</p>
               <p className="text-xs text-zinc-400 mt-2 uppercase tracking-wider">Response Time</p>
             </div>
           </FadeIn>
           <FadeIn delay={300}>
-            <div ref={agentCount.ref} className="panel p-6 text-center hover:scale-105 transition-transform cursor-default">
+            <div ref={agentCount.ref} className="panel royal-panel royal-stat p-6 text-center hover:scale-105 transition-transform cursor-default">
               <p className="text-3xl md:text-4xl font-bold text-gold">{agentCount.count.toLocaleString()}</p>
               <p className="text-xs text-zinc-400 mt-2 uppercase tracking-wider">Active Agents</p>
             </div>
@@ -331,10 +332,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── DARWIN KERNEL with Progress Bars ── */}
+      {/* ── RASTA KERNEL with Progress Bars ── */}
       <section className="container-page">
         <FadeIn>
-          <h2 className="text-3xl md:text-4xl text-gold text-center">The Darwin Kernel v7.2</h2>
+          <h2 className="text-3xl md:text-4xl text-gold text-center">The Rasta Kernel v7.2</h2>
           <p className="text-center text-zinc-400 mt-2">A multi-timescale deterministic governance kernel</p>
         </FadeIn>
         <div className="panel p-6 mt-8">

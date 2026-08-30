@@ -13,6 +13,7 @@ from fastapi.responses import HTMLResponse, FileResponse
 from src.codex.compliance import ComplianceEngine, ReplayResult
 
 from src.runtime_import_guard import install_legacy_import_guard
+from src.ark_safety.enquiries import EnquiryPayload, EnquiryResult, create_enquiry
 
 install_legacy_import_guard()
 
@@ -172,6 +173,11 @@ def trigger_rollback(actor: str, reason: str) -> dict[str, object]:
         "ok": True,
         "audit_digest": record.digest,
     }
+
+
+@app.post("/api/enquiries", response_model=EnquiryResult, status_code=201)
+def submit_enquiry(request: Request, payload: EnquiryPayload) -> EnquiryResult:
+    return create_enquiry(request, payload)
 
 
 # --- Static Frontend Serving ---
