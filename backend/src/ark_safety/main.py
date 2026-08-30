@@ -10,10 +10,10 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
 
-from src.codex.compliance import ComplianceEngine, ReplayResult
+from ..codex.compliance import ComplianceEngine, ReplayResult
 
-from src.runtime_import_guard import install_legacy_import_guard
-from src.ark_safety.enquiries import EnquiryPayload, EnquiryResult, create_enquiry
+from ..runtime_import_guard import install_legacy_import_guard
+from .enquiries import EnquiryPayload, EnquiryResult, create_enquiry
 
 install_legacy_import_guard()
 
