@@ -92,6 +92,9 @@ const pillars = [
 const pdfUrl =
   "https://drive.google.com/file/d/1AMGgLZTjuGazMZDJKhnDuIOivCnW9rL-/view?usp=drivesdk";
 
+const tabernacleUrl =
+  "https://drive.google.com/file/d/1KIw9Aun87Md5RlL7KK4u6wK-NIjdBe-m/view?usp=drivesdk";
+
 export default function BlueprintPage() {
   return (
     <main className="overflow-hidden">
@@ -125,7 +128,15 @@ export default function BlueprintPage() {
                   rel="noopener noreferrer"
                   className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F2D675] hover:shadow-lg hover:shadow-[#B8860B]/20 active:scale-[0.97]"
                 >
-                  Download full PDF (14 pages)
+                  Blueprint PDF (14p)
+                </a>
+                <a
+                  href={tabernacleUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg bg-[#107e3e] px-6 py-3 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#0d6b34] hover:shadow-lg hover:shadow-[#107e3e]/30 active:scale-[0.97]"
+                >
+                  Digital Tabernacle (15p)
                 </a>
                 <Link
                   href="/technology"
@@ -275,14 +286,15 @@ export default function BlueprintPage() {
       <section className="border-t border-[#B8860B]/20 bg-black/30">
         <div className="container-page py-20 text-center lg:py-24">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
-            Full document
+            Full documents
           </p>
           <h2 className="mx-auto mt-5 max-w-3xl text-3xl leading-tight text-zinc-100 sm:text-4xl">
-            Read the complete Sovereign AI Blueprint
+            Sovereign doctrine & constitutional architecture
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-zinc-400">
-            14-page visual blueprint covering Constitutional Computation, the EVO-V civilisation
-            kernel, monetisation pathways, and the full 9-layer architecture.
+          <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
+            Download the 14-page Sovereign AI Blueprint and the companion 15-page Digital Tabernacle
+            (Rastafarai Codex & EVO-V Civilization Kernel) — Seven Axioms, Five Rings of
+            Containment, Living Crystal Architecture, and formal TLA+ verification.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-4">
             <a
@@ -291,7 +303,15 @@ export default function BlueprintPage() {
               rel="noopener noreferrer"
               className="rounded-lg bg-[#D4AF37] px-8 py-3.5 text-sm font-bold text-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F2D675] hover:shadow-lg hover:shadow-[#B8860B]/20 active:scale-[0.97]"
             >
-              Open PDF on Google Drive
+              Sovereign AI Blueprint (14p)
+            </a>
+            <a
+              href={tabernacleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg bg-[#107e3e] px-8 py-3.5 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#0d6b34] hover:shadow-lg hover:shadow-[#107e3e]/30 active:scale-[0.97]"
+            >
+              Digital Tabernacle (15p)
             </a>
             <Link
               href="/library"
