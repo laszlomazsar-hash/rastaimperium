@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+
 export const metadata: Metadata = {
   title: "Library — Publications & Digital Artifacts",
-  description: "Published works: Rasta Codex and RastafarAI EVO-V. Digital artifacts: ARK Engine, Civilization Kernel, .evop proofs. Open source repositories.",
+  description: "Published works: Rasta Codex and RastafarAI EVO-V. Digital artifacts: ARK Engine, Civilization Kernel, Sovereign AI Blueprint, .evop proofs. Open source repositories.",
 };
 
 export default function LibraryPage() {
@@ -11,10 +13,11 @@ export default function LibraryPage() {
   ];
 
   const artifacts = [
-    { name: "ARK Engine", desc: "Production-ready codebase with containerized isolation and AST-based safety validation. GPU-accelerated processing.", icon: "️", status: "Production" },
-    { name: "Civilization Kernel", desc: "The constitutional substrate — governance logic compiled into executable architecture. 9-layer sovereign stack.", icon: "️", status: "Active" },
-    { name: "EVO-V Codex", desc: "Technical documentation of the kernel invariants, state machine, and deployment strategy.", icon: "", status: "v2.0" },
-    { name: ".evop Replay Proofs", desc: "Portable, court-grade evidence containers for deterministic truth verification. SHA-256 sealed.", icon: "", status: "Standard" },
+    { name: "Sovereign AI Blueprint", desc: "EVO-V v9 / Constitutional Computation — 21-page visual blueprint of the 9-layer sovereign stack, proof-carrying execution, and relational closure.", status: "v9", href: "/blueprint" },
+    { name: "ARK Engine", desc: "Production-ready codebase with containerized isolation and AST-based safety validation. GPU-accelerated processing.", status: "Production", href: null },
+    { name: "Civilization Kernel", desc: "The constitutional substrate — governance logic compiled into executable architecture. 9-layer sovereign stack.", status: "Active", href: null },
+    { name: "EVO-V Codex", desc: "Technical documentation of the kernel invariants, state machine, and deployment strategy.", status: "v2.0", href: null },
+    { name: ".evop Replay Proofs", desc: "Portable, court-grade evidence containers for deterministic truth verification. SHA-256 sealed.", status: "Standard", href: null },
   ];
 
   const repos = [
@@ -58,18 +61,31 @@ export default function LibraryPage() {
       <section className="mt-12">
         <h2 className="text-2xl text-gold">Digital Artifacts</h2>
         <div className="grid md:grid-cols-2 gap-4 mt-6">
-          {artifacts.map((a) => (
-            <div key={a.name} className="panel p-6 hover:scale-[1.02] transition-all duration-300">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{a.icon}</span>
-                  <h3 className="text-gold text-lg">{a.name}</h3>
+          {artifacts.map((a) => {
+            const inner = (
+              <>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <h3 className="text-gold text-lg">{a.name}</h3>
+                  </div>
+                  <span className="text-xs px-2 py-1 rounded border border-green-600/30 text-green-500">{a.status}</span>
                 </div>
-                <span className="text-xs px-2 py-1 rounded border border-green-600/30 text-green-500">{a.status}</span>
+                <p className="text-sm text-zinc-300 mt-3 leading-relaxed">{a.desc}</p>
+                {a.href && (
+                  <p className="text-sm text-gold/70 mt-4 group-hover:text-gold transition-colors">Open blueprint →</p>
+                )}
+              </>
+            );
+            return a.href ? (
+              <Link key={a.name} href={a.href} className="panel p-6 hover:scale-[1.02] transition-all duration-300 group block">
+                {inner}
+              </Link>
+            ) : (
+              <div key={a.name} className="panel p-6 hover:scale-[1.02] transition-all duration-300">
+                {inner}
               </div>
-              <p className="text-sm text-zinc-300 mt-3 leading-relaxed">{a.desc}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
