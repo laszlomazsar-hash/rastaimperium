@@ -90,7 +90,7 @@ const pillars = [
 ];
 
 const pdfUrl =
-  "https://drive.google.com/file/d/1eodtfTSqO5BYfnsTM8fgcno6Nkmw1VHW/view?usp=drivesdk";
+  "https://drive.google.com/file/d/1AMGgLZTjuGazMZDJKhnDuIOivCnW9rL-/view?usp=drivesdk";
 
 export default function BlueprintPage() {
   return (
@@ -125,7 +125,7 @@ export default function BlueprintPage() {
                   rel="noopener noreferrer"
                   className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F2D675] hover:shadow-lg hover:shadow-[#B8860B]/20 active:scale-[0.97]"
                 >
-                  Download full PDF (21 pages)
+                  Download full PDF (14 pages)
                 </a>
                 <Link
                   href="/technology"
@@ -246,7 +246,7 @@ export default function BlueprintPage() {
               </li>
               <li className="flex gap-3">
                 <span className="text-[#D4AF37]">→</span>
-                Graduated autonomy under continuous oversight
+                Graduated autonomy under continuous human oversight
               </li>
             </ul>
           </div>
@@ -281,7 +281,7 @@ export default function BlueprintPage() {
             Read the complete Sovereign AI Blueprint
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-zinc-400">
-            21-page visual blueprint covering Constitutional Computation, the EVO-V civilisation
+            14-page visual blueprint covering Constitutional Computation, the EVO-V civilisation
             kernel, monetisation pathways, and the full 9-layer architecture.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-4">
