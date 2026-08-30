@@ -66,28 +66,35 @@ const trustPillars: { text: string; icon: IconType }[] = [
   { text: "Counterexample generation for every critical invariant failure", icon: "prediction" },
 ];
 
-/* ── Animated Counter Hook ── */
+/* ── Animated Counter Hook ──
+ * SSR / static export starts at the final value so crawlers and no-JS
+ * always see the real benchmark numbers (never 0).
+ * On client mount we animate 0 → end once, above the fold — no IntersectionObserver.
+ */
 function useCounter(end: number, duration = 2000) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
+  const [count, setCount] = useState(end);
+  const ref = useRef(null);
   const started = useRef(false);
+
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !started.current) {
-        started.current = true;
-        const start = Date.now();
-        const tick = () => {
-          const elapsed = Date.now() - start;
-          const progress = Math.min(elapsed / duration, 1);
-          setCount(Math.floor(progress * end));
-          if (progress < 1) requestAnimationFrame(tick);
-        };
-        tick();
-      }
-    }, { threshold: 0.3 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    if (started.current) return;
+    started.current = true;
+    setCount(0);
+    const start = Date.now();
+    let raf = 0;
+    const tick = () => {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * end));
+      if (progress < 1) raf = requestAnimationFrame(tick);
+      else setCount(end);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [end, duration]);
+
   return { count, ref };
 }
 
@@ -102,7 +109,7 @@ function SemanticBadge({ semantic }: { semantic: MotionSemantic }) {
 
 /* ── Fade-in on scroll ── */
 function FadeIn({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -164,14 +171,15 @@ function LiveTerminal() {
 
 /* ── Animated Progress Bar ── */
 function ProgressBar({ pct, delay = 0 }: { pct: number; delay?: number }) {
-  const [width, setWidth] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(pct);
+  const ref = useRef(null);
+  const started = useRef(false);
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setTimeout(() => setWidth(pct), delay);
-    }, { threshold: 0.3 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    if (started.current) return;
+    started.current = true;
+    setWidth(0);
+    const t = setTimeout(() => setWidth(pct), delay + 50);
+    return () => clearTimeout(t);
   }, [pct, delay]);
   return (
     <div ref={ref} className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
@@ -185,7 +193,7 @@ export default function HomePage() {
   const ops = useCounter(1548, 2000);
   const reliability = useCounter(997, 2000);
   const agentCount = useCounter(2048, 2000);
-  const [expandedLayer, setExpandedLayer] = useState<string | null>(null);
+  const [expandedLayer, setExpandedLayer] = useState(null);
 
   return (
     <main className="royal-page">
@@ -430,7 +438,6 @@ export default function HomePage() {
         </FadeIn>
         <FadeIn delay={200}>
           <div className="mt-8 relative max-w-4xl mx-auto overflow-hidden rounded-2xl border border-[#B8860B]/40">
-            {/* Coloured background with green → gold gradient + glow orbs */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#0a1f14] via-[#0d2818] to-[#1a1508]" aria-hidden="true" />
             <div className="absolute -left-16 top-0 h-64 w-64 rounded-full bg-[#107e3e]/25 blur-3xl" aria-hidden="true" />
             <div className="absolute -right-12 bottom-0 h-56 w-56 rounded-full bg-[#D4AF37]/20 blur-3xl" aria-hidden="true" />
