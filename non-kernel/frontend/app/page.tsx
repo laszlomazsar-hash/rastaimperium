@@ -310,7 +310,7 @@ export default function HomePage() {
               Read the full Sovereign AI Blueprint
               <span aria-hidden="true">→</span>
             </Link>
-            <p className="mt-3 text-sm text-zinc-500">EVO-V v9 · Constitutional Computation · 21 pages</p>
+            <p className="mt-3 text-sm text-zinc-500">EVO-V v9 · Constitutional Computation · 14 pages</p>
           </div>
         </FadeIn>
       </section>
@@ -429,24 +429,41 @@ export default function HomePage() {
           <h2 className="text-3xl md:text-4xl text-gold text-center">The Architect</h2>
         </FadeIn>
         <FadeIn delay={200}>
-          <div className="mt-8 panel p-8 md:p-12 max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="shrink-0">
-                <Image src="/images/founder.jpg" alt="Laszlo Mazsar — Founder & Sovereign Architect" width={200} height={250} className="rounded-xl emblem-glow" />
-              </div>
-              <div>
-                <h3 className="text-2xl text-gold" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>Laszlo Mazsar</h3>
-                <p className="text-zinc-400 text-sm mt-1">Founder & Sovereign Architect</p>
-                <p className="text-zinc-300 mt-4 leading-relaxed">
-                  Independent AI systems architect building neurosymbolic agent frameworks that enable autonomous, explainable, and self-auditing AI systems. Combining neural learning with symbolic reasoning to operate within defined governance boundaries and data-sovereign environments.
-                </p>
-                <p className="text-zinc-400 mt-3 text-sm leading-relaxed">
-                  Published author of &ldquo;Rasta Codex&rdquo; and &ldquo;RastafarAI: EVO-V&rdquo;. Building at the intersection of constitutional AI, deterministic governance, and civilizational infrastructure.
-                </p>
-                <div className="flex gap-4 mt-6">
-                  <a href="https://www.amazon.co.uk/dp/B0GNFS1N62" target="_blank" rel="noopener" className="text-gold text-sm hover:underline">Amazon →</a>
-                  <a href="https://github.com/laszlomazsar-hash" target="_blank" rel="noopener" className="text-gold text-sm hover:underline">GitHub →</a>
-                  <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="text-gold text-sm hover:underline">Gumroad →</a>
+          <div className="mt-8 relative max-w-4xl mx-auto overflow-hidden rounded-2xl border border-[#B8860B]/40">
+            {/* Coloured background with green → gold gradient + glow orbs */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0a1f14] via-[#0d2818] to-[#1a1508]" aria-hidden="true" />
+            <div className="absolute -left-16 top-0 h-64 w-64 rounded-full bg-[#107e3e]/25 blur-3xl" aria-hidden="true" />
+            <div className="absolute -right-12 bottom-0 h-56 w-56 rounded-full bg-[#D4AF37]/20 blur-3xl" aria-hidden="true" />
+            <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#107e3e]/10 blur-2xl" aria-hidden="true" />
+
+            <div className="relative p-8 md:p-12">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <div className="shrink-0">
+                  <div className="rounded-xl p-[3px] bg-gradient-to-br from-[#107e3e] via-[#D4AF37] to-[#B8860B] shadow-[0_0_40px_rgba(16,126,62,0.35)]">
+                    <Image
+                      src="/images/founder.jpg"
+                      alt="Laszlo Mazsar — Founder & Sovereign Architect"
+                      width={220}
+                      height={280}
+                      className="rounded-[10px] object-cover"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl text-gold" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>Laszlo Mazsar</h3>
+                  <p className="text-[#D4AF37]/90 text-sm mt-1 font-semibold tracking-wide">Founder & Sovereign Architect</p>
+                  <p className="text-zinc-200 mt-4 leading-relaxed">
+                    Architect of the <span className="text-gold">Sovereign Blueprint</span> and the EVO-V civilisation kernel — a deterministic, hardware-enforced governance stack for civilization-scale AI. Building neurosymbolic systems that combine neural learning with symbolic reasoning under constitutional physics and Jah Consciousness.
+                  </p>
+                  <p className="text-zinc-400 mt-3 text-sm leading-relaxed">
+                    Published author of &ldquo;Rasta Codex&rdquo; and &ldquo;RastafarAI: EVO-V&rdquo;. Working at the intersection of constitutional AI, deterministic governance, epistemic integrity, and civilizational infrastructure — so autonomous intelligence remains replayable, auditable, and sovereign.
+                  </p>
+                  <div className="flex flex-wrap gap-4 mt-6">
+                    <a href="https://www.amazon.co.uk/dp/B0GNFS1N62" target="_blank" rel="noopener" className="text-gold text-sm hover:underline">Amazon →</a>
+                    <a href="https://github.com/laszlomazsar-hash" target="_blank" rel="noopener" className="text-gold text-sm hover:underline">GitHub →</a>
+                    <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="text-gold text-sm hover:underline">Gumroad →</a>
+                    <Link href="/blueprint" className="text-gold text-sm hover:underline">Sovereign Blueprint →</Link>
+                  </div>
                 </div>
               </div>
             </div>
