@@ -21,3 +21,5 @@ The deployed page was inspected at `https://rastaimperium.com/thanks-and-praise/
 - Added production and investigation notes for future release audits.
 - Diagnosed and removed conflict-marker contamination from generated static HTML introduced during concurrent rebase resolution; 84 affected generated files were cleaned.
 - Re-ran the local suite successfully: 84 captures passed across 42 routes and 2 viewports, including `/thanks-and-praise/` at desktop and mobile widths.
+- Diagnosed the reported mobile exception: `backend/static/governance/codex/index.html` referenced `/_next/static/chunks/app/governance/codex/page-7f29154db142c5a2.js`, but that client chunk was absent from the published export, causing hydration to fail. A clean production export restored the Governance/Codex chunks and retained all 42 routes.
+- The rebuilt export now passes the local visual suite across all 84 captures, including `/governance/codex/` and `/thanks-and-praise/` on mobile.

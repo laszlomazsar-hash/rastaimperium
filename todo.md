@@ -20,3 +20,4 @@
 - [x] Document the final root cause and validation result in audit-findings.md.
 - [x] Remove conflict-marker contamination from generated static files and re-run the remote visual workflow.
 - [ ] Separately investigate the seven remaining legacy visual failures, including the mobile Governance/Codex client-side exception and Codex IV article-region mismatch.
+- [ ] Fix the reported mobile client-side exception and verify the affected route in production.
