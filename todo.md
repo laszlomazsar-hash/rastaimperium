@@ -19,5 +19,10 @@
 - [x] Verify the Thanks & Praise page at desktop and mobile widths, including overflow and navigation wrapping.
 - [x] Document the final root cause and validation result in audit-findings.md.
 - [x] Remove conflict-marker contamination from generated static files and re-run the remote visual workflow.
-- [ ] Separately investigate the seven remaining legacy visual failures, including the mobile Governance/Codex client-side exception and Codex IV article-region mismatch.
+- [x] Separately investigate the seven remaining legacy visual failures, including the mobile Governance/Codex client-side exception and Codex IV article-region mismatch.
+- [x] Resolve the remaining desktop Blueprint visual mismatch.
+- [x] Resolve the remaining mobile homepage visual mismatch.
+- [x] Resolve the remaining Contact visual mismatch.
+- [x] Resolve the remaining desktop and mobile Technology/Verification visual mismatches.
+- [x] Rebuild the static export and verify all visual-regression captures pass.
 - [x] Fix the reported mobile client-side exception and verify the affected route in production.
