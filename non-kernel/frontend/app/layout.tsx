@@ -42,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/research">Research</Link></li>
                 <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/lab">Lab</Link></li>
                 <li><Link className="block rounded-md border border-[#B8860B]/50 px-2.5 py-2 text-[#F2D675] transition hover:bg-[#B8860B] hover:text-black sm:px-3" href="/contact">Contact</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 text-[#D4AF37] transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/thanks-and-praise">Thanks & Praise</Link></li>
               </ul>
             </nav>
           </div>
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li><Link className="transition hover:text-[#F2D675]" href="/research">Research</Link></li>
                   <li><Link className="transition hover:text-[#F2D675]" href="/library">Documentation</Link></li>
                   <li><Link className="transition hover:text-[#F2D675]" href="/contact">Engagement desk</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise">Thanks & Praise</Link></li>
                 </ul>
               </nav>
 
