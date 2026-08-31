@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Library — Publications & Digital Artifacts",
-  description: "Published works: Rasta Codex and RastafarAI EVO-V. Digital artifacts: The Digital Tabernacle, Sovereign AI Blueprint, ARK Engine, Civilization Kernel, .evop proofs. Open source repositories.",
+  description: "Published works: Rasta Codex and RastafarAI EVO-V. Digital artifacts: The Digital Tabernacle, Sovereign AI Blueprint, Living Crystal Blueprint, ARK Engine, Civilization Kernel, .evop proofs. Open source repositories.",
 };
 
 export default function LibraryPage() {
@@ -14,6 +14,7 @@ export default function LibraryPage() {
 
   const artifacts = [
     { name: "The Digital Tabernacle", desc: "The Rastafarai Codex & The EVO-V Civilization Kernel — 15-page production-ready visual doctrine (v7.6). Seven Axioms of Sovereign Code, Five Rings of Containment, Living Crystal Architecture, Temporal Asymmetry Guarantee. SHA3-256 sealed · TLA+ proven.", status: "v7.6", href: "https://drive.google.com/file/d/1KIw9Aun87Md5RlL7KK4u6wK-NIjdBe-m/view?usp=drivesdk", external: true },
+    { name: "Living Crystal Blueprint", desc: "RASTA IMPERIUM v2.1.7 — The Living Crystal Blueprint. 21-page sovereign intelligence architecture: 9-layer stack, Omega infrastructure, EVO-V Ultra Living Kernel, recursive safety (RSV), ironclad isolation, HGL autonomy dial, and global HA design.", status: "v2.1.7", href: "https://drive.google.com/file/d/1xycb92ZMLx0yof4ehlpB8w3E0Gl7t3G0/view?usp=drivesdk", external: true },
     { name: "Sovereign AI Blueprint", desc: "EVO-V v9 / Constitutional Computation — 14-page visual blueprint of the 9-layer sovereign stack, proof-carrying execution, and relational closure.", status: "v9", href: "/blueprint" },
     { name: "ARK Engine", desc: "Production-ready codebase with containerized isolation and AST-based safety validation. GPU-accelerated processing.", status: "Production", href: null },
     { name: "Civilization Kernel", desc: "The constitutional substrate — governance logic compiled into executable architecture. 9-layer sovereign stack.", status: "Active", href: null },
