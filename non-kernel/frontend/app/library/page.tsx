@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Library — Publications & Digital Artifacts",
-  description: "Published works: Rasta Codex and RastafarAI EVO-V. Digital artifacts: The Digital Tabernacle, Sovereign AI Blueprint, Living Crystal Blueprint, ARK Engine, Civilization Kernel, .evop proofs. Open source repositories.",
+  description: "Published works and digital artifacts: Tabernacle, Living Crystal, Sacred Blueprint, Genetic Blueprint, EVO-V Sovereign Intelligence, EVO-G Operational Assurance, and more.",
 };
 
 export default function LibraryPage() {
@@ -14,11 +14,14 @@ export default function LibraryPage() {
 
   const artifacts = [
     { name: "The Digital Tabernacle", desc: "The Rastafarai Codex & The EVO-V Civilization Kernel — 15-page production-ready visual doctrine (v7.6). Seven Axioms of Sovereign Code, Five Rings of Containment, Living Crystal Architecture, Temporal Asymmetry Guarantee. SHA3-256 sealed · TLA+ proven.", status: "v7.6", href: "https://drive.google.com/file/d/1KIw9Aun87Md5RlL7KK4u6wK-NIjdBe-m/view?usp=drivesdk", external: true },
-    { name: "Living Crystal Blueprint", desc: "RASTA IMPERIUM v2.1.7 — The Living Crystal Blueprint. 21-page sovereign intelligence architecture: 9-layer stack, Omega infrastructure, EVO-V Ultra Living Kernel, recursive safety (RSV), ironclad isolation, HGL autonomy dial, and global HA design.", status: "v2.1.7", href: "https://drive.google.com/file/d/1xycb92ZMLx0yof4ehlpB8w3E0Gl7t3G0/view?usp=drivesdk", external: true },
+    { name: "Living Crystal Blueprint", desc: "RASTA IMPERIUM v2.1.7 — 21-page sovereign intelligence architecture: 9-layer stack, Omega infrastructure, recursive safety, ironclad isolation, and global HA design.", status: "v2.1.7", href: "https://drive.google.com/file/d/1xycb92ZMLx0yof4ehlpB8w3E0Gl7t3G0/view?usp=drivesdk", external: true },
+    { name: "The Sacred Blueprint", desc: "Declassifying the EVO Architecture: The Physics of AI Containment — constitutional physics, Darwin Kernel, two-timescale cognitive dynamics (17 pages).", status: "EVO", href: "https://drive.google.com/file/d/17tKDmsxlj0AKdtbvCMfZwjiJeLZqAKzV/view?usp=drivesdk", external: true },
+    { name: "Genetic Blueprint of Sovereign AI", desc: "Mapping the phylogenetic lineage from ARK Evolution & Omega roots through EVO-V to commercial EVO-G deployment (20 pages).", status: "Lineage", href: "https://drive.google.com/file/d/1sfRPti0RY4QQULGDJXHHE3U46X-JZ6n-/view?usp=drivesdk", external: true },
+    { name: "EVO-V Sovereign Intelligence", desc: "Production-ready deterministic governance and verifiable containment for the age of autonomous systems (17 pages).", status: "v2.0", href: "https://drive.google.com/file/d/1IWfMr2TE3JIscDRSY6jie8py2gCFFg7e/view?usp=drivesdk", external: true },
+    { name: "EVO-G Operational Assurance", desc: "Trusted automation infrastructure for public sector — control gap closed; HMRC, NHS, and local council deployments (10 pages).", status: "Public", href: "https://drive.google.com/file/d/1CWncp6LIobmEcygPNNDPmj5B8_nC2fvC/view?usp=drivesdk", external: true },
     { name: "Sovereign AI Blueprint", desc: "EVO-V v9 / Constitutional Computation — 14-page visual blueprint of the 9-layer sovereign stack, proof-carrying execution, and relational closure.", status: "v9", href: "/blueprint" },
     { name: "ARK Engine", desc: "Production-ready codebase with containerized isolation and AST-based safety validation. GPU-accelerated processing.", status: "Production", href: null },
     { name: "Civilization Kernel", desc: "The constitutional substrate — governance logic compiled into executable architecture. 9-layer sovereign stack.", status: "Active", href: null },
-    { name: "EVO-V Codex", desc: "Technical documentation of the kernel invariants, state machine, and deployment strategy.", status: "v2.0", href: null },
     { name: ".evop Replay Proofs", desc: "Portable, court-grade evidence containers for deterministic truth verification. SHA-256 sealed.", status: "Standard", href: null },
   ];
 
