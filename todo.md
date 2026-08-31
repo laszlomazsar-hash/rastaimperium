@@ -10,4 +10,11 @@
 - [x] Add a polished Thanks & Praise page preserving the user’s spiritual intent and sovereign-architecture themes.
 - [x] Add the page to the primary navigation and relevant footer links.
 - [x] Validate the new route, TypeScript, production build, and responsive-safe presentation.
-- [ ] Commit and push the page update to GitHub.
+- [x] Commit and push the page update to GitHub.
+
+# Visual regression investigation
+
+- [x] Update the approved visual-regression route inventory for the newly added Thanks & Praise route.
+- [x] Re-run the visual regression suite and inspect the generated screenshots/diffs for genuine layout issues.
+- [x] Verify the Thanks & Praise page at desktop and mobile widths, including overflow and navigation wrapping.
+- [x] Document the final root cause and validation result in audit-findings.md.

@@ -1,0 +1,20 @@
+# Visual regression investigation
+
+## Confirmed workflow failure
+
+The failed GitHub Actions run `33358666135` did not reach screenshot comparison. The runner stopped at `non-kernel/frontend/scripts/visual-regression.mjs:210` because it expected 40 routes while `backend/static` contained 41 routes. The additional route was `/blueprint/`, and no approved baseline existed for it.
+
+## Local reproduction after correcting the route count
+
+Updating the expected inventory from 40 to 41 allowed the suite to proceed. The local suite checked 82 captures across 41 routes and reported 71 failures. `/blueprint/` was missing baselines for both viewports. Existing pages also showed broad pixel changes rather than one isolated route failure.
+
+## Visual findings
+
+Representative desktop and mobile home diffs show duplicated and vertically shifted navigation, headings, body copy, and action buttons. The pattern is consistent across many routes and is not specific to the new Thanks & Praise page. This indicates that the committed PNG baselines are stale or were generated from a different static export/rendering state. The diff is not evidence that the Thanks & Praise page itself has a layout defect.
+
+## Changes made during investigation
+
+- Updated the visual runner’s approved route count from 40 to 41.
+- Updated `docs/operations/visual-regression.md` from 40 routes/80 captures to 41 routes/82 captures.
+- No baselines have been regenerated.
+- No screenshot-driven layout fix has been applied.
