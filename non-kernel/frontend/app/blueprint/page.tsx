@@ -95,6 +95,9 @@ const pdfUrl =
 const tabernacleUrl =
   "https://drive.google.com/file/d/1KIw9Aun87Md5RlL7KK4u6wK-NIjdBe-m/view?usp=drivesdk";
 
+const livingCrystalUrl =
+  "https://drive.google.com/file/d/1xycb92ZMLx0yof4ehlpB8w3E0Gl7t3G0/view?usp=drivesdk";
+
 export default function BlueprintPage() {
   return (
     <main className="overflow-hidden">
@@ -137,6 +140,14 @@ export default function BlueprintPage() {
                   className="rounded-lg bg-[#107e3e] px-6 py-3 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#0d6b34] hover:shadow-lg hover:shadow-[#107e3e]/30 active:scale-[0.97]"
                 >
                   Digital Tabernacle (15p)
+                </a>
+                <a
+                  href={livingCrystalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg border border-[#D4AF37]/60 bg-[#0b0c0b] px-6 py-3 text-sm font-bold text-[#F2D675] transition duration-200 hover:-translate-y-0.5 hover:border-[#F2D675] hover:bg-[#D4AF37]/10 hover:shadow-lg hover:shadow-[#B8860B]/15 active:scale-[0.97]"
+                >
+                  Living Crystal Blueprint (21p)
                 </a>
                 <Link
                   href="/technology"
@@ -292,9 +303,9 @@ export default function BlueprintPage() {
             Sovereign doctrine & constitutional architecture
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
-            Download the 14-page Sovereign AI Blueprint and the companion 15-page Digital Tabernacle
-            (Rastafarai Codex & EVO-V Civilization Kernel) — Seven Axioms, Five Rings of
-            Containment, Living Crystal Architecture, and formal TLA+ verification.
+            Download the 14-page Sovereign AI Blueprint, the 15-page Digital Tabernacle, and the
+            21-page Living Crystal Blueprint (RASTA IMPERIUM v2.1.7) — Nine-layer stack, recursive
+            safety, ironclad isolation, and production-grade Omega infrastructure.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-4">
             <a
@@ -312,6 +323,14 @@ export default function BlueprintPage() {
               className="rounded-lg bg-[#107e3e] px-8 py-3.5 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#0d6b34] hover:shadow-lg hover:shadow-[#107e3e]/30 active:scale-[0.97]"
             >
               Digital Tabernacle (15p)
+            </a>
+            <a
+              href={livingCrystalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-[#D4AF37]/60 bg-[#0b0c0b] px-8 py-3.5 text-sm font-bold text-[#F2D675] transition duration-200 hover:-translate-y-0.5 hover:border-[#F2D675] hover:bg-[#D4AF37]/10 hover:shadow-lg hover:shadow-[#B8860B]/15 active:scale-[0.97]"
+            >
+              Living Crystal Blueprint (21p)
             </a>
             <Link
               href="/library"
