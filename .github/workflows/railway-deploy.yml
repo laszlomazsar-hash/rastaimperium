@@ -1,41 +1,17 @@
 name: Railway Deploy
 
+# Railway's native GitHub integration deploys the connected production service
+# from main. This workflow is intentionally manual-only so it cannot create a
+# second, ambiguous deployment path when the project contains multiple services.
+
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'src/**'
-      - 'backend/static/**'
-      - 'Dockerfile'
-      - 'pyproject.toml'
-      - 'requirements.txt'
-      - 'railway.json'
-      - '.github/workflows/railway-deploy.yml'
   workflow_dispatch:
 
 jobs:
-  deploy:
+  deployment-note:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install Railway CLI
-        run: npm install --global @railway/cli
-
-      - name: Deploy to Railway production
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_ENVIRONMENT: production
+      - name: Explain deployment source
         run: |
-          if [ -z "$RAILWAY_TOKEN" ]; then
-            echo "::error title=Missing Railway token::Set the RAILWAY_TOKEN GitHub Actions secret to a valid Railway project token."
-            exit 1
-          fi
-
-          railway up --ci --environment "$RAILWAY_ENVIRONMENT"
+          echo "Railway native GitHub integration owns production deployment."
+          echo "Use the Railway project deployment panel to redeploy or inspect logs."
