@@ -66,6 +66,33 @@ const trustPillars: { text: string; icon: IconType }[] = [
   { text: "Counterexample generation for every critical invariant failure", icon: "prediction" },
 ];
 
+const doctrineDocs = [
+  {
+    title: "Sovereign AI Blueprint",
+    pages: "14 pages",
+    badge: "v9",
+    desc: "Constitutional Computation — 9-layer sovereign stack, proof-carrying execution, and relational closure.",
+    href: "https://drive.google.com/file/d/1AMGgLZTjuGazMZDJKhnDuIOivCnW9rL-/view?usp=drivesdk",
+    accent: "gold",
+  },
+  {
+    title: "Digital Tabernacle",
+    pages: "15 pages",
+    badge: "v7.6",
+    desc: "Rastafarai Codex & EVO-V Civilization Kernel — Seven Axioms, Five Rings, Living Crystal Architecture.",
+    href: "https://drive.google.com/file/d/1KIw9Aun87Md5RlL7KK4u6wK-NIjdBe-m/view?usp=drivesdk",
+    accent: "green",
+  },
+  {
+    title: "Living Crystal Blueprint",
+    pages: "21 pages",
+    badge: "v2.1.7",
+    desc: "Full sovereign intelligence architecture — Omega infrastructure, recursive safety, isolation, and global HA.",
+    href: "https://drive.google.com/file/d/1xycb92ZMLx0yof4ehlpB8w3E0Gl7t3G0/view?usp=drivesdk",
+    accent: "crystal",
+  },
+];
+
 /* ── Animated Counter Hook ──
  * SSR / static export starts at the final value so crawlers and no-JS
  * always see the real benchmark numbers (never 0).
@@ -280,6 +307,55 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── DOCTRINE STRIP — three PDF front door ── */}
+      <section className="container-page py-12">
+        <FadeIn>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold text-center">Doctrine</p>
+          <h2 className="mt-3 text-3xl md:text-4xl text-gold text-center" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
+            The sovereign record
+          </h2>
+          <p className="mt-3 text-center text-zinc-400 max-w-2xl mx-auto">
+            Three production documents — architecture, constitution, and full living crystal blueprint.
+          </p>
+        </FadeIn>
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {doctrineDocs.map((doc, i) => (
+            <FadeIn key={doc.title} delay={i * 120}>
+              <a
+                href={doc.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="panel group block p-6 h-full transition-all duration-300 hover:scale-[1.02] hover:border-gold/50"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-zinc-500">{doc.pages}</p>
+                  <span className={`text-xs px-2 py-0.5 rounded border ${
+                    doc.accent === "green"
+                      ? "border-green-600/40 text-green-400"
+                      : "border-gold/40 text-gold"
+                  }`}>{doc.badge}</span>
+                </div>
+                <h3 className="mt-4 text-lg text-gold group-hover:text-yellow-400 transition-colors" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
+                  {doc.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-zinc-400">{doc.desc}</p>
+                <p className="mt-5 text-sm font-semibold text-gold/80 group-hover:text-gold transition-colors">
+                  Download PDF →
+                </p>
+              </a>
+            </FadeIn>
+          ))}
+        </div>
+        <FadeIn delay={200}>
+          <p className="mt-6 text-center text-sm text-zinc-500">
+            Or explore the full stack on the{" "}
+            <Link href="/blueprint" className="text-gold hover:underline">Blueprint page</Link>
+            {" "}·{" "}
+            <Link href="/library" className="text-gold hover:underline">Library</Link>
+          </p>
+        </FadeIn>
+      </section>
+
       {/* ── THESIS ── */}
       <FadeIn>
         <section className="bg-green/10 border-y border-gold/20">
@@ -318,7 +394,7 @@ export default function HomePage() {
               Read the full Sovereign AI Blueprint
               <span aria-hidden="true">→</span>
             </Link>
-            <p className="mt-3 text-sm text-zinc-500">EVO-V v9 · Constitutional Computation · 14 pages</p>
+            <p className="mt-3 text-sm text-zinc-500">14p Blueprint · 15p Tabernacle · 21p Living Crystal</p>
           </div>
         </FadeIn>
       </section>
