@@ -18,3 +18,4 @@
 - [x] Re-run the visual regression suite and inspect the generated screenshots/diffs for genuine layout issues.
 - [x] Verify the Thanks & Praise page at desktop and mobile widths, including overflow and navigation wrapping.
 - [x] Document the final root cause and validation result in audit-findings.md.
+- [x] Remove conflict-marker contamination from generated static files and re-run the remote visual workflow.

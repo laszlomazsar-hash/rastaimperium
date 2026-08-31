@@ -19,3 +19,5 @@ The deployed page was inspected at `https://rastaimperium.com/thanks-and-praise/
 - Rebuilt and synchronized the current static export.
 - Regenerated the approved baseline set after visual inspection.
 - Added production and investigation notes for future release audits.
+- Diagnosed and removed conflict-marker contamination from generated static HTML introduced during concurrent rebase resolution; 84 affected generated files were cleaned.
+- Re-ran the local suite successfully: 84 captures passed across 42 routes and 2 viewports, including `/thanks-and-praise/` at desktop and mobile widths.
