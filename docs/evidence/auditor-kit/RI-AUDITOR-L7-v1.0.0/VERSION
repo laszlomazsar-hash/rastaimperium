@@ -1,0 +1,10 @@
+kit_id: RI-AUDITOR-L7-v1.0.0
+sealed_at: 2026-09-01T21:50:00Z
+scope: Public L7 frozen capsules only — not full EVO-V kernel, not LIVE production
+artifacts:
+  - ART-L7-REPLAY-001
+  - ART-L7-REJECT-001
+  - ART-L7-PARITY-001
+runtimes_required:
+  - node >= 18
+  - python3 >= 3.9
