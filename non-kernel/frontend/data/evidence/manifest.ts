@@ -1,7 +1,7 @@
 /**
  * Phase 8/9 evidence manifest.
- * Honesty rule: DEMONSTRATION / UNAVAILABLE where production artifacts are not published.
- * VERIFIED only when a sealed public capsule independently replays to expected hashes.
+ * VERIFIED only when a sealed public capsule independently reproduces expected hashes.
+ * ART-L7-REPLAY-001 (INV-001 valid path) · ART-L7-REJECT-001 (INV-002 rejection path).
  */
 
 import type {
@@ -13,8 +13,8 @@ import type {
   TrustConsoleSnapshot,
 } from "./types";
 
-export const MANIFEST_VERSION = "phase9-verified-l7-replay-v1";
-export const MANIFEST_AS_OF = "2026-09-01T21:30:00Z";
+export const MANIFEST_VERSION = "phase9-verified-l7-replay-reject-v1";
+export const MANIFEST_AS_OF = "2026-09-01T21:40:00Z";
 
 export const claims: Claim[] = [
   {
@@ -28,7 +28,7 @@ export const claims: Claim[] = [
     verificationStatus: "VERIFIED",
     provenance: "HISTORICAL",
     notes:
-      "VERIFIED applies only to the published public capsule ART-L7-REPLAY-001 via independent pure-engine replay. Not a production EVO-V runtime measurement.",
+      "VERIFIED applies only to ART-L7-REPLAY-001 via independent pure-engine replay. Not production EVO-V runtime measurement.",
   },
   {
     claimId: "CLAIM-LEDGER-001",
@@ -42,13 +42,16 @@ export const claims: Claim[] = [
   },
   {
     claimId: "CLAIM-LIFECYCLE-001",
-    statement: "FSM-governed lifecycle transitions reject illegal edges.",
+    statement:
+      "For sealed public capsule ART-L7-REJECT-001, illegal lifecycle edge VERIFIED→INGESTED is deterministically rejected with no state mutation and a sealed rejection receipt (INV-002 family).",
     category: "governance",
     relatedInvariantIds: ["INV-002"],
-    evidenceIds: ["EVD-LIFECYCLE-DOC-001"],
+    evidenceIds: ["EVD-LIFECYCLE-DOC-001", "EVD-REJECT-ART-001"],
     proofIds: ["PROOF-ILLEGAL-001"],
-    verificationStatus: "DEMONSTRATION",
-    provenance: "DEMONSTRATION",
+    verificationStatus: "VERIFIED",
+    provenance: "HISTORICAL",
+    notes:
+      "VERIFIED applies only to ART-L7-REJECT-001. Complements valid-path ART-L7-REPLAY-001 with adversarial rejection.",
   },
   {
     claimId: "CLAIM-BENCH-OPS",
@@ -70,7 +73,6 @@ export const claims: Claim[] = [
     proofIds: [],
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
-    notes: "Figure retained from prior presentation; public artifact/evidence ID not currently published.",
   },
   {
     claimId: "CLAIM-BENCH-APPROVAL",
@@ -130,9 +132,29 @@ export const evidence: Evidence[] = [
     relatedInvariantIds: ["INV-001"],
     relatedTrustSections: ["parity", "transparency"],
     verificationMethod:
-      "Load ART-L7-REPLAY-001.json; run verifyCapsule() twice; assert state_hash, receipt_hash, ledger_head_hash match expected",
-    notes:
-      "Scope-limited VERIFIED: public capsule only. Receipt hash is the sealed receipt payload hash for this capsule.",
+      "node non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs",
+    notes: "Scope-limited VERIFIED: public capsule only. FROZEN.",
+  },
+  {
+    evidenceId: "EVD-REJECT-ART-001",
+    title: "Sealed public rejection capsule ART-L7-REJECT-001",
+    description:
+      "Illegal edge VERIFIED→INGESTED is rejected with no state mutation; sealed rejection receipt hashes are independently reproducible.",
+    claimIds: ["CLAIM-LIFECYCLE-001"],
+    proofIds: ["PROOF-ILLEGAL-001"],
+    artifactId: "ART-L7-REJECT-001",
+    hash: "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
+    implementation: "scripts/verify-art-l7-reject-001.mjs",
+    version: "ri-capsule-1.0.0",
+    timestamp: MANIFEST_AS_OF,
+    source: "/evidence/artifacts/ART-L7-REJECT-001.json",
+    verificationStatus: "VERIFIED",
+    provenance: "HISTORICAL",
+    relatedInvariantIds: ["INV-002"],
+    relatedTrustSections: ["adversarial", "governance"],
+    verificationMethod:
+      "node non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs",
+    notes: "Scope-limited VERIFIED: rejection capsule only. FROZEN. Adversarial complement to EVD-REPLAY-ART-001.",
   },
   {
     evidenceId: "EVD-LEDGER-DOC-001",
@@ -162,7 +184,7 @@ export const evidence: Evidence[] = [
     provenance: "DEMONSTRATION",
     relatedInvariantIds: ["INV-002"],
     relatedTrustSections: ["governance", "adversarial"],
-    verificationMethod: "Inspect transition matrix and illegal-edge tests",
+    verificationMethod: "Inspect transition matrix; sealed rejection is EVD-REJECT-ART-001",
     version: MANIFEST_VERSION,
     timestamp: MANIFEST_AS_OF,
   },
@@ -226,27 +248,24 @@ export const proofs: Proof[] = [
     proofId: "PROOF-REPLAY-001",
     title: "Deterministic replay parity — ART-L7-REPLAY-001",
     description:
-      "INV-001 verified for sealed public capsule ART-L7-REPLAY-001. Independent pure-engine double replay matches sealed state_hash, receipt_hash, and ledger_head_hash.",
+      "INV-001 verified for sealed public capsule ART-L7-REPLAY-001. Independent pure-engine double replay matches sealed hashes.",
     status: "VERIFIED",
     proofType: "deterministic_replay",
     invariant: "INV-001",
-    inputFixture: "ART-L7-REPLAY-001.json ordered events + version_bundle",
-    expectedOutcome:
-      "state_hash=5d04d74e0731853e2f2760a1047c7a8547dc860ce9d99525bf2ea715740bc31d; receipt_hash=3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f; ledger_head_hash=404e19c065afec5e11dac36db6838a5829d25244742d4eaee5c2ad3e6ff2a6de",
-    observedOutcome: "Independent verifyCapsule() passes; double replay parity holds",
-    source: "/evidence/artifacts/ART-L7-REPLAY-001.json · data/evidence/replay/capsuleEngine.ts",
-    verificationMethod: "vitest: capsuleEngine.test.ts · verifyCapsule(ART-L7-REPLAY-001)",
+    inputFixture: "ART-L7-REPLAY-001.json",
+    expectedOutcome: "Matching state_hash, receipt_hash, ledger_head_hash",
+    observedOutcome: "Independent verify-art-l7-replay-001.mjs EXIT 0",
+    source: "/evidence/artifacts/ART-L7-REPLAY-001.json",
+    verificationMethod: "node non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs",
     replayAvailable: true,
-    implementation: "capsuleEngine.ts (public pure reducer; not full EVO-V kernel)",
+    implementation: "capsuleEngine.ts (public pure reducer)",
     relatedClaim: "CLAIM-REPLAY-001",
     provenance: "HISTORICAL",
     timestamp: MANIFEST_AS_OF,
     engineVersion: "ri-capsule-1.0.0",
     artifactId: "ART-L7-REPLAY-001",
     hash: "3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f",
-    receiptVersion: "ri-capsule-receipt-1",
-    notes:
-      "VERIFIED scope: this capsule only. Does not certify production EVO-V deployments.",
+    notes: "FROZEN. Capsule-scoped VERIFIED only.",
   },
   {
     proofId: "PROOF-CHAIN-001",
@@ -266,20 +285,26 @@ export const proofs: Proof[] = [
   },
   {
     proofId: "PROOF-ILLEGAL-001",
-    title: "Illegal lifecycle transition rejection",
-    description: "Illegal FSM edges are rejected; valid matrix is explicit.",
-    status: "DEMONSTRATION",
+    title: "Illegal lifecycle transition rejection — ART-L7-REJECT-001",
+    description:
+      "INV-002 family: VERIFIED→INGESTED is rejected; state_mutated=false; sealed rejection receipt independently reproduced.",
+    status: "VERIFIED",
     proofType: "illegal_transition_rejection",
     invariant: "Transition legality",
-    inputFixture: "Transition outside allowed matrix",
-    expectedOutcome: "Reject + audit failure",
-    observedOutcome: "Specified in invariants; exercised via challenge fixture",
-    source: "evo-v/docs/INVARIANTS.md · src/governance/fsm/transition_matrix.py",
-    verificationMethod: "Challenge lab deterministic fixture + matrix inspection",
-    replayAvailable: false,
+    inputFixture: "ART-L7-REJECT-001.json",
+    expectedOutcome:
+      "ILLEGAL_TRANSITION; state_before_hash + receipt_hash match sealed values; no state mutation",
+    observedOutcome: "Independent verify-art-l7-reject-001.mjs EXIT 0",
+    source: "/evidence/artifacts/ART-L7-REJECT-001.json",
+    verificationMethod: "node non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs",
+    replayAvailable: true,
     relatedClaim: "CLAIM-LIFECYCLE-001",
-    provenance: "DEMONSTRATION",
+    provenance: "HISTORICAL",
     timestamp: MANIFEST_AS_OF,
+    engineVersion: "ri-capsule-1.0.0",
+    artifactId: "ART-L7-REJECT-001",
+    hash: "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
+    notes: "FROZEN. Adversarial complement to PROOF-REPLAY-001. Capsule-scoped VERIFIED only.",
   },
   {
     proofId: "PROOF-PARITY-001",
@@ -307,7 +332,6 @@ export const benchmarks: Benchmark[] = [
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     evidenceId: "EVD-BENCH-OPS-001",
-    notes: "Retained on homepage with explicit provenance label UNAVAILABLE until artifact published.",
   },
   {
     benchmarkId: "BENCH-LAT-001",
@@ -348,15 +372,16 @@ export const challenges: Challenge[] = [
     description: "Attempt VERIFIED → INGESTED (not in allowed matrix).",
     input: "STATE_TRANSITION { from: VERIFIED, to: INGESTED }",
     expected: "Reject; emit audit failure; no state mutation",
-    result: "REJECTED_AS_DESIGNED — transition not in matrix",
+    result: "REJECTED_AS_DESIGNED — sealed by ART-L7-REJECT-001",
     invariant: "Transition legality (INV-002 family)",
     reason: "Only explicit legal edges are accepted; reverse jump is forbidden",
-    receipt: "Not issued (mutation blocked)",
+    receipt: "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
+    hash: "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
     verification: "REJECTED_AS_DESIGNED",
     deterministic: true,
     nonDestructive: true,
     isolatedFromProduction: true,
-    provenance: "DEMONSTRATION",
+    provenance: "HISTORICAL",
     proofId: "PROOF-ILLEGAL-001",
   },
   {
@@ -365,7 +390,7 @@ export const challenges: Challenge[] = [
     description: "Altered event order must fail replay parity against ART-L7-REPLAY-001 sealed hash.",
     input: "Same events with permuted order under fixed version bundle",
     expected: "Parity failure vs sealed state_hash",
-    result: "FAIL parity (as designed when order differs) — covered by capsuleEngine.test.ts",
+    result: "FAIL parity (as designed when order differs)",
     invariant: "INV-001 replay_parity",
     reason: "Determinism requires identical ordered stream",
     verification: "PASS",
@@ -399,82 +424,80 @@ export const trustConsole: TrustConsoleSnapshot = {
   version: MANIFEST_VERSION,
   provenance: "HISTORICAL",
   notes:
-    "Public verification surface. INV-001 is VERIFIED for sealed capsule ART-L7-REPLAY-001 only. Production runtime telemetry is not claimed.",
+    "Two FROZEN public capsules: ART-L7-REPLAY-001 (valid path) and ART-L7-REJECT-001 (illegal rejection). Not production LIVE telemetry.",
   sections: [
     {
       id: "registry",
       label: "Registry",
-      status: "Manifest published · first VERIFIED capsule registered",
+      status: "Two VERIFIED capsules registered",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
       evidenceId: "EVD-REPLAY-ART-001",
       proofId: "PROOF-REPLAY-001",
       provenance: "HISTORICAL",
-      verificationActionHref: "/proof/#PROOF-REPLAY-001",
-      verificationActionLabel: "Open PROOF-REPLAY-001",
-      notes: "ART-L7-REPLAY-001 is the first registry artifact with earned VERIFIED status.",
+      verificationActionHref: "/proof/",
+      verificationActionLabel: "Open Proof Registry",
     },
     {
       id: "keys",
       label: "Keys",
       status: "Evidence not currently published",
       provenance: "UNAVAILABLE",
-      verificationActionHref: "/evidence",
+      verificationActionHref: "/evidence/",
       verificationActionLabel: "Browse Evidence",
-      notes: "Key lifecycle artifacts are not exposed on this public surface.",
     },
     {
       id: "transparency",
       label: "Transparency",
-      status: "Sealed capsule + pure engine published",
+      status: "Sealed capsules + standalone verifiers published",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
       evidenceId: "EVD-REPLAY-ART-001",
       proofId: "PROOF-REPLAY-001",
       provenance: "HISTORICAL",
       verificationActionHref: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-      verificationActionLabel: "Download capsule",
+      verificationActionLabel: "Download replay capsule",
     },
     {
       id: "parity",
       label: "Parity",
-      status: "Capsule self-parity VERIFIED; cross-implementation still unavailable",
+      status: "Capsule self-parity VERIFIED; cross-implementation UNAVAILABLE",
       proofId: "PROOF-REPLAY-001",
       provenance: "HISTORICAL",
       verificationActionHref: "/proof/#PROOF-REPLAY-001",
       verificationActionLabel: "View replay proof",
-      notes: "Cross-implementation parity (PROOF-PARITY-001) remains UNAVAILABLE.",
     },
     {
       id: "adversarial",
       label: "Adversarial",
-      status: "Public challenge fixtures available",
+      status: "Illegal transition rejection VERIFIED (ART-L7-REJECT-001)",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
       proofId: "PROOF-ILLEGAL-001",
-      provenance: "DEMONSTRATION",
-      verificationActionHref: "/challenge",
-      verificationActionLabel: "Open Challenge Lab",
+      evidenceId: "EVD-REJECT-ART-001",
+      provenance: "HISTORICAL",
+      verificationActionHref: "/proof/#PROOF-ILLEGAL-001",
+      verificationActionLabel: "Open rejection proof",
     },
     {
       id: "governance",
       label: "Governance",
-      status: "Transition matrix documented",
+      status: "Transition matrix + rejection capsule",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
-      evidenceId: "EVD-LIFECYCLE-DOC-001",
-      provenance: "DEMONSTRATION",
-      verificationActionHref: "/governance-model",
-      verificationActionLabel: "Governance Model",
+      evidenceId: "EVD-REJECT-ART-001",
+      provenance: "HISTORICAL",
+      verificationActionHref: "/challenge/",
+      verificationActionLabel: "Challenge Lab",
     },
     {
       id: "challenge",
       label: "Challenge",
-      status: "Deterministic challenges ready",
+      status: "Deterministic challenges · rejection sealed",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
-      provenance: "DEMONSTRATION",
-      verificationActionHref: "/challenge",
+      provenance: "HISTORICAL",
+      verificationActionHref: "/challenge/",
       verificationActionLabel: "Run Challenges",
     },
   ],
