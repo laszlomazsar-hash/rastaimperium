@@ -2,6 +2,12 @@
   "artifactId": "ART-L7-REPLAY-001",
   "invariant": "INV-001",
   "title": "Public L7 deterministic replay capsule v1",
+  "immutable": true,
+  "freeze": {
+    "status": "FROZEN",
+    "policy": "Do not mutate this object. Engine or fixture changes require ART-L7-REPLAY-002+.",
+    "sealed_at": "2026-09-01T21:30:00Z"
+  },
   "version_bundle": {
     "schema_version": "ri-capsule-1.0.0",
     "ruleset_version": "lifecycle-matrix-1",
@@ -31,7 +37,20 @@
     "hash": "sha256",
     "canonicalization": "json-canonical-sorted-keys-1",
     "ledger_link": "sha256(prev_head + '|' + canonicalize(event))",
-    "receipt": "sha256(canonicalize(receipt_payload))"
+    "receipt": "sha256(canonicalize(receipt_payload))",
+    "receipt_payload_fields": [
+      "version_bundle",
+      "event_count",
+      "state_hash",
+      "ledger_head_hash",
+      "terminal_lifecycle",
+      "commit_finalized"
+    ]
+  },
+  "reproduction": {
+    "guide": "docs/evidence/INDEPENDENT_REPRODUCTION_ART-L7-REPLAY-001.md",
+    "cli": "node non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs",
+    "engine": "non-kernel/frontend/data/evidence/replay/capsuleEngine.ts"
   },
   "scope": "Sealed public capsule for INV-001 replay parity on the Rasta Imperium verification surface. Not a claim that production EVO-V infrastructure was measured. Independent re-execution of the pure capsule engine must reproduce expected hashes."
 }
