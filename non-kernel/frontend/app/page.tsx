@@ -38,7 +38,6 @@ export default function HomePage() {
 
   return (
     <main className="royal-page overflow-hidden">
-      {/* UNDERSTAND */}
       <section className="royal-hero border-b border-[#B8860B]/20">
         <div className="container-page py-16 lg:py-24">
           <p className="royal-kicker text-xs font-semibold uppercase tracking-[0.32em]">
@@ -56,25 +55,25 @@ export default function HomePage() {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href="/blueprint"
+              href="/blueprint/#verifiable-stack"
               className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
             >
               Explore Architecture
             </Link>
             <Link
-              href="/trust"
+              href="/trust/"
               className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/50 px-5 py-3 text-sm font-semibold text-[#F2D675]"
             >
               Verify the System
             </Link>
             <Link
-              href="/challenge"
+              href="/challenge/"
               className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
             >
               Challenge the Claims
             </Link>
             <Link
-              href="/institutional-pilots"
+              href="/institutional-pilots/"
               className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
             >
               Institutional Pilot
@@ -87,31 +86,37 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* EXPLORE — architecture */}
       <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="explore-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">2 · Explore</p>
         <h2 id="explore-heading" className="mt-3 text-3xl text-zinc-100">
           Nine-layer civilization stack
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
-          Constitutional architecture from human interface through cosmology. Evidence for each layer
-          is published only where it exists — otherwise marked unavailable.
+          Constitutional architecture from human interface through cosmology. Open a layer on the
+          Blueprint to inspect Purpose → Invariants → Evidence → Verify → Challenge.
         </p>
         <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {civilizationStack.map((layer) => (
-            <li key={layer.layer} className="rounded-xl border border-zinc-800 bg-black/30 p-4">
-              <p className="font-mono text-[11px] text-[#D4AF37]">{layer.layer}</p>
-              <h3 className="mt-1 text-sm font-semibold text-zinc-100">{layer.name}</h3>
-              <p className="mt-2 text-xs leading-5 text-zinc-500">{layer.desc}</p>
+            <li key={layer.layer}>
+              <Link
+                href={`/blueprint/#${layer.layer}`}
+                className="block rounded-xl border border-zinc-800 bg-black/30 p-4 transition hover:border-[#B8860B]/40"
+              >
+                <p className="font-mono text-[11px] text-[#D4AF37]">{layer.layer}</p>
+                <h3 className="mt-1 text-sm font-semibold text-zinc-100">{layer.name}</h3>
+                <p className="mt-2 text-xs leading-5 text-zinc-500">{layer.desc}</p>
+              </Link>
             </li>
           ))}
         </ol>
-        <Link href="/blueprint" className="mt-6 inline-block text-sm text-[#F2D675]">
-          Full Blueprint →
+        <Link
+          href="/blueprint/#verifiable-stack"
+          className="mt-6 inline-block text-sm text-[#F2D675]"
+        >
+          Verifiable architecture map →
         </Link>
       </section>
 
-      {/* VERIFY */}
       <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="verify-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">3 · Verify</p>
         <h2 id="verify-heading" className="mt-3 text-3xl text-zinc-100">
@@ -158,12 +163,11 @@ export default function HomePage() {
             </tbody>
           </table>
         </div>
-        <Link href="/evidence" className="mt-4 inline-block text-sm text-[#F2D675]">
+        <Link href="/evidence/" className="mt-4 inline-block text-sm text-[#F2D675]">
           Evidence Explorer →
         </Link>
       </section>
 
-      {/* Telemetry discipline */}
       <section className="container-page border-b border-zinc-900 py-12">
         <div className="rounded-xl border border-amber-900/40 bg-amber-950/20 p-5">
           <div className="flex flex-wrap items-center gap-2">
@@ -208,7 +212,6 @@ export default function HomePage() {
         </ul>
       </section>
 
-      {/* CHALLENGE + ADOPT */}
       <section className="container-page py-16">
         <div className="grid gap-8 lg:grid-cols-2">
           <div>
@@ -219,7 +222,7 @@ export default function HomePage() {
               No production mutation endpoints on this surface.
             </p>
             <Link
-              href="/challenge"
+              href="/challenge/"
               className="mt-6 inline-block rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
             >
               Open Challenge Lab →
@@ -233,7 +236,7 @@ export default function HomePage() {
               regulated environments, and enterprise governance teams.
             </p>
             <Link
-              href="/institutional-pilots"
+              href="/institutional-pilots/"
               className="mt-6 inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
             >
               Institutional pilots →
