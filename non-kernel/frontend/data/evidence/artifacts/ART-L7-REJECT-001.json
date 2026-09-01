@@ -1,0 +1,49 @@
+{
+  "artifactId": "ART-L7-REJECT-001",
+  "invariant": "INV-002",
+  "title": "Public L7 illegal lifecycle transition rejection capsule v1",
+  "immutable": true,
+  "freeze": {
+    "status": "FROZEN",
+    "policy": "Do not mutate this object. Engine or fixture changes require ART-L7-REJECT-002+.",
+    "sealed_at": "2026-09-01T21:40:00Z"
+  },
+  "version_bundle": {
+    "schema_version": "ri-capsule-1.0.0",
+    "ruleset_version": "lifecycle-matrix-1",
+    "governance_version": "inv-002-public-1",
+    "canon_spec_version": "json-canonical-sorted-keys-1",
+    "cert_profile": "public-demonstration-capsule"
+  },
+  "initial_state": {
+    "lifecycle_state": "VERIFIED",
+    "records": { "r1": { "n": 1 } },
+    "commit_finalized": false
+  },
+  "events": [
+    { "event_type": "STATE_TRANSITION", "to_state": "INGESTED" }
+  ],
+  "expected": {
+    "rejected": true,
+    "rejection_index": 0,
+    "rejection_code": "ILLEGAL_TRANSITION",
+    "rejection_message": "illegal transition VERIFIED->INGESTED",
+    "from_state": "VERIFIED",
+    "to_state": "INGESTED",
+    "state_mutated": false,
+    "state_before_hash": "b2cd722b466d447a73441a52d5c3525c69e15aacb39d3d4d191ebe3786c134ac",
+    "attempted_ledger_head": "8da03a6e21c8335dbf1b4f4a9423fb0d5757965b866f0474511e75e941fecd7d",
+    "receipt_hash": "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a"
+  },
+  "algorithm": {
+    "hash": "sha256",
+    "canonicalization": "json-canonical-sorted-keys-1",
+    "behavior": "reduce until illegal edge throws; state remains pre-reject; rejection receipt sealed",
+    "receipt": "sha256(canonicalize(rejection_receipt_payload))"
+  },
+  "reproduction": {
+    "guide": "docs/evidence/INDEPENDENT_REPRODUCTION_ART-L7-REJECT-001.md",
+    "cli": "node non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs"
+  },
+  "scope": "Sealed public capsule for deterministic rejection of VERIFIED→INGESTED. Not production EVO-V measurement. Complements ART-L7-REPLAY-001 (valid path) with an adversarial/invalid path."
+}
