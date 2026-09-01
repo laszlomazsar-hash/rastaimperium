@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s | Rasta Imperium",
   },
   description: "Constitutional intelligence systems enforcing epistemic integrity across autonomous infrastructures. Replayable. Auditable. Sovereign.",
-  keywords: ["constitutional AI", "deterministic governance", "sovereign AI", "neurosymbolic", "EVO-V", "AI safety", "replay engine", "epistemic governance"],
+  keywords: ["constitutional AI", "deterministic governance", "sovereign AI", "neurosymbolic", "EVO-V", "AI safety", "replay engine", "epistemic governance", "verification", "trust console"],
   authors: [{ name: "Laszlo Mazsar" }],
   creator: "Rasta Imperium",
   metadataBase: new URL("https://rastaimperium.com"),
@@ -37,12 +37,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <ul className="flex min-w-max items-center justify-end gap-1 text-xs font-medium text-zinc-300 sm:gap-2">
                 <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/vision">Vision</Link></li>
                 <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/technology">Technology</Link></li>
-                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/systems">Systems</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/trust">Trust</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/proof">Proof</Link></li>
+                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/challenge">Challenge</Link></li>
                 <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/governance">Governance</Link></li>
                 <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/research">Research</Link></li>
-                <li><Link className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/lab">Lab</Link></li>
                 <li><Link className="block rounded-md border border-[#B8860B]/50 px-2.5 py-2 text-[#F2D675] transition hover:bg-[#B8860B] hover:text-black sm:px-3" href="/contact">Contact</Link></li>
-                <li><Link className="block rounded-md px-2.5 py-2 text-[#D4AF37] transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3" href="/thanks-and-praise">Thanks & Praise</Link></li>
               </ul>
             </nav>
           </div>
@@ -76,6 +76,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </ul>
               </nav>
 
+              <nav aria-label="Verification footer navigation">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Verify</p>
+                <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li><Link className="transition hover:text-[#F2D675]" href="/trust">Trust Console</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/proof">Proof Registry</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/evidence">Evidence Explorer</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/challenge">Challenge Lab</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/institutional-pilots">Institutional pilots</Link></li>
+                </ul>
+              </nav>
+
               <nav aria-label="Knowledge footer navigation">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Knowledge</p>
                 <ul className="mt-4 space-y-2.5 text-zinc-400">
@@ -87,16 +98,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li><Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise">Thanks & Praise</Link></li>
                 </ul>
               </nav>
-
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Publications & store</p>
-                <ul className="mt-4 space-y-2.5 text-zinc-400">
-                  <li><a className="transition hover:text-[#F2D675]" href="https://amzn.eu/d/0iNaEqMU" target="_blank" rel="noreferrer">Rasta Codex on Amazon</a></li>
-                  <li><a className="transition hover:text-[#F2D675]" href="https://amzn.eu/d/0fi2uUre" target="_blank" rel="noreferrer">RastafarAI: EVO-V on Amazon</a></li>
-                  <li><a className="transition hover:text-[#F2D675]" href="https://mazsar.gumroad.com/l/igggtj" target="_blank" rel="noreferrer">Daily Resonance</a></li>
-                  <li><a className="transition hover:text-[#F2D675]" href="https://gumroad.com/products" target="_blank" rel="noreferrer">Online store</a></li>
-                </ul>
-              </div>
             </div>
 
             <details className="group mt-12 border-y border-[#B8860B]/20 py-5">
