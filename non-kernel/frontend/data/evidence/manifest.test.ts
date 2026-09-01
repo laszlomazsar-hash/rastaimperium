@@ -11,7 +11,7 @@ import {
   trustConsole,
 } from "./manifest";
 
-describe("Phase 8 evidence manifest integrity", () => {
+describe("Phase 8/9 evidence manifest integrity", () => {
   it("has unique proof, evidence, and claim ids", () => {
     const proofIds = proofs.map((p) => p.proofId);
     const evidenceIds = evidence.map((e) => e.evidenceId);
@@ -45,12 +45,34 @@ describe("Phase 8 evidence manifest integrity", () => {
     }
   });
 
-  it("trust console sections do not invent LIVE without declaration", () => {
+  it("VERIFIED records require artifactId and are not LIVE", () => {
+    for (const p of proofs) {
+      if (p.status === "VERIFIED") {
+        expect(p.artifactId).toBeTruthy();
+        expect(p.hash).toBeTruthy();
+        expect(p.provenance).not.toBe("LIVE");
+        expect(p.replayAvailable).toBe(true);
+      }
+    }
+    for (const e of evidence) {
+      if (e.verificationStatus === "VERIFIED") {
+        expect(e.artifactId).toBeTruthy();
+        expect(e.provenance).not.toBe("LIVE");
+      }
+    }
+    for (const c of claims) {
+      if (c.verificationStatus === "VERIFIED") {
+        expect(c.provenance).not.toBe("LIVE");
+        expect(c.notes?.toLowerCase()).toContain("capsule");
+      }
+    }
+  });
+
+  it("trust console sections do not invent LIVE", () => {
     for (const s of trustConsole.sections) {
       expect(["LIVE", "DEMONSTRATION", "HISTORICAL", "TARGET", "UNAVAILABLE"]).toContain(
         s.provenance
       );
-      // Public Phase 8 snapshot is demonstration / unavailable only
       expect(s.provenance).not.toBe("LIVE");
     }
     expect(trustConsole.provenance).not.toBe("LIVE");
@@ -65,8 +87,10 @@ describe("Phase 8 evidence manifest integrity", () => {
     }
   });
 
-  it("high-value claims resolve", () => {
-    expect(getClaim("CLAIM-REPLAY-001")).toBeTruthy();
+  it("high-value claims resolve and replay claim is VERIFIED for capsule", () => {
+    expect(getClaim("CLAIM-REPLAY-001")?.verificationStatus).toBe("VERIFIED");
+    expect(getEvidence("EVD-REPLAY-ART-001")?.verificationStatus).toBe("VERIFIED");
+    expect(getProof("PROOF-REPLAY-001")?.status).toBe("VERIFIED");
     expect(getClaim("CLAIM-LEDGER-001")).toBeTruthy();
     expect(getClaim("CLAIM-LIFECYCLE-001")).toBeTruthy();
   });

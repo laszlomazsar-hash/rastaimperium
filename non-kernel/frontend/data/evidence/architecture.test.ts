@@ -12,13 +12,12 @@ describe("Phase 9 architecture layer integrity", () => {
     }
   });
 
-  it("never marks UNAVAILABLE layers as VERIFIED", () => {
+  it("never marks UNAVAILABLE layers as VERIFIED and never uses LIVE", () => {
     for (const l of architectureLayers) {
+      expect(l.provenance).not.toBe("LIVE");
       if (l.provenance === "UNAVAILABLE") {
         expect(l.verificationStatus).not.toBe("VERIFIED");
       }
-      expect(l.provenance).not.toBe("LIVE");
-      expect(l.verificationStatus).not.toBe("VERIFIED");
     }
   });
 
@@ -36,15 +35,17 @@ describe("Phase 9 architecture layer integrity", () => {
     }
   });
 
-  it("L7 Identity + Trust is the primary demonstration surface", () => {
+  it("L7 Identity + Trust holds the earned VERIFIED capsule path", () => {
     const l7 = getArchitectureLayer("L7");
     expect(l7).toBeTruthy();
     expect(l7!.name).toMatch(/Identity/i);
-    expect(l7!.evidenceIds.length).toBeGreaterThan(0);
-    expect(l7!.proofIds.length).toBeGreaterThan(0);
-    expect(l7!.challengeIds.length).toBeGreaterThan(0);
-    expect(l7!.provenance).toBe("DEMONSTRATION");
-    expect(l7!.verificationStatus).toBe("DEMONSTRATION");
+    expect(l7!.evidenceIds).toContain("EVD-REPLAY-ART-001");
+    expect(l7!.proofIds).toContain("PROOF-REPLAY-001");
+    expect(l7!.verificationStatus).toBe("VERIFIED");
+    expect(l7!.provenance).toBe("HISTORICAL");
+    const proof = getProof("PROOF-REPLAY-001");
+    expect(proof?.status).toBe("VERIFIED");
+    expect(proof?.artifactId).toBe("ART-L7-REPLAY-001");
   });
 
   it("empty evidence arrays use explicit unavailable posture", () => {
