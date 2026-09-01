@@ -1,126 +1,246 @@
-// @ts-nocheck
 "use client";
+
 import Link from "next/link";
-import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import { SYSTEM_STATE_VISUAL_MAP, semanticClass, type MotionSemantic, type SystemState as VisualSystemState } from "./motion/semantics";
+import { useEffect, useState } from "react";
+import { TrustStatus } from "../components/evidence/TrustStatus";
+import { ProvenanceBadge, VerificationBadge } from "../components/evidence/ProvenanceBadge";
+import { ClaimEvidence } from "../components/evidence/ClaimEvidence";
+import { benchmarks as evidenceBenchmarks } from "../data/evidence/manifest";
 import { generateTelemetrySnapshot, telemetryStatusLabel } from "./motion/telemetry";
-import { PlatformIcon } from "../components/ui/icons/platform-icon";
-import { getTelemetrySample } from "../core/motion/deterministicTelemetry";
-import type { CapabilityMetadata, SystemState as MotionSystemState } from "../core/motion/profiles";
-import type { IconKey } from "../components/icons/iconMap";
-import type { Capability } from "../core/constitution/capabilities";
-import type { SystemState as ConstitutionSystemState } from "../core/constitution/system-state";
 
-/* ── Data ── */
-const civilizationStack: { layer: string; name: string; desc: string; icon: IconType }[] = [
-  { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning", icon: "infrastructure" },
-  { layer: "L8", name: "Constitutional Layer", desc: "Seven Articles — hardware-enforced governance physics", icon: "constitutional" },
-  { layer: "L7", name: "Identity + Trust Layer", desc: "Immutable replay ledger and cryptographic proofs", icon: "storage" },
-  { layer: "L6", name: "Epistemic Governance Layer", desc: "Bayesian calibration and drift detection", icon: "prediction" },
-  { layer: "L5", name: "Deterministic Intelligence Layer", desc: "Causal modeling and symbolic reasoning", icon: "compute" },
-  { layer: "L4", name: "Agentic Infrastructure Layer", desc: "Deep Seed agent orchestration", icon: "network" },
-  { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement", icon: "compute" },
-  { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance", icon: "governance" },
-  { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals", icon: "network" },
+const civilizationStack = [
+  { layer: "L9", name: "Cosmology Layer", desc: "Mythic narrative and civilizational meaning" },
+  { layer: "L8", name: "Constitutional Layer", desc: "Seven Articles — hardware-enforced governance physics" },
+  { layer: "L7", name: "Identity + Trust Layer", desc: "Immutable replay ledger and cryptographic proofs" },
+  { layer: "L6", name: "Epistemic Governance Layer", desc: "Bayesian calibration and drift detection" },
+  { layer: "L5", name: "Deterministic Intelligence Layer", desc: "Causal modeling and symbolic reasoning" },
+  { layer: "L4", name: "Agentic Infrastructure Layer", desc: "Deep Seed agent orchestration" },
+  { layer: "L3", name: "Operational Systems Layer", desc: "Real-time invariant enforcement" },
+  { layer: "L2", name: "Economic + Institutional Layer", desc: "Enterprise integration and compliance" },
+  { layer: "L1", name: "Human Interface Layer", desc: "Progressive initiation and witness portals" },
 ];
 
-const kernelLayers = [
-  { layer: "L1", fn: "Real-time invariant enforcement", pct: 100 },
-  { layer: "L2", fn: "Intent verification", pct: 97 },
-  { layer: "L3", fn: "Agent orchestration", pct: 95 },
-  { layer: "L4", fn: "Drift detection", pct: 99 },
-  { layer: "L5", fn: "Causal modeling", pct: 92 },
-  { layer: "L6", fn: "Bayesian calibration", pct: 94 },
-  { layer: "L7", fn: "Immutable replay ledger", pct: 100 },
+const trustPillars = [
+  "Deterministic replay under identical inputs and event order",
+  "Append-only audit lineage with hash-linked chronology",
+  "FSM-governed lifecycle transitions with illegal-edge rejection",
+  "Counterexample generation for every critical invariant failure",
 ];
 
-const agents: { internal: string; public: string; desc: string; icon: IconType }[] = [
-  { internal: "Seed Clerk", public: "Intake Agent", desc: "High-volume administrative triage and onboarding ingress", icon: "governance" },
-  { internal: "Seed Judge", public: "Compliance Verifier", desc: "Policy conflict resolution and constitutional enforcement", icon: "constitutional" },
-  { internal: "Seed Detect", public: "Drift Monitor", desc: "Real-time anomaly detection and coherence monitoring", icon: "prediction" },
-  { internal: "Seed Memory", public: "Immutable Ledger Node", desc: "Cryptographically sealed state history", icon: "storage" },
-  { internal: "Seed Shepherd", public: "Recovery Coordinator", desc: "Lyapunov-stable remediation orchestration", icon: "archive" },
-];
+export default function HomePage() {
+  const [tick, setTick] = useState(0);
+  const telemetry = generateTelemetrySnapshot(tick, "rastaimperium-home");
 
-const phases: { num: string; name: string; status: ConstitutionSystemState }[] = [
-  { num: "1", name: "Architecture Visibility", status: "ACTIVE" },
-  { num: "2", name: "Replay Demonstrations", status: "BUILDING" },
-  { num: "3", name: "Institutional Pilots", status: "NEXT" },
-  { num: "4", name: "Open Constitutional APIs", status: "PLANNED" },
-  { num: "5", name: "Sovereign Governance Network", status: "PLANNED" },
-  { num: "6", name: "Civilization-Scale Orchestration", status: "VISION" },
-];
+  useEffect(() => {
+    const id = window.setInterval(() => setTick((t) => t + 1), 4000);
+    return () => window.clearInterval(id);
+  }, []);
 
-const benchmarks = [
-  { metric: "Operations Per Second", target: "1,000", achieved: "1,548+", status: "EXCEEDED" },
-  { metric: "System Response Time", target: "< 50ms", achieved: "45ms", status: "PASSED" },
-  { metric: "Human Approval Rate", target: "90.0%", achieved: "95.2%", status: "EXCEEDED" },
-  { metric: "System Reliability", target: "99.5%", achieved: "99.7%", status: "EXCEEDED" },
-];
+  return (
+    <main className="royal-page overflow-hidden">
+      {/* UNDERSTAND */}
+      <section className="royal-hero border-b border-[#B8860B]/20">
+        <div className="container-page py-16 lg:py-24">
+          <p className="royal-kicker text-xs font-semibold uppercase tracking-[0.32em]">
+            Public constitutional layer · EVO-V verification surface
+          </p>
+          <h1 className="royal-title mt-5 max-w-4xl text-4xl leading-tight text-zinc-50 sm:text-5xl lg:text-6xl">
+            Do not trust the claim.
+            <span className="mt-2 block text-gold-gradient">Inspect the evidence.</span>
+          </h1>
+          <p className="royal-lede mt-6 text-lg leading-8">
+            Rasta Imperium is the public constitutional, architecture, and verification layer for
+            EVO-V. It is not the execution runtime. Claims here connect to proofs, artifacts, and
+            safe challenges — with demonstration and unavailable states labelled explicitly.
+          </p>
 
-const trustPillars: { text: string; icon: IconType }[] = [
-  { text: "Deterministic replay under identical inputs and event order", icon: "archive" },
-  { text: "Append-only audit lineage with hash-linked chronology", icon: "storage" },
-  { text: "FSM-governed lifecycle transitions with illegal-edge rejection", icon: "governance" },
-  { text: "Counterexample generation for every critical invariant failure", icon: "prediction" },
-];
+          <div className="mt-10 flex flex-wrap gap-3">
+            <Link
+              href="/blueprint"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+            >
+              Explore Architecture
+            </Link>
+            <Link
+              href="/trust"
+              className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/50 px-5 py-3 text-sm font-semibold text-[#F2D675]"
+            >
+              Verify the System
+            </Link>
+            <Link
+              href="/challenge"
+              className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+            >
+              Challenge the Claims
+            </Link>
+            <Link
+              href="/institutional-pilots"
+              className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+            >
+              Institutional Pilot
+            </Link>
+          </div>
 
-const doctrineDocs = [
-  {
-    title: "Sovereign AI Blueprint",
-    pages: "14 pages",
-    badge: "v9",
-    desc: "Constitutional Computation — 9-layer sovereign stack, proof-carrying execution, and relational closure.",
-    href: "https://drive.google.com/file/d/1AMGgLZTjuGazMZDJKhnDuIOivCnW9rL-/view?usp=drivesdk",
-    accent: "gold",
-  },
-  {
-    title: "Digital Tabernacle",
-    pages: "15 pages",
-    badge: "v7.6",
-    desc: "Rastafarai Codex & EVO-V Civilization Kernel — Seven Axioms, Five Rings, Living Crystal Architecture.",
-    href: "https://drive.google.com/file/d/1KIw9Aun87Md5RlL7KK4u6wK-NIjdBe-m/view?usp=drivesdk",
-    accent: "green",
-  },
-  {
-    title: "Living Crystal Blueprint",
-    pages: "21 pages",
-    badge: "v2.1.7",
-    desc: "Full sovereign intelligence architecture — Omega infrastructure, recursive safety, isolation, and global HA.",
-    href: "https://drive.google.com/file/d/1xycb92ZMLx0yof4ehlpB8w3E0Gl7t3G0/view?usp=drivesdk",
-    accent: "crystal",
-  },
-  {
-    title: "The Sacred Blueprint",
-    pages: "17 pages",
-    badge: "EVO",
-    desc: "Declassifying the EVO Architecture — constitutional physics, Darwin Kernel, and the physics of AI containment.",
-    href: "https://drive.google.com/file/d/17tKDmsxlj0AKdtbvCMfZwjiJeLZqAKzV/view?usp=drivesdk",
-    accent: "gold",
-  },
-  {
-    title: "Genetic Blueprint of Sovereign AI",
-    pages: "20 pages",
-    badge: "Lineage",
-    desc: "Phylogenetic map from ARK Evolution & Omega roots through EVO-V to commercial EVO-G deployment.",
-    href: "https://drive.google.com/file/d/1sfRPti0RY4QQULGDJXHHE3U46X-JZ6n-/view?usp=drivesdk",
-    accent: "green",
-  },
-  {
-    title: "EVO-V Sovereign Intelligence",
-    pages: "17 pages",
-    badge: "v2.0",
-    desc: "Production-ready deterministic governance and verifiable containment for the age of autonomous systems.",
-    href: "https://drive.google.com/file/d/1IWfMr2TE3JIscDRSY6jie8py2gCFFg7e/view?usp=drivesdk",
-    accent: "crystal",
-  },
-  {
-    title: "EVO-G Operational Assurance",
-    pages: "10 pages",
-    badge: "Public",
-    desc: "Trusted automation for public sector — control gap closed, deterministic gatekeeping for HMRC, NHS, and councils.",
-    href: "https://drive.google.com/file/d/1CWncp6LIobmEcygPNNDPmj5B8_nC2fvC/view?usp=drivesdk",
-    accent: "green",
-  },
-];
+          <div className="mt-12">
+            <TrustStatus compact />
+          </div>
+        </div>
+      </section>
+
+      {/* EXPLORE — architecture */}
+      <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="explore-heading">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">2 · Explore</p>
+        <h2 id="explore-heading" className="mt-3 text-3xl text-zinc-100">
+          Nine-layer civilization stack
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Constitutional architecture from human interface through cosmology. Evidence for each layer
+          is published only where it exists — otherwise marked unavailable.
+        </p>
+        <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {civilizationStack.map((layer) => (
+            <li key={layer.layer} className="rounded-xl border border-zinc-800 bg-black/30 p-4">
+              <p className="font-mono text-[11px] text-[#D4AF37]">{layer.layer}</p>
+              <h3 className="mt-1 text-sm font-semibold text-zinc-100">{layer.name}</h3>
+              <p className="mt-2 text-xs leading-5 text-zinc-500">{layer.desc}</p>
+            </li>
+          ))}
+        </ol>
+        <Link href="/blueprint" className="mt-6 inline-block text-sm text-[#F2D675]">
+          Full Blueprint →
+        </Link>
+      </section>
+
+      {/* VERIFY */}
+      <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="verify-heading">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">3 · Verify</p>
+        <h2 id="verify-heading" className="mt-3 text-3xl text-zinc-100">
+          Trust · Proof · Evidence
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          High-value claims with explicit provenance. Benchmark numbers retained from prior
+          presentation are labelled UNAVAILABLE until public artifacts are attached.
+        </p>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          <ClaimEvidence claimId="CLAIM-REPLAY-001" />
+          <ClaimEvidence claimId="CLAIM-LEDGER-001" />
+          <ClaimEvidence claimId="CLAIM-LIFECYCLE-001" />
+          <ClaimEvidence claimId="CLAIM-BENCH-REL" />
+        </div>
+
+        <h3 className="mt-12 text-lg text-zinc-100">Benchmark provenance</h3>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[640px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-zinc-800 text-[10px] uppercase tracking-wider text-zinc-500">
+                <th className="py-2 pr-3">Metric</th>
+                <th className="py-2 pr-3">Value</th>
+                <th className="py-2 pr-3">Target</th>
+                <th className="py-2 pr-3">Verification</th>
+                <th className="py-2">Provenance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {evidenceBenchmarks.map((b) => (
+                <tr key={b.benchmarkId} className="border-b border-zinc-900">
+                  <td className="py-3 pr-3 text-zinc-200">{b.metric}</td>
+                  <td className="py-3 pr-3 font-mono text-zinc-100">{b.value}</td>
+                  <td className="py-3 pr-3 font-mono text-zinc-500">{b.target}</td>
+                  <td className="py-3 pr-3">
+                    <VerificationBadge status={b.verificationStatus} />
+                  </td>
+                  <td className="py-3">
+                    <ProvenanceBadge kind={b.provenance} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Link href="/evidence" className="mt-4 inline-block text-sm text-[#F2D675]">
+          Evidence Explorer →
+        </Link>
+      </section>
+
+      {/* Telemetry discipline */}
+      <section className="container-page border-b border-zinc-900 py-12">
+        <div className="rounded-xl border border-amber-900/40 bg-amber-950/20 p-5">
+          <div className="flex flex-wrap items-center gap-2">
+            <ProvenanceBadge kind="DEMONSTRATION" />
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/80">
+              Synthetic telemetry · local visual proof · not production monitoring
+            </p>
+          </div>
+          <dl className="mt-4 grid grid-cols-2 gap-3 font-mono text-xs text-zinc-400 sm:grid-cols-5">
+            <div>
+              <dt className="text-zinc-600">coherence</dt>
+              <dd className="text-zinc-200">{telemetry.coherence}</dd>
+            </div>
+            <div>
+              <dt className="text-zinc-600">drift</dt>
+              <dd className="text-zinc-200">{telemetry.drift}</dd>
+            </div>
+            <div>
+              <dt className="text-zinc-600">agents</dt>
+              <dd className="text-zinc-200">{telemetry.agents}</dd>
+            </div>
+            <div>
+              <dt className="text-zinc-600">block</dt>
+              <dd className="text-zinc-200">{telemetry.block}</dd>
+            </div>
+            <div>
+              <dt className="text-zinc-600">hash</dt>
+              <dd className="text-zinc-200">{telemetry.hash}</dd>
+            </div>
+          </dl>
+          <p className="mt-3 text-[11px] text-zinc-500">
+            SOURCE local PRNG · STATUS {telemetryStatusLabel(telemetry.systemState)} · not LIVE
+          </p>
+        </div>
+
+        <ul className="mt-8 grid gap-2 sm:grid-cols-2">
+          {trustPillars.map((t) => (
+            <li key={t} className="rounded-lg border border-zinc-800 px-4 py-3 text-sm text-zinc-400">
+              {t}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* CHALLENGE + ADOPT */}
+      <section className="container-page py-16">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">4 · Challenge</p>
+            <h2 className="mt-3 text-2xl text-zinc-100">Try to break the invariant</h2>
+            <p className="mt-3 text-sm leading-7 text-zinc-400">
+              Illegal transitions, replay mismatch, altered receipts — deterministic fixtures only.
+              No production mutation endpoints on this surface.
+            </p>
+            <Link
+              href="/challenge"
+              className="mt-6 inline-block rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
+            >
+              Open Challenge Lab →
+            </Link>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">5 · Adopt</p>
+            <h2 className="mt-3 text-2xl text-zinc-100">Institutional pathway</h2>
+            <p className="mt-3 text-sm leading-7 text-zinc-400">
+              Problem → method → evidence → challenge → pilot → assurance. Suitable for councils,
+              regulated environments, and enterprise governance teams.
+            </p>
+            <Link
+              href="/institutional-pilots"
+              className="mt-6 inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
+            >
+              Institutional pilots →
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
