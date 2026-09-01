@@ -1,7 +1,7 @@
 /**
  * Phase 8/9 evidence manifest.
  * VERIFIED only when a sealed public capsule independently reproduces expected hashes.
- * ART-L7-REPLAY-001 (INV-001 valid path) · ART-L7-REJECT-001 (INV-002 rejection path).
+ * ART-L7-REPLAY-001 · ART-L7-REJECT-001 · ART-L7-PARITY-001
  */
 
 import type {
@@ -13,8 +13,8 @@ import type {
   TrustConsoleSnapshot,
 } from "./types";
 
-export const MANIFEST_VERSION = "phase9-verified-l7-replay-reject-v1";
-export const MANIFEST_AS_OF = "2026-09-01T21:40:00Z";
+export const MANIFEST_VERSION = "phase9-verified-l7-parity-v1";
+export const MANIFEST_AS_OF = "2026-09-01T21:45:00Z";
 
 export const claims: Claim[] = [
   {
@@ -62,7 +62,6 @@ export const claims: Claim[] = [
     proofIds: [],
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
-    notes: "Figure retained from prior presentation; public artifact/evidence ID not currently published.",
   },
   {
     claimId: "CLAIM-BENCH-LAT",
@@ -112,28 +111,25 @@ export const evidence: Evidence[] = [
     verificationMethod: "Inspect invariant text and repository replay tests",
     version: MANIFEST_VERSION,
     timestamp: MANIFEST_AS_OF,
-    notes: "Specification context. Sealed capsule verification is EVD-REPLAY-ART-001.",
   },
   {
     evidenceId: "EVD-REPLAY-ART-001",
     title: "Sealed public replay capsule ART-L7-REPLAY-001",
     description:
-      "Versioned event sequence + version bundle + expected state/receipt/ledger hashes. Independent pure-engine replay must match sealed expected values.",
+      "Versioned event sequence + version bundle + expected hashes. Independent pure-engine replay must match sealed expected values.",
     claimIds: ["CLAIM-REPLAY-001"],
     proofIds: ["PROOF-REPLAY-001"],
     artifactId: "ART-L7-REPLAY-001",
     hash: "3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f",
-    implementation: "data/evidence/replay/capsuleEngine.ts",
-    version: "ri-capsule-1.0.0",
-    timestamp: MANIFEST_AS_OF,
     source: "/evidence/artifacts/ART-L7-REPLAY-001.json",
     verificationStatus: "VERIFIED",
     provenance: "HISTORICAL",
     relatedInvariantIds: ["INV-001"],
     relatedTrustSections: ["parity", "transparency"],
-    verificationMethod:
-      "node non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs",
-    notes: "Scope-limited VERIFIED: public capsule only. FROZEN.",
+    verificationMethod: "node non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs",
+    version: MANIFEST_VERSION,
+    timestamp: MANIFEST_AS_OF,
+    notes: "FROZEN. Capsule-scoped VERIFIED only.",
   },
   {
     evidenceId: "EVD-REJECT-ART-001",
@@ -144,17 +140,33 @@ export const evidence: Evidence[] = [
     proofIds: ["PROOF-ILLEGAL-001"],
     artifactId: "ART-L7-REJECT-001",
     hash: "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
-    implementation: "scripts/verify-art-l7-reject-001.mjs",
-    version: "ri-capsule-1.0.0",
-    timestamp: MANIFEST_AS_OF,
     source: "/evidence/artifacts/ART-L7-REJECT-001.json",
     verificationStatus: "VERIFIED",
     provenance: "HISTORICAL",
     relatedInvariantIds: ["INV-002"],
     relatedTrustSections: ["adversarial", "governance"],
-    verificationMethod:
-      "node non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs",
-    notes: "Scope-limited VERIFIED: rejection capsule only. FROZEN. Adversarial complement to EVD-REPLAY-ART-001.",
+    verificationMethod: "node non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs",
+    version: MANIFEST_VERSION,
+    timestamp: MANIFEST_AS_OF,
+    notes: "FROZEN. Adversarial complement to EVD-REPLAY-ART-001.",
+  },
+  {
+    evidenceId: "EVD-PARITY-ART-001",
+    title: "Cross-implementation parity report ART-L7-PARITY-001",
+    description:
+      "Node and Python independently verified both frozen L7 capsules with exact hash agreement.",
+    claimIds: ["CLAIM-REPLAY-001", "CLAIM-LIFECYCLE-001"],
+    proofIds: ["PROOF-PARITY-001"],
+    artifactId: "ART-L7-PARITY-001",
+    source: "/evidence/artifacts/ART-L7-PARITY-001.json",
+    verificationStatus: "VERIFIED",
+    provenance: "HISTORICAL",
+    relatedInvariantIds: ["INV-001", "INV-002"],
+    relatedTrustSections: ["parity", "transparency"],
+    verificationMethod: "node non-kernel/frontend/scripts/parity-art-l7.mjs",
+    version: MANIFEST_VERSION,
+    timestamp: MANIFEST_AS_OF,
+    notes: "FROZEN. Public pure-verifier parity only — not full EVO-V kernel.",
   },
   {
     evidenceId: "EVD-LEDGER-DOC-001",
@@ -191,8 +203,7 @@ export const evidence: Evidence[] = [
   {
     evidenceId: "EVD-BENCH-OPS-001",
     title: "Ops/sec benchmark — provenance pending",
-    description:
-      "Homepage displays 1,548+ ops/sec. No public benchmark artifact ID is attached on this verification surface yet.",
+    description: "Homepage displays 1,548+ ops/sec. No public benchmark artifact ID is attached yet.",
     claimIds: ["CLAIM-BENCH-OPS"],
     proofIds: [],
     source: "Homepage presentation (historical figure)",
@@ -200,13 +211,11 @@ export const evidence: Evidence[] = [
     provenance: "UNAVAILABLE",
     relatedInvariantIds: [],
     relatedTrustSections: [],
-    notes: "Do not treat as VERIFIED until artifact is published.",
   },
   {
     evidenceId: "EVD-BENCH-LAT-001",
     title: "Latency benchmark — provenance pending",
-    description:
-      "Homepage displays ≤45 ms response time. No public benchmark artifact ID is attached on this verification surface yet.",
+    description: "Homepage displays ≤45 ms response time. No public benchmark artifact ID is attached yet.",
     claimIds: ["CLAIM-BENCH-LAT"],
     proofIds: [],
     source: "Homepage presentation (historical figure)",
@@ -218,8 +227,7 @@ export const evidence: Evidence[] = [
   {
     evidenceId: "EVD-BENCH-APPROVAL-001",
     title: "Human approval rate — provenance pending",
-    description:
-      "Homepage displays 95.2% human approval. No public study artifact is attached on this verification surface yet.",
+    description: "Homepage displays 95.2% human approval. No public study artifact is attached yet.",
     claimIds: ["CLAIM-BENCH-APPROVAL"],
     proofIds: [],
     source: "Homepage presentation (historical figure)",
@@ -231,8 +239,7 @@ export const evidence: Evidence[] = [
   {
     evidenceId: "EVD-BENCH-REL-001",
     title: "Reliability figure — provenance pending",
-    description:
-      "Homepage displays 99.7% reliability. No public reliability study artifact is attached on this verification surface yet.",
+    description: "Homepage displays 99.7% reliability. No public reliability study artifact is attached yet.",
     claimIds: ["CLAIM-BENCH-REL"],
     proofIds: [],
     source: "Homepage presentation (historical figure)",
@@ -248,17 +255,16 @@ export const proofs: Proof[] = [
     proofId: "PROOF-REPLAY-001",
     title: "Deterministic replay parity — ART-L7-REPLAY-001",
     description:
-      "INV-001 verified for sealed public capsule ART-L7-REPLAY-001. Independent pure-engine double replay matches sealed hashes.",
+      "INV-001 verified for sealed public capsule ART-L7-REPLAY-001.",
     status: "VERIFIED",
     proofType: "deterministic_replay",
     invariant: "INV-001",
     inputFixture: "ART-L7-REPLAY-001.json",
     expectedOutcome: "Matching state_hash, receipt_hash, ledger_head_hash",
-    observedOutcome: "Independent verify-art-l7-replay-001.mjs EXIT 0",
+    observedOutcome: "Independent Node + Python EXIT 0",
     source: "/evidence/artifacts/ART-L7-REPLAY-001.json",
     verificationMethod: "node non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs",
     replayAvailable: true,
-    implementation: "capsuleEngine.ts (public pure reducer)",
     relatedClaim: "CLAIM-REPLAY-001",
     provenance: "HISTORICAL",
     timestamp: MANIFEST_AS_OF,
@@ -292,9 +298,8 @@ export const proofs: Proof[] = [
     proofType: "illegal_transition_rejection",
     invariant: "Transition legality",
     inputFixture: "ART-L7-REJECT-001.json",
-    expectedOutcome:
-      "ILLEGAL_TRANSITION; state_before_hash + receipt_hash match sealed values; no state mutation",
-    observedOutcome: "Independent verify-art-l7-reject-001.mjs EXIT 0",
+    expectedOutcome: "ILLEGAL_TRANSITION; sealed hashes match; no state mutation",
+    observedOutcome: "Independent Node + Python EXIT 0",
     source: "/evidence/artifacts/ART-L7-REJECT-001.json",
     verificationMethod: "node non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs",
     replayAvailable: true,
@@ -304,21 +309,29 @@ export const proofs: Proof[] = [
     engineVersion: "ri-capsule-1.0.0",
     artifactId: "ART-L7-REJECT-001",
     hash: "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
-    notes: "FROZEN. Adversarial complement to PROOF-REPLAY-001. Capsule-scoped VERIFIED only.",
+    notes: "FROZEN. Adversarial complement to PROOF-REPLAY-001.",
   },
   {
     proofId: "PROOF-PARITY-001",
-    title: "Cross-implementation parity",
-    description: "Parity across implementations is a stated goal; public parity report not yet published.",
-    status: "UNAVAILABLE",
+    title: "Cross-implementation parity — ART-L7-PARITY-001",
+    description:
+      "Node.js and Python3 pure verifiers independently pass frozen ART-L7-REPLAY-001 and ART-L7-REJECT-001 with exact hash agreement.",
+    status: "VERIFIED",
     proofType: "cross_implementation_parity",
-    expectedOutcome: "Matching validation decisions and receipt hashes across implementations",
-    observedOutcome: "Evidence not currently published",
-    source: "Constitutional goal — pending public artifact",
-    verificationMethod: "Await published parity report",
-    replayAvailable: false,
-    provenance: "UNAVAILABLE",
+    invariant: "INV-001 + INV-002 family (capsule scope)",
+    inputFixture: "ART-L7-REPLAY-001.json + ART-L7-REJECT-001.json",
+    expectedOutcome: "Both implementations pass; computed hashes identical across runtimes",
+    observedOutcome: "parity-art-l7 gate EXIT 0; sealed ART-L7-PARITY-001",
+    source: "/evidence/artifacts/ART-L7-PARITY-001.json",
+    verificationMethod: "node non-kernel/frontend/scripts/parity-art-l7.mjs",
+    replayAvailable: true,
+    implementation: "Node scripts + Python scripts (separate sources)",
+    provenance: "HISTORICAL",
     timestamp: MANIFEST_AS_OF,
+    engineVersion: "ri-capsule-1.0.0",
+    artifactId: "ART-L7-PARITY-001",
+    notes:
+      "FROZEN. Scope: public pure capsule verifiers only — not full EVO-V kernel parity, not LIVE production.",
   },
 ];
 
@@ -424,16 +437,16 @@ export const trustConsole: TrustConsoleSnapshot = {
   version: MANIFEST_VERSION,
   provenance: "HISTORICAL",
   notes:
-    "Two FROZEN public capsules: ART-L7-REPLAY-001 (valid path) and ART-L7-REJECT-001 (illegal rejection). Not production LIVE telemetry.",
+    "FROZEN capsules: REPLAY-001, REJECT-001, PARITY-001 (Node+Python). Not production LIVE telemetry.",
   sections: [
     {
       id: "registry",
       label: "Registry",
-      status: "Two VERIFIED capsules registered",
+      status: "Three VERIFIED artifacts registered",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
-      evidenceId: "EVD-REPLAY-ART-001",
-      proofId: "PROOF-REPLAY-001",
+      evidenceId: "EVD-PARITY-ART-001",
+      proofId: "PROOF-PARITY-001",
       provenance: "HISTORICAL",
       verificationActionHref: "/proof/",
       verificationActionLabel: "Open Proof Registry",
@@ -449,23 +462,25 @@ export const trustConsole: TrustConsoleSnapshot = {
     {
       id: "transparency",
       label: "Transparency",
-      status: "Sealed capsules + standalone verifiers published",
+      status: "Sealed capsules + dual-language verifiers published",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
-      evidenceId: "EVD-REPLAY-ART-001",
-      proofId: "PROOF-REPLAY-001",
+      evidenceId: "EVD-PARITY-ART-001",
+      proofId: "PROOF-PARITY-001",
       provenance: "HISTORICAL",
-      verificationActionHref: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-      verificationActionLabel: "Download replay capsule",
+      verificationActionHref: "/evidence/artifacts/ART-L7-PARITY-001.json",
+      verificationActionLabel: "Download parity report",
     },
     {
       id: "parity",
       label: "Parity",
-      status: "Capsule self-parity VERIFIED; cross-implementation UNAVAILABLE",
-      proofId: "PROOF-REPLAY-001",
+      status: "Node/Python cross-impl VERIFIED (ART-L7-PARITY-001)",
+      proofId: "PROOF-PARITY-001",
+      evidenceId: "EVD-PARITY-ART-001",
       provenance: "HISTORICAL",
-      verificationActionHref: "/proof/#PROOF-REPLAY-001",
-      verificationActionLabel: "View replay proof",
+      verificationActionHref: "/proof/#PROOF-PARITY-001",
+      verificationActionLabel: "View parity proof",
+      notes: "Scope: public pure capsule verifiers — not full EVO-V kernel.",
     },
     {
       id: "adversarial",
