@@ -1,7 +1,7 @@
 /**
  * Phase 9 — Verifiable Architecture
  * Evidence-linked civilization stack (L1–L9).
- * Honesty rule unchanged: no invented LIVE status; VERIFIED only when sealed artifacts exist.
+ * Honesty rule: VERIFIED only when sealed artifacts exist.
  */
 
 import type { ProvenanceKind, VerificationStatus } from "./types";
@@ -55,7 +55,6 @@ export const architectureLayers: ArchitectureLayer[] = [
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
-    notes: "Narrative layer — evidence not currently published as machine artifacts.",
   },
   {
     layerId: "L8",
@@ -74,7 +73,6 @@ export const architectureLayers: ArchitectureLayer[] = [
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
-    notes: "Evidence not currently published beyond documentation references.",
   },
   {
     layerId: "L7",
@@ -90,28 +88,35 @@ export const architectureLayers: ArchitectureLayer[] = [
       "State hash",
       "Receipt hash",
       "Ledger head hash",
+      "Rejection receipts on illegal edges",
       "Counterexample payloads on failure",
     ],
     invariantIds: ["INV-001", "INV-002"],
     invariantNotes: [
-      "INV-001 replay_parity — VERIFIED for sealed capsule ART-L7-REPLAY-001 only.",
-      "INV-002 no_hidden_state_mutation — still documentation / demonstration.",
+      "INV-001 replay_parity — VERIFIED for ART-L7-REPLAY-001 only.",
+      "INV-002 family illegal transition rejection — VERIFIED for ART-L7-REJECT-001 only.",
     ],
-    evidenceIds: ["EVD-REPLAY-DOC-001", "EVD-REPLAY-ART-001", "EVD-LEDGER-DOC-001", "EVD-LIFECYCLE-DOC-001"],
+    evidenceIds: [
+      "EVD-REPLAY-DOC-001",
+      "EVD-REPLAY-ART-001",
+      "EVD-REJECT-ART-001",
+      "EVD-LEDGER-DOC-001",
+      "EVD-LIFECYCLE-DOC-001",
+    ],
     proofIds: ["PROOF-REPLAY-001", "PROOF-CHAIN-001", "PROOF-ILLEGAL-001"],
     challengeIds: [
       "CHAL-ILLEGAL-TRANSITION-001",
       "CHAL-REPLAY-MISMATCH-001",
       "CHAL-ALTERED-RECEIPT-001",
     ],
-    implementation: "capsuleEngine.ts + ART-L7-REPLAY-001 · evo-v tests as reference",
+    implementation: "ART-L7-REPLAY-001 + ART-L7-REJECT-001 · standalone Node verifiers",
     verificationHref: "/proof/#PROOF-REPLAY-001",
-    verificationLabel: "PROOF-REPLAY-001 (VERIFIED capsule)",
+    verificationLabel: "PROOF-REPLAY-001 + PROOF-ILLEGAL-001",
     challengeHref: "/challenge/",
     verificationStatus: "VERIFIED",
     provenance: "HISTORICAL",
     notes:
-      "Layer status VERIFIED only for INV-001 public capsule ART-L7-REPLAY-001. Not production EVO-V runtime certification.",
+      "Two FROZEN capsules: valid-path replay + illegal-edge rejection. Not production EVO-V certification.",
   },
   {
     layerId: "L6",
@@ -177,16 +182,16 @@ export const architectureLayers: ArchitectureLayer[] = [
     invariantNotes: [
       "Shares enforcement dependency on INV-001 / INV-002 where lifecycle and replay apply.",
     ],
-    evidenceIds: ["EVD-REPLAY-DOC-001", "EVD-REPLAY-ART-001", "EVD-LIFECYCLE-DOC-001"],
+    evidenceIds: ["EVD-REPLAY-DOC-001", "EVD-REPLAY-ART-001", "EVD-REJECT-ART-001", "EVD-LIFECYCLE-DOC-001"],
     proofIds: ["PROOF-REPLAY-001", "PROOF-ILLEGAL-001"],
     challengeIds: ["CHAL-ILLEGAL-TRANSITION-001", "CHAL-REPLAY-MISMATCH-001"],
-    implementation: "Operational enforcement path documented via invariants and sealed capsule",
-    verificationHref: "/proof/#PROOF-REPLAY-001",
+    implementation: "Operational enforcement path via sealed valid + reject capsules",
+    verificationHref: "/proof/#PROOF-ILLEGAL-001",
     verificationLabel: "Open related proofs",
     challengeHref: "/challenge/",
     verificationStatus: "DEMONSTRATION",
     provenance: "DEMONSTRATION",
-    notes: "L3 remains demonstration-level; L7 holds the earned VERIFIED capsule.",
+    notes: "L3 remains demonstration-level; L7 holds the earned VERIFIED capsules.",
   },
   {
     layerId: "L2",
@@ -205,7 +210,6 @@ export const architectureLayers: ArchitectureLayer[] = [
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
-    notes: "Pathway is public; production institutional assurance artifacts not published.",
   },
   {
     layerId: "L1",
@@ -224,7 +228,6 @@ export const architectureLayers: ArchitectureLayer[] = [
     challengeHref: "/challenge/",
     verificationStatus: "DEMONSTRATION",
     provenance: "DEMONSTRATION",
-    notes: "The public site itself is the demonstration surface — not the EVO-V runtime.",
   },
 ];
 
