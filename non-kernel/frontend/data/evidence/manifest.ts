@@ -1,7 +1,7 @@
 /**
- * Phase 8 static evidence manifest.
+ * Phase 8/9 evidence manifest.
  * Honesty rule: DEMONSTRATION / UNAVAILABLE where production artifacts are not published.
- * Do not invent cryptographic hashes or live production telemetry.
+ * VERIFIED only when a sealed public capsule independently replays to expected hashes.
  */
 
 import type {
@@ -13,22 +13,22 @@ import type {
   TrustConsoleSnapshot,
 } from "./types";
 
-export const MANIFEST_VERSION = "phase8-v1.0.0";
-export const MANIFEST_AS_OF = "2026-09-01T00:00:00Z";
+export const MANIFEST_VERSION = "phase9-verified-l7-replay-v1";
+export const MANIFEST_AS_OF = "2026-09-01T21:30:00Z";
 
 export const claims: Claim[] = [
   {
     claimId: "CLAIM-REPLAY-001",
     statement:
-      "Deterministic replay under identical inputs and event order yields identical terminal state and receipt hashes.",
+      "For sealed public capsule ART-L7-REPLAY-001, deterministic replay under identical inputs and event order yields identical terminal state hash, receipt hash, and ledger head hash (INV-001).",
     category: "determinism",
     relatedInvariantIds: ["INV-001"],
-    evidenceIds: ["EVD-REPLAY-DOC-001"],
+    evidenceIds: ["EVD-REPLAY-DOC-001", "EVD-REPLAY-ART-001"],
     proofIds: ["PROOF-REPLAY-001"],
-    verificationStatus: "DEMONSTRATION",
-    provenance: "DEMONSTRATION",
+    verificationStatus: "VERIFIED",
+    provenance: "HISTORICAL",
     notes:
-      "Invariant is specified and covered by repository tests; public production receipt not published on this surface.",
+      "VERIFIED applies only to the published public capsule ART-L7-REPLAY-001 via independent pure-engine replay. Not a production EVO-V runtime measurement.",
   },
   {
     claimId: "CLAIM-LEDGER-001",
@@ -102,7 +102,7 @@ export const evidence: Evidence[] = [
       "INV-001 defines that replaying the same canonical event stream with the same version bundle yields identical terminal state hash, receipt hash, and ledger head hash.",
     claimIds: ["CLAIM-REPLAY-001"],
     proofIds: ["PROOF-REPLAY-001"],
-    source: "docs/INVARIANTS.md · evo-v/docs/INVARIANTS.md · evo-v/tests/replay_test.py",
+    source: "docs/INVARIANTS.md · evo-v/tests/replay_test.py",
     verificationStatus: "DEMONSTRATION",
     provenance: "DEMONSTRATION",
     relatedInvariantIds: ["INV-001"],
@@ -110,7 +110,29 @@ export const evidence: Evidence[] = [
     verificationMethod: "Inspect invariant text and repository replay tests",
     version: MANIFEST_VERSION,
     timestamp: MANIFEST_AS_OF,
-    notes: "Specification and test coverage — not a production run receipt.",
+    notes: "Specification context. Sealed capsule verification is EVD-REPLAY-ART-001.",
+  },
+  {
+    evidenceId: "EVD-REPLAY-ART-001",
+    title: "Sealed public replay capsule ART-L7-REPLAY-001",
+    description:
+      "Versioned event sequence + version bundle + expected state/receipt/ledger hashes. Independent pure-engine replay must match sealed expected values.",
+    claimIds: ["CLAIM-REPLAY-001"],
+    proofIds: ["PROOF-REPLAY-001"],
+    artifactId: "ART-L7-REPLAY-001",
+    hash: "3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f",
+    implementation: "data/evidence/replay/capsuleEngine.ts",
+    version: "ri-capsule-1.0.0",
+    timestamp: MANIFEST_AS_OF,
+    source: "/evidence/artifacts/ART-L7-REPLAY-001.json",
+    verificationStatus: "VERIFIED",
+    provenance: "HISTORICAL",
+    relatedInvariantIds: ["INV-001"],
+    relatedTrustSections: ["parity", "transparency"],
+    verificationMethod:
+      "Load ART-L7-REPLAY-001.json; run verifyCapsule() twice; assert state_hash, receipt_hash, ledger_head_hash match expected",
+    notes:
+      "Scope-limited VERIFIED: public capsule only. Receipt hash is the sealed receipt payload hash for this capsule.",
   },
   {
     evidenceId: "EVD-LEDGER-DOC-001",
@@ -202,24 +224,29 @@ export const evidence: Evidence[] = [
 export const proofs: Proof[] = [
   {
     proofId: "PROOF-REPLAY-001",
-    title: "Deterministic replay parity (specification + tests)",
+    title: "Deterministic replay parity — ART-L7-REPLAY-001",
     description:
-      "Public surface for INV-001. Repository contains replay tests; production receipt not published here.",
-    status: "DEMONSTRATION",
+      "INV-001 verified for sealed public capsule ART-L7-REPLAY-001. Independent pure-engine double replay matches sealed state_hash, receipt_hash, and ledger_head_hash.",
+    status: "VERIFIED",
     proofType: "deterministic_replay",
     invariant: "INV-001",
-    inputFixture: "Ordered event sequence + fixed version bundle (see evo-v/tests)",
-    expectedOutcome: "Identical state_hash, receipt_hash, ledger_head_hash across replays",
-    observedOutcome: "Covered by repository replay tests — not a public production run",
-    source: "evo-v/tests/replay_test.py · docs/INVARIANTS.md",
-    verificationMethod: "Review tests and invariant; run local replay where EVO-V runtime is available",
-    replayAvailable: false,
-    implementation: "evo-v ledger/replay",
+    inputFixture: "ART-L7-REPLAY-001.json ordered events + version_bundle",
+    expectedOutcome:
+      "state_hash=5d04d74e0731853e2f2760a1047c7a8547dc860ce9d99525bf2ea715740bc31d; receipt_hash=3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f; ledger_head_hash=404e19c065afec5e11dac36db6838a5829d25244742d4eaee5c2ad3e6ff2a6de",
+    observedOutcome: "Independent verifyCapsule() passes; double replay parity holds",
+    source: "/evidence/artifacts/ART-L7-REPLAY-001.json · data/evidence/replay/capsuleEngine.ts",
+    verificationMethod: "vitest: capsuleEngine.test.ts · verifyCapsule(ART-L7-REPLAY-001)",
+    replayAvailable: true,
+    implementation: "capsuleEngine.ts (public pure reducer; not full EVO-V kernel)",
     relatedClaim: "CLAIM-REPLAY-001",
-    provenance: "DEMONSTRATION",
+    provenance: "HISTORICAL",
     timestamp: MANIFEST_AS_OF,
-    engineVersion: "manifest-bound",
-    notes: "replayAvailable=false on public site to avoid implying browser execution of production kernel.",
+    engineVersion: "ri-capsule-1.0.0",
+    artifactId: "ART-L7-REPLAY-001",
+    hash: "3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f",
+    receiptVersion: "ri-capsule-receipt-1",
+    notes:
+      "VERIFIED scope: this capsule only. Does not certify production EVO-V deployments.",
   },
   {
     proofId: "PROOF-CHAIN-001",
@@ -335,17 +362,17 @@ export const challenges: Challenge[] = [
   {
     challengeId: "CHAL-REPLAY-MISMATCH-001",
     title: "Replay mismatch detection",
-    description: "Altered event order must fail replay parity.",
+    description: "Altered event order must fail replay parity against ART-L7-REPLAY-001 sealed hash.",
     input: "Same events with permuted order under fixed version bundle",
-    expected: "Parity failure; counterexample fields populated",
-    result: "FAIL parity (as designed when order differs)",
+    expected: "Parity failure vs sealed state_hash",
+    result: "FAIL parity (as designed when order differs) — covered by capsuleEngine.test.ts",
     invariant: "INV-001 replay_parity",
     reason: "Determinism requires identical ordered stream",
     verification: "PASS",
     deterministic: true,
     nonDestructive: true,
     isolatedFromProduction: true,
-    provenance: "DEMONSTRATION",
+    provenance: "HISTORICAL",
     proofId: "PROOF-REPLAY-001",
   },
   {
@@ -370,21 +397,22 @@ export const trustConsole: TrustConsoleSnapshot = {
   overallStatus: "VERIFICATION SURFACE OPERATIONAL",
   asOf: MANIFEST_AS_OF,
   version: MANIFEST_VERSION,
-  provenance: "DEMONSTRATION",
+  provenance: "HISTORICAL",
   notes:
-    "This console presents the public verification surface of Rasta Imperium. Status values are bound to the static evidence manifest. Production runtime telemetry is not claimed.",
+    "Public verification surface. INV-001 is VERIFIED for sealed capsule ART-L7-REPLAY-001 only. Production runtime telemetry is not claimed.",
   sections: [
     {
       id: "registry",
       label: "Registry",
-      status: "Manifest published",
+      status: "Manifest published · first VERIFIED capsule registered",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
-      evidenceId: "EVD-LEDGER-DOC-001",
-      provenance: "DEMONSTRATION",
-      verificationActionHref: "/proof",
-      verificationActionLabel: "Open Proof Registry",
-      notes: "Public proof registry is live; production registry mirror not claimed.",
+      evidenceId: "EVD-REPLAY-ART-001",
+      proofId: "PROOF-REPLAY-001",
+      provenance: "HISTORICAL",
+      verificationActionHref: "/proof/#PROOF-REPLAY-001",
+      verificationActionLabel: "Open PROOF-REPLAY-001",
+      notes: "ART-L7-REPLAY-001 is the first registry artifact with earned VERIFIED status.",
     },
     {
       id: "keys",
@@ -398,23 +426,24 @@ export const trustConsole: TrustConsoleSnapshot = {
     {
       id: "transparency",
       label: "Transparency",
-      status: "Documentation + tests referenced",
+      status: "Sealed capsule + pure engine published",
       timestamp: MANIFEST_AS_OF,
       version: MANIFEST_VERSION,
-      evidenceId: "EVD-REPLAY-DOC-001",
+      evidenceId: "EVD-REPLAY-ART-001",
       proofId: "PROOF-REPLAY-001",
-      provenance: "DEMONSTRATION",
-      verificationActionHref: "/evidence",
-      verificationActionLabel: "Inspect Evidence",
+      provenance: "HISTORICAL",
+      verificationActionHref: "/evidence/artifacts/ART-L7-REPLAY-001.json",
+      verificationActionLabel: "Download capsule",
     },
     {
       id: "parity",
       label: "Parity",
-      status: "Cross-implementation report unavailable",
-      proofId: "PROOF-PARITY-001",
-      provenance: "UNAVAILABLE",
-      verificationActionHref: "/proof",
-      verificationActionLabel: "View Parity Entry",
+      status: "Capsule self-parity VERIFIED; cross-implementation still unavailable",
+      proofId: "PROOF-REPLAY-001",
+      provenance: "HISTORICAL",
+      verificationActionHref: "/proof/#PROOF-REPLAY-001",
+      verificationActionLabel: "View replay proof",
+      notes: "Cross-implementation parity (PROOF-PARITY-001) remains UNAVAILABLE.",
     },
     {
       id: "adversarial",
