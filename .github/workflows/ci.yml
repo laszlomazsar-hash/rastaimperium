@@ -10,6 +10,13 @@ permissions:
   contents: read
 
 jobs:
+  deployment-artifact-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify canonical production web artifact
+        run: python scripts/check_deployment_artifacts.py
+
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
@@ -62,7 +69,7 @@ jobs:
           fi
 
   ci-status:
-    needs: [test-backend]
+    needs: [deployment-artifact-integrity, test-backend]
     if: always()
     runs-on: ubuntu-latest
     steps:

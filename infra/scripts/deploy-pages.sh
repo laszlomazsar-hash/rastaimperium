@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-: "${NEXT_PUBLIC_API_URL:?NEXT_PUBLIC_API_URL is required}"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+STATIC_EXPORT="$REPO_ROOT/backend/static"
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
-cd "$REPO_ROOT"
-npm run build
+if [[ ! -f "$STATIC_EXPORT/index.html" ]]; then
+  echo "Canonical static export is missing: $STATIC_EXPORT/index.html" >&2
+  exit 1
+fi
 
 TMP_DIR="$(mktemp -d)"
 cleanup() {
@@ -28,7 +29,8 @@ fi
 (
   cd "$TMP_DIR"
   git rm -rf . >/dev/null 2>&1 || true
-  cp -R "$REPO_ROOT/out/." "$TMP_DIR/"
+  # Pages publishes the exact export served by the production ASGI app.
+  cp -R "$STATIC_EXPORT/." "$TMP_DIR/"
   touch .nojekyll
   git add -A
 

@@ -33,6 +33,21 @@ This repository must not contain runtime execution logic for EVO-V governance op
 - `docs/CONSTITUTION.md`
 - `docs/GLOSSARY.md`
 
+## Production web deployment
+
+`backend/static/` is the canonical, committed production website export. The
+production ASGI entrypoint is `src.ark_safety.main:app`, which serves that
+directory at `/`; Docker and Railway both start this entrypoint. GitHub Pages
+publishes the same `backend/static/` directory through
+`infra/scripts/deploy-pages.sh`.
+
+To refresh the generated export, run the frontend build from
+`non-kernel/frontend`, then copy the resulting `out/` directory into
+`backend/static/` (the **Build Static Site** workflow performs this exact
+operation). Do not deploy `public/` or a separate frontend build directory.
+The artifact-integrity CI check rejects a reintroduced `public/index.html` and
+checks that the Docker and Pages paths both resolve the canonical root page.
+
 ## Site pages
 - `/vision`
 - `/architecture`
@@ -45,4 +60,3 @@ This repository must not contain runtime execution logic for EVO-V governance op
 2. Rastaimperium is the constitutional/conceptual layer.
 3. Execution occurs in a separate EVO-V repository.
 4. The model is built around replayable, auditable systems.
-
