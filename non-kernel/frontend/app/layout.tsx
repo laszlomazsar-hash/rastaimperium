@@ -98,6 +98,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
+                    href="/observatory"
+                  >
+                    Observatory
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
                     href="/blueprint"
                   >
                     Blueprint
@@ -109,14 +117,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     href="/proof"
                   >
                     Proof
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/limitations"
-                  >
-                    Limitations
                   </Link>
                 </li>
                 <li>
@@ -215,18 +215,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Link>
                   </li>
                   <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/observatory">
+                      Observatory
+                    </Link>
+                  </li>
+                  <li>
                     <Link className="transition hover:text-[#F2D675]" href="/blueprint">
                       Blueprint
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/pillars">
-                      Pillars
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/architecture">
-                      Architecture
                     </Link>
                   </li>
                   <li>
@@ -237,6 +232,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li>
                     <Link className="transition hover:text-[#F2D675]" href="/codex">
                       Codex
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/pillars">
+                      Pillars
                     </Link>
                   </li>
                 </ul>
