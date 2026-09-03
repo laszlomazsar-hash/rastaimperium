@@ -44,6 +44,24 @@ const tracks = [
     href: "/limitations/",
     status: "REQUIRED READING",
   },
+  {
+    title: "Library & publications",
+    detail: "Catalog of documents, codex materials, and narrative archives",
+    href: "/library/",
+    status: "LIBRARY",
+  },
+  {
+    title: "Applications & Genesis",
+    detail: "Kernel, Observatory, Fitness DSL, and demonstration ecosystem surfaces",
+    href: "/applications/",
+    status: "PRODUCT SURFACE",
+  },
+  {
+    title: "Design partner path",
+    detail: "Institutional pilots with written scope — research collaboration entry for labs",
+    href: "/institutional-pilots/",
+    status: "INSTITUTIONAL",
+  },
 ];
 
 export default function ResearchPage() {
@@ -59,9 +77,29 @@ export default function ResearchPage() {
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
             Canonical path for publications, technical artifacts, open repositories, and
-            replay-verifiable proof concepts. This page consolidates entry points; it does not
-            invent production claims. Unproven items remain labelled on the Limitations page.
+            replay-verifiable proof concepts. This page consolidates entry points; it does not invent
+            production claims. Unproven items remain labelled on the Limitations page.
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/proof/"
+              className="rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/library/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+            >
+              Library
+            </Link>
+            <Link
+              href="/contact/?intent=research"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+            >
+              Research collaboration
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -86,19 +124,23 @@ export default function ResearchPage() {
         <div className="mt-12 rounded-xl border border-zinc-800 bg-black/20 p-6">
           <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Boundary</p>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-400">
-            Research on this surface is evidence-oriented. Production deployment, live telemetry,
-            and benchmark performance are not claimed here without sealed public artifacts. For
-            institutional evaluation, begin with Limitations and the Proof Registry.
+            Research on this surface is evidence-oriented. Production deployment, live telemetry, and
+            benchmark performance are not claimed here without sealed public artifacts. For
+            institutional evaluation, begin with Limitations and the Proof Registry; for adoption,
+            use Product and design partner pilots.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/limitations/" className="text-sm text-[#F2D675]">
               Limitations →
             </Link>
-            <Link href="/library/" className="text-sm text-zinc-400">
-              Library →
+            <Link href="/product/" className="text-sm text-zinc-400">
+              Product →
             </Link>
             <Link href="/audit/" className="text-sm text-zinc-400">
               Auditor handoff →
+            </Link>
+            <Link href="/thanks-and-praise/" className="text-sm text-zinc-400">
+              Thanks & Praise →
             </Link>
           </div>
         </div>

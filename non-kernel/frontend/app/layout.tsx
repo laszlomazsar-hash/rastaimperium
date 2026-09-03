@@ -90,6 +90,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
+                    href="/applications"
+                  >
+                    Apps
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
                     href="/blueprint"
                   >
                     Blueprint
@@ -117,14 +125,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     href="/institutional-pilots"
                   >
                     Pilots
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/case-studies"
-                  >
-                    Cases
                   </Link>
                 </li>
                 <li>
@@ -210,6 +210,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Link>
                   </li>
                   <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/applications">
+                      Applications
+                    </Link>
+                  </li>
+                  <li>
                     <Link className="transition hover:text-[#F2D675]" href="/blueprint">
                       Blueprint
                     </Link>
@@ -227,11 +232,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li>
                     <Link className="transition hover:text-[#F2D675]" href="/technology">
                       Technology
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/applications">
-                      Applications
                     </Link>
                   </li>
                   <li>
@@ -301,6 +301,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li>
                     <Link className="transition hover:text-[#F2D675]" href="/case-studies">
                       Case studies
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/pricing">
+                      Pricing posture
                     </Link>
                   </li>
                   <li>
