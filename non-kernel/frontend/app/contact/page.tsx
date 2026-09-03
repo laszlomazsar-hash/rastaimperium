@@ -11,21 +11,24 @@ const engagementPaths = [
   {
     code: "01",
     title: "Institutional governance",
-    description: "For organisations evaluating constitutional controls, replayability, or accountable AI operating models.",
+    description:
+      "For organisations evaluating constitutional controls, replayability, or accountable AI operating models.",
     prompt: "Institutional governance inquiry",
     label: "Start an institutional inquiry",
   },
   {
     code: "02",
     title: "Research collaboration",
-    description: "For researchers exploring deterministic intelligence, epistemic governance, and verifiable system design.",
+    description:
+      "For researchers exploring deterministic intelligence, epistemic governance, and verifiable system design.",
     prompt: "Research collaboration inquiry",
     label: "Discuss a research collaboration",
   },
   {
     code: "03",
     title: "Technical exploration",
-    description: "For teams seeking a technical conversation about the EVO-V architecture, system layers, or governance metrics.",
+    description:
+      "For teams seeking a technical conversation about the EVO-V architecture, system layers, or governance metrics.",
     prompt: "EVO-V technical inquiry",
     label: "Explore the architecture",
   },
@@ -38,17 +41,24 @@ function inquiryHref(subject: string) {
 export default function ContactPage() {
   return (
     <main className="relative overflow-hidden bg-[#090a09] text-zinc-100">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(ellipse_at_50%_0%,rgba(34,197,94,0.14),transparent_64%)]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(ellipse_at_50%_0%,rgba(34,197,94,0.14),transparent_64%)]"
+      />
 
       <section className="relative mx-auto max-w-6xl px-6 pb-16 pt-24 sm:pb-24 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)] lg:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">Engagement desk</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+              Engagement desk
+            </p>
             <h1 className="mt-5 max-w-4xl font-serif text-4xl leading-[1.05] text-[#F2D675] sm:text-6xl">
               Begin with the governance question that matters.
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-300">
-              Rasta Imperium works at the boundary of constitutional intelligence, verifiable systems, and accountable deployment. Select an engagement path below to open a focused inquiry.
+              Rasta Imperium works at the boundary of constitutional intelligence, verifiable
+              systems, and accountable deployment. Select an engagement path below to open a focused
+              inquiry. Review Limitations and the Proof Registry before assuming production claims.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <a
@@ -58,20 +68,27 @@ export default function ContactPage() {
                 Write to the engagement desk
               </a>
               <Link
-                href="/technology"
-                className="rounded-full border border-[#D4AF37]/45 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:border-[#F2D675] hover:bg-[#D4AF37]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F2D675]"
+                href="/limitations/"
+                className="rounded-full border border-[#D4AF37]/45 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:border-[#F2D675] hover:bg-[#D4AF37]/10"
               >
-                Review EVO-V architecture
+                Read Limitations first
               </Link>
             </div>
           </div>
 
           <aside className="border border-[#D4AF37]/25 bg-[#11150f]/85 p-6 shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur-sm sm:p-7">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">A useful first note</p>
-            <p className="mt-4 text-base leading-7 text-zinc-200">
-              Share the decision context, the systems or institutions involved, and the governance question you need to resolve. This helps establish the appropriate technical and constitutional frame from the outset.
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">
+              A useful first note
             </p>
-            <a href={inquiryHref("Rasta Imperium engagement brief")} className="mt-6 inline-flex text-sm font-semibold text-[#F2D675] underline decoration-[#D4AF37]/45 underline-offset-4 transition hover:decoration-[#F2D675]">
+            <p className="mt-4 text-base leading-7 text-zinc-200">
+              Share the decision context, the systems or institutions involved, and the governance
+              question you need to resolve. This helps establish the appropriate technical and
+              constitutional frame from the outset.
+            </p>
+            <a
+              href={inquiryHref("Rasta Imperium engagement brief")}
+              className="mt-6 inline-flex text-sm font-semibold text-[#F2D675] underline decoration-[#D4AF37]/45 underline-offset-4 transition hover:decoration-[#F2D675]"
+            >
               Open a structured engagement brief
             </a>
           </aside>
@@ -82,19 +99,34 @@ export default function ContactPage() {
         <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
           <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">Choose a pathway</p>
-              <h2 className="mt-3 font-serif text-3xl text-[#F2D675] sm:text-4xl">A clear route into the conversation.</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+                Choose a pathway
+              </p>
+              <h2 className="mt-3 font-serif text-3xl text-[#F2D675] sm:text-4xl">
+                A clear route into the conversation.
+              </h2>
             </div>
-            <p className="max-w-xl text-sm leading-6 text-zinc-400">Each route opens a prepared email subject, keeping the first exchange anchored in the right operating context.</p>
+            <p className="max-w-xl text-sm leading-6 text-zinc-400">
+              Each route opens a prepared email subject, keeping the first exchange anchored in the
+              right operating context.
+            </p>
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {engagementPaths.map((path) => (
-              <article key={path.code} className="group flex min-h-72 flex-col border border-zinc-700/70 bg-[#101210] p-6 transition hover:-translate-y-1 hover:border-[#D4AF37]/65 hover:shadow-[0_18px_45px_rgba(0,0,0,0.3)]">
-                <span className="font-mono text-xs tracking-[0.2em] text-[#D4AF37]">PATH {path.code}</span>
+              <article
+                key={path.code}
+                className="group flex min-h-72 flex-col border border-zinc-700/70 bg-[#101210] p-6 transition hover:-translate-y-1 hover:border-[#D4AF37]/65 hover:shadow-[0_18px_45px_rgba(0,0,0,0.3)]"
+              >
+                <span className="font-mono text-xs tracking-[0.2em] text-[#D4AF37]">
+                  PATH {path.code}
+                </span>
                 <h3 className="mt-8 text-xl font-semibold text-zinc-100">{path.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-6 text-zinc-400">{path.description}</p>
-                <a href={inquiryHref(path.prompt)} className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#F2D675] transition group-hover:text-white">
+                <a
+                  href={inquiryHref(path.prompt)}
+                  className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#F2D675] transition group-hover:text-white"
+                >
                   {path.label}
                   <span aria-hidden="true">→</span>
                 </a>
@@ -111,35 +143,62 @@ export default function ContactPage() {
       <section className="relative mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
         <div className="grid gap-10 rounded-2xl border border-[#D4AF37]/25 bg-[linear-gradient(120deg,rgba(24,35,24,0.9),rgba(12,14,12,0.92))] p-7 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">Preparation</p>
-            <h2 className="mt-4 font-serif text-3xl leading-tight text-[#F2D675]">Bring the evidence horizon into view.</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+              Preparation
+            </p>
+            <h2 className="mt-4 font-serif text-3xl leading-tight text-[#F2D675]">
+              Bring the evidence horizon into view.
+            </h2>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="border-l border-[#D4AF37]/45 pl-5">
               <h3 className="text-sm font-semibold text-zinc-100">Decision boundary</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-400">Describe the decision, constraint, or institutional responsibility that needs a durable control surface.</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">
+                Describe the decision, constraint, or institutional responsibility that needs a
+                durable control surface.
+              </p>
             </div>
             <div className="border-l border-[#D4AF37]/45 pl-5">
               <h3 className="text-sm font-semibold text-zinc-100">Evidence requirements</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-400">Note the records, replay requirements, or provenance expectations that should remain inspectable.</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">
+                Note the records, replay requirements, or provenance expectations that should remain
+                inspectable.
+              </p>
             </div>
             <div className="border-l border-[#D4AF37]/45 pl-5">
               <h3 className="text-sm font-semibold text-zinc-100">System context</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-400">Identify the human, agentic, and operational layers implicated by the inquiry.</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">
+                Identify the human, agentic, and operational layers implicated by the inquiry.
+              </p>
             </div>
             <div className="border-l border-[#D4AF37]/45 pl-5">
               <h3 className="text-sm font-semibold text-zinc-100">Desired next step</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-400">State whether you need research exchange, architecture review, or an institutional governance discussion.</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">
+                State whether you need research exchange, architecture review, or an institutional
+                governance discussion.
+              </p>
             </div>
           </div>
         </div>
 
         <div className="mt-12 flex flex-col justify-between gap-6 border-t border-zinc-800 pt-8 sm:flex-row sm:items-center">
-          <p className="max-w-2xl text-sm leading-6 text-zinc-400">For a complete public orientation before writing, review the project’s vision and the EVO-V technology model.</p>
+          <p className="max-w-2xl text-sm leading-6 text-zinc-400">
+            For a complete public orientation before writing, review Limitations, Proof, and the
+            pilot pathway.
+          </p>
           <div className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold text-[#F2D675]">
-            <Link href="/vision" className="transition hover:text-white">Vision</Link>
-            <Link href="/technology" className="transition hover:text-white">Technology</Link>
-            <Link href="/governance" className="transition hover:text-white">Governance</Link>
+            <Link href="/limitations/" className="transition hover:text-white">
+              Limitations
+            </Link>
+            <Link href="/proof/" className="transition hover:text-white">
+              Proof
+            </Link>
+            <Link href="/institutional-pilots/" className="transition hover:text-white">
+              Pilots
+            </Link>
+            <Link href="/blueprint/" className="transition hover:text-white">
+              Blueprint
+            </Link>
           </div>
         </div>
       </section>
