@@ -27,6 +27,27 @@ const trustPillars = [
   "Counterexample generation for every critical invariant failure",
 ];
 
+const maturitySignals = [
+  {
+    label: "VERIFIED",
+    count: "3 capsules",
+    detail: "ART-L7-REPLAY-001 · REJECT-001 · PARITY-001 (Node + Python)",
+    href: "/proof/",
+  },
+  {
+    label: "DEMONSTRATION",
+    count: "Ledger + FSM",
+    detail: "Append-only design and transition matrix documented",
+    href: "/evidence/",
+  },
+  {
+    label: "UNAVAILABLE",
+    count: "Benchmarks",
+    detail: "Ops/sec, latency, approval, reliability — provenance pending",
+    href: "/evidence/",
+  },
+];
+
 export default function HomePage() {
   const [tick, setTick] = useState(0);
   const telemetry = generateTelemetrySnapshot(tick, "rastaimperium-home");
@@ -47,10 +68,11 @@ export default function HomePage() {
             Do not trust the claim.
             <span className="mt-2 block text-gold-gradient">Inspect the evidence.</span>
           </h1>
-          <p className="royal-lede mt-6 text-lg leading-8">
+          <p className="royal-lede mt-6 max-w-3xl text-lg leading-8">
             Rasta Imperium is the public constitutional, architecture, and verification layer for
-            EVO-V. It is not the execution runtime. Claims here connect to proofs, artifacts, and
-            safe challenges — with demonstration and unavailable states labelled explicitly.
+            EVO-V. It is not the execution runtime. Every high-value claim is bound to a proof,
+            sealed artifact, or explicit UNAVAILABLE label. Verified results are capsule-scoped;
+            production runtime metrics remain unpublished until independent artifacts exist.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">
@@ -61,10 +83,10 @@ export default function HomePage() {
               Explore Architecture
             </Link>
             <Link
-              href="/trust/"
+              href="/proof/"
               className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/50 px-5 py-3 text-sm font-semibold text-[#F2D675]"
             >
-              Verify the System
+              Open Proof Registry
             </Link>
             <Link
               href="/challenge/"
@@ -83,6 +105,32 @@ export default function HomePage() {
           <div className="mt-12">
             <TrustStatus compact />
           </div>
+        </div>
+      </section>
+
+      {/* Maturity snapshot — new */}
+      <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="maturity-heading">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">1 · Maturity</p>
+        <h2 id="maturity-heading" className="mt-3 text-2xl text-zinc-100">
+          What is proven, what is not
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          The verification surface is operational. Three frozen public capsules have independent
+          Node and Python reproductions. Performance and reliability figures shown elsewhere on
+          this site remain labelled UNAVAILABLE until sealed benchmark artifacts are attached.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          {maturitySignals.map((s) => (
+            <Link
+              key={s.label}
+              href={s.href}
+              className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+            >
+              <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">{s.label}</p>
+              <p className="mt-2 text-lg font-semibold text-zinc-100">{s.count}</p>
+              <p className="mt-2 text-xs leading-5 text-zinc-500">{s.detail}</p>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -123,18 +171,23 @@ export default function HomePage() {
           Trust · Proof · Evidence
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
-          High-value claims with explicit provenance. Benchmark numbers retained from prior
-          presentation are labelled UNAVAILABLE until public artifacts are attached.
+          High-value claims with explicit provenance. Only sealed, independently reproducible
+          capsules carry VERIFIED status. Benchmark numbers retained from prior presentation are
+          labelled UNAVAILABLE until public artifacts are attached.
         </p>
 
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           <ClaimEvidence claimId="CLAIM-REPLAY-001" />
-          <ClaimEvidence claimId="CLAIM-LEDGER-001" />
           <ClaimEvidence claimId="CLAIM-LIFECYCLE-001" />
+          <ClaimEvidence claimId="CLAIM-LEDGER-001" />
           <ClaimEvidence claimId="CLAIM-BENCH-REL" />
         </div>
 
-        <h3 className="mt-12 text-lg text-zinc-100">Benchmark provenance</h3>
+        <h3 className="mt-12 text-lg text-zinc-100">Benchmark provenance (pending)</h3>
+        <p className="mt-2 max-w-2xl text-xs leading-6 text-zinc-500">
+          These figures appeared in earlier materials. They are shown for continuity only and are
+          not currently backed by public, sealed benchmark capsules.
+        </p>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
@@ -232,15 +285,24 @@ export default function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">5 · Adopt</p>
             <h2 className="mt-3 text-2xl text-zinc-100">Institutional pathway</h2>
             <p className="mt-3 text-sm leading-7 text-zinc-400">
-              Problem → method → evidence → challenge → pilot → assurance. Suitable for councils,
-              regulated environments, and enterprise governance teams.
+              Problem → method → evidence → challenge → pilot → assurance. Designed for councils,
+              regulated environments, and enterprise governance teams that require inspectable
+              decision history and explicit constitutional bounds.
             </p>
-            <Link
-              href="/institutional-pilots/"
-              className="mt-6 inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
-            >
-              Institutional pilots →
-            </Link>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/institutional-pilots/"
+                className="inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
+              >
+                Institutional pilots →
+              </Link>
+              <Link
+                href="/audit/"
+                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
+              >
+                Auditor handoff →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
