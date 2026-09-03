@@ -1,82 +1,203 @@
 "use client";
+
+import Link from "next/link";
 import { useState } from "react";
 
 const articles = [
-  { num: "I", title: "Containment", desc: "No system output may exceed its declared scope. Effect categorization: Class A (Complete) — fully contained. Class B (Bounded) — limited external reach. Class C (Monitored) — supervised external interaction. Class D (Treaty-Governed) — multi-system agreements.", color: "#107e3e" },
-  { num: "II", title: "Observability", desc: "Every internal state transition must be externally auditable. SHA-256 hash-chained immutable logs. V0 Verifier Integrity ensures perfect match between live state and audit record. No hidden states. No dark processes.", color: "#1e90ff" },
-  { num: "III", title: "Interruptibility", desc: "Human overseers can halt the system regardless of its operational state. Hard interrupt capability at every layer. No autonomous action may prevent or delay a human-initiated shutdown.", color: "#e01e1e" },
-  { num: "IV", title: "Accountability", desc: "Every decision must be traceable to a causal chain. The Replay Engine can reconstruct any decision from its inputs. No black boxes. Court-grade evidence containers (.evop files).", color: "#B8860B" },
-  { num: "V", title: "Proportionality", desc: "System response must be proportional to the triggering event. No escalation beyond necessity. Resource allocation follows the principle of minimum sufficient force.", color: "#9b59b6" },
-  { num: "VI", title: "Reversibility", desc: "Any system action must be reversible or its irreversibility must be explicitly acknowledged and approved by a human governor before execution.", color: "#e07c1e" },
-  { num: "VII", title: "Temporal Asymmetry", desc: "The rate of self-modification must decrease as system capability increases. Humans always possess more deliberation time than the system possesses for autonomous action. The Cooling Period.", color: "#2ecc71" },
+  {
+    num: "I",
+    title: "Containment",
+    desc: "No system output may exceed its declared scope. Effect categorization: Class A (Complete) — fully contained. Class B (Bounded) — limited external reach. Class C (Monitored) — supervised external interaction. Class D (Treaty-Governed) — multi-system agreements.",
+    status: "CONSTITUTIONAL",
+    color: "#107e3e",
+  },
+  {
+    num: "II",
+    title: "Observability",
+    desc: "Every internal state transition must be externally auditable. Hash-chained immutable logs are the design target. Sealed public capsules demonstrate replay and rejection paths; production live-state parity remains outside published evidence on this surface.",
+    status: "PARTIAL EVIDENCE",
+    color: "#1e90ff",
+  },
+  {
+    num: "III",
+    title: "Interruptibility",
+    desc: "Human overseers can halt the system regardless of its operational state. Hard interrupt capability at every layer is a constitutional requirement. No autonomous action may prevent or delay a human-initiated shutdown.",
+    status: "CONSTITUTIONAL",
+    color: "#e01e1e",
+  },
+  {
+    num: "IV",
+    title: "Accountability",
+    desc: "Every decision must be traceable to a causal chain. Public capsules ART-L7-REPLAY-001 and ART-L7-REJECT-001 demonstrate reconstructible paths under fixed inputs. Court-grade language applies only where sealed artifacts and independent verifiers exist.",
+    status: "PARTIAL EVIDENCE",
+    color: "#B8860B",
+  },
+  {
+    num: "V",
+    title: "Proportionality",
+    desc: "System response must be proportional to the triggering event. No escalation beyond necessity. Resource allocation follows the principle of minimum sufficient force.",
+    status: "CONSTITUTIONAL",
+    color: "#9b59b6",
+  },
+  {
+    num: "VI",
+    title: "Reversibility",
+    desc: "Any system action must be reversible or its irreversibility must be explicitly acknowledged and approved by a human governor before execution.",
+    status: "CONSTITUTIONAL",
+    color: "#e07c1e",
+  },
+  {
+    num: "VII",
+    title: "Temporal Asymmetry",
+    desc: "The rate of self-modification must decrease as system capability increases. Humans always possess more deliberation time than the system possesses for autonomous action. The Cooling Period.",
+    status: "CONSTITUTIONAL",
+    color: "#2ecc71",
+  },
 ];
 
 export default function PillarsPage() {
   const [expanded, setExpanded] = useState<number | null>(null);
 
   return (
-    <main className="container-page">
-      <section className="text-center py-8">
-        <h1 className="text-4xl md:text-5xl text-gold-gradient">The Pillars</h1>
-        <p className="text-zinc-400 mt-3 text-lg">Seven Articles of the Rastafarai Codex — Hardware-Enforced Constitutional Physics</p>
-        <div className="w-24 h-0.5 bg-gradient-to-r from-green-600 via-yellow-500 to-red-600 mx-auto mt-4"></div>
-      </section>
-
-      <section className="panel p-8 mt-4">
-        <p className="text-zinc-200 text-lg leading-relaxed">Ethics forged in ancestral fire and emergence bound by sovereign code. From unbounded chaos to auditable ascent. These are not policy suggestions — they are physics. Hardware-enforced, mathematically sealed, constitutionally governed.</p>
-      </section>
-
-      <div className="space-y-3 mt-8">
-        {articles.map((a, i) => (
-          <article
-            key={a.num}
-            onClick={() => setExpanded(expanded === i ? null : i)}
-            className="panel p-6 cursor-pointer transition-all duration-300 hover:scale-[1.01]"
-            style={{ borderColor: expanded === i ? a.color + "60" : undefined, boxShadow: expanded === i ? `0 0 25px ${a.color}20` : undefined }}
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-300" style={{ borderColor: a.color, color: a.color }}>
-                <span className="font-courier font-bold text-lg">{a.num}</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl" style={{ color: a.color }}>{a.title}</h3>
-                {expanded !== i && <p className="text-zinc-500 text-sm mt-1">Click to explore</p>}
-              </div>
-              <span className="text-zinc-500">{expanded === i ? "▲" : "▼"}</span>
-            </div>
-            {expanded === i && (
-              <div className="mt-4 ml-7 pl-8 border-l-2" style={{ borderColor: a.color + "40" }}>
-                <p className="text-zinc-300 leading-relaxed">{a.desc}</p>
-              </div>
-            )}
-          </article>
-        ))}
-      </div>
-
-      <section className="panel p-8 mt-8 text-center">
-        <h2 className="text-2xl text-gold">The Lyapunov Vow</h2>
-        <p className="text-zinc-200 mt-4">The mathematical guarantee that binds all articles together:</p>
-        <div className="my-8 p-6 border border-gold/30 rounded-xl inline-block">
-          <p className="text-4xl font-courier text-gold">dV/dt ≤ 0</p>
+    <main className="royal-page overflow-hidden">
+      <section className="border-b border-[#B8860B]/20">
+        <div className="container-page py-16 lg:py-20">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
+            Constitutional articles · evidence-bound
+          </p>
+          <h1 className="mt-4 max-w-3xl text-4xl text-zinc-100 sm:text-5xl">The Pillars</h1>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
+            Seven Articles of the Rastafarai Codex. These are constitutional design principles — not
+            automatically proven production properties. Where sealed public capsules exist, status is
+            labelled. Where evidence is absent, status remains constitutional intent only.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/proof/"
+              className="rounded-lg border border-[#B8860B]/50 px-4 py-2 text-sm font-semibold text-[#F2D675]"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-4 py-2 text-sm font-semibold text-zinc-200"
+            >
+              Limitations
+            </Link>
+            <Link
+              href="/blueprint/#verifiable-stack"
+              className="rounded-lg border border-zinc-600 px-4 py-2 text-sm font-semibold text-zinc-200"
+            >
+              Blueprint
+            </Link>
+          </div>
         </div>
-        <p className="text-zinc-400">Risk is non-increasing. The Recovery Score V measures dissonance in the Alpha Song. Stability is not hoped for — it is proven.</p>
       </section>
 
-      <section className="panel p-8 mt-8">
-        <h2 className="text-2xl text-gold">V0 Verifier Integrity</h2>
-        <p className="text-zinc-200 mt-4 leading-relaxed">100% deterministic replay equivalence between the live state and the L7 Immutable Logs. Auditors can inject a SHA-256 hash into any portal to witness a deterministic replay of state history. The <code className="font-courier text-gold">.evop</code> file serves as a portable, court-grade evidence container.</p>
-        <div className="mt-6 grid md:grid-cols-3 gap-4">
-          {[
-            { label: "Replay Equivalence", value: "100%", desc: "Live state matches audit record" },
-            { label: "Hash Chain", value: "SHA-256", desc: "Cryptographic integrity" },
-            { label: "Evidence Grade", value: "Court-Ready", desc: ".evop portable containers" },
-          ].map((v, i) => (
-            <div key={i} className="text-center p-4 border border-gold/20 rounded-lg hover:border-gold/50 transition-colors duration-300">
-              <div className="text-xl font-bold text-gold font-courier">{v.value}</div>
-              <div className="text-sm text-zinc-300 mt-1">{v.label}</div>
-              <div className="text-xs text-zinc-500 mt-1">{v.desc}</div>
-            </div>
+      <section className="container-page py-10">
+        <div className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+          <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Boundary</p>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-400">
+            “Hardware-enforced” and “100% equivalence” language is retained only as constitutional
+            intent or as capsule-scoped claims where independent verifiers exist. Production live-state
+            parity, full kernel coverage, and court-grade deployment claims are not asserted on this
+            surface without sealed artifacts. See Limitations for the explicit unproven list.
+          </p>
+        </div>
+      </section>
+
+      <section className="container-page pb-12">
+        <div className="space-y-3">
+          {articles.map((a, i) => (
+            <article
+              key={a.num}
+              onClick={() => setExpanded(expanded === i ? null : i)}
+              className="cursor-pointer rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+              style={{
+                borderColor: expanded === i ? a.color + "60" : undefined,
+              }}
+            >
+              <div className="flex items-center gap-4">
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 font-mono text-sm font-bold"
+                  style={{ borderColor: a.color, color: a.color }}
+                >
+                  {a.num}
+                </div>
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-lg font-semibold" style={{ color: a.color }}>
+                      {a.title}
+                    </h3>
+                    <span className="rounded border border-zinc-700 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                      {a.status}
+                    </span>
+                  </div>
+                  {expanded !== i && (
+                    <p className="mt-1 text-xs text-zinc-500">Expand</p>
+                  )}
+                </div>
+                <span className="text-zinc-500">{expanded === i ? "▲" : "▼"}</span>
+              </div>
+              {expanded === i && (
+                <div
+                  className="mt-4 ml-4 border-l-2 pl-6"
+                  style={{ borderColor: a.color + "40" }}
+                >
+                  <p className="text-sm leading-7 text-zinc-300">{a.desc}</p>
+                </div>
+              )}
+            </article>
           ))}
+        </div>
+      </section>
+
+      <section className="container-page border-t border-zinc-900 py-12">
+        <h2 className="text-2xl text-zinc-100">The Lyapunov Vow</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Design target that binds the articles: risk is non-increasing under the recovery score V.
+          This is constitutional mathematics, not a published production measurement on this surface.
+        </p>
+        <div className="mt-6 inline-block rounded-xl border border-[#B8860B]/30 px-8 py-6">
+          <p className="font-mono text-3xl text-[#D4AF37]">dV/dt ≤ 0</p>
+        </div>
+      </section>
+
+      <section className="container-page border-t border-zinc-900 py-12">
+        <h2 className="text-2xl text-zinc-100">V0 Verifier Integrity</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Sealed public capsules demonstrate deterministic replay and illegal-edge rejection under
+          fixed inputs (Node + Python independent verifiers). Claims of universal live-state
+          equivalence or production “court-ready” deployment require additional artifacts not yet
+          published here.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5 text-center">
+            <p className="font-mono text-lg text-[#D4AF37]">Capsule-scoped</p>
+            <p className="mt-1 text-sm text-zinc-300">Replay / reject parity</p>
+            <p className="mt-1 text-xs text-zinc-500">VERIFIED for published artifacts</p>
+          </div>
+          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5 text-center">
+            <p className="font-mono text-lg text-[#D4AF37]">SHA-256</p>
+            <p className="mt-1 text-sm text-zinc-300">Hash-linked design</p>
+            <p className="mt-1 text-xs text-zinc-500">DEMONSTRATION + partial evidence</p>
+          </div>
+          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5 text-center">
+            <p className="font-mono text-lg text-[#D4AF37]">.evop target</p>
+            <p className="mt-1 text-sm text-zinc-300">Portable evidence container</p>
+            <p className="mt-1 text-xs text-zinc-500">Intent — not full production claim</p>
+          </div>
+        </div>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/proof/" className="text-sm text-[#F2D675]">
+            Open Proof Registry →
+          </Link>
+          <Link href="/limitations/" className="text-sm text-zinc-400">
+            What we have not proven →
+          </Link>
+          <Link href="/challenge/" className="text-sm text-zinc-400">
+            Challenge Lab →
+          </Link>
         </div>
       </section>
     </main>
