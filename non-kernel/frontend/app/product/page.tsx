@@ -2,39 +2,66 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Product — What you can use and buy",
+  title: "Product — Capabilities, pilots, and commercial pathway",
   description:
-    "Commercial pathway for EVO-V constitutional governance: design partner pilots, verification surface, runtime roadmap. Evidence-bound; no invented case studies.",
+    "What you can inspect, pilot, and buy: verification surface, design partner pilots, EVO-V runtime pathway, Observatory, and governance modules. Evidence-bound commercial surface.",
 };
 
 const surfaces = [
   {
     status: "OPERATIONAL",
     title: "Verification surface",
-    body: "Proof Registry, Evidence Explorer, Challenge Lab, auditor handoff. Public, inspectable, capsule-scoped.",
+    body: "Proof Registry, Evidence Explorer, Challenge Lab, auditor handoff. Public, inspectable, capsule-scoped. This is the surface you evaluate before any commercial commitment.",
     href: "/proof/",
     cta: "Open Proof Registry",
   },
   {
     status: "PILOT PATH",
     title: "Design partner pilots",
-    body: "Scoped institutional pilots: constitution mapping, evidence review, challenge fixtures, written boundary of scope.",
+    body: "Fixed-scope paid engagements ($50k–$150k indicative): constitution mapping, integration support, invariant enforcement on an agreed subset of your stack, written success criteria.",
     href: "/institutional-pilots/",
     cta: "Apply for a pilot",
   },
   {
     status: "DEMONSTRATION",
     title: "Applications & demos",
-    body: "Ecosystem surfaces and synthetic telemetry labelled DEMONSTRATION — not production SaaS or live monitoring.",
+    body: "Ecosystem surfaces and synthetic telemetry labelled DEMONSTRATION — not production SaaS or live monitoring. Useful for orientation, not for purchasing guarantees.",
     href: "/applications/",
     cta: "View applications",
   },
   {
-    status: "SEPARATE LAYER",
-    title: "EVO-V execution kernel",
-    body: "Runtime governance logic lives outside this site. Documented here; executed in dedicated repositories and deployments.",
+    status: "COMMERCIAL LAYER",
+    title: "EVO-V execution runtime",
+    body: "Deterministic governance kernel, hosted Observatory-style dashboards, and advanced epistemic modules. Sold under explicit scope after pilot fit — not self-serve on this site.",
     href: "/about-evo-v-kernel/",
     cta: "About the kernel",
+  },
+];
+
+const capabilities = [
+  {
+    title: "Deterministic replay",
+    body: "Identical inputs and event order yield identical terminal state, receipt, and ledger head hashes for sealed capsules.",
+  },
+  {
+    title: "Illegal-transition rejection",
+    body: "FSM-governed lifecycle edges reject unauthorized state mutations with sealed rejection receipts.",
+  },
+  {
+    title: "Append-only lineage",
+    body: "Hash-linked audit chronology designed for reconstructibility under institutional review.",
+  },
+  {
+    title: "Challenge battery",
+    body: "Adversarial fixtures for replay mismatch, altered receipts, and illegal edges — available on the public verification surface.",
+  },
+  {
+    title: "Constitution mapping",
+    body: "Pilot work product: explicit policy boundaries mapped onto your agent or decision paths before scale-up.",
+  },
+  {
+    title: "Observatory & telemetry path",
+    body: "Hosted coherence/drift visibility and operator surfaces are part of the commercial runtime layer after pilot.",
   },
 ];
 
@@ -47,7 +74,7 @@ const journey = [
   {
     step: "02",
     title: "Evidence",
-    body: "Review sealed capsules, limitations, and challenge fixtures before any commercial discussion.",
+    body: "Review sealed capsules, Limitations, and Challenge Lab fixtures before any commercial discussion.",
   },
   {
     step: "03",
@@ -57,7 +84,7 @@ const journey = [
   {
     step: "04",
     title: "Production path",
-    body: "Runtime integration, hosted observatory, or air-gapped license — only after pilot evidence and mutual fit.",
+    body: "Runtime integration, hosted Observatory, or air-gapped license — only after pilot evidence and mutual fit.",
   },
 ];
 
@@ -65,8 +92,8 @@ const commercial = [
   {
     title: "Design partner pilot",
     detail:
-      "Fixed-scope engagement for regulated or high-accountability teams. Custom constitution mapping, integration support, invariant enforcement on an agreed subset of your stack.",
-    action: "Contact for pilot terms",
+      "Fixed-scope engagement for regulated or high-accountability teams. Custom constitution mapping, integration support, invariant enforcement on an agreed subset of your stack. Indicative range $50k–$150k.",
+    action: "Apply for pilot terms",
     href: "/contact/?intent=design-partner",
   },
   {
@@ -79,7 +106,7 @@ const commercial = [
   {
     title: "Runtime & hosted modules",
     detail:
-      "Execution kernel, observatory dashboard, and advanced epistemic modules are the commercial layer. Pricing and packaging are scoped per engagement — not published as self-serve SaaS on this site.",
+      "Execution kernel, Observatory dashboard, and advanced epistemic modules. Open-core posture: verification surface public; runtime and hosted governance sold under enterprise terms (including air-gapped options).",
     action: "Request commercial brief",
     href: "/contact/?intent=commercial",
   },
@@ -144,6 +171,26 @@ export default function ProductPage() {
               <p className="mt-2 text-sm leading-6 text-zinc-400">{s.body}</p>
               <p className="mt-4 text-sm text-[#F2D675]">{s.cta} →</p>
             </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="container-page border-b border-zinc-900 py-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+          Capability surface
+        </p>
+        <h2 className="mt-3 text-2xl text-zinc-100">What buyers and auditors can evaluate</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Capabilities below are either publicly challengeable on this surface or delivered as pilot /
+          runtime work product under written scope. Performance claims remain UNAVAILABLE until sealed
+          benchmark capsules exist.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {capabilities.map((c) => (
+            <div key={c.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+              <h3 className="text-base font-semibold text-zinc-100">{c.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">{c.body}</p>
+            </div>
           ))}
         </div>
       </section>

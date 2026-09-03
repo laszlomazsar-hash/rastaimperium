@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Institutional Pilots — High-Accountability Environments",
+  title: "Institutional Pilots — Design Partner Program",
   description:
-    "Scoped pilot programs for regulated and high-accountability environments: problem, method, evidence, challenge, pilot, assurance.",
+    "Scoped design partner pilots for regulated and high-accountability environments: problem, method, evidence, challenge, pilot, assurance. Fixed-scope paid engagements with written boundaries.",
 };
 
 const journey = [
@@ -33,7 +33,7 @@ const journey = [
   {
     step: "Pilot",
     title: "Controlled institutional deployment",
-    body: "Scoped pilots in regulated environments before operational scale-up. Scope and success criteria agreed in writing.",
+    body: "Scoped design partner engagement in regulated environments before operational scale-up. Scope and success criteria agreed in writing.",
   },
   {
     step: "Assurance",
@@ -45,9 +45,11 @@ const journey = [
 
 const offered = [
   "Scoped pilot design against a defined governance problem",
+  "Custom constitution mapping for your agent or decision stack",
   "Mapping of claims to public evidence and limitations",
   "Access to Challenge Lab fixtures and auditor handoff path",
   "Written boundary of what is and is not in scope",
+  "Integration support for invariant enforcement on an agreed subset",
 ];
 
 const notOffered = [
@@ -55,6 +57,26 @@ const notOffered = [
   "Blanket certification or “court-ready” claims without evidence",
   "Open-ended SaaS deployment without institutional scope",
   "Performance benchmarks labelled VERIFIED without public capsules",
+  "Unlimited agent coverage outside the written pilot boundary",
+];
+
+const deliverables = [
+  {
+    title: "Duration",
+    body: "Typically 8–12 weeks (extendable by mutual written agreement).",
+  },
+  {
+    title: "Indicative investment",
+    body: "Design partner pilots are scoped in the $50k–$150k range depending on stack complexity, number of governed decision paths, and integration depth.",
+  },
+  {
+    title: "You receive",
+    body: "Written constitution map, pilot success criteria, challenge results, evidence handoff package, and a production-path recommendation.",
+  },
+  {
+    title: "You provide",
+    body: "Decision context, systems in scope, compliance or audit requirements, and a technical counterpart for integration windows.",
+  },
 ];
 
 export default function InstitutionalPilotsPage() {
@@ -63,33 +85,34 @@ export default function InstitutionalPilotsPage() {
       <section className="relative border-b border-[#B8860B]/20">
         <div className="container-page relative py-16 lg:py-24">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
-            Institutional Pilots
+            Design Partner Program
           </p>
           <h1 className="mt-6 max-w-3xl text-4xl leading-tight text-zinc-100 sm:text-5xl">
             Prove the system <span className="text-gold-gradient">before it scales.</span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
-            Pilot programs are scoped for regulated and high-accountability environments where
-            replay, traceability, and governance assurance are required before operational adoption.
+            Paid, fixed-scope design partner pilots for regulated and high-accountability teams.
+            Replay, traceability, and constitutional bounds are established in writing before any
+            claim of operational adoption.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
+              href="/contact/?intent=design-partner"
+              className="rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+            >
+              Apply for design partner pilot
+            </Link>
+            <Link
+              href="/product/"
+              className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
+            >
+              Product pathway
+            </Link>
+            <Link
               href="/limitations/"
-              className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
+              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
             >
               Read Limitations first
-            </Link>
-            <Link
-              href="/proof/"
-              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
-            >
-              Proof Registry
-            </Link>
-            <Link
-              href="/contact/"
-              className="rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
-            >
-              Contact engagement desk
             </Link>
           </div>
         </div>
@@ -126,6 +149,25 @@ export default function InstitutionalPilotsPage() {
         </div>
       </section>
 
+      <section className="container-page border-b border-zinc-900 py-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+          Design partner terms (indicative)
+        </p>
+        <h2 className="mt-3 text-2xl text-zinc-100">Scoped, paid, evidence-bound</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Final commercial terms are written per engagement. The ranges below orient institutional
+          buyers; they are not a public price list for self-serve purchase.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          {deliverables.map((d) => (
+            <div key={d.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+              <h3 className="text-lg text-[#F2D675]">{d.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">{d.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="container-page py-16 lg:py-20">
         <h2 className="text-sm font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Institutional journey
@@ -148,28 +190,29 @@ export default function InstitutionalPilotsPage() {
         </ol>
 
         <div className="mt-14 rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
-          <p className="text-zinc-300">Ready to discuss a scoped pilot?</p>
+          <p className="text-xl text-zinc-100">Ready to apply for a design partner pilot?</p>
           <p className="mt-2 text-sm text-zinc-500">
-            Bring the decision context, evidence requirements, and desired next step.
+            Bring the decision context, evidence requirements, systems in scope, and desired next
+            step. We reply with a written boundary and commercial outline.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             <Link
-              href="/contact/"
+              href="/contact/?intent=design-partner"
               className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition hover:bg-[#F2D675]"
             >
-              Contact engagement desk
+              Apply · design partner
+            </Link>
+            <Link
+              href="/product/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70 hover:text-[#F2D675]"
+            >
+              Product & commercial models
             </Link>
             <Link
               href="/audit/"
               className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70 hover:text-[#F2D675]"
             >
               Auditor handoff
-            </Link>
-            <Link
-              href="/limitations/"
-              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70 hover:text-[#F2D675]"
-            >
-              Limitations
             </Link>
           </div>
         </div>
