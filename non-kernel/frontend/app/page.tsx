@@ -48,6 +48,25 @@ const maturitySignals = [
   },
 ];
 
+const boundaryItems = [
+  {
+    title: "What this is",
+    points: [
+      "Public constitutional and verification surface for EVO-V",
+      "Evidence-bound claims with explicit provenance labels",
+      "Replayable, challengeable artifacts for auditors and institutions",
+    ],
+  },
+  {
+    title: "What this is not",
+    points: [
+      "Not the execution runtime or production kernel",
+      "Not a SaaS product or live monitoring dashboard",
+      "Not a source of unpublished performance guarantees",
+    ],
+  },
+];
+
 export default function HomePage() {
   const [tick, setTick] = useState(0);
   const telemetry = generateTelemetrySnapshot(tick, "rastaimperium-home");
@@ -108,7 +127,40 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Maturity snapshot — new */}
+      {/* Boundary clarity */}
+      <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="boundary-heading">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">0 · Boundary</p>
+        <h2 id="boundary-heading" className="mt-3 text-2xl text-zinc-100">
+          Scope of this surface
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          This site is the public-facing constitutional and verification layer. Execution,
+          production telemetry, and sealed performance claims live outside this surface until
+          independent artifacts are published.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          {boundaryItems.map((block) => (
+            <div
+              key={block.title}
+              className="rounded-xl border border-zinc-800 bg-black/30 p-5"
+            >
+              <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
+                {block.title}
+              </p>
+              <ul className="mt-3 space-y-2 text-sm text-zinc-300">
+                {block.points.map((p) => (
+                  <li key={p} className="flex gap-2">
+                    <span className="text-[#B8860B]">·</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Maturity snapshot */}
       <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="maturity-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">1 · Maturity</p>
         <h2 id="maturity-heading" className="mt-3 text-2xl text-zinc-100">
@@ -305,6 +357,10 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
+        <p className="mt-12 text-center text-[11px] tracking-wide text-zinc-600">
+          Static export via GitHub Actions · main branch · Railway deployment pipeline
+        </p>
       </section>
     </main>
   );
