@@ -17,7 +17,7 @@ const baselineRoot = path.join(frontendRoot, "tests/visual-baselines");
 const artifactRoot = path.join(frontendRoot, "visual-regression/artifacts");
 const temporaryRoot = path.join(frontendRoot, "visual-regression/.tmp");
 const updateBaselines = process.argv.includes("--update");
-const expectedRouteCount = 50;
+const expectedRouteCount = 52;
 const maxDiffPixelRatio = 0.002;
 
 const viewports = [
@@ -270,7 +270,7 @@ async function run() {
     }
   } finally {
     await rm(temporaryRoot, { recursive: true, force: true });
-    await new Promise((resolve) => server.close(resolve));
+       await new Promise((resolve) => server.close(resolve));
   }
 
   if (failures.length > 0) {
