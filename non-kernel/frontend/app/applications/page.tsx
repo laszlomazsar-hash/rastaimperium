@@ -1,10 +1,70 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Applications — EVO-V Ecosystem",
   description:
-    "Public pointers to EVO-V ecosystem surfaces. Demonstration and external prototypes are labelled explicitly; this page is not the execution runtime.",
+    "EVO-V applications and Genesis artifacts: verification surface, design partner path, kernel, Observatory, Fitness DSL, and demonstration ecosystem apps. Labels are explicit.",
 };
+
+const genesis = [
+  {
+    title: "Verification surface",
+    description:
+      "Proof Registry, Evidence Explorer, Challenge Lab, and auditor handoff on this site. Capsule-scoped VERIFIED artifacts; benchmarks remain UNAVAILABLE until sealed.",
+    status: "OPERATIONAL",
+    badge: "PUBLIC LAYER",
+    href: "/proof/",
+    cta: "Open Proof Registry",
+  },
+  {
+    title: "Design partner pilots",
+    description:
+      "Fixed-scope paid engagements: constitution mapping, integration support, invariant enforcement on an agreed subset. Indicative $50k–$150k / 8–12 weeks.",
+    status: "PILOT PATH",
+    badge: "COMMERCIAL",
+    href: "/institutional-pilots/",
+    cta: "Apply for pilot",
+  },
+  {
+    title: "EVO-V execution kernel",
+    description:
+      "Deterministic governance runtime — separate from this website. Replay, lifecycle rejection, and ledger logic live in dedicated repositories and deployments.",
+    status: "SEPARATE LAYER",
+    badge: "GENESIS · KERNEL",
+    href: "/about-evo-v-kernel/",
+    cta: "About the kernel",
+    external: "https://github.com/laszlomazsar-hash/evo-v",
+    externalLabel: "Kernel repo",
+  },
+  {
+    title: "Observatory",
+    description:
+      "Operator-facing coherence, drift, and governed-agent visibility. Hosted Observatory modules are part of the commercial runtime layer after pilot fit; synthetic telemetry on the homepage is DEMONSTRATION only.",
+    status: "COMMERCIAL LAYER",
+    badge: "GENESIS · OBSERVATORY",
+    href: "/product/",
+    cta: "Product pathway",
+  },
+  {
+    title: "Fitness DSL & invariants",
+    description:
+      "Policy and invariant expression surface used in pilot constitution mapping. Not a public self-serve product on this site; delivered under written pilot or runtime scope.",
+    status: "PILOT / RUNTIME",
+    badge: "GENESIS · DSL",
+    href: "/product/",
+    cta: "Commercial models",
+  },
+  {
+    title: "Design partner onboarding",
+    description:
+      "Intake, success criteria, and written boundary for institutional pilots. Start at Contact with intent=design-partner after Limitations and Proof.",
+    status: "OPERATIONAL",
+    badge: "ONBOARDING",
+    href: "/contact/?intent=design-partner",
+    cta: "Start intake",
+  },
+];
 
 const apps = [
   {
@@ -47,18 +107,24 @@ export default function ApplicationsPage() {
     <main className="royal-page">
       <section className="container-page border-b border-[#B8860B]/20 py-16 lg:py-24">
         <p className="royal-kicker text-xs font-semibold uppercase tracking-[0.32em] text-[#B8860B]">
-          Ecosystem surfaces · public pointers
+          Ecosystem · Genesis · demonstrations
         </p>
         <h1 className="royal-title mt-5 max-w-3xl text-4xl leading-tight text-zinc-50 sm:text-5xl">
           EVO-V Applications
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
-          Public pointers to related EVO-V surfaces. Each entry is labelled DEMONSTRATION on this
-          site. This page is not the execution runtime, does not host sealed production telemetry,
-          and does not claim independently verified performance metrics.
+          What exists to inspect, pilot, or demonstrate. Genesis artifacts (kernel, Observatory,
+          Fitness DSL) are labelled by layer. External demos remain DEMONSTRATION. This page is not
+          the production runtime and does not publish sealed performance guarantees.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/product/"
+            className="rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+          >
+            Product pathway
+          </Link>
           <Link
             href="/proof/"
             className="rounded-lg border border-[#B8860B]/50 px-5 py-2.5 text-sm font-semibold text-[#F2D675]"
@@ -66,22 +132,75 @@ export default function ApplicationsPage() {
             Proof Registry
           </Link>
           <Link
-            href="/evidence/"
+            href="/institutional-pilots/"
             className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
           >
-            Evidence Explorer
+            Design partner pilots
           </Link>
           <Link
-            href="/blueprint/#verifiable-stack"
+            href="/thanks-and-praise/"
             className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
           >
-            Architecture
+            Thanks & Praise
           </Link>
         </div>
       </section>
 
+      <section className="container-page border-b border-zinc-900 py-16">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+          Genesis product surface
+        </p>
+        <h2 className="mt-3 text-2xl text-zinc-100">Artifacts from the constitutional stack</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Mapped to what institutional buyers and auditors can actually reach today. Runtime modules
+          are sold under explicit scope after pilot fit.
+        </p>
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          {genesis.map((item) => (
+            <article
+              key={item.title}
+              className="rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
+                  {item.badge}
+                </p>
+                <span className="rounded border border-zinc-700 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                  {item.status}
+                </span>
+              </div>
+              <h3 className="mt-3 text-lg font-semibold text-zinc-100">{item.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-zinc-400">{item.description}</p>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link href={item.href} className="text-sm font-semibold text-[#F2D675]">
+                  {item.cta} →
+                </Link>
+                {item.external && (
+                  <a
+                    href={item.external}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-zinc-400 hover:text-[#F2D675]"
+                  >
+                    {item.externalLabel} ↗
+                  </a>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="container-page py-16">
-        <div className="grid gap-6 md:grid-cols-2">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+          Demonstration surfaces
+        </p>
+        <h2 className="mt-3 text-2xl text-zinc-100">External ecosystem pointers</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Each card below is labelled DEMONSTRATION. Useful for orientation; not a substitute for
+          sealed capsules or a paid pilot boundary.
+        </p>
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
           {apps.map((app) => (
             <article
               key={app.title}
@@ -140,14 +259,17 @@ export default function ApplicationsPage() {
             Boundary note
           </p>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-400">
-            These links point to external or related surfaces. On rastaimperium.com they are
-            labelled DEMONSTRATION. Sealed, independently reproducible capsules live in the Proof
-            Registry and Evidence Explorer. Production runtime metrics remain UNAVAILABLE until
-            public artifacts are attached.
+            Demonstration links point to external or related surfaces. Genesis runtime and
+            Observatory modules are commercial layers. Sealed, independently reproducible capsules
+            live in the Proof Registry and Evidence Explorer. Production metrics remain UNAVAILABLE
+            until public artifacts are attached.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-4">
             <Link href="/proof/" className="text-sm text-[#F2D675]">
               Open Proof Registry →
+            </Link>
+            <Link href="/product/" className="text-sm text-zinc-400">
+              Product pathway →
             </Link>
             <Link href="/institutional-pilots/" className="text-sm text-zinc-400">
               Institutional pilots →
