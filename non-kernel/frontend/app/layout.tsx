@@ -82,17 +82,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/blueprint"
+                    href="/product"
                   >
-                    Blueprint
+                    Product
                   </Link>
                 </li>
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/pillars"
+                    href="/blueprint"
                   >
-                    Pillars
+                    Blueprint
                   </Link>
                 </li>
                 <li>
@@ -106,14 +106,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/challenge"
-                  >
-                    Challenge
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
                     href="/limitations"
                   >
                     Limitations
@@ -122,25 +114,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/applications"
-                  >
-                    Applications
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/thanks-and-praise"
-                  >
-                    Thanks
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
                     href="/institutional-pilots"
                   >
                     Pilots
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
+                    href="/about"
+                  >
+                    About
                   </Link>
                 </li>
                 <li>
@@ -208,8 +192,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </p>
                 <ul className="mt-4 space-y-2 text-zinc-400">
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/vision">
-                      Vision
+                    <Link className="transition hover:text-[#F2D675]" href="/product">
+                      Product
                     </Link>
                   </li>
                   <li>
@@ -223,13 +207,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/technology">
-                      Technology
+                    <Link className="transition hover:text-[#F2D675]" href="/applications">
+                      Applications
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/applications">
-                      Applications
+                    <Link className="transition hover:text-[#F2D675]" href="/about">
+                      About
                     </Link>
                   </li>
                   <li>
@@ -281,6 +265,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Engage
                 </p>
                 <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/product">
+                      Product pathway
+                    </Link>
+                  </li>
                   <li>
                     <Link className="transition hover:text-[#F2D675]" href="/institutional-pilots">
                       Institutional pilots
