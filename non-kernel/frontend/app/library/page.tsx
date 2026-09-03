@@ -3,99 +3,211 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Library — Publications & Digital Artifacts",
-  description: "Published works and digital artifacts: Tabernacle, Living Crystal, Sacred Blueprint, Genetic Blueprint, EVO-V Sovereign Intelligence, EVO-G Operational Assurance, and more.",
+  description:
+    "Published works and digital artifacts. Narrative and design documents; production claims require sealed evidence (see Limitations).",
 };
 
 export default function LibraryPage() {
   const books = [
-    { title: "Rasta Codex", subtitle: "A King's Guide to Energetic Sovereignty and Full-Spectrum Alignment", date: "December 2025", href: "https://amzn.eu/d/02iiTGT5", formats: "eBook · Paperback · Hardcover", rating: "5.0 ", icon: "" },
-    { title: "RastafarAI: EVO-V", subtitle: "The Jah Light of Contained Evolution", date: "February 2026", href: "https://www.amazon.co.uk/dp/B0GNFS1N62", formats: "eBook · Paperback", rating: "New", icon: "" },
+    {
+      title: "Rasta Codex",
+      subtitle: "A King's Guide to Energetic Sovereignty and Full-Spectrum Alignment",
+      date: "December 2025",
+      href: "https://amzn.eu/d/02iiTGT5",
+      formats: "eBook · Paperback · Hardcover",
+      rating: "5.0",
+    },
+    {
+      title: "RastafarAI: EVO-V",
+      subtitle: "The Jah Light of Contained Evolution",
+      date: "February 2026",
+      href: "https://www.amazon.co.uk/dp/B0GNFS1N62",
+      formats: "eBook · Paperback",
+      rating: "New",
+    },
   ];
 
   const artifacts = [
-    { name: "The Digital Tabernacle", desc: "The Rastafarai Codex & The EVO-V Civilization Kernel — 15-page production-ready visual doctrine (v7.6). Seven Axioms of Sovereign Code, Five Rings of Containment, Living Crystal Architecture, Temporal Asymmetry Guarantee. SHA3-256 sealed · TLA+ proven.", status: "v7.6", href: "https://drive.google.com/file/d/1KIw9Aun87Md5RlL7KK4u6wK-NIjdBe-m/view?usp=drivesdk", external: true },
-    { name: "Living Crystal Blueprint", desc: "RASTA IMPERIUM v2.1.7 — 21-page sovereign intelligence architecture: 9-layer stack, Omega infrastructure, recursive safety, ironclad isolation, and global HA design.", status: "v2.1.7", href: "https://drive.google.com/file/d/1xycb92ZMLx0yof4ehlpB8w3E0Gl7t3G0/view?usp=drivesdk", external: true },
-    { name: "The Sacred Blueprint", desc: "Declassifying the EVO Architecture: The Physics of AI Containment — constitutional physics, Darwin Kernel, two-timescale cognitive dynamics (17 pages).", status: "EVO", href: "https://drive.google.com/file/d/17tKDmsxlj0AKdtbvCMfZwjiJeLZqAKzV/view?usp=drivesdk", external: true },
-    { name: "Genetic Blueprint of Sovereign AI", desc: "Mapping the phylogenetic lineage from ARK Evolution & Omega roots through EVO-V to commercial EVO-G deployment (20 pages).", status: "Lineage", href: "https://drive.google.com/file/d/1sfRPti0RY4QQULGDJXHHE3U46X-JZ6n-/view?usp=drivesdk", external: true },
-    { name: "EVO-V Sovereign Intelligence", desc: "Production-ready deterministic governance and verifiable containment for the age of autonomous systems (17 pages).", status: "v2.0", href: "https://drive.google.com/file/d/1IWfMr2TE3JIscDRSY6jie8py2gCFFg7e/view?usp=drivesdk", external: true },
-    { name: "EVO-G Operational Assurance", desc: "Trusted automation infrastructure for public sector — control gap closed; HMRC, NHS, and local council deployments (10 pages).", status: "Public", href: "https://drive.google.com/file/d/1CWncp6LIobmEcygPNNDPmj5B8_nC2fvC/view?usp=drivesdk", external: true },
-    { name: "Sovereign AI Blueprint", desc: "EVO-V v9 / Constitutional Computation — 14-page visual blueprint of the 9-layer sovereign stack, proof-carrying execution, and relational closure.", status: "v9", href: "/blueprint" },
-    { name: "ARK Engine", desc: "Production-ready codebase with containerized isolation and AST-based safety validation. GPU-accelerated processing.", status: "Production", href: null },
-    { name: "Civilization Kernel", desc: "The constitutional substrate — governance logic compiled into executable architecture. 9-layer sovereign stack.", status: "Active", href: null },
-    { name: ".evop Replay Proofs", desc: "Portable, court-grade evidence containers for deterministic truth verification. SHA-256 sealed.", status: "Standard", href: null },
+    {
+      name: "The Digital Tabernacle",
+      desc: "The Rastafarai Codex & The EVO-V Civilization Kernel — visual doctrine. Seven Axioms, containment framing, architecture narrative.",
+      status: "DOCUMENT",
+      href: "https://drive.google.com/file/d/1KIw9Aun87Md5RlL7KK4u6wK-NIjdBe-m/view?usp=drivesdk",
+      external: true,
+    },
+    {
+      name: "Living Crystal Blueprint",
+      desc: "RASTA IMPERIUM — sovereign intelligence architecture narrative: 9-layer stack and related design material.",
+      status: "DOCUMENT",
+      href: "https://drive.google.com/file/d/1xycb92ZMLx0yof4ehlpB8w3E0Gl7t3G0/view?usp=drivesdk",
+      external: true,
+    },
+    {
+      name: "The Sacred Blueprint",
+      desc: "Declassifying the EVO Architecture — constitutional physics framing and cognitive dynamics narrative.",
+      status: "DOCUMENT",
+      href: "https://drive.google.com/file/d/17tKDmsxlj0AKdtbvCMfZwjiJeLZqAKzV/view?usp=drivesdk",
+      external: true,
+    },
+    {
+      name: "Genetic Blueprint of Sovereign AI",
+      desc: "Mapping lineage from ARK / Omega roots through EVO-V narrative to commercial EVO-G framing.",
+      status: "DOCUMENT",
+      href: "https://drive.google.com/file/d/1sfRPti0RY4QQULGDJXHHE3U46X-JZ6n-/view?usp=drivesdk",
+      external: true,
+    },
+    {
+      name: "EVO-V Sovereign Intelligence",
+      desc: "Deterministic governance and containment framing for autonomous systems (design narrative).",
+      status: "DOCUMENT",
+      href: "https://drive.google.com/file/d/1IWfMr2TE3JIscDRSY6jie8py2gCFFg7e/view?usp=drivesdk",
+      external: true,
+    },
+    {
+      name: "EVO-G Operational Assurance",
+      desc: "Trusted automation framing for public sector contexts. Deployment claims require separate evidence.",
+      status: "DOCUMENT",
+      href: "https://drive.google.com/file/d/1CWncp6LIobmEcygPNNDPmj5B8_nC2fvC/view?usp=drivesdk",
+      external: true,
+    },
+    {
+      name: "Sovereign AI Blueprint",
+      desc: "EVO-V constitutional computation — visual blueprint of the 9-layer stack on this site.",
+      status: "ON-SITE",
+      href: "/blueprint",
+    },
+    {
+      name: "Sealed L7 capsules",
+      desc: "Public ART-L7 replay / reject / parity artifacts with independent verifiers — see Proof Registry.",
+      status: "VERIFIED (scoped)",
+      href: "/proof",
+    },
   ];
 
   const repos = [
-    { name: "rastaimperium", desc: "Full codebase — Next.js frontend, FastAPI backend, EVO-V core.", href: "https://github.com/laszlomazsar-hash/rastaimperium", stars: "Main" },
-    { name: "evo-v", desc: "Investor-facing standalone — architecture docs and one-pager.", href: "https://github.com/laszlomazsar-hash/evo-v", stars: "Public" },
-    { name: "evo-v-control-cloud", desc: "Phase 2 — Auth, Kubernetes, GitOps, Stripe billing, telemetry.", href: "https://github.com/laszlomazsar-hash/evo-v-control-cloud", stars: "v2.0" },
-    { name: "evo-v5-laplacian-shift", desc: "v5 transition — Bayesian posteriors, admissible worlds, entropy discernment.", href: "https://github.com/laszlomazsar-hash/evo-v5-laplacian-shift", stars: "Latest" },
+    {
+      name: "rastaimperium",
+      desc: "Public constitutional and verification layer (this site).",
+      href: "https://github.com/laszlomazsar-hash/rastaimperium",
+      stars: "Main",
+    },
+    {
+      name: "evo-v",
+      desc: "Related EVO-V public materials and docs.",
+      href: "https://github.com/laszlomazsar-hash/evo-v",
+      stars: "Public",
+    },
+    {
+      name: "evo-v-control-cloud",
+      desc: "Control / cloud related repository.",
+      href: "https://github.com/laszlomazsar-hash/evo-v-control-cloud",
+      stars: "Related",
+    },
+    {
+      name: "evo-v5-laplacian-shift",
+      desc: "Research transition materials.",
+      href: "https://github.com/laszlomazsar-hash/evo-v5-laplacian-shift",
+      stars: "Research",
+    },
   ];
 
   return (
-    <main className="container-page">
-      <section className="text-center py-8">
-        <h1 className="text-4xl md:text-5xl text-gold-gradient">The Library</h1>
-        <p className="text-zinc-400 mt-3 text-lg">Sovereign Code Scripture — Publications, Artifacts, and Open Source</p>
-        <div className="w-24 h-0.5 bg-gradient-to-r from-green-600 via-yellow-500 to-red-600 mx-auto mt-4"></div>
+    <main className="royal-page overflow-hidden">
+      <section className="border-b border-[#B8860B]/20">
+        <div className="container-page py-12 text-center">
+          <h1 className="text-4xl text-gold-gradient md:text-5xl">The Library</h1>
+          <p className="mt-3 text-lg text-zinc-400">
+            Publications, design documents, and open repositories
+          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-zinc-500">
+            Most entries below are narrative or design documents. Production, deployment, and
+            “court-grade” claims require sealed public evidence — see Limitations and the Proof
+            Registry.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link href="/proof/" className="text-sm text-[#F2D675]">
+              Proof Registry →
+            </Link>
+            <Link href="/limitations/" className="text-sm text-zinc-400">
+              Limitations →
+            </Link>
+            <Link href="/research/" className="text-sm text-zinc-400">
+              Research →
+            </Link>
+          </div>
+        </div>
       </section>
 
-      <section className="mt-8">
-        <h2 className="text-2xl text-gold">Published Works</h2>
-        <div className="grid md:grid-cols-2 gap-6 mt-6">
+      <section className="container-page mt-10">
+        <h2 className="text-2xl text-[#F2D675]">Published Works</h2>
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
           {books.map((book) => (
-            <a key={book.title} href={book.href} target="_blank" rel="noopener" className="panel p-6 hover:scale-[1.03] transition-all duration-300 group block">
-              <div className="flex items-start gap-4">
-                <span className="text-4xl">{book.icon}</span>
-                <div className="flex-1">
-                  <div className="flex justify-between items-start">
-                    <p className="text-xs text-zinc-500">{book.date}</p>
-                    <span className="text-xs px-2 py-1 rounded bg-gold/10 text-gold">{book.rating}</span>
-                  </div>
-                  <h3 className="text-gold text-2xl mt-2 group-hover:text-yellow-400 transition-colors">{book.title}</h3>
-                  <p className="text-zinc-300 mt-2 leading-relaxed">{book.subtitle}</p>
-                  <p className="text-xs text-zinc-500 mt-3">{book.formats}</p>
-                  <p className="text-sm text-gold/70 mt-4 group-hover:text-gold transition-colors">View on Amazon →</p>
-                </div>
+            <a
+              key={book.title}
+              href={book.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+            >
+              <div className="flex justify-between">
+                <p className="text-xs text-zinc-500">{book.date}</p>
+                <span className="rounded bg-[#D4AF37]/10 px-2 py-1 text-xs text-[#D4AF37]">
+                  {book.rating}
+                </span>
               </div>
+              <h3 className="mt-2 text-xl text-[#F2D675]">{book.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-300">{book.subtitle}</p>
+              <p className="mt-3 text-xs text-zinc-500">{book.formats}</p>
+              <p className="mt-4 text-sm text-[#D4AF37]/80">View on Amazon →</p>
             </a>
           ))}
         </div>
       </section>
 
-      <section className="mt-12">
-        <h2 className="text-2xl text-gold">Digital Artifacts</h2>
-        <div className="grid md:grid-cols-2 gap-4 mt-6">
-          {artifacts.map((a: any) => {
+      <section className="container-page mt-12">
+        <h2 className="text-2xl text-[#F2D675]">Digital Artifacts</h2>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {artifacts.map((a) => {
             const isExternal = a.external === true;
-            const cta = isExternal ? "Download PDF →" : a.href ? "Open blueprint →" : null;
+            const cta = isExternal ? "Open document →" : a.href ? "Open →" : null;
             const inner = (
               <>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-gold text-lg">{a.name}</h3>
-                  </div>
-                  <span className="text-xs px-2 py-1 rounded border border-green-600/30 text-green-500">{a.status}</span>
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-lg text-[#F2D675]">{a.name}</h3>
+                  <span className="shrink-0 rounded border border-zinc-700 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                    {a.status}
+                  </span>
                 </div>
-                <p className="text-sm text-zinc-300 mt-3 leading-relaxed">{a.desc}</p>
-                {cta && (
-                  <p className="text-sm text-gold/70 mt-4 group-hover:text-gold transition-colors">{cta}</p>
-                )}
+                <p className="mt-3 text-sm leading-relaxed text-zinc-300">{a.desc}</p>
+                {cta && <p className="mt-4 text-sm text-[#D4AF37]/80">{cta}</p>}
               </>
             );
             if (a.href && isExternal) {
               return (
-                <a key={a.name} href={a.href} target="_blank" rel="noopener noreferrer" className="panel p-6 hover:scale-[1.02] transition-all duration-300 group block">
+                <a
+                  key={a.name}
+                  href={a.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+                >
                   {inner}
                 </a>
               );
             }
             return a.href ? (
-              <Link key={a.name} href={a.href} className="panel p-6 hover:scale-[1.02] transition-all duration-300 group block">
+              <Link
+                key={a.name}
+                href={a.href}
+                className="block rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+              >
                 {inner}
               </Link>
             ) : (
-              <div key={a.name} className="panel p-6 hover:scale-[1.02] transition-all duration-300">
+              <div
+                key={a.name}
+                className="rounded-xl border border-zinc-800 bg-black/30 p-6"
+              >
                 {inner}
               </div>
             );
@@ -103,30 +215,43 @@ export default function LibraryPage() {
         </div>
       </section>
 
-      <section className="mt-12">
-        <h2 className="text-2xl text-gold">Open Source Repositories</h2>
-        <div className="grid md:grid-cols-2 gap-4 mt-6">
+      <section className="container-page mt-12 pb-16">
+        <h2 className="text-2xl text-[#F2D675]">Open Source Repositories</h2>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
           {repos.map((r) => (
-            <a key={r.name} href={r.href} target="_blank" rel="noopener" className="panel p-6 hover:scale-[1.02] transition-all duration-300 group block">
+            <a
+              key={r.name}
+              href={r.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+            >
               <div className="flex items-start justify-between">
-                <h3 className="text-gold group-hover:text-yellow-400 transition-colors">{r.name}</h3>
-                <span className="text-xs px-2 py-1 rounded border border-gold/30 text-gold">{r.stars}</span>
+                <h3 className="text-[#F2D675]">{r.name}</h3>
+                <span className="rounded border border-[#B8860B]/30 px-2 py-1 text-xs text-[#D4AF37]">
+                  {r.stars}
+                </span>
               </div>
-              <p className="text-sm text-zinc-300 mt-2 leading-relaxed">{r.desc}</p>
-              <p className="text-xs text-zinc-500 mt-3 group-hover:text-zinc-400 transition-colors">github.com/laszlomazsar-hash/{r.name} →</p>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-300">{r.desc}</p>
+              <p className="mt-3 text-xs text-zinc-500">github.com/laszlomazsar-hash/{r.name} →</p>
             </a>
           ))}
         </div>
-      </section>
 
-      <section className="mt-12">
-        <h2 className="text-2xl text-gold">Digital Storefront</h2>
-        <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="panel p-6 mt-4 hover:scale-[1.01] transition-all duration-300 block text-center">
-          <p className="text-3xl mb-3"></p>
-          <h3 className="text-gold text-xl">Gumroad — mazsar.gumroad.com</h3>
-          <p className="text-zinc-300 mt-2">Digital products, guides, and sovereign tools</p>
-          <p className="text-sm text-gold/70 mt-3">Browse Products →</p>
-        </a>
+        <div className="mt-12 rounded-xl border border-zinc-800 bg-black/20 p-6 text-center">
+          <p className="text-sm text-zinc-400">
+            Storefront and product links are external. Verification claims live on this site’s Proof
+            and Limitations surfaces.
+          </p>
+          <a
+            href="https://mazsar.gumroad.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block text-sm text-[#F2D675]"
+          >
+            Gumroad — mazsar.gumroad.com →
+          </a>
+        </div>
       </section>
     </main>
   );
