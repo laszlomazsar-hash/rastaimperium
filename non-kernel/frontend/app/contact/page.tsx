@@ -4,33 +4,45 @@ import EnquiryForm from "./EnquiryForm";
 
 export const metadata: Metadata = {
   title: "Contact — Rasta Imperium",
-  description: "Start an institutional, research, or governance inquiry with Rasta Imperium.",
+  description: "Start an institutional, research, or governance inquiry with Rasta Imperium. Design partner pilots and commercial briefs.",
 };
 
 const engagementPaths = [
   {
     code: "01",
+    title: "Design partner pilot",
+    description:
+      "Fixed-scope paid pilots for regulated and high-accountability teams. Constitution mapping, integration support, written boundary.",
+    prompt: "Design partner pilot inquiry",
+    label: "Apply for a design partner pilot",
+    intent: "design-partner",
+  },
+  {
+    code: "02",
     title: "Institutional governance",
     description:
       "For organisations evaluating constitutional controls, replayability, or accountable AI operating models.",
     prompt: "Institutional governance inquiry",
     label: "Start an institutional inquiry",
+    intent: "institutional",
   },
   {
-    code: "02",
+    code: "03",
     title: "Research collaboration",
     description:
       "For researchers exploring deterministic intelligence, epistemic governance, and verifiable system design.",
     prompt: "Research collaboration inquiry",
     label: "Discuss a research collaboration",
+    intent: "research",
   },
   {
-    code: "03",
-    title: "Technical exploration",
+    code: "04",
+    title: "Technical / commercial brief",
     description:
-      "For teams seeking a technical conversation about the EVO-V architecture, system layers, or governance metrics.",
-    prompt: "EVO-V technical inquiry",
-    label: "Explore the architecture",
+      "Runtime, Observatory, audit path, or packaging questions after reviewing Product and Limitations.",
+    prompt: "EVO-V commercial / technical inquiry",
+    label: "Request a commercial brief",
+    intent: "commercial",
   },
 ];
 
@@ -38,7 +50,32 @@ function inquiryHref(subject: string) {
   return `mailto:lazzlowtuning@me.com?subject=${encodeURIComponent(subject)}`;
 }
 
-export default function ContactPage() {
+export default function ContactPage({
+  searchParams,
+}: {
+  searchParams?: { intent?: string };
+}) {
+  const intent = (searchParams?.intent || "").toLowerCase();
+  const isPilot = intent === "design-partner" || intent === "pilot";
+  const isAudit = intent === "audit";
+  const isCommercial = intent === "commercial";
+
+  const bannerTitle = isPilot
+    ? "Design partner pilot intake"
+    : isAudit
+      ? "Governance audit inquiry"
+      : isCommercial
+        ? "Commercial / runtime brief"
+        : "Begin with the governance question that matters.";
+
+  const bannerBody = isPilot
+    ? "You are on the design partner path. Share decision context, systems in scope, compliance requirements, and success criteria. Indicative pilot investment is $50k–$150k for an 8–12 week fixed scope."
+    : isAudit
+      ? "Describe the system under review, the invariants you care about, and the evidence standard you need. Certification language only where sealed artifacts support it."
+      : isCommercial
+        ? "Runtime, Observatory, and hosted modules are sold under explicit scope after pilot fit. Include stack constraints (cloud vs air-gapped) and scale."
+        : "Rasta Imperium works at the boundary of constitutional intelligence, verifiable systems, and accountable deployment. Select a path below or send context via the form.";
+
   return (
     <main className="relative overflow-hidden bg-[#090a09] text-zinc-100">
       <div
@@ -53,25 +90,35 @@ export default function ContactPage() {
               Engagement desk
             </p>
             <h1 className="mt-5 max-w-4xl font-serif text-4xl leading-[1.05] text-[#F2D675] sm:text-6xl">
-              Begin with the governance question that matters.
+              {bannerTitle}
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-300">
-              Rasta Imperium works at the boundary of constitutional intelligence, verifiable
-              systems, and accountable deployment. Select an engagement path below to open a focused
-              inquiry. Review Limitations and the Proof Registry before assuming production claims.
-            </p>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-300">{bannerBody}</p>
             <div className="mt-9 flex flex-wrap gap-3">
               <a
-                href={inquiryHref("Rasta Imperium inquiry")}
+                href={inquiryHref(
+                  isPilot
+                    ? "Design partner pilot inquiry"
+                    : isAudit
+                      ? "Governance audit inquiry"
+                      : isCommercial
+                        ? "Commercial brief inquiry"
+                        : "Rasta Imperium inquiry",
+                )}
                 className="rounded-full bg-[#D4AF37] px-6 py-3 text-sm font-bold text-[#12130f] transition hover:bg-[#F2D675] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F2D675]"
               >
-                Write to the engagement desk
+                {isPilot ? "Email pilot intake" : "Write to the engagement desk"}
               </a>
               <Link
                 href="/limitations/"
                 className="rounded-full border border-[#D4AF37]/45 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:border-[#F2D675] hover:bg-[#D4AF37]/10"
               >
                 Read Limitations first
+              </Link>
+              <Link
+                href="/product/"
+                className="rounded-full border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70"
+              >
+                Product pathway
               </Link>
             </div>
           </div>
@@ -107,16 +154,20 @@ export default function ContactPage() {
               </h2>
             </div>
             <p className="max-w-xl text-sm leading-6 text-zinc-400">
-              Each route opens a prepared email subject, keeping the first exchange anchored in the
-              right operating context.
+              Each route opens a prepared email subject or deep-link intent, keeping the first exchange
+              anchored in the right operating context.
             </p>
           </div>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {engagementPaths.map((path) => (
               <article
                 key={path.code}
-                className="group flex min-h-72 flex-col border border-zinc-700/70 bg-[#101210] p-6 transition hover:-translate-y-1 hover:border-[#D4AF37]/65 hover:shadow-[0_18px_45px_rgba(0,0,0,0.3)]"
+                className={`group flex min-h-72 flex-col border p-6 transition hover:-translate-y-1 hover:border-[#D4AF37]/65 hover:shadow-[0_18px_45px_rgba(0,0,0,0.3)] ${
+                  intent === path.intent
+                    ? "border-[#D4AF37]/70 bg-[#152015]"
+                    : "border-zinc-700/70 bg-[#101210]"
+                }`}
               >
                 <span className="font-mono text-xs tracking-[0.2em] text-[#D4AF37]">
                   PATH {path.code}
@@ -174,8 +225,8 @@ export default function ContactPage() {
             <div className="border-l border-[#D4AF37]/45 pl-5">
               <h3 className="text-sm font-semibold text-zinc-100">Desired next step</h3>
               <p className="mt-2 text-sm leading-6 text-zinc-400">
-                State whether you need research exchange, architecture review, or an institutional
-                governance discussion.
+                State whether you need a design partner pilot, architecture review, audit path, or
+                research exchange.
               </p>
             </div>
           </div>
@@ -183,8 +234,8 @@ export default function ContactPage() {
 
         <div className="mt-12 flex flex-col justify-between gap-6 border-t border-zinc-800 pt-8 sm:flex-row sm:items-center">
           <p className="max-w-2xl text-sm leading-6 text-zinc-400">
-            For a complete public orientation before writing, review Limitations, Proof, and the
-            pilot pathway.
+            For a complete public orientation before writing, review Limitations, Proof, Product, and
+            the pilot pathway.
           </p>
           <div className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold text-[#F2D675]">
             <Link href="/limitations/" className="transition hover:text-white">
@@ -193,11 +244,14 @@ export default function ContactPage() {
             <Link href="/proof/" className="transition hover:text-white">
               Proof
             </Link>
+            <Link href="/product/" className="transition hover:text-white">
+              Product
+            </Link>
             <Link href="/institutional-pilots/" className="transition hover:text-white">
               Pilots
             </Link>
-            <Link href="/blueprint/" className="transition hover:text-white">
-              Blueprint
+            <Link href="/case-studies/" className="transition hover:text-white">
+              Case studies
             </Link>
           </div>
         </div>

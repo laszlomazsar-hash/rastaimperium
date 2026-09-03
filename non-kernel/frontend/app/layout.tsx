@@ -106,17 +106,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/limitations"
+                    href="/institutional-pilots"
                   >
-                    Limitations
+                    Pilots
                   </Link>
                 </li>
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/institutional-pilots"
+                    href="/case-studies"
                   >
-                    Pilots
+                    Cases
                   </Link>
                 </li>
                 <li>
@@ -212,13 +212,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/about">
-                      About
+                    <Link className="transition hover:text-[#F2D675]" href="/case-studies">
+                      Case studies
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise">
-                      Thanks & Praise
+                    <Link className="transition hover:text-[#F2D675]" href="/about">
+                      About
                     </Link>
                   </li>
                 </ul>
@@ -272,7 +272,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </li>
                   <li>
                     <Link className="transition hover:text-[#F2D675]" href="/institutional-pilots">
-                      Institutional pilots
+                      Design partner pilots
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/contact/?intent=design-partner">
+                      Apply for pilot
                     </Link>
                   </li>
                   <li>
