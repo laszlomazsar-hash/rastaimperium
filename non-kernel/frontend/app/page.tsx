@@ -76,9 +76,9 @@ const audiencePaths = [
   },
   {
     role: "Institutional decision-maker",
-    path: "Boundary → Blueprint → Institutional pilots → Contact",
-    href: "/institutional-pilots/",
-    cta: "Institutional path",
+    path: "Product → Pilots → Contact",
+    href: "/product/",
+    cta: "Commercial pathway",
   },
   {
     role: "Technical reviewer",
@@ -123,10 +123,10 @@ export default function HomePage() {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href="/blueprint/#verifiable-stack"
+              href="/product/"
               className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
             >
-              Explore Architecture
+              Product & pilots
             </Link>
             <Link
               href="/proof/"
@@ -135,16 +135,16 @@ export default function HomePage() {
               Open Proof Registry
             </Link>
             <Link
+              href="/institutional-pilots/"
+              className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+            >
+              Design partner pilot
+            </Link>
+            <Link
               href="/limitations/"
               className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
             >
               Limitations
-            </Link>
-            <Link
-              href="/institutional-pilots/"
-              className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
-            >
-              Institutional Pilot
             </Link>
           </div>
 
@@ -390,24 +390,30 @@ export default function HomePage() {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">5 · Adopt</p>
-            <h2 className="mt-3 text-2xl text-zinc-100">Institutional pathway</h2>
+            <h2 className="mt-3 text-2xl text-zinc-100">Commercial pathway</h2>
             <p className="mt-3 text-sm leading-7 text-zinc-400">
-              Problem → method → evidence → challenge → pilot → assurance. Designed for councils,
-              regulated environments, and enterprise governance teams that require inspectable
-              decision history and explicit constitutional bounds.
+              Problem → evidence → design partner pilot → production runtime. For councils, regulated
+              environments, and enterprise teams that need inspectable decision history and explicit
+              constitutional bounds before scale.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="/institutional-pilots/"
+                href="/product/"
                 className="inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
               >
-                Institutional pilots →
+                Product & capabilities →
               </Link>
               <Link
-                href="/audit/"
+                href="/institutional-pilots/"
                 className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
               >
-                Auditor handoff →
+                Design partner pilots →
+              </Link>
+              <Link
+                href="/contact/?intent=design-partner"
+                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
+              >
+                Apply now →
               </Link>
             </div>
           </div>
