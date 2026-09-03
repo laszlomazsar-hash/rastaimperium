@@ -1,131 +1,190 @@
-// @ts-nocheck
-import { Metadata } from "next";
-import { SovereignIcon } from "../../components/icons/SovereignIcon";
-import type { IconKey } from "../../components/icons/iconMap";
-import { CapabilityIcon } from "../../components/constitutional/CapabilityIcon";
-import type { Capability } from "../../core/runtime/capability-registry";
-
-const SECTION_ICON_TOKEN = "w-8 h-8 mb-3";
-const CARD_ICON_TOKEN = "w-6 h-6 mb-2";
+import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Invest & Support — Rasta Imperium",
-  description: "Support the development of sovereign AI infrastructure. Invest in the future of deterministic governance and constitutional intelligence.",
+  description:
+    "Support sovereign AI infrastructure. Community contributions and institutional engagement paths for EVO-V constitutional governance.",
 };
 
-export default function InvestPage() {
-  const supportItems: { title: string; icon: IconKey; description: string }[] = [
-    { title: "Infrastructure", icon: "infrastructure_build", description: "Server costs, Railway hosting, domain maintenance, and development tools for the living kernel." },
-    { title: "Research & Development", icon: "research_microscope", description: "Advancing the neurosymbolic architecture, Bayesian governance, and the Laplacian Shift to v5." },
-    { title: "Publications & Outreach", icon: "publications_books", description: "Expanding the Rasta Codex, publishing research, and building the sovereign AI community." },
-  ];
+const funding = [
+  {
+    title: "Infrastructure",
+    body: "Hosting, domains, CI, and tooling for the public verification surface and related repositories.",
+  },
+  {
+    title: "Research & development",
+    body: "Deterministic governance, replay/evidence work, and kernel / Observatory productisation under explicit scope.",
+  },
+  {
+    title: "Publications & outreach",
+    body: "Codex materials, design documents, and community-facing education — not a substitute for sealed proof.",
+  },
+];
 
+export default function InvestPage() {
   return (
-    <main className="container-page">
-      <section className="text-center py-12">
-        <h1 className="text-4xl md:text-5xl text-gold-gradient" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
-          Invest in Sovereignty
-        </h1>
-        <p className="text-zinc-400 mt-4 text-lg max-w-2xl mx-auto">
-          Support the development of civilization-scale deterministic AI governance. 
-          Every contribution fuels the architecture of a safer, more accountable future.
-        </p>
-        <div className="w-24 h-0.5 bg-gradient-to-r from-green-600 via-yellow-500 to-red-600 mx-auto mt-6"></div>
+    <main className="royal-page overflow-hidden">
+      <section className="border-b border-[#B8860B]/20">
+        <div className="container-page py-16 text-center lg:py-24">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
+            Invest & support
+          </p>
+          <h1 className="mt-5 text-4xl text-zinc-100 sm:text-5xl">Invest in sovereignty</h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
+            Support the public constitutional layer and the path toward deterministic governance.
+            Community contributions and institutional engagement are separate channels — both
+            evidence-bound.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/product/"
+              className="rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+            >
+              Institutional product path
+            </Link>
+            <Link
+              href="/proof/"
+              className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
+            >
+              Limitations
+            </Link>
+          </div>
+        </div>
       </section>
 
-      {/* WHAT YOU'RE FUNDING */}
-      <section className="panel p-8 mt-4">
-        <h2 className="text-2xl text-[#B8860B] mb-6" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>What Your Investment Supports</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {supportItems.map((item) => (
-            <div key={item.title} className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-              <div className="text-3xl mb-3"><SovereignIcon icon={item.icon} className="w-8 h-8" /></div>
-              <h3 className="text-[#B8860B] font-bold mb-2">{item.title}</h3>
-              <p className="text-zinc-400 text-sm">{item.description}</p>
+      <section className="container-page border-b border-zinc-900 py-12">
+        <h2 className="text-2xl text-zinc-100">What support funds</h2>
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {funding.map((f) => (
+            <div key={f.title} className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+              <h3 className="text-lg text-[#F2D675]">{f.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-zinc-400">{f.body}</p>
             </div>
           ))}
-          <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <CapabilityIcon capability="infrastructure" className={SECTION_ICON_TOKEN} />
-            <div className="text-3xl mb-3">️</div>
-            <h3 className="text-[#B8860B] font-bold mb-2">Infrastructure</h3>
-            <p className="text-zinc-400 text-sm">Server costs, Railway hosting, domain maintenance, and development tools for the living kernel.</p>
+        </div>
+      </section>
+
+      <section className="container-page border-b border-zinc-900 py-12">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div className="rounded-xl border border-[#B8860B]/30 bg-black/30 p-8">
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
+              Community · direct transfer
+            </p>
+            <h2 className="mt-3 text-2xl text-zinc-100">Bank transfer (UK)</h2>
+            <p className="mt-2 text-sm text-zinc-500">Santander UK · personal account of Laszlo Mazsar</p>
+            <dl className="mt-6 space-y-3 font-mono text-sm">
+              <div className="flex justify-between border-b border-zinc-800 pb-2">
+                <dt className="text-zinc-500">Account name</dt>
+                <dd className="text-zinc-100">Laszlo Mazsar</dd>
+              </div>
+              <div className="flex justify-between border-b border-zinc-800 pb-2">
+                <dt className="text-zinc-500">Sort code</dt>
+                <dd className="text-zinc-100">09-01-28</dd>
+              </div>
+              <div className="flex justify-between border-b border-zinc-800 pb-2">
+                <dt className="text-zinc-500">Account number</dt>
+                <dd className="text-zinc-100">30627007</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-zinc-500">Reference</dt>
+                <dd className="text-[#F2D675]">EVO-V-INVEST</dd>
+              </div>
+            </dl>
+            <p className="mt-6 text-xs leading-5 text-zinc-500">
+              Contributions are voluntary support for public work. This is not a securities offering
+              and not a claim of verified financial return.
+            </p>
           </div>
-          <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <CapabilityIcon capability="research" className={SECTION_ICON_TOKEN} />
-            <div className="text-3xl mb-3"></div>
-            <h3 className="text-[#B8860B] font-bold mb-2">Research & Development</h3>
-            <p className="text-zinc-400 text-sm">Advancing the neurosymbolic architecture, Bayesian governance, and the Laplacian Shift to v5.</p>
-          </div>
-          <div className="border border-[#B8860B]/20 rounded-lg p-6 hover:border-[#B8860B]/50 transition-all duration-300 hover:scale-[1.02]">
-            <CapabilityIcon capability="publications" className={SECTION_ICON_TOKEN} />
-            <div className="text-3xl mb-3"></div>
-            <h3 className="text-[#B8860B] font-bold mb-2">Publications & Outreach</h3>
-            <p className="text-zinc-400 text-sm">Expanding the Rasta Codex, publishing research, and building the sovereign AI community.</p>
+
+          <div className="rounded-xl border border-zinc-800 bg-black/30 p-8">
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
+              Institutional · commercial
+            </p>
+            <h2 className="mt-3 text-2xl text-zinc-100">Design partners & enterprise</h2>
+            <p className="mt-3 text-sm leading-7 text-zinc-400">
+              For councils, regulated teams, and enterprise buyers: paid pilots, audit paths, and
+              runtime modules under written scope. Start with Product and Pricing posture — not a
+              donation form.
+            </p>
+            <ul className="mt-5 space-y-2 text-sm text-zinc-400">
+              <li>· Design partner pilot · indicative $50k–$150k</li>
+              <li>· Governance audit path · scoped quote</li>
+              <li>· Runtime & Observatory · enterprise terms after pilot</li>
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/pricing/"
+                className="rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-bold text-black"
+              >
+                Pricing posture
+              </Link>
+              <Link
+                href="/contact/?intent=commercial"
+                className="rounded-lg border border-zinc-600 px-4 py-2 text-sm text-zinc-100"
+              >
+                Commercial brief
+              </Link>
+              <Link
+                href="/institutional-pilots/"
+                className="rounded-lg border border-zinc-600 px-4 py-2 text-sm text-zinc-100"
+              >
+                Pilots
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* BANK DETAILS */}
-      <section className="mt-10">
-        <div className="panel p-8 border-2 border-[#B8860B]/40 max-w-lg mx-auto">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl text-[#B8860B]" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>Direct Bank Transfer</h2>
-            <p className="text-zinc-500 text-sm mt-2">Santander UK</p>
-          </div>
-          <div className="space-y-4 font-mono">
-            <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
-              <span className="text-zinc-400 text-sm">Account Name</span>
-              <span className="text-zinc-100 font-bold">Laszlo Mazsar</span>
-            </div>
-            <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
-              <span className="text-zinc-400 text-sm">Sort Code</span>
-              <span className="text-zinc-100 font-bold text-lg">09-01-28</span>
-            </div>
-            <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
-              <span className="text-zinc-400 text-sm">Account Number</span>
-              <span className="text-zinc-100 font-bold text-lg">30627007</span>
-            </div>
-            <div className="flex justify-between items-center pb-1">
-              <span className="text-zinc-400 text-sm">Reference</span>
-              <span className="text-[#B8860B] font-bold">EVO-V-INVEST</span>
-            </div>
-          </div>
-          <div className="mt-6 p-4 rounded-lg bg-green-900/20 border border-green-800/30">
-            <p className="text-green-400 text-sm text-center">All contributions are acknowledged and recorded in the sovereign ledger.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* OTHER WAYS TO SUPPORT */}
-      <section className="mt-10 pb-12">
-        <h2 className="text-2xl text-[#B8860B] text-center mb-6" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>Other Ways to Support</h2>
-        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-          <a href="https://mazsar.gumroad.com" target="_blank" rel="noopener" className="panel p-6 text-center hover:scale-[1.03] transition-all duration-300 block">
-            <CapabilityIcon capability="digitalProducts" className={CARD_ICON_TOKEN} />
-            <div className="text-2xl mb-2"><SovereignIcon icon="book_open" className="w-6 h-6 mx-auto" /></div>
-            <p className="text-2xl mb-2"></p>
-            <p className="text-[#B8860B] font-bold">Buy Digital Products</p>
-            <p className="text-zinc-500 text-sm mt-1">Gumroad Store</p>
+      <section className="container-page py-12">
+        <h2 className="text-center text-2xl text-zinc-100">Other ways to support</h2>
+        <div className="mx-auto mt-8 grid max-w-2xl gap-4 sm:grid-cols-2">
+          <a
+            href="https://mazsar.gumroad.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-xl border border-zinc-800 bg-black/30 p-6 text-center transition hover:border-[#B8860B]/40"
+          >
+            <p className="font-semibold text-[#F2D675]">Digital products</p>
+            <p className="mt-2 text-sm text-zinc-500">mazsar.gumroad.com</p>
           </a>
-          <a href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH" target="_blank" rel="noopener" className="panel p-6 text-center hover:scale-[1.03] transition-all duration-300 block">
-            <CapabilityIcon capability="books" className={CARD_ICON_TOKEN} />
-            <div className="text-2xl mb-2"><SovereignIcon icon="publications_books" className="w-6 h-6 mx-auto" /></div>
-            <p className="text-2xl mb-2"></p>
-            <p className="text-[#B8860B] font-bold">Buy the Books</p>
-            <p className="text-zinc-500 text-sm mt-1">Amazon Author Page</p>
+          <a
+            href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-xl border border-zinc-800 bg-black/30 p-6 text-center transition hover:border-[#B8860B]/40"
+          >
+            <p className="font-semibold text-[#F2D675]">Books</p>
+            <p className="mt-2 text-sm text-zinc-500">Amazon author page</p>
           </a>
         </div>
-      </section>
 
-      {/* VISION STATEMENT */}
-      <section className="panel p-8 mb-12 text-center max-w-2xl mx-auto border border-[#B8860B]/30">
-        <p className="text-zinc-300 italic leading-relaxed">
-          &ldquo;We are building the constitutional physics for autonomous intelligence. 
-          Not to control AI, but to ensure it governs itself with the same integrity 
-          we demand of sovereign nations. This is not charity — this is infrastructure 
-          for the future.&rdquo;
-        </p>
-        <p className="text-[#B8860B] mt-4 text-sm tracking-widest" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>— LASZLO MAZSAR, SOVEREIGN ARCHITECT</p>
+        <blockquote className="mx-auto mt-12 max-w-2xl rounded-xl border border-[#B8860B]/25 bg-black/20 p-8 text-center">
+          <p className="text-sm italic leading-7 text-zinc-300">
+            “We are building the constitutional physics for autonomous intelligence. Not to control
+            AI, but to ensure it governs itself with the same integrity we demand of sovereign
+            nations. This is not charity — this is infrastructure for the future.”
+          </p>
+          <p className="mt-4 text-xs tracking-widest text-[#D4AF37]">— LASZLO MAZSAR</p>
+        </blockquote>
+
+        <div className="mt-10 flex flex-wrap justify-center gap-4 text-sm">
+          <Link href="/library/" className="text-[#F2D675]">
+            Library →
+          </Link>
+          <Link href="/applications/" className="text-zinc-400">
+            Applications →
+          </Link>
+          <Link href="/observatory/" className="text-zinc-400">
+            Observatory demo →
+          </Link>
+        </div>
       </section>
     </main>
   );

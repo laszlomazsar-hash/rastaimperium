@@ -84,6 +84,15 @@ export default function LibraryPage() {
     },
   ];
 
+  const productLinks = [
+    { name: "Product pathway", href: "/product/", detail: "Capabilities, pilots, commercial models" },
+    { name: "Applications & Genesis", href: "/applications/", detail: "Kernel, Observatory, DSL, demos" },
+    { name: "Observatory demo", href: "/observatory/", detail: "Synthetic telemetry · DEMONSTRATION" },
+    { name: "Pricing posture", href: "/pricing/", detail: "Pilot ranges and enterprise terms" },
+    { name: "Design partner pilots", href: "/institutional-pilots/", detail: "Fixed-scope institutional path" },
+    { name: "Case studies", href: "/case-studies/", detail: "Evidence before logos" },
+  ];
+
   const repos = [
     {
       name: "rastaimperium",
@@ -117,7 +126,7 @@ export default function LibraryPage() {
         <div className="container-page py-12 text-center">
           <h1 className="text-4xl text-gold-gradient md:text-5xl">The Library</h1>
           <p className="mt-3 text-lg text-zinc-400">
-            Publications, design documents, and open repositories
+            Publications, design documents, product surface, and open repositories
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-zinc-500">
             Most entries below are narrative or design documents. Production, deployment, and
@@ -128,17 +137,40 @@ export default function LibraryPage() {
             <Link href="/proof/" className="text-sm text-[#F2D675]">
               Proof Registry →
             </Link>
+            <Link href="/product/" className="text-sm text-zinc-400">
+              Product →
+            </Link>
             <Link href="/limitations/" className="text-sm text-zinc-400">
               Limitations →
             </Link>
             <Link href="/research/" className="text-sm text-zinc-400">
               Research →
             </Link>
+            <Link href="/thanks-and-praise/" className="text-sm text-zinc-400">
+              Thanks & Praise →
+            </Link>
           </div>
         </div>
       </section>
 
       <section className="container-page mt-10">
+        <h2 className="text-2xl text-[#F2D675]">Commercial & product surface</h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {productLinks.map((p) => (
+            <Link
+              key={p.name}
+              href={p.href}
+              className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+            >
+              <h3 className="text-lg text-zinc-100">{p.name}</h3>
+              <p className="mt-2 text-sm text-zinc-500">{p.detail}</p>
+              <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="container-page mt-12">
         <h2 className="text-2xl text-[#F2D675]">Published Works</h2>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {books.map((book) => (
@@ -204,10 +236,7 @@ export default function LibraryPage() {
                 {inner}
               </Link>
             ) : (
-              <div
-                key={a.name}
-                className="rounded-xl border border-zinc-800 bg-black/30 p-6"
-              >
+              <div key={a.name} className="rounded-xl border border-zinc-800 bg-black/30 p-6">
                 {inner}
               </div>
             );
