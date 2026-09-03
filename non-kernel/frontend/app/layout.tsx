@@ -106,6 +106,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
+                    href="/limitations"
+                  >
+                    Limitations
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
                     href="/institutional-pilots"
                   >
                     Pilots
@@ -142,8 +150,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <footer className="royal-footer border-t border-[#B8860B]/20 bg-[#090a09] py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-10 text-sm sm:grid-cols-2 xl:grid-cols-[1.25fr_0.8fr_0.8fr_1fr]">
-              <div className="max-w-sm">
+            <div className="grid gap-10 text-sm sm:grid-cols-2 xl:grid-cols-5">
+              <div className="max-w-sm xl:col-span-1">
                 <Link
                   href="/"
                   className="text-lg tracking-[0.18em] text-[#D4AF37] transition hover:text-[#F2D675]"
@@ -192,6 +200,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </p>
                 <ul className="mt-4 space-y-2 text-zinc-400">
                   <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/vision">
+                      Vision
+                    </Link>
+                  </li>
+                  <li>
                     <Link className="transition hover:text-[#F2D675]" href="/product">
                       Product
                     </Link>
@@ -207,18 +220,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Link>
                   </li>
                   <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/architecture">
+                      Architecture
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/technology">
+                      Technology
+                    </Link>
+                  </li>
+                  <li>
                     <Link className="transition hover:text-[#F2D675]" href="/applications">
                       Applications
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/case-studies">
-                      Case studies
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/about">
-                      About
+                    <Link className="transition hover:text-[#F2D675]" href="/codex">
+                      Codex
                     </Link>
                   </li>
                 </ul>
@@ -256,6 +274,53 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li>
                     <Link className="transition hover:text-[#F2D675]" href="/limitations">
                       Limitations
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/governance-model">
+                      Governance model
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+                  Library
+                </p>
+                <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/library">
+                      Library
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/research">
+                      Research
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/case-studies">
+                      Case studies
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/about-evo-v-kernel">
+                      EVO-V Kernel
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/about">
+                      About
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise">
+                      Thanks & Praise
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/invest">
+                      Invest
                     </Link>
                   </li>
                 </ul>
@@ -300,7 +365,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
             <p className="mt-12 border-t border-zinc-900 pt-6 text-xs text-zinc-600">
               Rasta Imperium is the public constitutional and verification layer — not the EVO-V
-              execution runtime. Unproven claims are labelled; see Limitations.
+              execution runtime. Unproven claims are labelled; see{" "}
+              <Link href="/limitations/" className="text-zinc-500 underline hover:text-[#F2D675]">
+                Limitations
+              </Link>
+              .
             </p>
           </div>
         </footer>
