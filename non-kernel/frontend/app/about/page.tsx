@@ -21,6 +21,26 @@ export default function AboutPage() {
             for EVO-V — deterministic governance for autonomous systems that must remain
             reconstructible, challengeable, and bound by explicit rules.
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/product/"
+              className="rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+            >
+              Product pathway
+            </Link>
+            <Link
+              href="/observatory/"
+              className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
+            >
+              Observatory demo
+            </Link>
+            <Link
+              href="/thanks-and-praise/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+            >
+              Thanks & Praise
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -79,9 +99,14 @@ export default function AboutPage() {
               <li>· Design partner terms scoped in writing ($50k–$150k indicative)</li>
               <li>· Runtime and hosted modules sold only after pilot fit</li>
             </ul>
-            <Link href="/limitations/" className="mt-6 inline-block text-sm text-[#F2D675]">
-              Limitations →
-            </Link>
+            <div className="mt-6 flex flex-wrap gap-3 text-sm">
+              <Link href="/limitations/" className="text-[#F2D675]">
+                Limitations →
+              </Link>
+              <Link href="/pricing/" className="text-zinc-400">
+                Pricing →
+              </Link>
+            </div>
           </aside>
         </div>
       </section>
@@ -118,27 +143,22 @@ export default function AboutPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           How to engage
         </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5">
-            <h3 className="text-lg text-zinc-100">For buyers & institutions</h3>
-            <p className="mt-2 text-sm leading-6 text-zinc-400">
-              Start at Product, read Limitations, then apply for a design partner pilot with decision
-              context and success criteria.
-            </p>
-            <Link href="/product/" className="mt-4 inline-block text-sm text-[#F2D675]">
-              Product pathway →
-            </Link>
-          </div>
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5">
-            <h3 className="text-lg text-zinc-100">For auditors & researchers</h3>
-            <p className="mt-2 text-sm leading-6 text-zinc-400">
-              Use Proof Registry, Challenge Lab, and Auditor handoff. Independent reproduction of
-              sealed capsules is the trust mechanism.
-            </p>
-            <Link href="/proof/" className="mt-4 inline-block text-sm text-[#F2D675]">
-              Proof Registry →
-            </Link>
-          </div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {(
+            [
+              ["Buyers", "/product/", "Product pathway"],
+              ["Auditors", "/proof/", "Proof Registry"],
+              ["Pilots", "/contact/?intent=design-partner", "Apply · design partner"],
+              ["Audit path", "/contact/?intent=audit", "Audit inquiry"],
+            ] as const
+          ).map(([title, href, cta]) => (
+            <div key={title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+              <h3 className="text-lg text-zinc-100">{title}</h3>
+              <Link href={href} className="mt-4 inline-block text-sm text-[#F2D675]">
+                {cta} →
+              </Link>
+            </div>
+          ))}
         </div>
       </section>
 

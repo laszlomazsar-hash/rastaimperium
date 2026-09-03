@@ -42,6 +42,15 @@ const engagementPaths = [
     label: "Request a commercial brief",
     intent: "commercial",
   },
+  {
+    code: "05",
+    title: "Governance audit",
+    description:
+      "Assessment against stated invariants. Certification language only where sealed artifacts support it.",
+    prompt: "Governance audit inquiry",
+    label: "Open an audit inquiry",
+    intent: "audit",
+  },
 ];
 
 function inquiryHref(subject: string) {
@@ -54,6 +63,8 @@ function ContactBody() {
   const isPilot = intent === "design-partner" || intent === "pilot";
   const isAudit = intent === "audit";
   const isCommercial = intent === "commercial";
+  const isResearch = intent === "research";
+  const isInstitutional = intent === "institutional";
 
   const bannerTitle = isPilot
     ? "Design partner pilot intake"
@@ -61,7 +72,11 @@ function ContactBody() {
       ? "Governance audit inquiry"
       : isCommercial
         ? "Commercial / runtime brief"
-        : "Begin with the governance question that matters.";
+        : isResearch
+          ? "Research collaboration"
+          : isInstitutional
+            ? "Institutional governance inquiry"
+            : "Begin with the governance question that matters.";
 
   const bannerBody = isPilot
     ? "You are on the design partner path. Share decision context, systems in scope, compliance requirements, and success criteria. Indicative pilot investment is $50k–$150k for an 8–12 week fixed scope."
@@ -69,7 +84,11 @@ function ContactBody() {
       ? "Describe the system under review, the invariants you care about, and the evidence standard you need. Certification language only where sealed artifacts support it."
       : isCommercial
         ? "Runtime, Observatory, and hosted modules are sold under explicit scope after pilot fit. Include stack constraints (cloud vs air-gapped) and scale."
-        : "Rasta Imperium works at the boundary of constitutional intelligence, verifiable systems, and accountable deployment. Select a path below or send context via the form.";
+        : isResearch
+          ? "Share the research question, collaboration model, and any publication or evidence constraints. This surface remains evidence-bound."
+          : isInstitutional
+            ? "Share the institutional context, decision boundary, and what accountable autonomy must look like for your environment."
+            : "Rasta Imperium works at the boundary of constitutional intelligence, verifiable systems, and accountable deployment. Select a path below or send context via the form.";
 
   return (
     <main className="relative overflow-hidden bg-[#090a09] text-zinc-100">
@@ -88,6 +107,24 @@ function ContactBody() {
               {bannerTitle}
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-300">{bannerBody}</p>
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              {engagementPaths.map((p) => (
+                <Link
+                  key={p.intent}
+                  href={`/contact/?intent=${p.intent}`}
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                    intent === p.intent ||
+                    (isPilot && p.intent === "design-partner")
+                      ? "bg-[#D4AF37] text-black"
+                      : "border border-zinc-600 text-zinc-300 hover:border-[#D4AF37]/60"
+                  }`}
+                >
+                  {p.title}
+                </Link>
+              ))}
+            </div>
+
             <div className="mt-9 flex flex-wrap gap-3">
               <a
                 href={inquiryHref(
@@ -97,7 +134,9 @@ function ContactBody() {
                       ? "Governance audit inquiry"
                       : isCommercial
                         ? "Commercial brief inquiry"
-                        : "Rasta Imperium inquiry",
+                        : isResearch
+                          ? "Research collaboration inquiry"
+                          : "Rasta Imperium inquiry",
                 )}
                 className="rounded-full bg-[#D4AF37] px-6 py-3 text-sm font-bold text-[#12130f] transition hover:bg-[#F2D675] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F2D675]"
               >
@@ -110,10 +149,10 @@ function ContactBody() {
                 Read Limitations first
               </Link>
               <Link
-                href="/product/"
+                href="/pricing/"
                 className="rounded-full border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70"
               >
-                Product pathway
+                Pricing posture
               </Link>
             </div>
           </div>
@@ -149,19 +188,20 @@ function ContactBody() {
               </h2>
             </div>
             <p className="max-w-xl text-sm leading-6 text-zinc-400">
-              Each route opens a prepared email subject, keeping the first exchange anchored in the
-              right operating context.
+              Chips above and cards below share the same intents. Each route can open a prepared
+              email subject or the form below.
             </p>
           </div>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {engagementPaths.map((path) => (
               <article
                 key={path.code}
-                className={`group flex min-h-72 flex-col border p-6 transition hover:-translate-y-1 hover:border-[#D4AF37]/65 hover:shadow-[0_18px_45px_rgba(0,0,0,0.3)] ${
+                className={`group flex min-h-64 flex-col border p-6 transition hover:-translate-y-1 hover:border-[#D4AF37]/65 hover:shadow-[0_18px_45px_rgba(0,0,0,0.3)] ${
                   intent === path.intent ||
                   (isPilot && path.intent === "design-partner") ||
-                  (isCommercial && path.intent === "commercial")
+                  (isCommercial && path.intent === "commercial") ||
+                  (isAudit && path.intent === "audit")
                     ? "border-[#D4AF37]/70 bg-[#152015]"
                     : "border-zinc-700/70 bg-[#101210]"
                 }`}
@@ -169,15 +209,22 @@ function ContactBody() {
                 <span className="font-mono text-xs tracking-[0.2em] text-[#D4AF37]">
                   PATH {path.code}
                 </span>
-                <h3 className="mt-8 text-xl font-semibold text-zinc-100">{path.title}</h3>
+                <h3 className="mt-6 text-xl font-semibold text-zinc-100">{path.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-6 text-zinc-400">{path.description}</p>
-                <a
-                  href={inquiryHref(path.prompt)}
-                  className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#F2D675] transition group-hover:text-white"
-                >
-                  {path.label}
-                  <span aria-hidden="true">→</span>
-                </a>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link
+                    href={`/contact/?intent=${path.intent}`}
+                    className="text-sm font-semibold text-[#F2D675]"
+                  >
+                    Select path
+                  </Link>
+                  <a
+                    href={inquiryHref(path.prompt)}
+                    className="text-sm font-semibold text-zinc-400 transition group-hover:text-white"
+                  >
+                    {path.label} →
+                  </a>
+                </div>
               </article>
             ))}
           </div>
@@ -231,8 +278,8 @@ function ContactBody() {
 
         <div className="mt-12 flex flex-col justify-between gap-6 border-t border-zinc-800 pt-8 sm:flex-row sm:items-center">
           <p className="max-w-2xl text-sm leading-6 text-zinc-400">
-            For a complete public orientation before writing, review Limitations, Proof, Product, and
-            the pilot pathway.
+            For a complete public orientation before writing, review Limitations, Proof, Product,
+            Pricing, and the pilot pathway.
           </p>
           <div className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold text-[#F2D675]">
             <Link href="/limitations/" className="transition hover:text-white">
@@ -244,11 +291,14 @@ function ContactBody() {
             <Link href="/product/" className="transition hover:text-white">
               Product
             </Link>
+            <Link href="/pricing/" className="transition hover:text-white">
+              Pricing
+            </Link>
             <Link href="/institutional-pilots/" className="transition hover:text-white">
               Pilots
             </Link>
-            <Link href="/case-studies/" className="transition hover:text-white">
-              Case studies
+            <Link href="/observatory/" className="transition hover:text-white">
+              Observatory
             </Link>
           </div>
         </div>

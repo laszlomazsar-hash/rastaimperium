@@ -76,19 +76,19 @@ const audiencePaths = [
   },
   {
     role: "Institutional decision-maker",
-    path: "Product → Pilots → Contact",
+    path: "Product → Pricing → Pilots → Contact",
     href: "/product/",
     cta: "Commercial pathway",
   },
   {
     role: "Technical reviewer",
-    path: "Proof → Evidence → Challenge → Verify scripts",
+    path: "Proof → Observatory → Evidence → Challenge",
     href: "/proof/",
     cta: "Open Proof Registry",
   },
   {
     role: "Curious visitor",
-    path: "Vision → Pillars → Applications → Thanks & Praise",
+    path: "Vision → Apps → Codex → Thanks & Praise",
     href: "/vision/",
     cta: "Start with Vision",
   },
@@ -129,16 +129,22 @@ export default function HomePage() {
               Product & pilots
             </Link>
             <Link
-              href="/proof/"
+              href="/observatory/"
               className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/50 px-5 py-3 text-sm font-semibold text-[#F2D675]"
             >
-              Open Proof Registry
+              Observatory demo
             </Link>
             <Link
-              href="/institutional-pilots/"
+              href="/pricing/"
               className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
             >
-              Design partner pilot
+              Pricing posture
+            </Link>
+            <Link
+              href="/proof/"
+              className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+            >
+              Proof Registry
             </Link>
             <Link
               href="/limitations/"
@@ -154,7 +160,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Audience paths */}
       <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="audience-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">Start here</p>
         <h2 id="audience-heading" className="mt-3 text-2xl text-zinc-100">
@@ -179,7 +184,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Boundary clarity */}
       <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="boundary-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">0 · Boundary</p>
         <h2 id="boundary-heading" className="mt-3 text-2xl text-zinc-100">
@@ -192,10 +196,7 @@ export default function HomePage() {
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {boundaryItems.map((block) => (
-            <div
-              key={block.title}
-              className="rounded-xl border border-zinc-800 bg-black/30 p-5"
-            >
+            <div key={block.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
               <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
                 {block.title}
               </p>
@@ -212,7 +213,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Maturity snapshot */}
       <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="maturity-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">1 · Maturity</p>
         <h2 id="maturity-heading" className="mt-3 text-2xl text-zinc-100">
@@ -264,10 +264,7 @@ export default function HomePage() {
             </li>
           ))}
         </ol>
-        <Link
-          href="/blueprint/#verifiable-stack"
-          className="mt-6 inline-block text-sm text-[#F2D675]"
-        >
+        <Link href="/blueprint/#verifiable-stack" className="mt-6 inline-block text-sm text-[#F2D675]">
           Verifiable architecture map →
         </Link>
       </section>
@@ -330,11 +327,16 @@ export default function HomePage() {
 
       <section className="container-page border-b border-zinc-900 py-12">
         <div className="rounded-xl border border-amber-900/40 bg-amber-950/20 p-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <ProvenanceBadge kind="DEMONSTRATION" />
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/80">
-              Synthetic telemetry · local visual proof · not production monitoring
-            </p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <ProvenanceBadge kind="DEMONSTRATION" />
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/80">
+                Synthetic telemetry · not production monitoring
+              </p>
+            </div>
+            <Link href="/observatory/" className="text-sm text-[#F2D675]">
+              Full Observatory demo →
+            </Link>
           </div>
           <dl className="mt-4 grid grid-cols-2 gap-3 font-mono text-xs text-zinc-400 sm:grid-cols-5">
             <div>
@@ -392,28 +394,33 @@ export default function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">5 · Adopt</p>
             <h2 className="mt-3 text-2xl text-zinc-100">Commercial pathway</h2>
             <p className="mt-3 text-sm leading-7 text-zinc-400">
-              Problem → evidence → design partner pilot → production runtime. For councils, regulated
-              environments, and enterprise teams that need inspectable decision history and explicit
-              constitutional bounds before scale.
+              Problem → evidence → design partner pilot → production runtime. Engagement-scoped
+              pricing; no unlimited self-serve SaaS tiers on this surface.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/product/"
                 className="inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
               >
-                Product & capabilities →
+                Product →
+              </Link>
+              <Link
+                href="/pricing/"
+                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
+              >
+                Pricing →
               </Link>
               <Link
                 href="/institutional-pilots/"
                 className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
               >
-                Design partner pilots →
+                Pilots →
               </Link>
               <Link
                 href="/contact/?intent=design-partner"
                 className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
               >
-                Apply now →
+                Apply →
               </Link>
             </div>
           </div>
