@@ -130,6 +130,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <li>
                   <Link
                     className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
+                    href="/thanks-and-praise"
+                  >
+                    Thanks
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
                     href="/institutional-pilots"
                   >
                     Pilots
