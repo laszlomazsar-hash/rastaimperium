@@ -67,6 +67,33 @@ const boundaryItems = [
   },
 ];
 
+const audiencePaths = [
+  {
+    role: "Auditor / reviewer",
+    path: "Limitations → Proof Registry → Challenge Lab → Auditor handoff",
+    href: "/limitations/",
+    cta: "Start with Limitations",
+  },
+  {
+    role: "Institutional decision-maker",
+    path: "Boundary → Blueprint → Institutional pilots → Contact",
+    href: "/institutional-pilots/",
+    cta: "Institutional path",
+  },
+  {
+    role: "Technical reviewer",
+    path: "Proof → Evidence → Challenge → Verify scripts",
+    href: "/proof/",
+    cta: "Open Proof Registry",
+  },
+  {
+    role: "Curious visitor",
+    path: "Vision → Pillars → Applications → Thanks & Praise",
+    href: "/vision/",
+    cta: "Start with Vision",
+  },
+];
+
 export default function HomePage() {
   const [tick, setTick] = useState(0);
   const telemetry = generateTelemetrySnapshot(tick, "rastaimperium-home");
@@ -108,10 +135,10 @@ export default function HomePage() {
               Open Proof Registry
             </Link>
             <Link
-              href="/challenge/"
+              href="/limitations/"
               className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
             >
-              Challenge the Claims
+              Limitations
             </Link>
             <Link
               href="/institutional-pilots/"
@@ -124,6 +151,31 @@ export default function HomePage() {
           <div className="mt-12">
             <TrustStatus compact />
           </div>
+        </div>
+      </section>
+
+      {/* Audience paths */}
+      <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="audience-heading">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">Start here</p>
+        <h2 id="audience-heading" className="mt-3 text-2xl text-zinc-100">
+          Paths by role
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Choose a route that matches how you evaluate systems. Every path ends at evidence or an
+          explicit limitation — not marketing claims.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {audiencePaths.map((a) => (
+            <Link
+              key={a.role}
+              href={a.href}
+              className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+            >
+              <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">{a.role}</p>
+              <p className="mt-2 text-xs leading-5 text-zinc-500">{a.path}</p>
+              <p className="mt-3 text-sm text-[#F2D675]">{a.cta} →</p>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -184,6 +236,9 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+        <Link href="/limitations/" className="mt-6 inline-block text-sm text-[#F2D675]">
+          Full list of unproven claims →
+        </Link>
       </section>
 
       <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="explore-heading">
