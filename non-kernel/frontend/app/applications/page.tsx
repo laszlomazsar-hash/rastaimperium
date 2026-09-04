@@ -40,11 +40,11 @@ const genesis = [
   {
     title: "Observatory",
     description:
-      "Operator-facing coherence, drift, and governed-agent visibility. Hosted Observatory modules are part of the commercial runtime layer after pilot fit; synthetic telemetry on the homepage is DEMONSTRATION only.",
-    status: "COMMERCIAL LAYER",
+      "Operator-facing coherence, drift, and governed-agent visibility. Synthetic telemetry on this site is DEMONSTRATION only. Hosted Observatory modules ship under commercial runtime scope after pilot fit.",
+    status: "DEMONSTRATION + COMMERCIAL",
     badge: "GENESIS · OBSERVATORY",
-    href: "/product/",
-    cta: "Product pathway",
+    href: "/observatory/",
+    cta: "Open Observatory demo",
   },
   {
     title: "Fitness DSL & invariants",
@@ -58,7 +58,7 @@ const genesis = [
   {
     title: "Design partner onboarding",
     description:
-      "Intake, success criteria, and written boundary for institutional pilots. Start at Contact with intent=design-partner after Limitations and Proof.",
+      "Structured intake: organisation, stack, risk surface, success criteria, compliance context. Start at Contact with intent=design-partner after Limitations and Proof.",
     status: "OPERATIONAL",
     badge: "ONBOARDING",
     href: "/contact/?intent=design-partner",
@@ -126,8 +126,14 @@ export default function ApplicationsPage() {
             Product pathway
           </Link>
           <Link
-            href="/proof/"
+            href="/observatory/"
             className="rounded-lg border border-[#B8860B]/50 px-5 py-2.5 text-sm font-semibold text-[#F2D675]"
+          >
+            Observatory demo
+          </Link>
+          <Link
+            href="/proof/"
+            className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
           >
             Proof Registry
           </Link>
@@ -136,12 +142,6 @@ export default function ApplicationsPage() {
             className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
           >
             Design partner pilots
-          </Link>
-          <Link
-            href="/thanks-and-praise/"
-            className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
-          >
-            Thanks & Praise
           </Link>
         </div>
       </section>
@@ -175,7 +175,7 @@ export default function ApplicationsPage() {
                 <Link href={item.href} className="text-sm font-semibold text-[#F2D675]">
                   {item.cta} →
                 </Link>
-                {item.external && (
+                {"external" in item && item.external && (
                   <a
                     href={item.external}
                     target="_blank"
@@ -268,14 +268,14 @@ export default function ApplicationsPage() {
             <Link href="/proof/" className="text-sm text-[#F2D675]">
               Open Proof Registry →
             </Link>
+            <Link href="/case-studies/" className="text-sm text-zinc-400">
+              Case studies →
+            </Link>
             <Link href="/product/" className="text-sm text-zinc-400">
               Product pathway →
             </Link>
             <Link href="/institutional-pilots/" className="text-sm text-zinc-400">
               Institutional pilots →
-            </Link>
-            <Link href="/thanks-and-praise/" className="text-sm text-zinc-400">
-              Thanks & Praise →
             </Link>
           </div>
         </div>

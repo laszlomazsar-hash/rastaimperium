@@ -114,8 +114,7 @@ function ContactBody() {
                   key={p.intent}
                   href={`/contact/?intent=${p.intent}`}
                   className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                    intent === p.intent ||
-                    (isPilot && p.intent === "design-partner")
+                    intent === p.intent || (isPilot && p.intent === "design-partner")
                       ? "bg-[#D4AF37] text-black"
                       : "border border-zinc-600 text-zinc-300 hover:border-[#D4AF37]/60"
                   }`}
@@ -126,6 +125,12 @@ function ContactBody() {
             </div>
 
             <div className="mt-9 flex flex-wrap gap-3">
+              <a
+                href="#enquiry-form"
+                className="rounded-full bg-[#D4AF37] px-6 py-3 text-sm font-bold text-[#12130f] transition hover:bg-[#F2D675] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F2D675]"
+              >
+                {isPilot ? "Open pilot form" : "Open enquiry form"}
+              </a>
               <a
                 href={inquiryHref(
                   isPilot
@@ -138,40 +143,43 @@ function ContactBody() {
                           ? "Research collaboration inquiry"
                           : "Rasta Imperium inquiry",
                 )}
-                className="rounded-full bg-[#D4AF37] px-6 py-3 text-sm font-bold text-[#12130f] transition hover:bg-[#F2D675] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F2D675]"
+                className="rounded-full border border-[#D4AF37]/45 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:border-[#F2D675] hover:bg-[#D4AF37]/10"
               >
-                {isPilot ? "Email pilot intake" : "Write to the engagement desk"}
+                Email instead
               </a>
               <Link
                 href="/limitations/"
-                className="rounded-full border border-[#D4AF37]/45 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:border-[#F2D675] hover:bg-[#D4AF37]/10"
-              >
-                Read Limitations first
-              </Link>
-              <Link
-                href="/pricing/"
                 className="rounded-full border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70"
               >
-                Pricing posture
+                Limitations
               </Link>
             </div>
           </div>
 
           <aside className="border border-[#D4AF37]/25 bg-[#11150f]/85 p-6 shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur-sm sm:p-7">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">
-              A useful first note
+              {isPilot ? "Pilot checklist" : "A useful first note"}
             </p>
-            <p className="mt-4 text-base leading-7 text-zinc-200">
-              Share the decision context, the systems or institutions involved, and the governance
-              question you need to resolve. This helps establish the appropriate technical and
-              constitutional frame from the outset.
-            </p>
-            <a
-              href={inquiryHref("Rasta Imperium engagement brief")}
+            {isPilot ? (
+              <ul className="mt-4 space-y-2 text-sm leading-6 text-zinc-300">
+                <li>· Organisation & role</li>
+                <li>· Stack / environment</li>
+                <li>· Risk surface in scope</li>
+                <li>· Success criteria for 8–12 weeks</li>
+                <li>· Compliance context (if any)</li>
+              </ul>
+            ) : (
+              <p className="mt-4 text-base leading-7 text-zinc-200">
+                Share the decision context, the systems or institutions involved, and the governance
+                question you need to resolve.
+              </p>
+            )}
+            <Link
+              href="/case-studies/"
               className="mt-6 inline-flex text-sm font-semibold text-[#F2D675] underline decoration-[#D4AF37]/45 underline-offset-4 transition hover:decoration-[#F2D675]"
             >
-              Open a structured engagement brief
-            </a>
+              How we publish evidence →
+            </Link>
           </aside>
         </div>
       </section>
@@ -231,8 +239,8 @@ function ContactBody() {
         </div>
       </section>
 
-      <section className="relative mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
-        <EnquiryForm />
+      <section id="enquiry-form" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-16 lg:px-8 lg:py-20">
+        <EnquiryForm intent={intent} />
       </section>
 
       <section className="relative mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
