@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Product — Capabilities, pilots, and commercial pathway",
   description:
-    "What you can inspect, pilot, and buy: verification surface, design partner pilots, EVO-V runtime pathway, Observatory, and governance modules. Evidence-bound commercial surface.",
+    "What you can inspect, pilot, and buy: verification surface, design partner pilots, EVO-V runtime pathway, Observatory, and governance modules. Evidence-bound commercial surface for institutions that cannot afford opaque autonomy.",
 };
 
 const surfaces = [
@@ -35,6 +35,25 @@ const surfaces = [
     body: "Deterministic governance kernel, hosted Observatory-style dashboards, and advanced epistemic modules. Sold under explicit scope after pilot fit — not self-serve on this site.",
     href: "/about-evo-v-kernel/",
     cta: "About the kernel",
+  },
+];
+
+const institutionalValue = [
+  {
+    title: "Reconstructible decisions",
+    body: "When an autonomous system acts, institutions need a clear record of what entered, which rules applied, and what changed. Deterministic replay turns opaque outcomes into inspectable history.",
+  },
+  {
+    title: "Bounded autonomy",
+    body: "High-consequence agents should operate inside explicit constitutional limits rather than relying on retrospective interpretation or hidden intent.",
+  },
+  {
+    title: "Audit-ready evidence",
+    body: "Sealed capsules, challenge fixtures, and append-only lineage give auditors and boards a concrete surface to examine instead of marketing claims.",
+  },
+  {
+    title: "Scoped risk reduction",
+    body: "Pilots establish written boundaries and success criteria before scale-up, reducing institutional liability from ungoverned agent behaviour.",
   },
 ];
 
@@ -153,6 +172,29 @@ export default function ProductPage() {
         </div>
       </section>
 
+      {/* NEW: Institutional value section */}
+      <section className="container-page border-b border-zinc-900 py-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+          Why institutions engage
+        </p>
+        <h2 className="mt-3 text-2xl text-zinc-100">
+          Reduce liability from opaque autonomy
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Boards, CISOs, and regulated operators face growing exposure when AI agents act without
+          reconstructible records or enforceable bounds. The commercial path below is designed for
+          that constraint — not for general-purpose model monitoring.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {institutionalValue.map((item) => (
+            <div key={item.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+              <h3 className="text-base font-semibold text-[#F2D675]">{item.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="container-page border-b border-zinc-900 py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           What exists today
@@ -252,8 +294,8 @@ export default function ProductPage() {
             >
               Pilot pathway detail
             </Link>
-            <Link href="/about/" className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100">
-              About the founder
+            <Link href="/pricing/" className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100">
+              Pricing posture
             </Link>
           </div>
         </div>
