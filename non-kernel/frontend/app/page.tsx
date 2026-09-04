@@ -67,30 +67,53 @@ const boundaryItems = [
   },
 ];
 
-const audiencePaths = [
+const institutionalValue = [
   {
-    role: "Auditor / reviewer",
-    path: "Limitations → Proof Registry → Challenge Lab → Auditor handoff",
-    href: "/limitations/",
-    cta: "Start with Limitations",
+    title: "Reconstructible decisions",
+    body: "When agents act, institutions need a clear record of inputs, rules applied, and outcomes — not opaque model logs.",
   },
+  {
+    title: "Bounded autonomy",
+    body: "High-consequence systems should operate inside explicit constitutional limits rather than retrospective interpretation.",
+  },
+  {
+    title: "Audit-ready evidence",
+    body: "Sealed capsules and challenge fixtures give boards and auditors a concrete surface to examine.",
+  },
+  {
+    title: "Scoped pilots",
+    body: "Fixed-scope design partner engagements with written success criteria before any claim of operational adoption.",
+  },
+];
+
+const audiencePaths = [
   {
     role: "Institutional decision-maker",
     path: "Product → Pricing → Pilots → Contact",
     href: "/product/",
     cta: "Commercial pathway",
+    primary: true,
+  },
+  {
+    role: "Auditor / reviewer",
+    path: "Limitations → Proof Registry → Challenge Lab → Auditor handoff",
+    href: "/limitations/",
+    cta: "Start with Limitations",
+    primary: false,
   },
   {
     role: "Technical reviewer",
     path: "Proof → Observatory → Evidence → Challenge",
     href: "/proof/",
     cta: "Open Proof Registry",
+    primary: false,
   },
   {
     role: "Curious visitor",
     path: "Vision → Apps → Codex → Thanks & Praise",
     href: "/vision/",
     cta: "Start with Vision",
+    primary: false,
   },
 ];
 
@@ -105,6 +128,7 @@ export default function HomePage() {
 
   return (
     <main className="royal-page overflow-hidden">
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="royal-hero relative border-b border-[#B8860B]/20">
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <div className="absolute -left-24 top-0 h-96 w-96 rounded-full bg-[#107e3e]/12 blur-3xl" />
@@ -127,11 +151,12 @@ export default function HomePage() {
             </h1>
 
             <p className="royal-lede mt-5 max-w-xl text-base leading-7 text-zinc-300 sm:mt-6 sm:text-lg sm:leading-8">
-              Rasta Imperium is the verification surface for deterministic AI governance — not the
-              execution runtime. Sealed capsules, explicit Limitations, and design partner pilots for
-              institutions that cannot afford opaque autonomy.
+              Deterministic governance for institutions that cannot afford opaque autonomy.
+              Sealed capsules, explicit Limitations, and scoped design partner pilots — not a
+              self-serve SaaS storefront.
             </p>
 
+            {/* Primary CTA hierarchy */}
             <div className="mt-7 flex flex-wrap gap-2.5 sm:mt-9 sm:gap-3">
               <Link
                 href="/product/"
@@ -140,16 +165,16 @@ export default function HomePage() {
                 Product & pilots
               </Link>
               <Link
-                href="/proof/"
+                href="/contact/?intent=design-partner"
                 className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/50 px-5 py-2.5 text-sm font-semibold text-[#F2D675] sm:px-6 sm:py-3"
               >
-                Proof Registry
+                Apply for pilot
               </Link>
               <Link
-                href="/observatory/"
-                className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-100 sm:px-6 sm:py-3"
+                href="/limitations/"
+                className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-100 sm:px-6 sm:py-3"
               >
-                Observatory
+                Read Limitations first
               </Link>
             </div>
 
@@ -157,14 +182,14 @@ export default function HomePage() {
               <Link href="/pricing/" className="hover:text-[#F2D675]">
                 Pricing posture
               </Link>
-              <Link href="/limitations/" className="hover:text-[#F2D675]">
-                Limitations
+              <Link href="/proof/" className="hover:text-[#F2D675]">
+                Proof Registry
               </Link>
-              <Link href="/applications/" className="hover:text-[#F2D675]">
-                Applications
+              <Link href="/institutional-pilots/" className="hover:text-[#F2D675]">
+                Pilot pathway
               </Link>
-              <Link href="/contact/?intent=design-partner" className="hover:text-[#F2D675]">
-                Apply for pilot
+              <Link href="/observatory/" className="hover:text-[#F2D675]">
+                Observatory
               </Link>
             </div>
 
@@ -206,10 +231,10 @@ export default function HomePage() {
 
             <div className="mt-5 space-y-2 border-t border-zinc-800 pt-4 sm:mt-6 sm:pt-5">
               <Link
-                href="/proof/"
-                className="flex items-center justify-between rounded-lg border border-zinc-800 px-3 py-2 text-sm text-zinc-300 transition hover:border-[#B8860B]/40 hover:text-[#F2D675] sm:py-2.5"
+                href="/product/"
+                className="flex items-center justify-between rounded-lg border border-[#B8860B]/35 bg-[#B8860B]/5 px-3 py-2 text-sm text-[#F2D675] transition hover:border-[#B8860B]/55 hover:bg-[#B8860B]/10 sm:py-2.5"
               >
-                <span>3 sealed capsules · VERIFIED</span>
+                <span className="font-medium">Product & pilots</span>
                 <span aria-hidden="true">→</span>
               </Link>
               <Link
@@ -220,10 +245,10 @@ export default function HomePage() {
                 <span aria-hidden="true">→</span>
               </Link>
               <Link
-                href="/observatory/"
+                href="/proof/"
                 className="flex items-center justify-between rounded-lg border border-zinc-800 px-3 py-2 text-sm text-zinc-300 transition hover:border-[#B8860B]/40 hover:text-[#F2D675] sm:py-2.5"
               >
-                <span>Full Observatory demo</span>
+                <span>3 sealed capsules · VERIFIED</span>
                 <span aria-hidden="true">→</span>
               </Link>
             </div>
@@ -231,6 +256,48 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Institutional value strip ─────────────────────────────────────── */}
+      <section className="border-b border-zinc-900 bg-[#0b0c0b]/50" aria-labelledby="value-heading">
+        <div className="container-page py-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+            Why institutions engage
+          </p>
+          <h2 id="value-heading" className="mt-3 max-w-2xl text-2xl text-zinc-100">
+            Reduce liability from opaque autonomy
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+            Boards, CISOs, and regulated operators need reconstructible decision trails and enforceable
+            bounds — not another model-monitoring dashboard.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {institutionalValue.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/30"
+              >
+                <h3 className="text-base font-semibold text-[#F2D675]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-400">{item.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/product/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+            >
+              View product pathway
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
+            >
+              Design partner pilots
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Paths by role ─────────────────────────────────────────────────── */}
       <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="audience-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">Start here</p>
         <h2 id="audience-heading" className="mt-3 text-2xl text-zinc-100">
@@ -245,7 +312,11 @@ export default function HomePage() {
             <Link
               key={a.role}
               href={a.href}
-              className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+              className={`rounded-xl border p-5 transition hover:border-[#B8860B]/40 ${
+                a.primary
+                  ? "border-[#B8860B]/35 bg-[#B8860B]/5"
+                  : "border-zinc-800 bg-black/30"
+              }`}
             >
               <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">{a.role}</p>
               <p className="mt-2 text-xs leading-5 text-zinc-500">{a.path}</p>
@@ -255,6 +326,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Boundary ──────────────────────────────────────────────────────── */}
       <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="boundary-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">0 · Boundary</p>
         <h2 id="boundary-heading" className="mt-3 text-2xl text-zinc-100">
@@ -284,6 +356,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Maturity ──────────────────────────────────────────────────────── */}
       <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="maturity-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">1 · Maturity</p>
         <h2 id="maturity-heading" className="mt-3 text-2xl text-zinc-100">
@@ -291,8 +364,8 @@ export default function HomePage() {
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
           The verification surface is operational. Three frozen public capsules have independent
-          Node and Python reproductions. Performance and reliability figures shown elsewhere on
-          this site remain labelled UNAVAILABLE until sealed benchmark artifacts are attached.
+          Node and Python reproductions. Performance and reliability figures remain labelled
+          UNAVAILABLE until sealed benchmark artifacts are attached.
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {maturitySignals.map((s) => (
@@ -312,6 +385,7 @@ export default function HomePage() {
         </Link>
       </section>
 
+      {/* ── Explore stack ─────────────────────────────────────────────────── */}
       <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="explore-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">2 · Explore</p>
         <h2 id="explore-heading" className="mt-3 text-3xl text-zinc-100">
@@ -340,6 +414,7 @@ export default function HomePage() {
         </Link>
       </section>
 
+      {/* ── Verify ────────────────────────────────────────────────────────── */}
       <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="verify-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">3 · Verify</p>
         <h2 id="verify-heading" className="mt-3 text-3xl text-zinc-100">
@@ -394,44 +469,9 @@ export default function HomePage() {
         <Link href="/evidence/" className="mt-4 inline-block text-sm text-[#F2D675]">
           Evidence Explorer →
         </Link>
-      </section>
 
-      <section className="container-page border-b border-zinc-900 py-12">
-        <div className="rounded-xl border border-amber-900/40 bg-amber-950/20 p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <ProvenanceBadge kind="DEMONSTRATION" />
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/80">
-                Synthetic telemetry · not production monitoring
-              </p>
-            </div>
-            <Link href="/observatory/" className="text-sm text-[#F2D675]">
-              Full Observatory demo →
-            </Link>
-          </div>
-          <dl className="mt-4 grid grid-cols-2 gap-3 font-mono text-xs text-zinc-400 sm:grid-cols-5">
-            <div>
-              <dt className="text-zinc-600">coherence</dt>
-              <dd className="text-zinc-200">{telemetry.coherence}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">drift</dt>
-              <dd className="text-zinc-200">{telemetry.drift}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">agents</dt>
-              <dd className="text-zinc-200">{telemetry.agents}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">block</dt>
-              <dd className="text-zinc-200">{telemetry.block}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">hash</dt>
-              <dd className="text-zinc-200">{telemetry.hash}</dd>
-            </div>
-          </dl>
-          <p className="mt-3 text-[11px] text-zinc-500">
+        <div className="mt-10 rounded-xl border border-zinc-800 bg-black/30 p-5">
+          <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
             SOURCE local PRNG · STATUS {telemetryStatusLabel(telemetry.systemState)} · not LIVE
           </p>
         </div>
@@ -445,6 +485,7 @@ export default function HomePage() {
         </ul>
       </section>
 
+      {/* ── Challenge + Adopt (conversion close) ──────────────────────────── */}
       <section className="container-page py-16">
         <div className="grid gap-8 lg:grid-cols-2">
           <div>
@@ -461,7 +502,7 @@ export default function HomePage() {
               Open Challenge Lab →
             </Link>
           </div>
-          <div>
+          <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">5 · Adopt</p>
             <h2 className="mt-3 text-2xl text-zinc-100">Commercial pathway</h2>
             <p className="mt-3 text-sm leading-7 text-zinc-400">
@@ -471,19 +512,13 @@ export default function HomePage() {
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/product/"
-                className="inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
+                className="royal-button royal-button-primary inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
               >
                 Product →
               </Link>
               <Link
-                href="/pricing/"
-                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
-              >
-                Pricing →
-              </Link>
-              <Link
                 href="/institutional-pilots/"
-                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
+                className="inline-block rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm font-semibold text-[#F2D675]"
               >
                 Pilots →
               </Link>
