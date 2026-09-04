@@ -1,20 +1,20 @@
 import type { ProvenanceKind, VerificationStatus } from "../../data/evidence/types";
 
 const provenanceStyles: Record<ProvenanceKind, string> = {
-  LIVE: "border-emerald-500/50 bg-emerald-950/40 text-emerald-300",
-  DEMONSTRATION: "border-amber-500/40 bg-amber-950/30 text-amber-200",
-  HISTORICAL: "border-sky-500/40 bg-sky-950/30 text-sky-200",
-  TARGET: "border-violet-500/40 bg-violet-950/30 text-violet-200",
-  UNAVAILABLE: "border-zinc-600 bg-zinc-900/60 text-zinc-400",
+  LIVE: "border-emerald-500/60 bg-emerald-950/50 text-emerald-200 font-bold",
+  DEMONSTRATION: "border-amber-500/35 bg-amber-950/25 text-amber-200/90",
+  HISTORICAL: "border-sky-500/35 bg-sky-950/25 text-sky-200/90",
+  TARGET: "border-violet-500/35 bg-violet-950/25 text-violet-200/90",
+  UNAVAILABLE: "border-zinc-700/60 bg-zinc-950/40 text-zinc-500 opacity-80",
 };
 
 const statusStyles: Record<VerificationStatus, string> = {
-  VERIFIED: "border-emerald-500/50 bg-emerald-950/40 text-emerald-300",
-  DEMONSTRATION: "border-amber-500/40 bg-amber-950/30 text-amber-200",
-  TARGET: "border-violet-500/40 bg-violet-950/30 text-violet-200",
-  HISTORICAL: "border-sky-500/40 bg-sky-950/30 text-sky-200",
-  UNAVAILABLE: "border-zinc-600 bg-zinc-900/60 text-zinc-400",
-  PENDING: "border-zinc-500 bg-zinc-900/50 text-zinc-300",
+  VERIFIED: "border-emerald-500/60 bg-emerald-950/50 text-emerald-200 font-bold shadow-[0_0_12px_-4px_rgba(16,185,129,0.35)]",
+  DEMONSTRATION: "border-amber-500/35 bg-amber-950/25 text-amber-200/90",
+  TARGET: "border-violet-500/35 bg-violet-950/25 text-violet-200/90",
+  HISTORICAL: "border-sky-500/35 bg-sky-950/25 text-sky-200/90",
+  UNAVAILABLE: "border-zinc-700/60 bg-zinc-950/40 text-zinc-500 opacity-80",
+  PENDING: "border-zinc-600/50 bg-zinc-950/30 text-zinc-500 opacity-75",
 };
 
 export function ProvenanceBadge({
