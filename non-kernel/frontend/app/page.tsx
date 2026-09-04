@@ -33,18 +33,21 @@ const maturitySignals = [
     count: "3 capsules",
     detail: "ART-L7-REPLAY-001 · REJECT-001 · PARITY-001 (Node + Python)",
     href: "/proof/",
+    tone: "verified" as const,
   },
   {
     label: "DEMONSTRATION",
     count: "Ledger + FSM",
     detail: "Append-only design and transition matrix documented",
     href: "/evidence/",
+    tone: "demo" as const,
   },
   {
     label: "UNAVAILABLE",
     count: "Benchmarks",
     detail: "Ops/sec, latency, approval, reliability — provenance pending",
     href: "/evidence/",
+    tone: "unavailable" as const,
   },
 ];
 
@@ -295,17 +298,31 @@ export default function HomePage() {
           this site remain labelled UNAVAILABLE until sealed benchmark artifacts are attached.
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          {maturitySignals.map((s) => (
-            <Link
-              key={s.label}
-              href={s.href}
-              className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
-            >
-              <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">{s.label}</p>
-              <p className="mt-2 text-lg font-semibold text-zinc-100">{s.count}</p>
-              <p className="mt-2 text-xs leading-5 text-zinc-500">{s.detail}</p>
-            </Link>
-          ))}
+          {maturitySignals.map((s) => {
+            const cardClass =
+              s.tone === "verified"
+                ? "rounded-xl border border-emerald-500/40 bg-emerald-950/20 p-5 transition hover:border-emerald-400/60 shadow-[0_0_24px_-12px_rgba(16,185,129,0.35)]"
+                : s.tone === "unavailable"
+                  ? "rounded-xl border border-zinc-800/70 bg-black/20 p-5 opacity-75 transition hover:border-zinc-700"
+                  : "rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40";
+            const labelClass =
+              s.tone === "verified"
+                ? "font-mono text-[11px] uppercase tracking-wider text-emerald-300"
+                : s.tone === "unavailable"
+                  ? "font-mono text-[11px] uppercase tracking-wider text-zinc-500"
+                  : "font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]";
+            const countClass =
+              s.tone === "unavailable"
+                ? "mt-2 text-lg font-semibold text-zinc-400"
+                : "mt-2 text-lg font-semibold text-zinc-100";
+            return (
+              <Link key={s.label} href={s.href} className={cardClass}>
+                <p className={labelClass}>{s.label}</p>
+                <p className={countClass}>{s.count}</p>
+                <p className="mt-2 text-xs leading-5 text-zinc-500">{s.detail}</p>
+              </Link>
+            );
+          })}
         </div>
         <Link href="/limitations/" className="mt-6 inline-block text-sm text-[#F2D675]">
           Full list of unproven claims →
@@ -396,108 +413,48 @@ export default function HomePage() {
         </Link>
       </section>
 
-      <section className="container-page border-b border-zinc-900 py-12">
-        <div className="rounded-xl border border-amber-900/40 bg-amber-950/20 p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <ProvenanceBadge kind="DEMONSTRATION" />
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/80">
-                Synthetic telemetry · not production monitoring
-              </p>
-            </div>
-            <Link href="/observatory/" className="text-sm text-[#F2D675]">
-              Full Observatory demo →
-            </Link>
-          </div>
-          <dl className="mt-4 grid grid-cols-2 gap-3 font-mono text-xs text-zinc-400 sm:grid-cols-5">
-            <div>
-              <dt className="text-zinc-600">coherence</dt>
-              <dd className="text-zinc-200">{telemetry.coherence}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">drift</dt>
-              <dd className="text-zinc-200">{telemetry.drift}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">agents</dt>
-              <dd className="text-zinc-200">{telemetry.agents}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">block</dt>
-              <dd className="text-zinc-200">{telemetry.block}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">hash</dt>
-              <dd className="text-zinc-200">{telemetry.hash}</dd>
-            </div>
-          </dl>
-          <p className="mt-3 text-[11px] text-zinc-500">
-            SOURCE local PRNG · STATUS {telemetryStatusLabel(telemetry.systemState)} · not LIVE
-          </p>
-        </div>
-
-        <ul className="mt-8 grid gap-2 sm:grid-cols-2">
-          {trustPillars.map((t) => (
-            <li key={t} className="rounded-lg border border-zinc-800 px-4 py-3 text-sm text-zinc-400">
-              {t}
-            </li>
-          ))}
-        </ul>
+      <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="challenge-heading">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">4 · Challenge</p>
+        <h2 id="challenge-heading" className="mt-3 text-3xl text-zinc-100">
+          Try to break the invariant
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Illegal transitions, replay mismatch, altered receipts — deterministic fixtures only. No
+          production mutation endpoints on this surface.
+        </p>
+        <Link
+          href="/challenge/"
+          className="mt-6 inline-flex items-center rounded-lg border border-[#B8860B]/50 px-5 py-2.5 text-sm font-semibold text-[#F2D675] transition hover:border-[#D4AF37]"
+        >
+          Open Challenge Lab →
+        </Link>
       </section>
 
-      <section className="container-page py-16">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">4 · Challenge</p>
-            <h2 className="mt-3 text-2xl text-zinc-100">Try to break the invariant</h2>
-            <p className="mt-3 text-sm leading-7 text-zinc-400">
-              Illegal transitions, replay mismatch, altered receipts — deterministic fixtures only.
-              No production mutation endpoints on this surface.
-            </p>
-            <Link
-              href="/challenge/"
-              className="mt-6 inline-block rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
-            >
-              Open Challenge Lab →
-            </Link>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">5 · Adopt</p>
-            <h2 className="mt-3 text-2xl text-zinc-100">Commercial pathway</h2>
-            <p className="mt-3 text-sm leading-7 text-zinc-400">
-              Problem → evidence → design partner pilot → production runtime. Engagement-scoped
-              pricing; no unlimited self-serve SaaS tiers on this surface.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/product/"
-                className="inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
-              >
-                Product →
-              </Link>
-              <Link
-                href="/pricing/"
-                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
-              >
-                Pricing →
-              </Link>
-              <Link
-                href="/institutional-pilots/"
-                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
-              >
-                Pilots →
-              </Link>
-              <Link
-                href="/contact/?intent=design-partner"
-                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
-              >
-                Apply →
-              </Link>
-            </div>
-          </div>
+      <section className="container-page py-16" aria-labelledby="adopt-heading">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">5 · Adopt</p>
+        <h2 id="adopt-heading" className="mt-3 text-3xl text-zinc-100">
+          Institutional pathway
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Problem → method → evidence → challenge → pilot → assurance. Designed for councils,
+          regulated environments, and enterprise governance teams that require inspectable decision
+          history and explicit constitutional bounds.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/institutional-pilots/"
+            className="rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black transition hover:bg-[#F2D675]"
+          >
+            Institutional pilots
+          </Link>
+          <Link
+            href="/product/"
+            className="rounded-lg border border-[#B8860B]/50 px-5 py-2.5 text-sm font-semibold text-[#F2D675]"
+          >
+            Product overview
+          </Link>
         </div>
-
-        <p className="mt-12 text-center text-[11px] tracking-wide text-zinc-600">
+        <p className="mt-10 font-mono text-[10px] text-zinc-600">
           Static export via GitHub Actions · main branch · Railway deployment pipeline
         </p>
       </section>
