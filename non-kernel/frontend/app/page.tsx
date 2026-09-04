@@ -3,9 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TrustStatus } from "../components/evidence/TrustStatus";
-import { ProvenanceBadge, VerificationBadge } from "../components/evidence/ProvenanceBadge";
 import { ClaimEvidence } from "../components/evidence/ClaimEvidence";
-import { benchmarks as evidenceBenchmarks } from "../data/evidence/manifest";
 import { generateTelemetrySnapshot, telemetryStatusLabel } from "./motion/telemetry";
 
 const civilizationStack = [
@@ -42,9 +40,9 @@ const maturitySignals = [
   },
   {
     label: "UNAVAILABLE",
-    count: "Benchmarks",
-    detail: "Ops/sec, latency, approval, reliability — provenance pending",
-    href: "/evidence/",
+    count: "Performance benchmarks",
+    detail: "No sealed public benchmark capsules published yet",
+    href: "/limitations/",
   },
 ];
 
@@ -156,7 +154,6 @@ export default function HomePage() {
               self-serve SaaS storefront.
             </p>
 
-            {/* Primary CTA hierarchy */}
             <div className="mt-7 flex flex-wrap gap-2.5 sm:mt-9 sm:gap-3">
               <Link
                 href="/product/"
@@ -364,8 +361,8 @@ export default function HomePage() {
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
           The verification surface is operational. Three frozen public capsules have independent
-          Node and Python reproductions. Performance and reliability figures remain labelled
-          UNAVAILABLE until sealed benchmark artifacts are attached.
+          Node and Python reproductions. Performance benchmarks are not claimed on this surface
+          until sealed artifacts exist.
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {maturitySignals.map((s) => (
@@ -414,7 +411,7 @@ export default function HomePage() {
         </Link>
       </section>
 
-      {/* ── Verify ────────────────────────────────────────────────────────── */}
+      {/* ── Verify (only verified / demonstration claims) ─────────────────── */}
       <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="verify-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">3 · Verify</p>
         <h2 id="verify-heading" className="mt-3 text-3xl text-zinc-100">
@@ -422,53 +419,43 @@ export default function HomePage() {
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
           High-value claims with explicit provenance. Only sealed, independently reproducible
-          capsules carry VERIFIED status. Benchmark numbers retained from prior presentation are
-          labelled UNAVAILABLE until public artifacts are attached.
+          capsules carry VERIFIED status. Performance benchmarks are not displayed here.
         </p>
 
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           <ClaimEvidence claimId="CLAIM-REPLAY-001" />
           <ClaimEvidence claimId="CLAIM-LIFECYCLE-001" />
           <ClaimEvidence claimId="CLAIM-LEDGER-001" />
-          <ClaimEvidence claimId="CLAIM-BENCH-REL" />
         </div>
 
-        <h3 className="mt-12 text-lg text-zinc-100">Benchmark provenance (pending)</h3>
-        <p className="mt-2 max-w-2xl text-xs leading-6 text-zinc-500">
-          These figures appeared in earlier materials. They are shown for continuity only and are
-          not currently backed by public, sealed benchmark capsules.
-        </p>
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left text-sm">
-            <thead>
-              <tr className="border-b border-zinc-800 text-[10px] uppercase tracking-wider text-zinc-500">
-                <th className="py-2 pr-3">Metric</th>
-                <th className="py-2 pr-3">Value</th>
-                <th className="py-2 pr-3">Target</th>
-                <th className="py-2 pr-3">Verification</th>
-                <th className="py-2">Provenance</th>
-              </tr>
-            </thead>
-            <tbody>
-              {evidenceBenchmarks.map((b) => (
-                <tr key={b.benchmarkId} className="border-b border-zinc-900">
-                  <td className="py-3 pr-3 text-zinc-200">{b.metric}</td>
-                  <td className="py-3 pr-3 font-mono text-zinc-100">{b.value}</td>
-                  <td className="py-3 pr-3 font-mono text-zinc-500">{b.target}</td>
-                  <td className="py-3 pr-3">
-                    <VerificationBadge status={b.verificationStatus} />
-                  </td>
-                  <td className="py-3">
-                    <ProvenanceBadge kind={b.provenance} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Quarantine notice — no benchmark numbers on homepage */}
+        <div className="mt-10 rounded-xl border border-zinc-700/80 bg-zinc-900/40 p-5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center rounded border border-zinc-600 bg-zinc-900/60 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-zinc-400">
+              UNAVAILABLE
+            </span>
+            <p className="text-sm font-medium text-zinc-200">Performance benchmarks</p>
+          </div>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400">
+            Ops/sec, latency, approval rate, and reliability figures are not claimed on this surface.
+            They remain labelled UNAVAILABLE until sealed public benchmark capsules are published.
+            Unproven does not mean false — it means evidence has not yet been attached.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-[#B8860B]/40 px-4 py-2 text-xs text-[#F2D675] transition hover:bg-[#B8860B]/10"
+            >
+              See Limitations →
+            </Link>
+            <Link
+              href="/evidence/"
+              className="rounded-lg border border-zinc-700 px-4 py-2 text-xs text-zinc-300 transition hover:border-[#B8860B]/30"
+            >
+              Evidence Explorer →
+            </Link>
+          </div>
         </div>
-        <Link href="/evidence/" className="mt-4 inline-block text-sm text-[#F2D675]">
-          Evidence Explorer →
-        </Link>
 
         <div className="mt-10 rounded-xl border border-zinc-800 bg-black/30 p-5">
           <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
@@ -485,7 +472,7 @@ export default function HomePage() {
         </ul>
       </section>
 
-      {/* ── Challenge + Adopt (conversion close) ──────────────────────────── */}
+      {/* ── Challenge + Adopt ─────────────────────────────────────────────── */}
       <section className="container-page py-16">
         <div className="grid gap-8 lg:grid-cols-2">
           <div>
