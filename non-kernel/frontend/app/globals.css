@@ -10,6 +10,12 @@
   --rasta-green: #107e3e;
   --deep-earth: #0a0a0a;
   --gold-sovereign: #B8860B;
+
+  /* Breakpoint tokens (documentation + JS matchMedia) */
+  --bp-phone-max: 639px;
+  --bp-tablet-min: 640px;
+  --bp-tablet-mid: 768px;
+  --bp-desktop-min: 1024px;
 }
 
 body {
@@ -328,52 +334,6 @@ body {
   }
 }
 
-/* —— Phone (< 640) —— */
-@media (max-width: 639px) {
-  .royal-hero::before {
-    inset: 1rem 0;
-    height: 21rem;
-  }
-
-  .royal-microcopy {
-    font-size: 0.58rem;
-    letter-spacing: 0.045em;
-  }
-
-  .container-page {
-    @apply px-4 py-10;
-  }
-}
-
-/* —— Tablet (640–1023) —— */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .royal-hero::before {
-    inset: 1.5rem 1.25rem auto;
-    height: 16rem;
-    border-radius: 1.5rem;
-  }
-
-  .container-page {
-    @apply px-6 py-12;
-  }
-
-  .royal-title {
-    letter-spacing: -0.02em;
-  }
-
-  .royal-lede {
-    max-width: 34rem;
-  }
-}
-
-/* —— Tablet landscape / small desktop (768–1023) —— */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .royal-hero::before {
-    inset: 1.75rem 1.5rem auto;
-    height: 17rem;
-  }
-}
-
 .royal-header {
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.28), inset 0 -1px 0 rgba(242, 214, 117, 0.04);
 }
@@ -399,16 +359,289 @@ body {
   box-shadow: 0 0 18px rgba(242, 214, 117, 0.1);
 }
 
+.royal-footer {
+  background:
+    linear-gradient(180deg, rgba(242, 214, 117, 0.025), transparent 12rem),
+    #090a09;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINT SNIPPETS
+   Phone  < 640px
+   Tablet 640–1023px  (mid-tablet ≥ 768px)
+   Desktop ≥ 1024px
+   ========================================================================== */
+
+/* —— Hero layout helpers —— */
+.hero-split {
+  display: grid;
+  gap: 2rem;
+}
+
+.hero-status-panel {
+  border-radius: 1rem;
+  border: 1px solid rgba(184, 134, 11, 0.3);
+  background: rgba(11, 12, 11, 0.85);
+  padding: 1.25rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+}
+
+/* —— Card grids —— */
+.resp-grid-2 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.resp-grid-3 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.resp-grid-4 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+/* —— Footer column density —— */
+.footer-columns {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: 1fr;
+}
+
+/* —— Nav link density (used with Tailwind show/hide) —— */
+.nav-link-dense {
+  padding: 0.5rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* —— Phone only (< 640px) —— */
+@media (max-width: 639px) {
+  .royal-hero::before {
+    inset: 1rem 0 auto;
+    height: 21rem;
+    border-radius: 1.25rem;
+  }
+
+  .royal-microcopy {
+    font-size: 0.58rem;
+    letter-spacing: 0.045em;
+  }
+
+  .container-page {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .hero-split {
+    gap: 1.75rem;
+  }
+
+  .hero-status-panel {
+    padding: 1.15rem;
+  }
+
+  .royal-title {
+    font-size: clamp(1.75rem, 7vw, 2.25rem);
+    letter-spacing: -0.02em;
+  }
+
+  .royal-lede {
+    max-width: 100%;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .royal-brand {
+    gap: 0.45rem;
+  }
+
+  .royal-brand-mark {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.55rem;
+  }
+}
+
+/* —— Tablet portrait / small tablet (640–767px) —— */
+@media (min-width: 640px) and (max-width: 767px) {
+  .royal-hero::before {
+    inset: 1.5rem 1.25rem auto;
+    height: 16rem;
+    border-radius: 1.5rem;
+  }
+
+  .container-page {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .royal-title {
+    letter-spacing: -0.02em;
+  }
+
+  .royal-lede {
+    max-width: 34rem;
+  }
+
+  .resp-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .resp-grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .resp-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-status-panel {
+    padding: 1.35rem;
+  }
+}
+
+/* —— Tablet landscape / iPad-class (768–1023px) —— */
 @media (min-width: 768px) and (max-width: 1023px) {
+  .royal-hero::before {
+    inset: 1.75rem 1.5rem auto;
+    height: 17rem;
+    border-radius: 1.75rem;
+  }
+
+  .container-page {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    max-width: 56rem;
+  }
+
+  /* Side-by-side hero on tablet */
+  .hero-split {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .hero-status-panel {
+    padding: 1.4rem;
+  }
+
+  .royal-title {
+    font-size: clamp(2.25rem, 4.2vw, 2.75rem);
+    letter-spacing: -0.02em;
+  }
+
+  .royal-lede {
+    max-width: 32rem;
+    font-size: 1.05rem;
+  }
+
   .royal-brand-mark {
     width: 1.55rem;
     height: 1.55rem;
     font-size: 0.55rem;
   }
+
+  .nav-link-dense {
+    padding: 0.5rem 0.55rem;
+    font-size: 0.8125rem;
+  }
+
+  .resp-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .resp-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .resp-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .footer-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  /* Slightly denser header chrome on tablet */
+  .royal-header .royal-brand span:last-child {
+    letter-spacing: 0.12em;
+  }
 }
 
-.royal-footer {
-  background:
-    linear-gradient(180deg, rgba(242, 214, 117, 0.025), transparent 12rem),
-    #090a09;
+/* —— Desktop (≥ 1024px) —— */
+@media (min-width: 1024px) {
+  .royal-hero::before {
+    inset: 2rem 1rem auto;
+    height: 18rem;
+    border-radius: 2rem;
+  }
+
+  .hero-split {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .hero-status-panel {
+    padding: 1.75rem;
+  }
+
+  .resp-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .resp-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .resp-grid-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .footer-columns {
+    grid-template-columns: 1.25fr repeat(4, minmax(0, 0.85fr));
+  }
+
+  .container-page {
+    max-width: 72rem;
+  }
+}
+
+/* —— Wide desktop (≥ 1280px) —— */
+@media (min-width: 1280px) {
+  .container-page {
+    max-width: 80rem;
+  }
+
+  .hero-split {
+    gap: 3.5rem;
+  }
+}
+
+/* —— Landscape phones (short height) —— */
+@media (max-height: 480px) and (orientation: landscape) {
+  .royal-hero::before {
+    display: none;
+  }
+
+  .hero-split {
+    gap: 1rem;
+  }
 }
