@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Case Studies — Evidence before logos",
   description:
-    "Methodology case study from sealed public capsules, plus publication rules for institutional pilot outcomes. No fabricated logos or unverified metrics.",
+    "Methodology case studies from sealed public capsules, publication rules for institutional pilot outcomes, and the path from design partner pilot to publishable evidence. No fabricated logos or unverified metrics.",
 };
 
 export default function CaseStudiesPage() {
@@ -15,25 +15,25 @@ export default function CaseStudiesPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Case studies · social proof
           </p>
-          <h1 className="mt-5 max-w-3xl text-4xl leading-tight text-zinc-100 sm:text-5xl">
+          <h1 className="mt-5 max-w-3xl font-cinzel text-4xl leading-tight text-zinc-100 sm:text-5xl">
             Evidence before logos.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
             Institutional customer names and outcome metrics appear only with sealed public artifacts
             or explicit written permission. Until design partner results are publishable under those
-            rules, this page carries a methodology case grounded in public capsules — not borrowed
+            rules, this page carries methodology cases grounded in public capsules — not borrowed
             logos.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/institutional-pilots/"
-              className="rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
             >
               Become a design partner
             </Link>
             <Link
               href="/proof/"
-              className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
+              className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
             >
               Public proof registry
             </Link>
@@ -47,16 +47,51 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
+      {/* Why this matters for buyers */}
+      <section className="container-page border-b border-zinc-900 py-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+          For institutional evaluators
+        </p>
+        <h2 className="mt-3 text-2xl text-zinc-100">What a case study must prove</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Buyers evaluating deterministic governance need more than a slide with a logo. They need a
+          reconstructible path: problem → method → sealed evidence → explicit boundary. The cases
+          below follow that template using only public artifacts.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          {[
+            {
+              title: "Problem",
+              body: "A decision path that cannot be reconstructed or bounded creates liability.",
+            },
+            {
+              title: "Method",
+              body: "Freeze capsules, independent verifiers, written success criteria.",
+            },
+            {
+              title: "Boundary",
+              body: "Capsule-scoped claims only. Unproven metrics stay UNAVAILABLE.",
+            },
+          ].map((c) => (
+            <div key={c.title} className="royal-panel rounded-xl border p-5">
+              <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">{c.title}</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">{c.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CS-001 */}
       <section className="container-page border-b border-zinc-900 py-14" aria-labelledby="method-case">
         <div className="flex flex-wrap items-center gap-2">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
             CS-001 · methodology
           </p>
           <span className="rounded border border-emerald-900/50 bg-emerald-950/30 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-emerald-200/90">
-            PUBLIC CAPSULES
+            PUBLIC CAPSULES · VERIFIED
           </span>
         </div>
-        <h2 id="method-case" className="mt-3 text-2xl text-zinc-100 sm:text-3xl">
+        <h2 id="method-case" className="mt-3 font-cinzel text-2xl text-zinc-100 sm:text-3xl">
           Sealed replay & illegal-transition rejection
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
@@ -65,7 +100,7 @@ export default function CaseStudiesPage() {
         </p>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+          <div className="royal-panel rounded-xl border p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">01 · Problem</p>
             <p className="mt-3 text-sm leading-7 text-zinc-300">
               Autonomous or semi-autonomous systems change state in ways operators cannot later
@@ -73,7 +108,7 @@ export default function CaseStudiesPage() {
               whether the audit trail still matches live memory.
             </p>
           </div>
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+          <div className="royal-panel rounded-xl border p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">02 · Approach</p>
             <p className="mt-3 text-sm leading-7 text-zinc-300">
               Freeze public capsules for deterministic replay parity and illegal lifecycle rejection.
@@ -81,7 +116,7 @@ export default function CaseStudiesPage() {
               claim is not labelled VERIFIED.
             </p>
           </div>
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+          <div className="royal-panel rounded-xl border p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">03 · Evidence</p>
             <ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-300">
               <li>
@@ -104,7 +139,7 @@ export default function CaseStudiesPage() {
               </li>
             </ul>
           </div>
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+          <div className="royal-panel rounded-xl border p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">04 · Boundary</p>
             <p className="mt-3 text-sm leading-7 text-zinc-300">
               Capsule-scoped only. No claim that production fleets, latency, or reliability figures
@@ -142,6 +177,82 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
+      {/* CS-002 — pilot narrative template */}
+      <section className="container-page border-b border-zinc-900 py-14" aria-labelledby="pilot-template">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+            CS-002 · pilot narrative template
+          </p>
+          <span className="rounded border border-violet-900/50 bg-violet-950/30 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-violet-200/90">
+            TARGET · FRAMEWORK
+          </span>
+        </div>
+        <h2 id="pilot-template" className="mt-3 font-cinzel text-2xl text-zinc-100 sm:text-3xl">
+          How a design partner case will be written
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          When the first institutional pilot is ready for publication, it will follow this structure.
+          Nothing below is a claim about a current customer.
+        </p>
+
+        <ol className="mt-10 space-y-4">
+          {[
+            {
+              step: "01",
+              title: "Context",
+              body: "Sector, decision class, and why reconstructibility or bound-enforcement matters (no confidential detail without permission).",
+            },
+            {
+              step: "02",
+              title: "Scope",
+              body: "Written pilot boundary: which agent paths, which invariants, which systems, and what is explicitly out of scope.",
+            },
+            {
+              step: "03",
+              title: "Success criteria",
+              body: "Pre-agreed pass/fail conditions — not post-hoc storytelling.",
+            },
+            {
+              step: "04",
+              title: "Evidence",
+              body: "Public capsules and/or customer-held artifacts with verification method. Provenance labels on every claim.",
+            },
+            {
+              step: "05",
+              title: "Outcomes & non-outcomes",
+              body: "What was demonstrated, what remains UNAVAILABLE, and recommended next step (scale, hold, or re-scope).",
+            },
+          ].map((item) => (
+            <li
+              key={item.step}
+              className="flex gap-4 rounded-xl border border-zinc-800 bg-black/30 p-5"
+            >
+              <span className="font-mono text-sm text-[#D4AF37]">{item.step}</span>
+              <div>
+                <p className="font-semibold text-zinc-100">{item.title}</p>
+                <p className="mt-1 text-sm leading-6 text-zinc-400">{item.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/institutional-pilots/"
+            className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+          >
+            Design partner pathway
+          </Link>
+          <Link
+            href="/contact/?intent=design-partner"
+            className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
+          >
+            Apply for pilot
+          </Link>
+        </div>
+      </section>
+
+      {/* Publication standard */}
       <section className="container-page border-b border-zinc-900 py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Publication standard
@@ -167,6 +278,7 @@ export default function CaseStudiesPage() {
         </ul>
       </section>
 
+      {/* Named cases status */}
       <section className="container-page border-b border-zinc-900 py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Institutional cases
@@ -183,9 +295,10 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
+      {/* CTA */}
       <section className="container-page py-14">
         <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
-          <h2 className="text-2xl text-zinc-100">Pilot first. Publish later.</h2>
+          <h2 className="font-cinzel text-2xl text-zinc-100">Pilot first. Publish later.</h2>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
             If you want a governed pilot and may allow a future case study under the rules above,
             start the design partner path.
@@ -193,9 +306,15 @@ export default function CaseStudiesPage() {
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
               href="/contact/?intent=design-partner"
-              className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
             >
               Apply · design partner
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
+            >
+              Pilot pathway detail
             </Link>
             <Link
               href="/product/"
