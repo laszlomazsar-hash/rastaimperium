@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import SiteHeader from "../components/SiteHeader";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -69,84 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="plausible-init" strategy="afterInteractive">{`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`}</Script>
       </head>
       <body className="text-zinc-100">
-        <header className="royal-header sticky top-0 z-50 border-b border-[#B8860B]/25 bg-[#090a09]/90 backdrop-blur">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-            <Link
-              href="/"
-              className="text-sm font-semibold tracking-[0.18em] text-[#D4AF37] transition hover:text-[#F2D675]"
-            >
-              RASTA IMPERIUM
-            </Link>
-            <nav aria-label="Primary" className="overflow-x-auto">
-              <ul className="flex items-center gap-0.5 text-xs text-zinc-300 sm:text-sm">
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/product"
-                  >
-                    Product
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/applications"
-                  >
-                    Apps
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/observatory"
-                  >
-                    Observatory
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/blueprint"
-                  >
-                    Blueprint
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/proof"
-                  >
-                    Proof
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/institutional-pilots"
-                  >
-                    Pilots
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] sm:px-3"
-                    href="/about"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block rounded-md border border-[#B8860B]/50 px-2.5 py-2 text-[#F2D675] transition hover:bg-[#B8860B] hover:text-black sm:px-3"
-                    href="/contact"
-                  >
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <SiteHeader />
         {children}
         <footer className="royal-footer border-t border-[#B8860B]/20 bg-[#090a09] py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
