@@ -2,9 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Institutional Pilots — Design Partner Program",
+  title: "Design Partner Pilots — Institutional AI governance engagements",
   description:
-    "Scoped design partner pilots for regulated and high-accountability environments: problem, method, evidence, challenge, pilot, assurance. Fixed-scope paid engagements with written boundaries.",
+    "Fixed-scope design partner pilots ($50k–$150k, 8–12 weeks) for regulated AI systems. Constitution mapping, evidence-bound success criteria, and a written path to production runtime.",
+  keywords: [
+    "AI governance pilot",
+    "design partner program",
+    "institutional AI",
+    "deterministic governance",
+    "auditable AI pilot",
+  ],
+  openGraph: {
+    title: "Design Partner Pilots — Institutional AI governance",
+    description:
+      "Prove the system before it scales. Paid, fixed-scope pilots with written boundaries for high-accountability environments.",
+    url: "https://rastaimperium.com/institutional-pilots/",
+  },
 };
 
 const journey = [

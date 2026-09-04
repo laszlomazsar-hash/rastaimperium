@@ -2,103 +2,115 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "What we have not proven",
+  title: "Limitations — What AI governance claims we have not proven",
   description:
-    "Explicit unproven and unavailable claims for Rasta Imperium / L7 public evidence. Unproven does not mean false.",
+    "Explicit list of unproven and UNAVAILABLE claims for Rasta Imperium public evidence. Performance benchmarks, production telemetry, and certification language require sealed artifacts. Unproven does not mean false.",
+  keywords: [
+    "AI governance limitations",
+    "unproven claims",
+    "evidence-bound AI",
+    "deterministic AI transparency",
+  ],
+  openGraph: {
+    title: "Limitations — What we have not proven",
+    description:
+      "Honest boundary of the public verification surface. Inspect what is VERIFIED vs UNAVAILABLE before any commercial discussion.",
+    url: "https://rastaimperium.com/limitations/",
+  },
 };
-
-const notClaimed = [
-  "Production deployment of EVO-V",
-  "Production performance or benchmark figures as VERIFIED",
-  "Full EVO-V kernel parity across all components",
-  "Production security assurance",
-  "LIVE operational telemetry",
-  "External certification or formal security audit",
-  "Complete adversarial / mutation coverage",
-  "Production ledger recording of rejected attempts",
-  "Key management / cryptographic key lifecycle on this surface",
-  "Cross-cloud or multi-tenant operational evidence",
-];
 
 export default function LimitationsPage() {
   return (
     <main className="royal-page overflow-hidden">
       <section className="border-b border-[#B8860B]/20">
-        <div className="container-page py-16 lg:py-20">
+        <div className="container-page py-16 lg:py-24">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
-            Evidence boundary
+            Epistemic hygiene
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl text-zinc-100 sm:text-5xl">
+          <h1 className="mt-5 max-w-3xl font-cinzel text-4xl leading-tight text-zinc-100 sm:text-5xl">
             What we have not proven
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
-            Unproven does not mean false. It means evidence has not yet been published.
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
+            Unproven does not mean false. It means sealed public artifacts are not yet attached.
+            Read this page before treating any performance figure or production claim as verified.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/proof/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/evidence/"
+              className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
+            >
+              Evidence Explorer
+            </Link>
+            <Link
+              href="/product/"
+              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
+            >
+              Product pathway
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="container-page border-b border-zinc-900 py-12">
+        <div className="royal-panel rounded-xl border p-6">
+          <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
+            UNAVAILABLE · performance benchmarks
+          </p>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+            Ops/sec, latency, human approval rate, and reliability figures that appeared in earlier
+            materials are not claimed as VERIFIED on this surface. They remain labelled UNAVAILABLE
+            until sealed public benchmark capsules are published.
+          </p>
+        </div>
+        <div className="mt-4 royal-panel rounded-xl border p-6">
+          <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
+            UNAVAILABLE · production LIVE telemetry
+          </p>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+            Observatory and homepage status panels are DEMONSTRATION / synthetic. They are not live
+            monitoring of production agents or the EVO-V execution runtime.
+          </p>
+        </div>
+        <div className="mt-4 royal-panel rounded-xl border p-6">
+          <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
+            BOUNDARY · capsule scope
+          </p>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+            VERIFIED labels on ART-L7-REPLAY-001, ART-L7-REJECT-001, and ART-L7-PARITY-001 apply only
+            to those sealed public capsules and pure verifiers — not to full production fleets or
+            unpublished kernels.
           </p>
         </div>
       </section>
 
-      <section className="container-page space-y-10 py-12">
-        <article className="rounded-xl border border-zinc-800 bg-black/30 p-6">
-          <h2 className="text-lg text-zinc-100">Not currently claimed</h2>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-zinc-400">
-            {notClaimed.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="rounded-xl border border-zinc-800 bg-black/30 p-6">
-          <h2 className="text-lg text-zinc-100">What is in evidence (narrow scope)</h2>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-zinc-400">
-            <li>Sealed public capsule ART-L7-REPLAY-001 — deterministic valid-path replay</li>
-            <li>Sealed public capsule ART-L7-REJECT-001 — deterministic illegal-edge rejection</li>
-            <li>Independent Node, Python, and Go pure verifiers agreeing on sealed hashes</li>
-            <li>Offline reproduction without the website UI</li>
-            <li>Self-administered challenge and mutation suites (finite, not complete coverage)</li>
-          </ul>
-          <Link href="/audit/" className="mt-4 inline-block text-sm text-[#F2D675]">
-            Auditor handoff →
-          </Link>
-        </article>
-
-        <article className="rounded-xl border border-zinc-800 p-6">
-          <h2 className="text-lg text-zinc-100">Status vocabulary</h2>
-          <dl className="mt-4 space-y-3 text-sm text-zinc-400">
-            <div>
-              <dt className="font-mono text-xs text-zinc-500">VERIFIED</dt>
-              <dd>Only for artifacts that meet the evidence gate (sealed + reproducible).</dd>
-            </div>
-            <div>
-              <dt className="font-mono text-xs text-zinc-500">HISTORICAL</dt>
-              <dd>Frozen record; do not silently rewrite.</dd>
-            </div>
-            <div>
-              <dt className="font-mono text-xs text-zinc-500">UNAVAILABLE</dt>
-              <dd>Evidence does not currently exist on this surface.</dd>
-            </div>
-            <div>
-              <dt className="font-mono text-xs text-zinc-500">LIVE</dt>
-              <dd>Only actual operational evidence — not claimed here.</dd>
-            </div>
-          </dl>
-        </article>
-
-        <p className="text-sm text-zinc-500">
-          See also{" "}
-          <Link href="/trust/" className="text-[#F2D675]">
-            Trust Console
-          </Link>{" "}
-          and{" "}
-          <a
-            className="text-[#F2D675]"
-            href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/EVIDENCE_BOUNDARY_L7.md"
-            target="_blank"
-            rel="noreferrer"
-          >
-            evidence boundary (repo)
-          </a>
-          .
-        </p>
+      <section className="container-page py-14">
+        <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
+          <h2 className="font-cinzel text-2xl text-zinc-100">Evaluate evidence first</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            Start with the Proof Registry and Challenge Lab. Commercial discussion follows evidence,
+            not the other way around.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/proof/"
+              className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+            >
+              Open Proof Registry
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Design partner pilots
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   );

@@ -2,9 +2,23 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Product — Capabilities, pilots, and commercial pathway",
+  title: "Product — Deterministic AI governance pilots & verification",
   description:
-    "What you can inspect, pilot, and buy: verification surface, design partner pilots, EVO-V runtime pathway, Observatory, and governance modules. Evidence-bound commercial surface for institutions that cannot afford opaque autonomy.",
+    "Institutional product pathway for deterministic AI governance: public verification surface, design partner pilots ($50k–$150k), EVO-V runtime, and Observatory. Evidence-bound — not self-serve SaaS.",
+  keywords: [
+    "AI governance product",
+    "deterministic AI",
+    "design partner pilot",
+    "auditable AI",
+    "constitutional AI",
+    "EVO-V",
+  ],
+  openGraph: {
+    title: "Product — Deterministic AI governance pilots & verification",
+    description:
+      "Inspect sealed evidence, run design partner pilots, and path to production runtime. Built for institutions that cannot afford opaque autonomy.",
+    url: "https://rastaimperium.com/product/",
+  },
 };
 
 const surfaces = [
@@ -172,7 +186,6 @@ export default function ProductPage() {
         </div>
       </section>
 
-      {/* NEW: Institutional value section */}
       <section className="container-page border-b border-zinc-900 py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Why institutions engage
