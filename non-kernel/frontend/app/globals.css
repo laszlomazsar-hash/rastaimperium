@@ -328,7 +328,8 @@ body {
   }
 }
 
-@media (max-width: 640px) {
+/* —— Phone (< 640) —— */
+@media (max-width: 639px) {
   .royal-hero::before {
     inset: 1rem 0;
     height: 21rem;
@@ -337,6 +338,39 @@ body {
   .royal-microcopy {
     font-size: 0.58rem;
     letter-spacing: 0.045em;
+  }
+
+  .container-page {
+    @apply px-4 py-10;
+  }
+}
+
+/* —— Tablet (640–1023) —— */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .royal-hero::before {
+    inset: 1.5rem 1.25rem auto;
+    height: 16rem;
+    border-radius: 1.5rem;
+  }
+
+  .container-page {
+    @apply px-6 py-12;
+  }
+
+  .royal-title {
+    letter-spacing: -0.02em;
+  }
+
+  .royal-lede {
+    max-width: 34rem;
+  }
+}
+
+/* —— Tablet landscape / small desktop (768–1023) —— */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .royal-hero::before {
+    inset: 1.75rem 1.5rem auto;
+    height: 17rem;
   }
 }
 
@@ -363,6 +397,14 @@ body {
   font-size: 0.63rem;
   letter-spacing: -0.05em;
   box-shadow: 0 0 18px rgba(242, 214, 117, 0.1);
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .royal-brand-mark {
+    width: 1.55rem;
+    height: 1.55rem;
+    font-size: 0.55rem;
+  }
 }
 
 .royal-footer {
