@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   },
   description:
     "Constitutional intelligence systems enforcing epistemic integrity across autonomous infrastructures. Replayable. Auditable. Sovereign.",
-  authors: [{ name: "Laszlo Mazsar" }],
   keywords: [
     "constitutional AI",
     "deterministic governance",
@@ -24,18 +23,20 @@ export const metadata: Metadata = {
     "verification",
     "trust console",
   ],
+  authors: [{ name: "Laszlo Mazsar" }],
   creator: "Rasta Imperium",
+  metadataBase: new URL("https://rastaimperium.com"),
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: "https://rastaimperium.com/",
+    url: "https://rastaimperium.com",
     siteName: "Rasta Imperium",
     title: "Rasta Imperium — Deterministic Governance for Civilization-Scale AI",
     description:
       "Constitutional intelligence systems enforcing epistemic integrity across autonomous infrastructures. Replayable. Auditable. Sovereign.",
     images: [
       {
-        url: "https://rastaimperium.com/og-image.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Rasta Imperium — Constitutional Intelligence Infrastructure",
@@ -46,17 +47,18 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rasta Imperium — Deterministic Governance for Civilization-Scale AI",
     description: "Replayable. Auditable. Sovereign. Constitutional AI governance.",
-    images: ["https://rastaimperium.com/og-image.png"],
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png", sizes: "192x192" },
+    ],
   },
   robots: { index: true, follow: true },
-  metadataBase: new URL("https://rastaimperium.com"),
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -65,9 +67,7 @@ export default function RootLayout({
           src="https://plausible.io/js/pa-gk0L-J_xecv-BrP67xDRE.js"
           strategy="afterInteractive"
         />
-        <Script id="plausible-init" strategy="afterInteractive">
-          {`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`}
-        </Script>
+        <Script id="plausible-init" strategy="afterInteractive">{`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`}</Script>
       </head>
       <body className="text-zinc-100">
         <SiteHeader />
@@ -126,8 +126,148 @@ export default function RootLayout({
                   </div>
                 </nav>
               </div>
-              {/* remaining footer columns preserved via full file - see note */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+                  Explore
+                </p>
+                <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/vision">
+                      Vision
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/product">
+                      Product
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/applications">
+                      Applications
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/blueprint">
+                      Blueprint
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/proof">
+                      Proof
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/pillars">
+                      Pillars
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+                  Verify
+                </p>
+                <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/trust">
+                      Trust Console
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/evidence">
+                      Evidence
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/challenge">
+                      Challenge Lab
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/limitations">
+                      Limitations
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/audit">
+                      Audit
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+                  More
+                </p>
+                <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/about">
+                      About
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/technology">
+                      Technology
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise">
+                      Thanks & Praise
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/invest">
+                      Invest
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+                  Engage
+                </p>
+                <ul className="mt-4 space-y-2 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/product">
+                      Product pathway
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/institutional-pilots">
+                      Design partner pilots
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/contact/?intent=design-partner">
+                      Apply for pilot
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/contact">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <a
+                      className="transition hover:text-[#F2D675]"
+                      href="https://github.com/laszlomazsar-hash/rastaimperium"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Repository
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
+            <p className="mt-12 border-t border-zinc-900 pt-6 text-xs text-zinc-600">
+              Rasta Imperium is the public constitutional and verification layer — not the EVO-V
+              execution runtime. Unproven claims are labelled; see{" "}
+              <Link href="/limitations/" className="text-zinc-500 underline hover:text-[#F2D675]">
+                Limitations
+              </Link>
+              .
+            </p>
           </div>
         </footer>
       </body>
