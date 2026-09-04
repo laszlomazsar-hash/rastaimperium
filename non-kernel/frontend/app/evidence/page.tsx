@@ -19,7 +19,7 @@ export default function EvidencePage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Evidence layer
           </p>
-          <h1 className="mt-4 text-4xl text-zinc-100 sm:text-5xl">Evidence Explorer</h1>
+          <h1 className="mt-4 font-cinzel text-4xl text-zinc-100 sm:text-5xl">Evidence Explorer</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
             Flow: Claim → Proof → Artifact → Verification. Quantitative claims are never marked
             verified without published evidence.
@@ -31,7 +31,7 @@ export default function EvidencePage() {
       </section>
 
       <section className="container-page py-12">
-        <h2 className="text-xl text-zinc-100">Claims</h2>
+        <h2 className="font-cinzel text-xl text-zinc-100">Claims</h2>
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {claims.map((c) => (
             <ClaimEvidence key={c.claimId} claimId={c.claimId} />
@@ -40,11 +40,11 @@ export default function EvidencePage() {
       </section>
 
       <section className="container-page border-t border-zinc-900 py-12">
-        <h2 className="text-xl text-zinc-100">Evidence records</h2>
+        <h2 className="font-cinzel text-xl text-zinc-100">Evidence records</h2>
         <ul className="mt-6 space-y-4">
           {evidence.map((e) => (
             <li key={e.evidenceId} id={e.evidenceId}>
-              <article className="rounded-xl border border-zinc-800 bg-[#0b0c0b]/80 p-5">
+              <article className="royal-panel rounded-xl border p-5">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <p className="font-mono text-[11px] text-zinc-500">{e.evidenceId}</p>
@@ -100,11 +100,12 @@ export default function EvidencePage() {
       </section>
 
       <section className="container-page border-t border-zinc-900 py-12">
-        <h2 className="text-xl text-zinc-100">Benchmark provenance</h2>
+        <h2 className="font-cinzel text-xl text-zinc-100">Benchmark provenance</h2>
         <p className="mt-2 text-sm text-zinc-500">
-          Homepage figures retained with explicit status. UNAVAILABLE until public artifacts exist.
+          Historical figures retained with explicit status. UNAVAILABLE until public artifacts exist.
+          Not claimed on the homepage.
         </p>
-        <div className="mt-6 overflow-x-auto">
+        <div className="royal-panel mt-6 overflow-x-auto rounded-xl border p-4">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
               <tr className="border-b border-zinc-800 text-xs uppercase tracking-wider text-zinc-500">
@@ -132,6 +133,9 @@ export default function EvidencePage() {
             </tbody>
           </table>
         </div>
+        <Link href="/limitations/" className="mt-4 inline-block text-sm text-[#F2D675]">
+          Full Limitations list →
+        </Link>
       </section>
     </main>
   );

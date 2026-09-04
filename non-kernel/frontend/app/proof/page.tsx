@@ -66,7 +66,7 @@ export default function ProofRegistryPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Public proof library
           </p>
-          <h1 className="mt-4 text-4xl text-zinc-100 sm:text-5xl">Proof Registry</h1>
+          <h1 className="mt-4 font-cinzel text-4xl text-zinc-100 sm:text-5xl">Proof Registry</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
             Structured proof records. Filter by type, status, invariant, and implementation. No
             fabricated production hashes — unavailable evidence is labelled as such.
@@ -78,7 +78,7 @@ export default function ProofRegistryPage() {
       </section>
 
       <section className="container-page py-10">
-        <div className="grid gap-3 rounded-xl border border-zinc-800 bg-black/30 p-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="royal-panel grid gap-3 rounded-xl border p-4 sm:grid-cols-2 lg:grid-cols-5">
           <label className="block text-xs text-zinc-500 lg:col-span-2">
             Search
             <input
@@ -142,7 +142,7 @@ export default function ProofRegistryPage() {
         <ul className="mt-6 space-y-4">
           {filtered.map((p) => (
             <li key={p.proofId} id={p.proofId}>
-              <article className="rounded-xl border border-zinc-800 bg-[#0b0c0b]/80 p-5 sm:p-6">
+              <article className="royal-panel rounded-xl border p-5 sm:p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="font-mono text-[11px] text-zinc-500">{p.proofId}</p>

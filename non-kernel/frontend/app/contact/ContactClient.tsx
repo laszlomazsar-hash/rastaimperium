@@ -91,7 +91,7 @@ function ContactBody() {
             : "Rasta Imperium works at the boundary of constitutional intelligence, verifiable systems, and accountable deployment. Select a path below or send context via the form.";
 
   return (
-    <main className="relative overflow-hidden bg-[#090a09] text-zinc-100">
+    <main className="royal-page relative overflow-hidden text-zinc-100">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(ellipse_at_50%_0%,rgba(34,197,94,0.14),transparent_64%)]"
@@ -103,7 +103,7 @@ function ContactBody() {
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               Engagement desk
             </p>
-            <h1 className="mt-5 max-w-4xl font-serif text-4xl leading-[1.05] text-[#F2D675] sm:text-6xl">
+            <h1 className="mt-5 max-w-4xl font-cinzel text-4xl leading-[1.05] text-[#F2D675] sm:text-6xl">
               {bannerTitle}
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-300">{bannerBody}</p>
@@ -127,7 +127,7 @@ function ContactBody() {
             <div className="mt-9 flex flex-wrap gap-3">
               <a
                 href="#enquiry-form"
-                className="rounded-full bg-[#D4AF37] px-6 py-3 text-sm font-bold text-[#12130f] transition hover:bg-[#F2D675] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F2D675]"
+                className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-[#12130f] transition hover:bg-[#F2D675] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F2D675]"
               >
                 {isPilot ? "Open pilot form" : "Open enquiry form"}
               </a>
@@ -143,20 +143,20 @@ function ContactBody() {
                           ? "Research collaboration inquiry"
                           : "Rasta Imperium inquiry",
                 )}
-                className="rounded-full border border-[#D4AF37]/45 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:border-[#F2D675] hover:bg-[#D4AF37]/10"
+                className="royal-button royal-button-ghost rounded-lg border border-[#D4AF37]/45 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:border-[#F2D675] hover:bg-[#D4AF37]/10"
               >
                 Email instead
               </a>
               <Link
                 href="/limitations/"
-                className="rounded-full border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70"
+                className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70"
               >
                 Limitations
               </Link>
             </div>
           </div>
 
-          <aside className="border border-[#D4AF37]/25 bg-[#11150f]/85 p-6 shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur-sm sm:p-7">
+          <aside className="royal-panel rounded-xl border p-6 sm:p-7">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">
               {isPilot ? "Pilot checklist" : "A useful first note"}
             </p>
@@ -184,14 +184,14 @@ function ContactBody() {
         </div>
       </section>
 
-      <section className="relative border-y border-[#D4AF37]/20 bg-[#0d100d]">
+      <section className="relative border-y border-[#D4AF37]/20 bg-[#0d100d]/80">
         <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
           <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
                 Choose a pathway
               </p>
-              <h2 className="mt-3 font-serif text-3xl text-[#F2D675] sm:text-4xl">
+              <h2 className="mt-3 font-cinzel text-3xl text-[#F2D675] sm:text-4xl">
                 A clear route into the conversation.
               </h2>
             </div>
@@ -205,13 +205,13 @@ function ContactBody() {
             {engagementPaths.map((path) => (
               <article
                 key={path.code}
-                className={`group flex min-h-64 flex-col border p-6 transition hover:-translate-y-1 hover:border-[#D4AF37]/65 hover:shadow-[0_18px_45px_rgba(0,0,0,0.3)] ${
+                className={`royal-panel group flex min-h-64 flex-col rounded-xl border p-6 transition hover:-translate-y-1 ${
                   intent === path.intent ||
                   (isPilot && path.intent === "design-partner") ||
                   (isCommercial && path.intent === "commercial") ||
                   (isAudit && path.intent === "audit")
-                    ? "border-[#D4AF37]/70 bg-[#152015]"
-                    : "border-zinc-700/70 bg-[#101210]"
+                    ? "border-[#D4AF37]/70"
+                    : ""
                 }`}
               >
                 <span className="font-mono text-xs tracking-[0.2em] text-[#D4AF37]">
@@ -244,12 +244,12 @@ function ContactBody() {
       </section>
 
       <section className="relative mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
-        <div className="grid gap-10 rounded-2xl border border-[#D4AF37]/25 bg-[linear-gradient(120deg,rgba(24,35,24,0.9),rgba(12,14,12,0.92))] p-7 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+        <div className="royal-panel grid gap-10 rounded-2xl border p-7 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
               Preparation
             </p>
-            <h2 className="mt-4 font-serif text-3xl leading-tight text-[#F2D675]">
+            <h2 className="mt-4 font-cinzel text-3xl leading-tight text-[#F2D675]">
               Bring the evidence horizon into view.
             </h2>
           </div>
