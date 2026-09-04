@@ -2,6 +2,10 @@ import Link from "next/link";
 import { trustConsole } from "../../data/evidence/manifest";
 import { ProvenanceBadge } from "./ProvenanceBadge";
 
+/**
+ * Trust Status — Rasta Royal panel treatment.
+ * Compact mode for homepage; full mode for /trust.
+ */
 export function TrustStatus({
   compact = false,
   className = "",
@@ -14,13 +18,13 @@ export function TrustStatus({
   if (compact) {
     return (
       <div
-        className={`rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/90 p-4 ${className}`}
+        className={`royal-panel rounded-xl border border-[var(--royal-line)] bg-[linear-gradient(145deg,var(--royal-panel-strong),var(--royal-panel))] p-4 shadow-[var(--royal-shadow)] backdrop-blur-[12px] ${className}`}
         role="region"
         aria-label="Trust status summary"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--royal-gold)]">
               {snap.overallLabel}
             </p>
             <p className="mt-1 font-mono text-sm text-zinc-100">{snap.overallStatus}</p>
@@ -29,7 +33,7 @@ export function TrustStatus({
             <ProvenanceBadge kind={snap.provenance} />
             <Link
               href="/trust"
-              className="rounded-md border border-[#B8860B]/40 px-3 py-1.5 text-xs text-[#F2D675] transition hover:bg-[#B8860B]/10"
+              className="royal-button rounded-md border border-[rgba(242,214,117,0.4)] px-3 py-1.5 text-xs text-[var(--royal-gold)] transition hover:bg-[rgba(184,134,11,0.1)]"
             >
               Trust Console
             </Link>
@@ -40,7 +44,7 @@ export function TrustStatus({
             <li key={s.id}>
               <Link
                 href={s.verificationActionHref}
-                className="inline-flex items-center gap-1.5 rounded border border-zinc-800 px-2 py-1 text-[11px] text-zinc-400 transition hover:border-[#B8860B]/30 hover:text-zinc-200"
+                className="inline-flex items-center gap-1.5 rounded border border-zinc-800 px-2 py-1 text-[11px] text-zinc-400 transition hover:border-[rgba(184,134,11,0.3)] hover:text-zinc-200"
               >
                 <span className="font-medium text-zinc-300">{s.label}</span>
                 <ProvenanceBadge kind={s.provenance} />
@@ -54,22 +58,24 @@ export function TrustStatus({
 
   return (
     <section
-      className={`rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/90 p-6 sm:p-8 ${className}`}
+      className={`royal-panel rounded-xl border border-[var(--royal-line)] bg-[linear-gradient(145deg,var(--royal-panel-strong),var(--royal-panel))] p-6 shadow-[var(--royal-shadow)] backdrop-blur-[12px] sm:p-8 ${className}`}
       aria-labelledby="trust-status-heading"
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[var(--royal-gold)]">
             {snap.overallLabel}
           </p>
-          <h2 id="trust-status-heading" className="mt-2 text-2xl text-zinc-100 sm:text-3xl">
+          <h2 id="trust-status-heading" className="mt-2 font-cinzel text-2xl text-zinc-100 sm:text-3xl">
             {snap.overallStatus}
           </h2>
           <p className="mt-2 font-mono text-xs text-zinc-500">
             version {snap.version} · as of {snap.asOf}
           </p>
         </div>
-        <ProvenanceBadge kind={snap.provenance} />
+        <div className="royal-seal-wrap">
+          <ProvenanceBadge kind={snap.provenance} />
+        </div>
       </div>
       <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-400">{snap.notes}</p>
 
@@ -77,7 +83,7 @@ export function TrustStatus({
         {snap.sections.map((s) => (
           <article
             key={s.id}
-            className="rounded-lg border border-zinc-800/90 bg-black/30 p-4"
+            className="rounded-lg border border-zinc-800/90 bg-black/30 p-4 transition hover:border-[rgba(184,134,11,0.25)]"
             aria-label={`${s.label} trust section`}
           >
             <div className="flex items-start justify-between gap-2">
@@ -101,7 +107,7 @@ export function TrustStatus({
             {s.notes && <p className="mt-2 text-xs leading-5 text-zinc-500">{s.notes}</p>}
             <Link
               href={s.verificationActionHref}
-              className="mt-3 inline-block text-xs font-medium text-[#F2D675] transition hover:text-[#D4AF37]"
+              className="mt-3 inline-block text-xs font-medium text-[var(--royal-gold)] transition hover:text-[#D4AF37]"
             >
               {s.verificationActionLabel} →
             </Link>

@@ -2,6 +2,10 @@ import Link from "next/link";
 import { getClaim, getEvidence, getProof } from "../../data/evidence/manifest";
 import { ProvenanceBadge, VerificationBadge } from "./ProvenanceBadge";
 
+/**
+ * ClaimEvidence — Rasta Royal evidence card.
+ * Explicit provenance + linked evidence/proofs. No marketing claims.
+ */
 export function ClaimEvidence({
   claimId,
   className = "",
@@ -23,7 +27,7 @@ export function ClaimEvidence({
 
   return (
     <div
-      className={`rounded-lg border border-zinc-800 bg-black/25 p-4 ${className}`}
+      className={`royal-panel group rounded-xl border border-zinc-800 bg-[linear-gradient(145deg,rgba(19,23,16,0.94),rgba(15,18,13,0.82))] p-4 shadow-[0_16px_40px_rgba(0,0,0,0.35)] transition hover:border-[rgba(242,214,117,0.35)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.45),0_0_20px_rgba(242,214,117,0.06)] ${className}`}
       role="group"
       aria-label={`Claim ${claim.claimId}`}
     >
@@ -37,7 +41,9 @@ export function ClaimEvidence({
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#B8860B]">Evidence</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--royal-gold-deep,#B8860B)]">
+            Evidence
+          </p>
           {evidenceItems.length === 0 ? (
             <p className="mt-1 text-xs text-zinc-500">None linked</p>
           ) : (
@@ -47,7 +53,7 @@ export function ClaimEvidence({
                   <li key={e.evidenceId}>
                     <Link
                       href={`/evidence#${e.evidenceId}`}
-                      className="font-mono text-xs text-zinc-300 transition hover:text-[#F2D675]"
+                      className="font-mono text-xs text-zinc-300 transition hover:text-[var(--royal-gold)]"
                     >
                       {e.evidenceId}
                     </Link>
@@ -59,7 +65,9 @@ export function ClaimEvidence({
           )}
         </div>
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#B8860B]">Proof</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--royal-gold-deep,#B8860B)]">
+            Proof
+          </p>
           {proofItems.length === 0 ? (
             <p className="mt-1 text-xs text-zinc-500">None linked</p>
           ) : (
@@ -69,7 +77,7 @@ export function ClaimEvidence({
                   <li key={p.proofId}>
                     <Link
                       href={`/proof#${p.proofId}`}
-                      className="font-mono text-xs text-zinc-300 transition hover:text-[#F2D675]"
+                      className="font-mono text-xs text-zinc-300 transition hover:text-[var(--royal-gold)]"
                     >
                       {p.proofId}
                     </Link>
@@ -85,14 +93,14 @@ export function ClaimEvidence({
       <div className="mt-4 flex flex-wrap gap-2">
         <Link
           href={`/evidence#${claim.evidenceIds[0] ?? ""}`}
-          className="rounded border border-[#B8860B]/35 px-2.5 py-1 text-[11px] text-[#F2D675] transition hover:bg-[#B8860B]/10"
+          className="royal-button rounded border border-[rgba(184,134,11,0.35)] px-2.5 py-1 text-[11px] text-[var(--royal-gold)] transition hover:bg-[rgba(184,134,11,0.1)]"
         >
           Verify → Evidence
         </Link>
         {claim.proofIds[0] && (
           <Link
             href={`/proof#${claim.proofIds[0]}`}
-            className="rounded border border-zinc-700 px-2.5 py-1 text-[11px] text-zinc-300 transition hover:border-[#B8860B]/30"
+            className="rounded border border-zinc-700 px-2.5 py-1 text-[11px] text-zinc-300 transition hover:border-[rgba(184,134,11,0.3)]"
           >
             Open proof
           </Link>
