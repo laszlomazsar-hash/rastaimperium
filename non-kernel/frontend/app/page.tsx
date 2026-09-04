@@ -112,48 +112,48 @@ export default function HomePage() {
           <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-[#e01e1e]/08 blur-3xl" />
         </div>
 
-        <div className="container-page relative grid gap-12 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:py-24">
+        <div className="container-page relative grid gap-8 py-12 sm:gap-10 sm:py-16 md:grid-cols-[1.1fr_0.9fr] md:items-center md:gap-10 md:py-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:py-24">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[#B8860B]/30 bg-black/30 px-3 py-1">
               <span className="h-1.5 w-1.5 rounded-full bg-[#34D399] shadow-[0_0_8px_#34D399]" />
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#D4AF37] sm:text-[11px] sm:tracking-[0.22em]">
                 Public constitutional layer · EVO-V
               </p>
             </div>
 
-            <h1 className="royal-title mt-6 max-w-3xl text-4xl leading-[1.05] text-zinc-50 sm:text-5xl lg:text-6xl">
+            <h1 className="royal-title mt-5 max-w-3xl text-3xl leading-[1.05] text-zinc-50 sm:mt-6 sm:text-5xl md:text-[2.75rem] lg:text-6xl">
               Do not trust the claim.
               <span className="mt-2 block text-gold-gradient">Inspect the evidence.</span>
             </h1>
 
-            <p className="royal-lede mt-6 max-w-xl text-lg leading-8 text-zinc-300">
+            <p className="royal-lede mt-5 max-w-xl text-base leading-7 text-zinc-300 sm:mt-6 sm:text-lg sm:leading-8">
               Rasta Imperium is the verification surface for deterministic AI governance — not the
               execution runtime. Sealed capsules, explicit Limitations, and design partner pilots for
               institutions that cannot afford opaque autonomy.
             </p>
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-2.5 sm:mt-9 sm:gap-3">
               <Link
                 href="/product/"
-                className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition hover:bg-[#F2D675]"
+                className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black transition hover:bg-[#F2D675] sm:px-6 sm:py-3"
               >
                 Product & pilots
               </Link>
               <Link
                 href="/proof/"
-                className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/50 px-6 py-3 text-sm font-semibold text-[#F2D675]"
+                className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/50 px-5 py-2.5 text-sm font-semibold text-[#F2D675] sm:px-6 sm:py-3"
               >
                 Proof Registry
               </Link>
               <Link
                 href="/observatory/"
-                className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100"
+                className="royal-button royal-button-ghost rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-100 sm:px-6 sm:py-3"
               >
                 Observatory
               </Link>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-500">
+            <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-sm text-zinc-500 sm:mt-6 sm:gap-x-5">
               <Link href="/pricing/" className="hover:text-[#F2D675]">
                 Pricing posture
               </Link>
@@ -168,15 +168,15 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="mt-10">
+            <div className="mt-8 sm:mt-10">
               <TrustStatus compact />
             </div>
           </div>
 
-          <aside className="relative overflow-hidden rounded-2xl border border-[#B8860B]/30 bg-[#0b0c0b]/85 p-6 shadow-2xl shadow-black/40 backdrop-blur sm:p-7">
+          <aside className="relative overflow-hidden rounded-2xl border border-[#B8860B]/30 bg-[#0b0c0b]/85 p-5 shadow-2xl shadow-black/40 backdrop-blur sm:p-6 md:p-6 lg:p-7">
             <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#107e3e] via-[#D4AF37] to-[#e01e1e]" />
-            <div className="flex items-center justify-between">
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#D4AF37] sm:text-[11px] sm:tracking-[0.2em]">
                 Surface status
               </p>
               <span className="rounded border border-amber-900/50 bg-amber-950/30 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-amber-200/80">
@@ -184,7 +184,7 @@ export default function HomePage() {
               </span>
             </div>
 
-            <dl className="mt-6 grid grid-cols-2 gap-3">
+            <dl className="mt-5 grid grid-cols-2 gap-2.5 sm:mt-6 sm:gap-3">
               {(
                 [
                   ["coherence", telemetry.coherence],
@@ -193,35 +193,35 @@ export default function HomePage() {
                   ["block", String(telemetry.block)],
                 ] as const
               ).map(([k, v]) => (
-                <div key={k} className="rounded-lg border border-zinc-800/80 bg-black/40 px-3 py-3">
+                <div key={k} className="rounded-lg border border-zinc-800/80 bg-black/40 px-3 py-2.5 sm:py-3">
                   <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">{k}</dt>
-                  <dd className="mt-1 font-mono text-lg text-zinc-100">{v}</dd>
+                  <dd className="mt-1 font-mono text-base text-zinc-100 sm:text-lg">{v}</dd>
                 </div>
               ))}
             </dl>
 
-            <p className="mt-4 font-mono text-[11px] text-zinc-500">
+            <p className="mt-3 font-mono text-[10px] text-zinc-500 sm:mt-4 sm:text-[11px]">
               STATUS · {telemetryStatusLabel(telemetry.systemState)} · hash {telemetry.hash} · not LIVE
             </p>
 
-            <div className="mt-6 space-y-2 border-t border-zinc-800 pt-5">
+            <div className="mt-5 space-y-2 border-t border-zinc-800 pt-4 sm:mt-6 sm:pt-5">
               <Link
                 href="/proof/"
-                className="flex items-center justify-between rounded-lg border border-zinc-800 px-3 py-2.5 text-sm text-zinc-300 transition hover:border-[#B8860B]/40 hover:text-[#F2D675]"
+                className="flex items-center justify-between rounded-lg border border-zinc-800 px-3 py-2 text-sm text-zinc-300 transition hover:border-[#B8860B]/40 hover:text-[#F2D675] sm:py-2.5"
               >
                 <span>3 sealed capsules · VERIFIED</span>
                 <span aria-hidden="true">→</span>
               </Link>
               <Link
                 href="/institutional-pilots/"
-                className="flex items-center justify-between rounded-lg border border-zinc-800 px-3 py-2.5 text-sm text-zinc-300 transition hover:border-[#B8860B]/40 hover:text-[#F2D675]"
+                className="flex items-center justify-between rounded-lg border border-zinc-800 px-3 py-2 text-sm text-zinc-300 transition hover:border-[#B8860B]/40 hover:text-[#F2D675] sm:py-2.5"
               >
                 <span>Design partner · $50k–$150k</span>
                 <span aria-hidden="true">→</span>
               </Link>
               <Link
                 href="/observatory/"
-                className="flex items-center justify-between rounded-lg border border-zinc-800 px-3 py-2.5 text-sm text-zinc-300 transition hover:border-[#B8860B]/40 hover:text-[#F2D675]"
+                className="flex items-center justify-between rounded-lg border border-zinc-800 px-3 py-2 text-sm text-zinc-300 transition hover:border-[#B8860B]/40 hover:text-[#F2D675] sm:py-2.5"
               >
                 <span>Full Observatory demo</span>
                 <span aria-hidden="true">→</span>
