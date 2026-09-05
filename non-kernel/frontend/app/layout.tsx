@@ -10,18 +10,23 @@ export const metadata: Metadata = {
     template: "%s | Rasta Imperium",
   },
   description:
-    "Constitutional intelligence systems enforcing epistemic integrity across autonomous infrastructures. Replayable. Auditable. Sovereign.",
+    "Deterministic AI governance for institutions: sealed evidence, design partner pilots, and auditable constitutional controls. Replayable. Auditable. Sovereign. Not opaque autonomy.",
   keywords: [
+    "AI governance",
+    "deterministic AI",
+    "auditable AI",
     "constitutional AI",
     "deterministic governance",
     "sovereign AI",
-    "neurosymbolic",
     "EVO-V",
     "AI safety",
     "replay engine",
     "epistemic governance",
-    "verification",
+    "verification surface",
+    "design partner pilot",
+    "institutional AI",
     "trust console",
+    "neurosymbolic",
   ],
   authors: [{ name: "Laszlo Mazsar" }],
   creator: "Rasta Imperium",
@@ -33,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Rasta Imperium",
     title: "Rasta Imperium — Deterministic Governance for Civilization-Scale AI",
     description:
-      "Constitutional intelligence systems enforcing epistemic integrity across autonomous infrastructures. Replayable. Auditable. Sovereign.",
+      "Inspect sealed evidence. Run design partner pilots. Path to production runtime. Built for institutions that cannot afford opaque autonomy.",
     images: [
       {
         url: "/og-image.png",
@@ -46,7 +51,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Rasta Imperium — Deterministic Governance for Civilization-Scale AI",
-    description: "Replayable. Auditable. Sovereign. Constitutional AI governance.",
+    description:
+      "Replayable. Auditable. Sovereign. Public verification surface and design partner pilots for constitutional AI governance.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -56,6 +62,9 @@ export const metadata: Metadata = {
     ],
   },
   robots: { index: true, follow: true },
+  alternates: {
+    canonical: "https://rastaimperium.com",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

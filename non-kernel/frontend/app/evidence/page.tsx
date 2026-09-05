@@ -8,7 +8,21 @@ import { ClaimEvidence } from "../../components/evidence/ClaimEvidence";
 export const metadata: Metadata = {
   title: "Evidence Explorer — Claim → Proof → Artifact",
   description:
-    "Unified evidence layer connecting claims, proofs, and artifacts. Demonstration and unavailable states are explicit.",
+    "Unified evidence layer for deterministic AI governance: claims, proofs, sealed capsules, and explicit UNAVAILABLE labels. Inspect provenance before you trust performance figures.",
+  keywords: [
+    "AI evidence explorer",
+    "claim proof artifact",
+    "sealed capsules",
+    "deterministic AI evidence",
+    "auditable AI",
+    "UNAVAILABLE provenance",
+  ],
+  openGraph: {
+    title: "Evidence Explorer — Claim → Proof → Artifact",
+    description:
+      "Quantitative claims are never marked VERIFIED without published evidence. Browse the public evidence layer.",
+    url: "https://rastaimperium.com/evidence/",
+  },
 };
 
 export default function EvidencePage() {
