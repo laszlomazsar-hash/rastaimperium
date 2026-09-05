@@ -17,7 +17,9 @@ const baselineRoot = path.join(frontendRoot, "tests/visual-baselines");
 const artifactRoot = path.join(frontendRoot, "visual-regression/artifacts");
 const temporaryRoot = path.join(frontendRoot, "visual-regression/.tmp");
 const updateBaselines = process.argv.includes("--update");
-const expectedRouteCount = 52;
+// Bumped after adding /design-system/ and /why-deterministic-governance/ (and related export routes).
+// If inventory drifts, update this number only after reviewing the new route list, then run test:visual:update.
+const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 54);
 const maxDiffPixelRatio = 0.002;
 
 const viewports = [
@@ -207,7 +209,10 @@ function compareScreenshots(baselineBuffer, actualBuffer) {
 async function run() {
   const routes = await discoverRoutes(staticRoot);
   if (routes.length !== expectedRouteCount) {
-    throw new Error(`Route inventory changed: expected ${expectedRouteCount} routes, found ${routes.length}. Update the approved route count before regenerating baselines.`);
+    throw new Error(
+      `Route inventory changed: expected ${expectedRouteCount} routes, found ${routes.length}. ` +
+        `Review new routes, set VISUAL_EXPECTED_ROUTES or update expectedRouteCount, then run npm run test:visual:update.`,
+    );
   }
 
   const browserExecutable = process.env.VISUAL_CHROMIUM_EXECUTABLE || chromium.executablePath();
@@ -270,7 +275,7 @@ async function run() {
     }
   } finally {
     await rm(temporaryRoot, { recursive: true, force: true });
-       await new Promise((resolve) => server.close(resolve));
+    await new Promise((resolve) => server.close(resolve));
   }
 
   if (failures.length > 0) {
