@@ -138,6 +138,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Link>
                   </li>
                   <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/why-deterministic-governance">
+                      Why Deterministic
+                    </Link>
+                  </li>
+                  <li>
                     <Link className="transition hover:text-[#F2D675]" href="/product">
                       Product
                     </Link>
@@ -165,11 +170,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li>
                     <Link className="transition hover:text-[#F2D675]" href="/codex">
                       Codex
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/pillars">
-                      Pillars
                     </Link>
                   </li>
                 </ul>
