@@ -30,6 +30,7 @@ const journey = [
     step: "Method",
     title: "Deterministic constitutional control",
     body: "EVO-V-style governance: ordered events, version bundles, legal transition matrices, and append-only lineage.",
+    href: "/governance-model/",
   },
   {
     step: "Evidence",
@@ -100,7 +101,7 @@ export default function InstitutionalPilotsPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Design Partner Program
           </p>
-          <h1 className="mt-6 max-w-3xl text-4xl leading-tight text-zinc-100 sm:text-5xl">
+          <h1 className="mt-6 max-w-3xl font-cinzel text-4xl leading-tight text-zinc-100 sm:text-5xl">
             Prove the system <span className="text-gold-gradient">before it scales.</span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
@@ -111,15 +112,15 @@ export default function InstitutionalPilotsPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/contact/?intent=design-partner"
-              className="rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
             >
               Apply for design partner pilot
             </Link>
             <Link
-              href="/product/"
+              href="/governance-model/"
               className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
             >
-              Product pathway
+              Governance model
             </Link>
             <Link
               href="/limitations/"
@@ -132,8 +133,48 @@ export default function InstitutionalPilotsPage() {
       </section>
 
       <section className="container-page border-b border-zinc-900 py-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+          Before you apply
+        </p>
+        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Doctrine and evidence first</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Pilots map a written subset of the governance model onto your stack. Start with the model,
+          Articles, and proof surface so scope conversations stay evidence-bound.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <Link
+            href="/governance-model/"
+            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Systems model</p>
+            <p className="mt-2 font-semibold text-zinc-100">Governance model</p>
+            <p className="mt-2 text-sm text-zinc-400">Transitions, lineage, replay, constraints.</p>
+            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
+          </Link>
+          <Link
+            href="/pillars/"
+            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Articles</p>
+            <p className="mt-2 font-semibold text-zinc-100">Seven Pillars</p>
+            <p className="mt-2 text-sm text-zinc-400">Constitutional principles with status labels.</p>
+            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
+          </Link>
+          <Link
+            href="/proof/"
+            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Evidence</p>
+            <p className="mt-2 font-semibold text-zinc-100">Proof Registry</p>
+            <p className="mt-2 text-sm text-zinc-400">Sealed capsules before commercial claims.</p>
+            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
+          </Link>
+        </div>
+      </section>
+
+      <section className="container-page border-b border-zinc-900 py-12">
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+          <div className="royal-panel rounded-xl border p-5">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
               What a pilot can include
             </p>
@@ -146,7 +187,7 @@ export default function InstitutionalPilotsPage() {
               ))}
             </ul>
           </div>
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+          <div className="royal-panel rounded-xl border p-5">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
               What is not offered here
             </p>
@@ -166,28 +207,39 @@ export default function InstitutionalPilotsPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Design partner terms (indicative)
         </p>
-        <h2 className="mt-3 text-2xl text-zinc-100">Scoped, paid, evidence-bound</h2>
+        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Scoped, paid, evidence-bound</h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
           Final commercial terms are written per engagement. The ranges below orient institutional
           buyers; they are not a public price list for self-serve purchase.
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {deliverables.map((d) => (
-            <div key={d.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+            <div key={d.title} className="royal-panel rounded-xl border p-5">
               <h3 className="text-lg text-[#F2D675]">{d.title}</h3>
               <p className="mt-2 text-sm leading-6 text-zinc-400">{d.body}</p>
             </div>
           ))}
         </div>
+        <p className="mt-6 text-sm text-zinc-500">
+          See{" "}
+          <Link href="/pricing/" className="text-[#F2D675]">
+            pricing hierarchy
+          </Link>{" "}
+          and{" "}
+          <Link href="/product/" className="text-[#F2D675]">
+            product pathway
+          </Link>
+          .
+        </p>
       </section>
 
       <section className="container-page py-16 lg:py-20">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Institutional journey
         </h2>
         <ol className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {journey.map((j, i) => (
-            <li key={j.step} className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+            <li key={j.step} className="royal-panel rounded-xl border p-6">
               <p className="font-mono text-[11px] text-zinc-500">
                 {String(i + 1).padStart(2, "0")} · {j.step}
               </p>
@@ -203,29 +255,29 @@ export default function InstitutionalPilotsPage() {
         </ol>
 
         <div className="mt-14 rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
-          <p className="text-xl text-zinc-100">Ready to apply for a design partner pilot?</p>
+          <p className="font-cinzel text-xl text-zinc-100">Ready to apply for a design partner pilot?</p>
           <p className="mt-2 text-sm text-zinc-500">
             Bring the decision context, evidence requirements, systems in scope, and desired next
             step. We reply with a written boundary and commercial outline.
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
               href="/contact/?intent=design-partner"
-              className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition hover:bg-[#F2D675]"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
             >
               Apply · design partner
             </Link>
             <Link
               href="/product/"
-              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70 hover:text-[#F2D675]"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100"
             >
-              Product & commercial models
+              Product pathway
             </Link>
             <Link
-              href="/audit/"
-              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70 hover:text-[#F2D675]"
+              href="/pillars/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100"
             >
-              Auditor handoff
+              Seven Articles
             </Link>
           </div>
         </div>
