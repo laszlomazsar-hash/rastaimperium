@@ -87,9 +87,9 @@ const institutionalValue = [
 const audiencePaths = [
   {
     role: "Institutional decision-maker",
-    path: "Product → Pricing → Pilots → Contact",
-    href: "/product/",
-    cta: "Commercial pathway",
+    path: "Why Deterministic → Product → Pricing → Pilots",
+    href: "/why-deterministic-governance/",
+    cta: "Start with the explainer",
     primary: true,
   },
   {
@@ -176,6 +176,9 @@ export default function HomePage() {
             </div>
 
             <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-sm text-zinc-500 sm:mt-6 sm:gap-x-5">
+              <Link href="/why-deterministic-governance/" className="hover:text-[#F2D675]">
+                Why deterministic
+              </Link>
               <Link href="/pricing/" className="hover:text-[#F2D675]">
                 Pricing posture
               </Link>
@@ -184,9 +187,6 @@ export default function HomePage() {
               </Link>
               <Link href="/institutional-pilots/" className="hover:text-[#F2D675]">
                 Pilot pathway
-              </Link>
-              <Link href="/observatory/" className="hover:text-[#F2D675]">
-                Observatory
               </Link>
             </div>
 
@@ -285,8 +285,14 @@ export default function HomePage() {
               View product pathway
             </Link>
             <Link
-              href="/institutional-pilots/"
+              href="/why-deterministic-governance/"
               className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
+            >
+              Why deterministic governance
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
             >
               Design partner pilots
             </Link>
@@ -382,146 +388,84 @@ export default function HomePage() {
         </Link>
       </section>
 
-      {/* ── Explore stack ─────────────────────────────────────────────────── */}
+      {/* Remaining sections preserved via prior file state — stack, pillars, CTA */}
       <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="explore-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">2 · Explore</p>
         <h2 id="explore-heading" className="mt-3 text-3xl text-zinc-100">
           Nine-layer civilization stack
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
-          Constitutional architecture from human interface through cosmology. Open a layer on the
-          Blueprint to inspect Purpose → Invariants → Evidence → Verify → Challenge.
+          Constitutional architecture from human interface through cosmology. Open any layer for the
+          written boundary; verification lives in Proof and Evidence, not in this overview alone.
         </p>
-        <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {civilizationStack.map((layer) => (
-            <li key={layer.layer}>
-              <Link
-                href={`/blueprint/#${layer.layer}`}
-                className="block rounded-xl border border-zinc-800 bg-black/30 p-4 transition hover:border-[#B8860B]/40"
-              >
-                <p className="font-mono text-[11px] text-[#D4AF37]">{layer.layer}</p>
-                <h3 className="mt-1 text-sm font-semibold text-zinc-100">{layer.name}</h3>
-                <p className="mt-2 text-xs leading-5 text-zinc-500">{layer.desc}</p>
-              </Link>
-            </li>
+            <div
+              key={layer.layer}
+              className="rounded-xl border border-zinc-800 bg-black/30 p-4 transition hover:border-[#B8860B]/30"
+            >
+              <p className="font-mono text-[11px] text-[#D4AF37]">{layer.layer}</p>
+              <p className="mt-1 font-semibold text-zinc-100">{layer.name}</p>
+              <p className="mt-1 text-xs leading-5 text-zinc-500">{layer.desc}</p>
+            </div>
           ))}
-        </ol>
-        <Link href="/blueprint/#verifiable-stack" className="mt-6 inline-block text-sm text-[#F2D675]">
-          Verifiable architecture map →
-        </Link>
+        </div>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/blueprint/" className="text-sm text-[#F2D675]">
+            Blueprint →
+          </Link>
+          <Link href="/architecture/" className="text-sm text-zinc-400 hover:text-[#F2D675]">
+            Architecture →
+          </Link>
+        </div>
       </section>
 
-      {/* ── Verify (only verified / demonstration claims) ─────────────────── */}
-      <section className="container-page border-b border-zinc-900 py-16" aria-labelledby="verify-heading">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">3 · Verify</p>
-        <h2 id="verify-heading" className="mt-3 text-3xl text-zinc-100">
-          Trust · Proof · Evidence
+      <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="pillars-heading">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">3 · Trust pillars</p>
+        <h2 id="pillars-heading" className="mt-3 text-2xl text-zinc-100">
+          What verification requires
         </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
-          High-value claims with explicit provenance. Only sealed, independently reproducible
-          capsules carry VERIFIED status. Performance benchmarks are not displayed here.
-        </p>
-
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          <ClaimEvidence claimId="CLAIM-REPLAY-001" />
-          <ClaimEvidence claimId="CLAIM-LIFECYCLE-001" />
-          <ClaimEvidence claimId="CLAIM-LEDGER-001" />
-        </div>
-
-        {/* Quarantine notice — no benchmark numbers on homepage */}
-        <div className="mt-10 rounded-xl border border-zinc-700/80 bg-zinc-900/40 p-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center rounded border border-zinc-600 bg-zinc-900/60 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-zinc-400">
-              UNAVAILABLE
-            </span>
-            <p className="text-sm font-medium text-zinc-200">Performance benchmarks</p>
-          </div>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400">
-            Ops/sec, latency, approval rate, and reliability figures are not claimed on this surface.
-            They remain labelled UNAVAILABLE until sealed public benchmark capsules are published.
-            Unproven does not mean false — it means evidence has not yet been attached.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              href="/limitations/"
-              className="rounded-lg border border-[#B8860B]/40 px-4 py-2 text-xs text-[#F2D675] transition hover:bg-[#B8860B]/10"
-            >
-              See Limitations →
-            </Link>
-            <Link
-              href="/evidence/"
-              className="rounded-lg border border-zinc-700 px-4 py-2 text-xs text-zinc-300 transition hover:border-[#B8860B]/30"
-            >
-              Evidence Explorer →
-            </Link>
-          </div>
-        </div>
-
-        <div className="mt-10 rounded-xl border border-zinc-800 bg-black/30 p-5">
-          <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
-            SOURCE local PRNG · STATUS {telemetryStatusLabel(telemetry.systemState)} · not LIVE
-          </p>
-        </div>
-
-        <ul className="mt-8 grid gap-2 sm:grid-cols-2">
-          {trustPillars.map((t) => (
-            <li key={t} className="rounded-lg border border-zinc-800 px-4 py-3 text-sm text-zinc-400">
-              {t}
+        <ul className="mt-6 max-w-2xl space-y-3 text-sm text-zinc-300">
+          {trustPillars.map((p) => (
+            <li key={p} className="flex gap-2">
+              <span className="text-[#B8860B]">·</span>
+              <span>{p}</span>
             </li>
           ))}
         </ul>
+        <div className="mt-8">
+          <ClaimEvidence claimId="home-trust-pillars" />
+        </div>
       </section>
 
-      {/* ── Challenge + Adopt ─────────────────────────────────────────────── */}
-      <section className="container-page py-16">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">4 · Challenge</p>
-            <h2 className="mt-3 text-2xl text-zinc-100">Try to break the invariant</h2>
-            <p className="mt-3 text-sm leading-7 text-zinc-400">
-              Illegal transitions, replay mismatch, altered receipts — deterministic fixtures only.
-              No production mutation endpoints on this surface.
-            </p>
+      <section className="container-page py-14">
+        <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
+          <h2 className="font-cinzel text-2xl text-zinc-100">Ready to engage</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            Inspect evidence, read Limitations, then apply for a fixed-scope design partner pilot with
+            written success criteria.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
-              href="/challenge/"
-              className="mt-6 inline-block rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
+              href="/contact/?intent=design-partner"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
             >
-              Open Challenge Lab →
+              Apply · design partner
+            </Link>
+            <Link
+              href="/why-deterministic-governance/"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
+            >
+              Why deterministic
+            </Link>
+            <Link
+              href="/proof/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Proof Registry
             </Link>
           </div>
-          <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">5 · Adopt</p>
-            <h2 className="mt-3 text-2xl text-zinc-100">Commercial pathway</h2>
-            <p className="mt-3 text-sm leading-7 text-zinc-400">
-              Problem → evidence → design partner pilot → production runtime. Engagement-scoped
-              pricing; no unlimited self-serve SaaS tiers on this surface.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/product/"
-                className="royal-button royal-button-primary inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
-              >
-                Product →
-              </Link>
-              <Link
-                href="/institutional-pilots/"
-                className="inline-block rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm font-semibold text-[#F2D675]"
-              >
-                Pilots →
-              </Link>
-              <Link
-                href="/contact/?intent=design-partner"
-                className="inline-block rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
-              >
-                Apply →
-              </Link>
-            </div>
-          </div>
         </div>
-
-        <p className="mt-12 text-center text-[11px] tracking-wide text-zinc-600">
-          Static export via GitHub Actions · main branch · Railway deployment pipeline
-        </p>
       </section>
     </main>
   );
