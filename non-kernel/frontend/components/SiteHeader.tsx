@@ -22,6 +22,7 @@ const tabletPrimary = [
 ];
 
 const moreLinks = [
+  { href: "/why-deterministic-governance", label: "Why Deterministic" },
   { href: "/observatory", label: "Observatory" },
   { href: "/blueprint", label: "Blueprint" },
   { href: "/technology", label: "Technology" },
@@ -36,7 +37,6 @@ const moreLinks = [
   { href: "/invest", label: "Invest" },
 ];
 
-/** Tablet More omits links already on tablet bar */
 const tabletMoreLinks = moreLinks;
 
 const mobilePrimary = desktopPrimary;
@@ -106,7 +106,6 @@ export default function SiteHeader() {
     };
   }, [open]);
 
-  // Close drawer when resizing into desktop/tablet inline nav
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const onChange = () => {
@@ -131,7 +130,6 @@ export default function SiteHeader() {
           </span>
         </Link>
 
-        {/* Tablet nav — md to lg */}
         <nav aria-label="Primary tablet" className="hidden items-center md:flex lg:hidden">
           <ul className="flex items-center gap-0 text-xs text-zinc-300 sm:text-sm">
             {tabletPrimary.map((l) => (
@@ -156,7 +154,6 @@ export default function SiteHeader() {
           </ul>
         </nav>
 
-        {/* Desktop nav — lg+ */}
         <nav aria-label="Primary" className="hidden items-center lg:flex">
           <ul className="flex items-center gap-0.5 text-sm text-zinc-300">
             {desktopPrimary.map((l) => (
@@ -173,6 +170,7 @@ export default function SiteHeader() {
               open={moreOpen}
               setOpen={setMoreOpen}
               links={[
+                { href: "/why-deterministic-governance", label: "Why Deterministic" },
                 { href: "/technology", label: "Technology" },
                 { href: "/codex", label: "Codex" },
                 { href: "/pricing", label: "Pricing" },
@@ -196,7 +194,6 @@ export default function SiteHeader() {
           </ul>
         </nav>
 
-        {/* Phone toggle — below md */}
         <div className="flex items-center gap-2 md:hidden">
           <Link
             href="/contact"
@@ -224,7 +221,6 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      {/* Phone drawer — below md only */}
       {open && (
         <div className="border-t border-[#B8860B]/20 bg-[#0a0c0a] md:hidden">
           <nav aria-label="Mobile" className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
