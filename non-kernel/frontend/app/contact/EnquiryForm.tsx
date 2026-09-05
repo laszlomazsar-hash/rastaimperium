@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 type SubmissionState = "idle" | "submitting" | "success" | "error";
@@ -39,22 +40,91 @@ export default function EnquiryForm({ intent = "" }: Props) {
   const field =
     "mt-2 w-full rounded-md border border-zinc-700 bg-[#090a09] px-4 py-3 text-zinc-100 outline-none transition focus:border-[#F2D675]";
 
+  if (state === "success") {
+    return (
+      <div className="royal-panel rounded-xl border p-6 sm:p-8">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">
+          Received · human review
+        </p>
+        <h2 className="mt-3 font-cinzel text-2xl text-[#F2D675]">Thank you — your enquiry is in the desk.</h2>
+        {reference && (
+          <p className="mt-2 font-mono text-sm text-zinc-300">
+            Reference · {reference}
+          </p>
+        )}
+        <p className="mt-4 text-sm leading-7 text-zinc-400">
+          {isPilot
+            ? "What happens next: we review fit against scope, stack, and success criteria, then reply with a written boundary and indicative commercial outline — or a clear decline if the engagement is not a match."
+            : "What happens next: a human reviews the context and replies with the appropriate pathway (pilot, audit, research, or commercial brief)."}
+        </p>
+        <ul className="mt-6 space-y-2 text-sm text-zinc-300">
+          <li className="flex gap-2">
+            <span className="text-[#B8860B]">·</span>
+            <span>No automated decision is made from this form</span>
+          </li>
+          <li className="flex gap-2">
+            <span className="text-[#B8860B]">·</span>
+            <span>Typical response window: a few business days</span>
+          </li>
+          <li className="flex gap-2">
+            <span className="text-[#B8860B]">·</span>
+            <span>You can continue evaluating via Proof and Limitations meanwhile</span>
+          </li>
+        </ul>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/proof/"
+            className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+          >
+            Open Proof Registry
+          </Link>
+          <Link
+            href="/limitations/"
+            className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
+          >
+            Limitations
+          </Link>
+          <button
+            type="button"
+            onClick={() => setState("idle")}
+            className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+          >
+            Submit another
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="border border-[#D4AF37]/25 bg-[#11150f]/85 p-6 shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur-sm sm:p-8"
+      className="royal-panel rounded-xl border p-6 sm:p-8"
     >
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">
         {isPilot ? "Design partner intake" : isAudit ? "Audit intake" : "Secure enquiry channel"}
       </p>
-      <h2 className="mt-3 font-serif text-3xl text-[#F2D675]">
+      <h2 className="mt-3 font-cinzel text-3xl text-[#F2D675]">
         {isPilot ? "Pilot application" : "Send the context directly."}
       </h2>
       <p className="mt-3 text-sm leading-6 text-zinc-400">
         {isPilot
-          ? "Fixed-scope pilots are typically $50k–$150k over 8–12 weeks. Fields below help establish fit before a scoping call. Submission is for human review only."
-          : "Your submission is stored for human review in the Rasta Imperium engagement desk. No automated decision is made from this form."}
+          ? "Fixed-scope pilots are typically $50k–$150k over 8–12 weeks. Fields below help establish fit before a scoping reply. Human review only — not an automated acceptance."
+          : "Your submission is stored for human review in the engagement desk. No automated decision is made from this form."}
       </p>
+
+      {isPilot && (
+        <div className="mt-5 rounded-lg border border-[#B8860B]/25 bg-black/30 p-4">
+          <p className="font-mono text-[10px] uppercase tracking-wider text-[#D4AF37]">
+            What happens after you submit
+          </p>
+          <ol className="mt-2 space-y-1.5 text-xs leading-5 text-zinc-400">
+            <li>1 · Desk reviews organisation, stack, risk surface, and success criteria</li>
+            <li>2 · Reply with written boundary + indicative commercial outline — or a clear decline</li>
+            <li>3 · Mutual agreement on scope before any pilot kickoff</li>
+          </ol>
+        </div>
+      )}
 
       <input type="hidden" name="intent" value={intent} />
 
@@ -188,32 +258,36 @@ export default function EnquiryForm({ intent = "" }: Props) {
       <button
         type="submit"
         disabled={state === "submitting"}
-        className="mt-5 inline-flex w-full items-center justify-center rounded-md bg-[#D4AF37] px-6 py-3 font-bold text-[#12130f] transition hover:bg-[#F2D675] disabled:cursor-wait disabled:opacity-60"
+        className="royal-button royal-button-primary mt-5 inline-flex w-full items-center justify-center rounded-md bg-[#D4AF37] px-6 py-3 font-bold text-[#12130f] transition hover:bg-[#F2D675] disabled:cursor-wait disabled:opacity-60"
       >
         {state === "submitting"
           ? "Sending to the engagement desk…"
-          : state === "success"
-            ? `Received · ${reference}`
-            : isPilot
-              ? "Submit pilot application"
-              : "Send enquiry"}
+          : isPilot
+            ? "Submit pilot application"
+            : "Send enquiry"}
       </button>
 
-      {state === "success" && (
-        <p role="status" className="mt-3 text-center text-sm text-emerald-300">
-          Your enquiry was received for human review.
-        </p>
-      )}
       {state === "error" && (
-        <p role="alert" className="mt-3 text-center text-sm text-red-300">
-          The engagement desk is temporarily unavailable. Please try again shortly, or email
-          lazzlowtuning@me.com.
-        </p>
+        <div role="alert" className="mt-4 rounded-lg border border-red-900/50 bg-red-950/30 p-4 text-center text-sm text-red-200">
+          <p>The engagement desk channel is temporarily unavailable.</p>
+          <p className="mt-2 text-xs text-red-200/80">
+            Email{" "}
+            <a className="underline hover:text-white" href="mailto:lazzlowtuning@me.com?subject=Design%20partner%20pilot%20inquiry">
+              lazzlowtuning@me.com
+            </a>{" "}
+            with the same context, or try again shortly.
+          </p>
+        </div>
       )}
+
       <p className="mt-4 text-center text-xs leading-5 text-zinc-500">
         Human review only · not used for automated decisions · see{" "}
         <a href="/limitations/" className="underline hover:text-[#F2D675]">
           Limitations
+        </a>
+        {" · "}
+        <a href="/institutional-pilots/" className="underline hover:text-[#F2D675]">
+          Pilot pathway
         </a>
       </p>
     </form>
