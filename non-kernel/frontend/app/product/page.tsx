@@ -153,7 +153,7 @@ export default function ProductPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Product · commercial pathway
           </p>
-          <h1 className="mt-5 max-w-3xl text-4xl leading-tight text-zinc-100 sm:text-5xl">
+          <h1 className="mt-5 max-w-3xl font-cinzel text-4xl leading-tight text-zinc-100 sm:text-5xl">
             Governance you can inspect.
             <span className="mt-2 block text-gold-gradient">Pilots you can buy.</span>
           </h1>
@@ -166,21 +166,21 @@ export default function ProductPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/institutional-pilots/"
-              className="rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
             >
               Pilot with us
             </Link>
             <Link
-              href="/limitations/"
+              href="/governance-model/"
               className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
             >
-              Read Limitations first
+              Governance model
             </Link>
             <Link
-              href="/contact/?intent=design-partner"
+              href="/limitations/"
               className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
             >
-              Contact sales path
+              Read Limitations first
             </Link>
           </div>
         </div>
@@ -188,9 +188,51 @@ export default function ProductPage() {
 
       <section className="container-page border-b border-zinc-900 py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
+          Constitutional foundation
+        </p>
+        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">
+          Model → Articles → Evidence → Pilot
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+          Commercial work maps a written subset of the governance model onto your stack. Doctrine
+          without sealed evidence stays labelled; pilots do not skip Limitations.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <Link
+            href="/governance-model/"
+            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Systems model</p>
+            <p className="mt-2 font-semibold text-zinc-100">Governance model</p>
+            <p className="mt-2 text-sm text-zinc-400">Deterministic transitions, lineage, replay, constraints.</p>
+            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
+          </Link>
+          <Link
+            href="/pillars/"
+            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Seven Articles</p>
+            <p className="mt-2 font-semibold text-zinc-100">Pillars</p>
+            <p className="mt-2 text-sm text-zinc-400">Containment through Temporal Asymmetry — status labelled.</p>
+            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
+          </Link>
+          <Link
+            href="/why-deterministic-governance/"
+            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Plain language</p>
+            <p className="mt-2 font-semibold text-zinc-100">Why deterministic</p>
+            <p className="mt-2 text-sm text-zinc-400">Board- and operator-facing explainer before commercial terms.</p>
+            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
+          </Link>
+        </div>
+      </section>
+
+      <section className="container-page border-b border-zinc-900 py-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Why institutions engage
         </p>
-        <h2 className="mt-3 text-2xl text-zinc-100">
+        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">
           Reduce liability from opaque autonomy
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
@@ -200,7 +242,7 @@ export default function ProductPage() {
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {institutionalValue.map((item) => (
-            <div key={item.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+            <div key={item.title} className="royal-panel rounded-xl border p-5">
               <h3 className="text-base font-semibold text-[#F2D675]">{item.title}</h3>
               <p className="mt-2 text-sm leading-6 text-zinc-400">{item.body}</p>
             </div>
@@ -217,7 +259,7 @@ export default function ProductPage() {
             <Link
               key={s.title}
               href={s.href}
-              className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+              className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
             >
               <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
                 {s.status}
@@ -234,7 +276,7 @@ export default function ProductPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Capability surface
         </p>
-        <h2 className="mt-3 text-2xl text-zinc-100">What buyers and auditors can evaluate</h2>
+        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">What buyers and auditors can evaluate</h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
           Capabilities below are either publicly challengeable on this surface or delivered as pilot /
           runtime work product under written scope. Performance claims remain UNAVAILABLE until sealed
@@ -242,7 +284,7 @@ export default function ProductPage() {
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {capabilities.map((c) => (
-            <div key={c.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+            <div key={c.title} className="royal-panel rounded-xl border p-5">
               <h3 className="text-base font-semibold text-zinc-100">{c.title}</h3>
               <p className="mt-2 text-sm leading-6 text-zinc-400">{c.body}</p>
             </div>
@@ -254,10 +296,10 @@ export default function ProductPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Buying journey
         </p>
-        <h2 className="mt-3 text-2xl text-zinc-100">Problem → evidence → pilot → production</h2>
+        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Problem → evidence → pilot → production</h2>
         <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {journey.map((j) => (
-            <li key={j.step} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+            <li key={j.step} className="royal-panel rounded-xl border p-5">
               <p className="font-mono text-[11px] text-zinc-500">{j.step}</p>
               <h3 className="mt-2 text-lg text-[#F2D675]">{j.title}</h3>
               <p className="mt-2 text-sm leading-6 text-zinc-400">{j.body}</p>
@@ -276,7 +318,7 @@ export default function ProductPage() {
         </p>
         <div className="mt-8 grid gap-4 lg:grid-cols-3">
           {commercial.map((c) => (
-            <div key={c.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+            <div key={c.title} className="royal-panel rounded-xl border p-5">
               <h3 className="text-lg text-zinc-100">{c.title}</h3>
               <p className="mt-3 text-sm leading-6 text-zinc-400">{c.detail}</p>
               <Link href={c.href} className="mt-4 inline-block text-sm text-[#F2D675]">
@@ -285,11 +327,22 @@ export default function ProductPage() {
             </div>
           ))}
         </div>
+        <p className="mt-6 text-sm text-zinc-500">
+          See also{" "}
+          <Link href="/pricing/" className="text-[#F2D675]">
+            pricing hierarchy
+          </Link>{" "}
+          and{" "}
+          <Link href="/governance-model/" className="text-[#F2D675]">
+            governance model
+          </Link>
+          .
+        </p>
       </section>
 
       <section className="container-page py-14">
         <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
-          <h2 className="text-2xl text-zinc-100">Ready for a scoped pilot?</h2>
+          <h2 className="font-cinzel text-2xl text-zinc-100">Ready for a scoped pilot?</h2>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
             Bring the decision context, evidence requirements, and success criteria. We respond with
             a written boundary of what is in scope — and what is not.
@@ -297,7 +350,7 @@ export default function ProductPage() {
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
               href="/contact/?intent=design-partner"
-              className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
             >
               Apply · design partner
             </Link>
@@ -307,8 +360,8 @@ export default function ProductPage() {
             >
               Pilot pathway detail
             </Link>
-            <Link href="/pricing/" className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100">
-              Pricing posture
+            <Link href="/pillars/" className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100">
+              Seven Articles
             </Link>
           </div>
         </div>
