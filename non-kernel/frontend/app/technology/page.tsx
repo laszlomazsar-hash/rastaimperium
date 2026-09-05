@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   title: "Technology — EVO-V Architecture",
   description:
     "An overview of the EVO-V deterministic governance architecture: boundaries, evidence, replay, and accountable execution.",
+  openGraph: {
+    title: "Technology — EVO-V Architecture",
+    description:
+      "Deterministic governance architecture: Intent → Constraint → Execution → Evidence.",
+    url: "https://rastaimperium.com/technology/",
+  },
 };
 
 const architectureLayers = [
@@ -77,12 +83,12 @@ const pathways = [
     action: "Open verification path",
   },
   {
-    href: "/observatory",
-    eyebrow: "Operator surface",
-    title: "Observatory demo",
+    href: "/governance-model/",
+    eyebrow: "Governance",
+    title: "Governance model",
     description:
-      "Synthetic coherence and drift panel for orientation. DEMONSTRATION only — commercial modules after pilot fit.",
-    action: "Open Observatory",
+      "Systems properties and Seven Articles map — how doctrine connects to sealed evidence.",
+    action: "Open governance model",
   },
   {
     href: "/product",
@@ -96,7 +102,7 @@ const pathways = [
 
 export default function TechnologyPage() {
   return (
-    <main className="overflow-hidden">
+    <main className="royal-page overflow-hidden">
       <section className="relative border-b border-[#B8860B]/20">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div className="absolute left-[10%] top-0 h-80 w-80 rounded-full bg-[#107e3e]/10 blur-3xl" />
@@ -104,45 +110,45 @@ export default function TechnologyPage() {
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
         </div>
 
-        <div className="container-page relative py-20 lg:py-28">
+        <div className="container-page relative py-16 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
                 Technology / 02
               </p>
-              <h1 className="mt-6 max-w-4xl text-5xl leading-[0.98] text-zinc-100 sm:text-6xl lg:text-7xl">
+              <h1 className="mt-6 max-w-4xl font-cinzel text-4xl leading-[0.98] text-zinc-100 sm:text-5xl lg:text-6xl">
                 Build systems that can <span className="text-gold-gradient">account for themselves.</span>
               </h1>
-              <p className="mt-8 max-w-2xl text-lg leading-8 text-zinc-300 sm:text-xl">
+              <p className="mt-8 max-w-2xl text-lg leading-8 text-zinc-300">
                 EVO-V is a deterministic governance architecture for systems where a decision must be
                 bounded by policy, recoverable through replay, and legible to the people accountable
                 for it.
               </p>
-              <div className="mt-10 flex flex-wrap gap-4">
+              <div className="mt-10 flex flex-wrap gap-3">
                 <Link
                   href="/technology/evo-v"
-                  className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F2D675] hover:shadow-lg hover:shadow-[#B8860B]/20 active:scale-[0.97]"
+                  className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
                 >
                   Inspect the kernel
                 </Link>
                 <Link
-                  href="/observatory"
-                  className="rounded-lg border border-[#B8860B]/50 px-6 py-3 text-sm font-semibold text-[#F2D675] transition duration-200 hover:-translate-y-0.5 hover:bg-[#B8860B]/10 active:scale-[0.97]"
+                  href="/blueprint/"
+                  className="rounded-lg border border-[#B8860B]/50 px-5 py-3 text-sm font-semibold text-[#F2D675]"
                 >
-                  Observatory demo
+                  Blueprint
                 </Link>
                 <Link
-                  href="/technology/verification"
-                  className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition duration-200 hover:-translate-y-0.5 hover:border-[#D4AF37]/70 hover:text-[#F2D675] active:scale-[0.97]"
+                  href="/governance-model/"
+                  className="rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
                 >
-                  Verification path
+                  Governance model
                 </Link>
               </div>
             </div>
 
-            <div className="relative border border-[#B8860B]/30 bg-[#0b0c0b]/80 p-6 shadow-2xl shadow-black/30 backdrop-blur sm:p-8">
+            <div className="royal-panel relative border p-6 shadow-2xl shadow-black/30 sm:p-8">
               <div className="flex items-center justify-between border-b border-[#B8860B]/20 pb-4">
-                <p className="font-courier text-[0.68rem] uppercase tracking-[0.22em] text-[#D4AF37]">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-[#D4AF37]">
                   Governance sequence
                 </p>
                 <span
@@ -153,7 +159,7 @@ export default function TechnologyPage() {
               <ol className="mt-6 space-y-4">
                 {architectureLayers.map((layer, index) => (
                   <li key={layer.id} className="grid grid-cols-[2.5rem_1fr] gap-4">
-                    <span className="font-courier text-sm text-[#D4AF37]">{layer.id}</span>
+                    <span className="font-mono text-sm text-[#D4AF37]">{layer.id}</span>
                     <div className="relative border-l border-[#B8860B]/30 pl-4">
                       <p className="text-sm font-semibold text-zinc-100">{layer.label}</p>
                       <p className="mt-1 text-sm leading-6 text-zinc-500">
@@ -174,13 +180,13 @@ export default function TechnologyPage() {
         </div>
       </section>
 
-      <section className="container-page py-20 lg:py-28">
+      <section className="container-page py-16 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               The architecture
             </p>
-            <h2 className="mt-5 text-3xl leading-tight text-zinc-100 sm:text-4xl">
+            <h2 className="mt-5 font-cinzel text-3xl leading-tight text-zinc-100 sm:text-4xl">
               A decision path designed for evidence.
             </h2>
           </div>
@@ -195,12 +201,12 @@ export default function TechnologyPage() {
       </section>
       <MotionCodexGallery />
       <section className="border-y border-[#B8860B]/15 bg-black/25">
-        <div className="container-page py-20 lg:py-24">
+        <div className="container-page py-16 lg:py-20">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               Engineering posture
             </p>
-            <h2 className="mt-5 text-3xl text-zinc-100 sm:text-4xl">
+            <h2 className="mt-5 font-cinzel text-3xl text-zinc-100 sm:text-4xl">
               The technical choices are governance choices.
             </h2>
           </div>
@@ -210,7 +216,7 @@ export default function TechnologyPage() {
                 key={title}
                 className="grid gap-4 py-7 sm:grid-cols-[4rem_0.75fr_1.25fr] sm:gap-6"
               >
-                <span className="font-courier text-sm text-[#D4AF37]">0{index + 1}</span>
+                <span className="font-mono text-sm text-[#D4AF37]">0{index + 1}</span>
                 <h3 className="text-xl text-zinc-100">{title}</h3>
                 <p className="leading-7 text-zinc-400">{description}</p>
               </article>
@@ -219,14 +225,14 @@ export default function TechnologyPage() {
         </div>
       </section>
 
-      <section className="container-page py-20 lg:py-28">
+      <section className="container-page py-16 lg:py-20">
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               Explore the system
             </p>
-            <h2 className="mt-5 max-w-2xl text-3xl leading-tight text-zinc-100 sm:text-4xl">
-              Kernel, verification, Observatory, and the institutional path.
+            <h2 className="mt-5 max-w-2xl font-cinzel text-3xl leading-tight text-zinc-100 sm:text-4xl">
+              Kernel, verification, governance, and the institutional path.
             </h2>
           </div>
           <Link
@@ -242,7 +248,7 @@ export default function TechnologyPage() {
             <Link
               key={pathway.href}
               href={pathway.href}
-              className="group relative overflow-hidden border border-zinc-700 bg-[#0c0d0c]/80 p-7 transition duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/70 hover:shadow-xl hover:shadow-black/25 sm:p-8"
+              className="royal-panel group relative block overflow-hidden rounded-xl border p-7 transition duration-300 hover:border-[#D4AF37]/50 sm:p-8"
             >
               <div
                 className="absolute right-0 top-0 h-24 w-24 bg-gradient-to-bl from-[#D4AF37]/10 to-transparent"
@@ -253,7 +259,7 @@ export default function TechnologyPage() {
               </p>
               <h3 className="mt-5 text-2xl text-zinc-100">{pathway.title}</h3>
               <p className="mt-4 max-w-lg leading-7 text-zinc-400">{pathway.description}</p>
-              <p className="mt-8 text-sm font-semibold text-[#F2D675] transition group-hover:translate-x-1">
+              <p className="mt-8 text-sm font-semibold text-[#F2D675]">
                 {pathway.action} <span aria-hidden="true">→</span>
               </p>
             </Link>

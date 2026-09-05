@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   title: "Sovereign AI Blueprint — Verifiable Architecture",
   description:
     "Constitutional Computation: EVO-V / Rasta Imperium 9-layer stack with evidence-linked Purpose → Invariants → Evidence → Verification → Challenge.",
+  openGraph: {
+    title: "Sovereign AI Blueprint — Verifiable Architecture",
+    description:
+      "Drill L1–L9 from purpose to evidence. Missing artifacts labelled UNAVAILABLE.",
+    url: "https://rastaimperium.com/blueprint/",
+  },
 };
 
 const productLayers = [
@@ -106,7 +112,7 @@ export default function BlueprintPage() {
   const unavailable = architectureLayers.filter((l) => l.provenance === "UNAVAILABLE").length;
 
   return (
-    <main className="overflow-hidden">
+    <main className="royal-page overflow-hidden">
       <section className="relative border-b border-[#B8860B]/20">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div className="absolute left-[8%] top-0 h-80 w-80 rounded-full bg-[#107e3e]/12 blur-3xl" />
@@ -114,46 +120,44 @@ export default function BlueprintPage() {
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
         </div>
 
-        <div className="container-page relative py-20 lg:py-28">
+        <div className="container-page relative py-16 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
                 Blueprint · Phase 9 verifiable architecture
               </p>
-              <h1 className="mt-6 max-w-4xl text-5xl leading-[0.98] text-zinc-100 sm:text-6xl lg:text-7xl">
+              <h1 className="mt-6 max-w-4xl font-cinzel text-4xl leading-[0.98] text-zinc-100 sm:text-5xl lg:text-6xl">
                 Sovereign AI.{" "}
                 <span className="text-gold-gradient">Constitutional Computation.</span>
               </h1>
-              <p className="mt-8 max-w-2xl text-lg leading-8 text-zinc-300 sm:text-xl">
+              <p className="mt-8 max-w-2xl text-lg leading-8 text-zinc-300">
                 Rasta Imperium is the public constitutional and verification layer for EVO-V — not
                 the execution runtime. Drill each civilization layer from purpose to evidence,
                 verification, and challenge. Missing evidence is labelled UNAVAILABLE.
               </p>
-              <div className="mt-10 flex flex-wrap gap-4">
+              <div className="mt-10 flex flex-wrap gap-3">
                 <a
                   href="#verifiable-stack"
-                  className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition hover:-translate-y-0.5 hover:bg-[#F2D675]"
+                  className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
                 >
                   Evidence-linked stack
                 </a>
                 <Link
-                  href="/trust/"
-                  className="rounded-lg border border-[#B8860B]/50 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:bg-[#B8860B]/10"
+                  href="/governance-model/"
+                  className="rounded-lg border border-[#B8860B]/50 px-5 py-3 text-sm font-semibold text-[#F2D675]"
                 >
-                  Trust Console
+                  Governance model
                 </Link>
-                <a
-                  href={pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition hover:border-[#D4AF37]/70"
+                <Link
+                  href="/architecture/"
+                  className="rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
                 >
-                  Blueprint PDF (14p)
-                </a>
+                  Architecture split
+                </Link>
               </div>
             </div>
 
-            <div className="relative border border-[#B8860B]/30 bg-[#0b0c0b]/80 p-4 shadow-2xl shadow-black/30 backdrop-blur sm:p-5">
+            <div className="royal-panel relative border p-4 shadow-2xl shadow-black/30 sm:p-5">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#B8860B]/20">
                 <Image
                   src="/images/blueprint-9layer.jpg"
@@ -164,7 +168,7 @@ export default function BlueprintPage() {
                   priority
                 />
               </div>
-              <p className="mt-3 text-center font-courier text-[0.65rem] uppercase tracking-[0.2em] text-[#D4AF37]/80">
+              <p className="mt-3 text-center font-mono text-[0.65rem] uppercase tracking-[0.2em] text-[#D4AF37]/80">
                 9-Layer Sovereign Stack
               </p>
             </div>
@@ -176,13 +180,12 @@ export default function BlueprintPage() {
         </div>
       </section>
 
-      {/* Phase 9 — verifiable civilization stack */}
       <section id="verifiable-stack" className="border-b border-[#B8860B]/15 bg-black/30">
         <div className="container-page py-16 lg:py-24">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
             Verifiable architecture
           </p>
-          <h2 className="mt-5 max-w-3xl text-3xl text-zinc-100 sm:text-4xl">
+          <h2 className="mt-5 max-w-3xl font-cinzel text-3xl text-zinc-100 sm:text-4xl">
             L1–L9 · Purpose → Evidence → Verify → Challenge
           </h2>
           <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-400">
@@ -199,13 +202,15 @@ export default function BlueprintPage() {
             <Link href="/proof/" className="rounded border border-zinc-700 px-3 py-1.5 text-zinc-300">
               Proof Registry
             </Link>
+            <Link href="/pillars/" className="rounded border border-zinc-700 px-3 py-1.5 text-zinc-300">
+              Seven Articles
+            </Link>
             <Link href="/challenge/" className="rounded border border-zinc-700 px-3 py-1.5 text-zinc-300">
               Challenge Lab
             </Link>
           </div>
 
           <div className="mt-10 space-y-3">
-            {/* L9 → L1 display order matches homepage civilization stack */}
             {architectureLayers.map((layer) => (
               <ArchitectureLayerCard
                 key={layer.layerId}
@@ -217,19 +222,19 @@ export default function BlueprintPage() {
         </div>
       </section>
 
-      <section className="container-page py-20 lg:py-24">
+      <section className="container-page py-16 lg:py-20">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
             Core thesis
           </p>
-          <h2 className="mt-5 text-3xl leading-tight text-zinc-100 sm:text-4xl">
+          <h2 className="mt-5 font-cinzel text-3xl leading-tight text-zinc-100 sm:text-4xl">
             From procedural models to constitutional systems.
           </h2>
         </div>
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
           {pillars.map((p) => (
-            <article key={p.title} className="panel p-7 sm:p-8">
-              <h3 className="text-xl text-gold">{p.title}</h3>
+            <article key={p.title} className="royal-panel rounded-xl border p-7 sm:p-8">
+              <h3 className="text-xl text-[#F2D675]">{p.title}</h3>
               <p className="mt-4 leading-7 text-zinc-400">{p.body}</p>
             </article>
           ))}
@@ -237,12 +242,12 @@ export default function BlueprintPage() {
       </section>
 
       <section className="border-y border-[#B8860B]/15 bg-black/25">
-        <div className="container-page py-20 lg:py-24">
+        <div className="container-page py-16 lg:py-20">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               Doctrine product layers
             </p>
-            <h2 className="mt-5 text-3xl text-zinc-100 sm:text-4xl">
+            <h2 className="mt-5 font-cinzel text-3xl text-zinc-100 sm:text-4xl">
               Blueprint PDF stack (documentation view)
             </h2>
             <p className="mt-4 text-lg leading-8 text-zinc-400">
@@ -256,10 +261,10 @@ export default function BlueprintPage() {
             {productLayers.map((layer) => (
               <div
                 key={layer.id}
-                className="border border-[#B8860B]/20 bg-[#0b0c0b]/90 p-6 transition hover:border-[#D4AF37]/50"
+                className="royal-panel rounded-xl border p-6 transition hover:border-[#D4AF37]/40"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <span className="font-courier text-sm text-[#D4AF37]">{layer.id}</span>
+                  <span className="font-mono text-sm text-[#D4AF37]">{layer.id}</span>
                   <span className="rounded border border-[#B8860B]/25 px-2 py-0.5 text-[0.6rem] uppercase tracking-wider text-zinc-500">
                     {layer.role}
                   </span>
@@ -272,24 +277,25 @@ export default function BlueprintPage() {
         </div>
       </section>
 
-      <section className="container-page py-20 lg:py-28">
+      <section className="container-page py-16 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               Execution semantics
             </p>
-            <h2 className="mt-5 text-3xl leading-tight text-zinc-100 sm:text-4xl">
+            <h2 className="mt-5 font-cinzel text-3xl leading-tight text-zinc-100 sm:text-4xl">
               Proof-carrying execution & lockdown
             </h2>
             <p className="mt-6 text-lg leading-8 text-zinc-300">
-              Every consequential transition produces a cryptographic receipt. Capability checks
-              precede action. Hash-chained evidence enables full replay. Public inspection of what
-              is published today starts at L7 and the Trust Console — not at marketing metrics.
+              Every consequential transition is designed to produce a cryptographic receipt.
+              Capability checks precede action. Hash-chained evidence enables full replay where
+              sealed. Public inspection of what is published today starts at L7 and the Trust
+              Console — not at marketing metrics.
             </p>
             <ul className="mt-8 space-y-3 text-zinc-400">
               <li className="flex gap-3">
                 <span className="text-[#D4AF37]">→</span>
-                Cryptographic proof verification before state change
+                Cryptographic proof verification before state change (where sealed)
               </li>
               <li className="flex gap-3">
                 <span className="text-[#D4AF37]">→</span>
@@ -297,7 +303,7 @@ export default function BlueprintPage() {
               </li>
               <li className="flex gap-3">
                 <span className="text-[#D4AF37]">→</span>
-                Hash-chained receipts for court-grade evidence
+                Hash-chained receipts for reconstructible evidence
               </li>
               <li className="flex gap-3">
                 <span className="text-[#D4AF37]">→</span>
@@ -317,12 +323,18 @@ export default function BlueprintPage() {
               >
                 Institutional pilots
               </Link>
+              <Link
+                href="/product/"
+                className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+              >
+                Product
+              </Link>
             </div>
           </div>
 
-          <div className="relative border border-[#B8860B]/30 bg-[#0b0c0b]/80 p-8 shadow-2xl shadow-black/30">
+          <div className="royal-panel relative border p-8 shadow-2xl shadow-black/30">
             <div className="absolute left-0 top-0 h-1 w-24 bg-gradient-to-r from-[#107e3e] via-[#D4AF37] to-[#e01e1e]" />
-            <p className="font-courier text-[0.68rem] uppercase tracking-[0.22em] text-[#D4AF37]">
+            <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-[#D4AF37]">
               Unified equation
             </p>
             <p className="mt-6 text-2xl leading-snug text-zinc-100 sm:text-3xl">
@@ -341,11 +353,11 @@ export default function BlueprintPage() {
       </section>
 
       <section className="border-t border-[#B8860B]/20 bg-black/30">
-        <div className="container-page py-20 text-center lg:py-24">
+        <div className="container-page py-16 text-center lg:py-20">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
             Full documents
           </p>
-          <h2 className="mx-auto mt-5 max-w-3xl text-3xl leading-tight text-zinc-100 sm:text-4xl">
+          <h2 className="mx-auto mt-5 max-w-3xl font-cinzel text-3xl leading-tight text-zinc-100 sm:text-4xl">
             Sovereign doctrine & constitutional architecture
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
@@ -379,7 +391,7 @@ export default function BlueprintPage() {
             </a>
             <Link
               href="/evidence/"
-              className="rounded-lg border border-zinc-600 px-6 py-3.5 text-sm font-semibold text-zinc-200 transition hover:border-[#D4AF37]/70"
+              className="rounded-lg border border-zinc-600 px-6 py-3.5 text-sm font-semibold text-zinc-200"
             >
               Evidence Explorer
             </Link>
