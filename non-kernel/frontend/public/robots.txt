@@ -1,0 +1,9 @@
+# https://rastaimperium.com/robots.txt
+User-agent: *
+Allow: /
+
+# Internal / non-public surfaces
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://rastaimperium.com/sitemap.xml
