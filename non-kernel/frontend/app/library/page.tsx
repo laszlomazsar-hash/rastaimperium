@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   title: "Library — Publications & Digital Artifacts",
   description:
     "Published works and digital artifacts. Narrative and design documents; production claims require sealed evidence (see Limitations).",
+  openGraph: {
+    title: "Library — Publications & Digital Artifacts",
+    description:
+      "Books, design documents, product surface links, and open repositories. Evidence-bound claims on Proof and Limitations.",
+    url: "https://rastaimperium.com/library/",
+  },
 };
 
 export default function LibraryPage() {
@@ -124,7 +130,7 @@ export default function LibraryPage() {
     <main className="royal-page overflow-hidden">
       <section className="border-b border-[#B8860B]/20">
         <div className="container-page py-12 text-center">
-          <h1 className="text-4xl text-gold-gradient md:text-5xl">The Library</h1>
+          <h1 className="font-cinzel text-4xl text-gold-gradient md:text-5xl">The Library</h1>
           <p className="mt-3 text-lg text-zinc-400">
             Publications, design documents, product surface, and open repositories
           </p>
@@ -146,21 +152,21 @@ export default function LibraryPage() {
             <Link href="/research/" className="text-sm text-zinc-400">
               Research →
             </Link>
-            <Link href="/thanks-and-praise/" className="text-sm text-zinc-400">
-              Thanks & Praise →
+            <Link href="/architecture/" className="text-sm text-zinc-400">
+              Architecture →
             </Link>
           </div>
         </div>
       </section>
 
       <section className="container-page mt-10">
-        <h2 className="text-2xl text-[#F2D675]">Commercial & product surface</h2>
+        <h2 className="font-cinzel text-2xl text-[#F2D675]">Commercial & product surface</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {productLinks.map((p) => (
             <Link
               key={p.name}
               href={p.href}
-              className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+              className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
             >
               <h3 className="text-lg text-zinc-100">{p.name}</h3>
               <p className="mt-2 text-sm text-zinc-500">{p.detail}</p>
@@ -171,7 +177,7 @@ export default function LibraryPage() {
       </section>
 
       <section className="container-page mt-12">
-        <h2 className="text-2xl text-[#F2D675]">Published Works</h2>
+        <h2 className="font-cinzel text-2xl text-[#F2D675]">Published Works</h2>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {books.map((book) => (
             <a
@@ -179,7 +185,7 @@ export default function LibraryPage() {
               href={book.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="block rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+              className="royal-panel block rounded-xl border p-6 transition hover:border-[#B8860B]/40"
             >
               <div className="flex justify-between">
                 <p className="text-xs text-zinc-500">{book.date}</p>
@@ -197,7 +203,7 @@ export default function LibraryPage() {
       </section>
 
       <section className="container-page mt-12">
-        <h2 className="text-2xl text-[#F2D675]">Digital Artifacts</h2>
+        <h2 className="font-cinzel text-2xl text-[#F2D675]">Digital Artifacts</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {artifacts.map((a) => {
             const isExternal = a.external === true;
@@ -221,7 +227,7 @@ export default function LibraryPage() {
                   href={a.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+                  className="royal-panel block rounded-xl border p-6 transition hover:border-[#B8860B]/40"
                 >
                   {inner}
                 </a>
@@ -231,12 +237,12 @@ export default function LibraryPage() {
               <Link
                 key={a.name}
                 href={a.href}
-                className="block rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+                className="royal-panel block rounded-xl border p-6 transition hover:border-[#B8860B]/40"
               >
                 {inner}
               </Link>
             ) : (
-              <div key={a.name} className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+              <div key={a.name} className="royal-panel rounded-xl border p-6">
                 {inner}
               </div>
             );
@@ -245,7 +251,7 @@ export default function LibraryPage() {
       </section>
 
       <section className="container-page mt-12 pb-16">
-        <h2 className="text-2xl text-[#F2D675]">Open Source Repositories</h2>
+        <h2 className="font-cinzel text-2xl text-[#F2D675]">Open Source Repositories</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {repos.map((r) => (
             <a
@@ -253,7 +259,7 @@ export default function LibraryPage() {
               href={r.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="block rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
+              className="royal-panel block rounded-xl border p-6 transition hover:border-[#B8860B]/40"
             >
               <div className="flex items-start justify-between">
                 <h3 className="text-[#F2D675]">{r.name}</h3>
