@@ -1,42 +1,38 @@
-name: Railway Deploy
+name: Railway Deploy (Manual Force-Redeploy)
 
-# Manual force-redeploy + automatic chain after Build Static Site succeeds.
-# Primary automated path is now the railway-redeploy job inside
-# build-static-site.yml. This workflow remains for:
-#   - workflow_dispatch force-redeploy with optional service override
-#   - workflow_run backup if the in-workflow CLI step was skipped
+# Manual-only emergency redeploy mechanism for production service.
+# 
+# Normal production deployments are handled by Railway's native GitHub integration:
+#   GitHub main commit → Railway detects push → builds & deploys to web/production
 #
-# Multi-service projects MUST set secrets.RAILWAY_SERVICE or pass the
-# service input — otherwise `railway up` fails with:
-#   Multiple services found. Please specify a service via the `--service` flag.
+# This workflow is for emergency situations only:
+#   - Force redeploy current commit without code changes
+#   - Override service/environment for testing (with explicit workflow_dispatch inputs)
+#
+# Requires:
+#   - RAILWAY_TOKEN GitHub secret (for CLI access)
+#   - Manually triggered via workflow_dispatch (never automatic)
 
 on:
-  workflow_run:
-    workflows: ["Build Static Site"]
-    types: [completed]
-    branches: [main]
   workflow_dispatch:
     inputs:
       service:
-        description: "Railway service name (required if project has multiple services)"
+        description: "Railway service name (default: web)"
         required: false
         type: string
+        default: "web"
       environment:
-        description: "Railway environment name"
+        description: "Railway environment name (default: production)"
         required: false
-        default: production
         type: string
+        default: "production"
 
 concurrency:
-  group: railway-deploy-${{ github.event.workflow_run.head_branch || github.ref }}
+  group: railway-manual-deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   deploy:
-    # Skip failed static builds; always allow manual dispatch
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -53,40 +49,37 @@ jobs:
       - name: Install Railway CLI
         run: npm install --global @railway/cli
 
-      - name: Deploy to Railway
+      - name: Deploy to Railway (manual force-redeploy)
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_ENVIRONMENT: ${{ inputs.environment || secrets.RAILWAY_ENVIRONMENT || 'production' }}
-          INPUT_SERVICE: ${{ inputs.service }}
-          SECRET_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
+          RAILWAY_ENVIRONMENT: ${{ inputs.environment }}
+          RAILWAY_SERVICE: ${{ inputs.service }}
         shell: bash
         run: |
           set -euo pipefail
 
           if [ -z "${RAILWAY_TOKEN:-}" ]; then
-            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-              echo "::error title=Missing Railway token::Set the RAILWAY_TOKEN GitHub Actions secret."
-              exit 1
-            fi
-            echo "::notice title=Railway CLI skipped::RAILWAY_TOKEN not set; relying on Railway native GitHub integration."
-            exit 0
+            echo "::error title=Missing Railway token::Set the RAILWAY_TOKEN GitHub Actions secret to enable manual redeploy."
+            exit 1
           fi
 
-          SERVICE="${INPUT_SERVICE:-${SECRET_SERVICE:-}}"
+          SERVICE="${RAILWAY_SERVICE}"
+          ENVIRONMENT="${RAILWAY_ENVIRONMENT}"
+          COMMIT="$(git rev-parse --short HEAD)"
 
-          if [ -n "$SERVICE" ]; then
-            echo "Deploying service='$SERVICE' environment='$RAILWAY_ENVIRONMENT'"
-            railway up --ci --service "$SERVICE" --environment "$RAILWAY_ENVIRONMENT"
-          else
-            echo "No service specified (input or RAILWAY_SERVICE secret). Attempting project default…"
-            set +e
-            railway up --ci --environment "$RAILWAY_ENVIRONMENT"
-            status=$?
-            set -e
-            if [ "$status" -ne 0 ]; then
-              echo "::error title=Service required::Railway project has multiple services. Re-run with the service input, or set the RAILWAY_SERVICE repository secret."
-              exit 1
-            fi
+          echo "Manual force-redeploy: service='${SERVICE}' environment='${ENVIRONMENT}' commit='${COMMIT}'"
+
+          # Validate service exists before attempting deploy
+          if ! railway service list --environment "${ENVIRONMENT}" 2>/dev/null | grep -q "^${SERVICE}"; then
+            echo "::error title=Service not found::Service '${SERVICE}' not found in Railway environment '${ENVIRONMENT}'."
+            echo ""
+            echo "Available services:"
+            railway service list --environment "${ENVIRONMENT}" 2>/dev/null || {
+              echo "  (Failed to query services. Verify RAILWAY_TOKEN has project access.)"
+            }
+            exit 1
           fi
 
-          echo "Railway CLI deploy submitted."
+          railway up --ci --service "${SERVICE}" --environment "${ENVIRONMENT}"
+          echo "Railway CLI force-redeploy submitted."
+
