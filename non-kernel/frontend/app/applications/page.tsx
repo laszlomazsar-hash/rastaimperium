@@ -104,45 +104,53 @@ const apps = [
 
 export default function ApplicationsPage() {
   return (
-    <main className="royal-page">
-      <section className="container-page border-b border-[#B8860B]/20 py-16 lg:py-24">
-        <p className="royal-kicker text-xs font-semibold uppercase tracking-[0.32em] text-[#B8860B]">
-          Ecosystem · Genesis · demonstrations
-        </p>
-        <h1 className="royal-title mt-5 max-w-3xl text-4xl leading-tight text-zinc-50 sm:text-5xl">
-          EVO-V Applications
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
-          What exists to inspect, pilot, or demonstrate. Genesis artifacts (kernel, Observatory,
-          Fitness DSL) are labelled by layer. External demos remain DEMONSTRATION. This page is not
-          the production runtime and does not publish sealed performance guarantees.
-        </p>
+    <main className="royal-page overflow-hidden">
+      <section className="border-b border-[#B8860B]/20">
+        <div className="container-page py-16 lg:py-24">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
+            Ecosystem · Genesis · demonstrations
+          </p>
+          <h1 className="mt-5 max-w-3xl font-cinzel text-4xl leading-tight text-zinc-100 sm:text-5xl">
+            EVO-V Applications
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
+            What exists to inspect, pilot, or demonstrate. Genesis artifacts (kernel, Observatory,
+            Fitness DSL) are labelled by layer. External demos remain DEMONSTRATION. This page is not
+            the production runtime and does not publish sealed performance guarantees.
+          </p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/product/"
-            className="rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
-          >
-            Product pathway
-          </Link>
-          <Link
-            href="/observatory/"
-            className="rounded-lg border border-[#B8860B]/50 px-5 py-2.5 text-sm font-semibold text-[#F2D675]"
-          >
-            Observatory demo
-          </Link>
-          <Link
-            href="/proof/"
-            className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
-          >
-            Proof Registry
-          </Link>
-          <Link
-            href="/institutional-pilots/"
-            className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
-          >
-            Design partner pilots
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/product/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+            >
+              Product pathway
+            </Link>
+            <Link
+              href="/observatory/"
+              className="rounded-lg border border-[#B8860B]/50 px-5 py-2.5 text-sm font-semibold text-[#F2D675]"
+            >
+              Observatory demo
+            </Link>
+            <Link
+              href="/proof/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
+            >
+              Design partner pilots
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm font-semibold text-zinc-200"
+            >
+              Limitations
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -150,17 +158,14 @@ export default function ApplicationsPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Genesis product surface
         </p>
-        <h2 className="mt-3 text-2xl text-zinc-100">Artifacts from the constitutional stack</h2>
+        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Artifacts from the constitutional stack</h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
           Mapped to what institutional buyers and auditors can actually reach today. Runtime modules
           are sold under explicit scope after pilot fit.
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {genesis.map((item) => (
-            <article
-              key={item.title}
-              className="rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
-            >
+            <article key={item.title} className="royal-panel rounded-xl border p-6">
               <div className="flex flex-wrap items-center gap-2">
                 <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
                   {item.badge}
@@ -195,17 +200,14 @@ export default function ApplicationsPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
           Demonstration surfaces
         </p>
-        <h2 className="mt-3 text-2xl text-zinc-100">External ecosystem pointers</h2>
+        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">External ecosystem pointers</h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
           Each card below is labelled DEMONSTRATION. Useful for orientation; not a substitute for
           sealed capsules or a paid pilot boundary.
         </p>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {apps.map((app) => (
-            <article
-              key={app.title}
-              className="rounded-xl border border-zinc-800 bg-black/30 p-6 transition hover:border-[#B8860B]/40"
-            >
+            <article key={app.title} className="royal-panel rounded-xl border p-6">
               <div className="flex flex-wrap items-center gap-2">
                 <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
                   {app.badge}
@@ -254,7 +256,7 @@ export default function ApplicationsPage() {
           ))}
         </div>
 
-        <div className="mt-16 rounded-xl border border-zinc-800 bg-black/20 p-6">
+        <div className="mt-16 royal-panel rounded-xl border p-6">
           <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
             Boundary note
           </p>
@@ -268,14 +270,41 @@ export default function ApplicationsPage() {
             <Link href="/proof/" className="text-sm text-[#F2D675]">
               Open Proof Registry →
             </Link>
-            <Link href="/case-studies/" className="text-sm text-zinc-400">
-              Case studies →
+            <Link href="/evidence/" className="text-sm text-zinc-400">
+              Evidence Explorer →
+            </Link>
+            <Link href="/limitations/" className="text-sm text-zinc-400">
+              Limitations →
             </Link>
             <Link href="/product/" className="text-sm text-zinc-400">
               Product pathway →
             </Link>
-            <Link href="/institutional-pilots/" className="text-sm text-zinc-400">
-              Institutional pilots →
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
+          <h2 className="font-cinzel text-xl text-zinc-100">From demos to scoped engagement</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            Demos orient. Pilots define written boundaries. Runtime modules follow mutual fit.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/contact/?intent=commercial"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+            >
+              Commercial brief
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
+            >
+              Design partner pilots
+            </Link>
+            <Link
+              href="/contact/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Contact
             </Link>
           </div>
         </div>
