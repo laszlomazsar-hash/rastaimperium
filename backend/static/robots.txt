@@ -6,4 +6,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
+# Public verification and commercial surfaces are intentionally crawlable.
+# See https://rastaimperium.com/sitemap.xml for the canonical URL inventory.
+
 Sitemap: https://rastaimperium.com/sitemap.xml
