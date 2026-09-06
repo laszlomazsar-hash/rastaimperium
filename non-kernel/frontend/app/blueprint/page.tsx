@@ -154,6 +154,18 @@ export default function BlueprintPage() {
                 >
                   Architecture split
                 </Link>
+                <Link
+                  href="/limitations/"
+                  className="rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+                >
+                  Limitations
+                </Link>
+                <Link
+                  href="/proof/"
+                  className="rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+                >
+                  Proof Registry
+                </Link>
               </div>
             </div>
 
@@ -395,6 +407,34 @@ export default function BlueprintPage() {
             >
               Evidence Explorer
             </Link>
+          </div>
+
+          <div className="mx-auto mt-12 max-w-2xl rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8">
+            <h3 className="font-cinzel text-xl text-zinc-100">From blueprint to engagement</h3>
+            <p className="mt-3 text-sm leading-7 text-zinc-400">
+              Architecture orients. Sealed evidence and written pilot scope define what can be
+              claimed in production.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Link
+                href="/product/"
+                className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+              >
+                Product pathway
+              </Link>
+              <Link
+                href="/institutional-pilots/"
+                className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
+              >
+                Design partner pilots
+              </Link>
+              <Link
+                href="/contact/"
+                className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+              >
+                Contact
+              </Link>
+            </div>
           </div>
         </div>
       </section>
