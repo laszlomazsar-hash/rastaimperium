@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   title: "Vision — Constitutional Intelligence",
   description:
     "The Rasta Imperium vision for constitutional intelligence: bounded autonomy, verifiable decisions, and accountable infrastructure.",
+  openGraph: {
+    title: "Vision — Constitutional Intelligence",
+    description:
+      "Bounded autonomy, verifiable history, institutional legibility — public interface for why constitutional limits matter.",
+    url: "https://rastaimperium.com/vision/",
+  },
 };
 
 const commitments = [
@@ -45,7 +51,7 @@ const principles = [
 
 export default function VisionPage() {
   return (
-    <main className="overflow-hidden">
+    <main className="royal-page overflow-hidden">
       <section className="relative border-b border-[#B8860B]/20">
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <div className="absolute -left-36 top-10 h-80 w-80 rounded-full bg-[#107e3e]/15 blur-3xl" />
@@ -58,38 +64,44 @@ export default function VisionPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
               Vision / 01
             </p>
-            <h1 className="mt-6 max-w-4xl text-5xl leading-[0.98] text-zinc-100 sm:text-6xl lg:text-7xl">
+            <h1 className="mt-6 max-w-4xl font-cinzel text-5xl leading-[0.98] text-zinc-100 sm:text-6xl lg:text-7xl">
               Intelligence deserves a <span className="text-gold-gradient">constitution.</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-zinc-300 sm:text-xl">
               Rasta Imperium imagines autonomous infrastructure that can act with discipline, account
               for its decisions, and remain understandable to the institutions it serves.
             </p>
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-10 flex flex-wrap gap-3">
               <Link
                 href="/product/"
-                className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F2D675] hover:shadow-lg hover:shadow-[#B8860B]/20 active:scale-[0.97]"
+                className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
               >
                 Product & pilots
               </Link>
               <Link
-                href="/technology"
-                className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition duration-200 hover:-translate-y-0.5 hover:border-[#D4AF37]/70 hover:text-[#F2D675] active:scale-[0.97]"
+                href="/governance-model/"
+                className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm font-semibold text-[#F2D675]"
               >
-                Explore the technology
+                Governance model
               </Link>
               <Link
                 href="/proof/"
-                className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100 transition duration-200 hover:-translate-y-0.5 hover:border-[#D4AF37]/70 hover:text-[#F2D675] active:scale-[0.97]"
+                className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100"
               >
                 Proof Registry
+              </Link>
+              <Link
+                href="/limitations/"
+                className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-100"
+              >
+                Limitations
               </Link>
             </div>
           </div>
 
-          <aside className="relative border border-[#B8860B]/30 bg-[#0b0c0b]/70 p-6 shadow-2xl shadow-black/30 backdrop-blur sm:p-8">
+          <aside className="royal-panel relative border p-6 shadow-2xl shadow-black/30 sm:p-8">
             <div className="absolute left-0 top-0 h-1 w-24 bg-gradient-to-r from-[#107e3e] via-[#D4AF37] to-[#e01e1e]" />
-            <p className="font-courier text-[0.68rem] uppercase tracking-[0.22em] text-[#D4AF37]">
+            <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-[#D4AF37]">
               Statement of intent
             </p>
             <p className="mt-6 text-2xl leading-snug text-zinc-100 sm:text-3xl">
@@ -97,17 +109,17 @@ export default function VisionPage() {
             </p>
             <div className="mt-8 grid grid-cols-3 border-t border-[#B8860B]/20 pt-5 text-center">
               <div className="border-r border-[#B8860B]/20 px-2">
-                <p className="font-courier text-lg text-[#D4AF37]">I</p>
+                <p className="font-mono text-lg text-[#D4AF37]">I</p>
                 <p className="mt-1 text-[0.64rem] uppercase tracking-[0.16em] text-zinc-500">Intent</p>
               </div>
               <div className="border-r border-[#B8860B]/20 px-2">
-                <p className="font-courier text-lg text-[#D4AF37]">II</p>
+                <p className="font-mono text-lg text-[#D4AF37]">II</p>
                 <p className="mt-1 text-[0.64rem] uppercase tracking-[0.16em] text-zinc-500">
                   Constraint
                 </p>
               </div>
               <div className="px-2">
-                <p className="font-courier text-lg text-[#D4AF37]">III</p>
+                <p className="font-mono text-lg text-[#D4AF37]">III</p>
                 <p className="mt-1 text-[0.64rem] uppercase tracking-[0.16em] text-zinc-500">Witness</p>
               </div>
             </div>
@@ -121,7 +133,7 @@ export default function VisionPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               The proposition
             </p>
-            <h2 className="mt-5 text-3xl leading-tight text-zinc-100 sm:text-4xl">
+            <h2 className="mt-5 font-cinzel text-3xl leading-tight text-zinc-100 sm:text-4xl">
               From managed models to governed systems.
             </h2>
           </div>
@@ -144,7 +156,7 @@ export default function VisionPage() {
               key={commitment.number}
               className="group relative bg-[#0b0c0b]/95 p-7 transition duration-300 hover:bg-[#121512] sm:p-8"
             >
-              <span className="font-courier text-sm text-[#D4AF37]">{commitment.number}</span>
+              <span className="font-mono text-sm text-[#D4AF37]">{commitment.number}</span>
               <h3 className="mt-8 text-2xl text-zinc-100">{commitment.title}</h3>
               <p className="mt-4 leading-7 text-zinc-400">{commitment.description}</p>
               <div className="mt-8 h-px w-10 bg-[#D4AF37]/60 transition-all duration-300 group-hover:w-20" />
@@ -159,14 +171,14 @@ export default function VisionPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               How we orient the work
             </p>
-            <h2 className="mt-5 text-3xl text-zinc-100 sm:text-4xl">
+            <h2 className="mt-5 font-cinzel text-3xl text-zinc-100 sm:text-4xl">
               A sovereign system should be able to show its work.
             </h2>
           </div>
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
             {principles.map(([title, description], index) => (
               <article key={title} className="relative border-l border-[#B8860B]/45 py-2 pl-6">
-                <span className="font-courier text-xs text-[#D4AF37]">0{index + 1}</span>
+                <span className="font-mono text-xs text-[#D4AF37]">0{index + 1}</span>
                 <h3 className="mt-4 text-xl text-zinc-100">{title}</h3>
                 <p className="mt-3 leading-7 text-zinc-400">{description}</p>
               </article>
@@ -179,31 +191,31 @@ export default function VisionPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
           From vision to adoption
         </p>
-        <h2 className="mx-auto mt-5 max-w-3xl text-3xl leading-tight text-zinc-100 sm:text-4xl">
+        <h2 className="mx-auto mt-5 max-w-3xl font-cinzel text-3xl leading-tight text-zinc-100 sm:text-4xl">
           Inspect the evidence. Pilot under a written boundary. Then scale the runtime.
         </h2>
         <div className="mt-9 flex flex-wrap justify-center gap-4">
           <Link
             href="/product/"
-            className="rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F2D675] active:scale-[0.97]"
+            className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
           >
             Product pathway
           </Link>
           <Link
             href="/institutional-pilots/"
-            className="rounded-lg bg-[#107e3e] px-6 py-3 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#159450] active:scale-[0.97]"
+            className="rounded-lg bg-[#107e3e] px-6 py-3 text-sm font-bold text-white"
           >
             Design partner pilots
           </Link>
           <Link
             href="/applications/"
-            className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-200 transition duration-200 hover:border-[#D4AF37]/70 hover:text-[#F2D675] active:scale-[0.97]"
+            className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-200"
           >
             Applications & Genesis
           </Link>
           <Link
             href="/thanks-and-praise/"
-            className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-200 transition duration-200 hover:border-[#D4AF37]/70 hover:text-[#F2D675] active:scale-[0.97]"
+            className="rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-zinc-200"
           >
             Thanks & Praise
           </Link>
