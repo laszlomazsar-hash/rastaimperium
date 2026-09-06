@@ -27,7 +27,7 @@ permissions:
 jobs:
   visual-regression:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -45,13 +45,31 @@ jobs:
         working-directory: non-kernel/frontend
         run: npm ci --no-audit --no-fund
 
-      - name: Locate Chromium
-        id: chromium
+      - name: Ensure backend/static exists
         shell: bash
         run: |
-          executable="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          if [ ! -f backend/static/index.html ]; then
+            echo "::error title=Missing static export::backend/static/index.html not found. Run Build Static Site first."
+            exit 1
+          fi
+          echo "Static export present ($(wc -c < backend/static/index.html) bytes index.html)."
+
+      - name: Locate or install Chromium
+        id: chromium
+        working-directory: non-kernel/frontend
+        shell: bash
+        run: |
+          set -euo pipefail
+          executable="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$executable" ]; then
+            echo "System Chrome not found — installing Playwright Chromium…"
+            npx playwright install chromium --with-deps
+            executable="$(node -e "const {chromium}=require('@playwright/test'); process.stdout.write(chromium.executablePath())")"
+          fi
           test -n "$executable"
+          test -x "$executable" || test -f "$executable"
           echo "executable=$executable" >> "$GITHUB_OUTPUT"
+          echo "Using Chromium: $executable"
 
       - name: Run visual regression suite
         working-directory: non-kernel/frontend
