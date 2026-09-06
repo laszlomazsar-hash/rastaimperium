@@ -81,10 +81,22 @@ export default function ArchitecturePage() {
               Governance model
             </Link>
             <Link
+              href="/proof/"
+              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
+            >
+              Proof Registry
+            </Link>
+            <Link
               href="/limitations/"
               className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
             >
               Limitations
+            </Link>
+            <Link
+              href="/technology/"
+              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
+            >
+              Technology
             </Link>
           </div>
         </div>
@@ -149,10 +161,16 @@ export default function ArchitecturePage() {
               Product
             </Link>
             <Link
-              href="/about-evo-v-kernel/"
+              href="/institutional-pilots/"
               className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
             >
-              EVO-V kernel
+              Pilots
+            </Link>
+            <Link
+              href="/contact/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Contact
             </Link>
           </div>
         </div>
