@@ -85,7 +85,7 @@ const institutionalValue = [
   },
   {
     title: "Audit-ready evidence",
-    body: "Sealed capsules and challenge fixtures give boards and auditors a concrete surface to examine.",
+    body: "Sealed capsules and challenge fixtures give boards and auditors a concrete surface to examine — before any operational claim.",
   },
   {
     title: "Scoped pilots",
@@ -93,26 +93,69 @@ const institutionalValue = [
   },
 ];
 
+/** V2 — institutional conversion: evidence → trust → commercial path (no claim beyond sealed evidence). */
+const proofTrustPilot = [
+  {
+    step: "01",
+    title: "Proof",
+    body: "Inspect sealed capsules and reproduce offline. Claims stay labelled until artifacts exist.",
+    href: "/verify/",
+    cta: "Verify",
+  },
+  {
+    step: "02",
+    title: "Trust",
+    body: "Read status labels, Limitations, and the Trust Console. Unproven stays unproven.",
+    href: "/trust/",
+    cta: "Trust Console",
+  },
+  {
+    step: "03",
+    title: "Pilot",
+    body: "Fixed-scope design partner work maps a written subset of the model onto your stack — after evidence, not instead of it.",
+    href: "/institutional-pilots/",
+    cta: "Pilot pathway",
+  },
+];
+
+const surfaceMap = [
+  {
+    label: "Research surface",
+    body: "Architecture, doctrine, and public verification fixtures. Open to inspection.",
+    href: "/proof/",
+  },
+  {
+    label: "Infrastructure intent",
+    body: "Constitutional bounds and replay semantics for high-accountability systems — not a hosted runtime on this site.",
+    href: "/governance-model/",
+  },
+  {
+    label: "Commercial engagement",
+    body: "Paid design partner pilots only. No self-serve SaaS; no production guarantee without written scope.",
+    href: "/product/",
+  },
+];
+
 const audiencePaths = [
+  {
+    role: "Institutional decision-maker",
+    path: "Proof → Trust → Product → Pilot",
+    href: "/product/",
+    cta: "See institutional pathway",
+    primary: true,
+  },
   {
     role: "Auditor / reviewer",
     path: "Verify → Limitations → Proof → Audit",
     href: "/verify/",
     cta: "Run the proof",
-    primary: true,
+    primary: false,
   },
   {
     role: "Technical reviewer",
     path: "Verify → Proof → Trust → Challenge",
     href: "/proof/",
     cta: "Open Proof Registry",
-    primary: false,
-  },
-  {
-    role: "Institutional decision-maker",
-    path: "Limitations → Why Deterministic → Product → Pilots",
-    href: "/limitations/",
-    cta: "Start with Limitations",
     primary: false,
   },
   {
@@ -195,8 +238,14 @@ export default function HomePage() {
       <section className="border-b border-zinc-900 bg-[#0b0c0b]/50" aria-labelledby="value-heading">
         <div className="container-page py-12">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">Why institutions engage</p>
-          <h2 id="value-heading" className="mt-3 max-w-2xl text-2xl text-zinc-100">Reduce liability from opaque autonomy</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">Boards, CISOs, and regulated operators need reconstructible decision trails and enforceable bounds — not another model-monitoring dashboard.</p>
+          <h2 id="value-heading" className="mt-3 max-w-3xl text-2xl text-zinc-100 sm:text-3xl">
+            Opaque autonomy fails without a reconstructible record.
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+            Boards, CISOs, and regulated operators need enforceable bounds and decision trails they can examine —
+            not another model-monitoring dashboard. This surface is for institutions that must prove what happened
+            when autonomous systems act.
+          </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {institutionalValue.map((item) => (
               <div key={item.title} className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/30">
@@ -206,9 +255,56 @@ export default function HomePage() {
             ))}
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/product/" className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black">View product pathway</Link>
-            <Link href="/why-deterministic-governance/" className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]">Why deterministic governance</Link>
+            <Link href="/product/" className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black">Institutional pathway</Link>
+            <Link href="/why-deterministic-governance/" className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]">Why deterministic</Link>
             <Link href="/institutional-pilots/" className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100">Design partner pilots</Link>
+            <Link href="/limitations/" className="rounded-lg border border-zinc-700 px-5 py-2.5 text-sm text-zinc-400">Limitations first</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-zinc-900" aria-labelledby="chain-heading">
+        <div className="container-page py-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">Institutional path</p>
+          <h2 id="chain-heading" className="mt-3 max-w-2xl text-2xl text-zinc-100">Proof → Trust → Pilot</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+            Evidence first. Commercial engagement only after scope is written and Limitations are read.
+            No claim on this path is stronger than sealed public artifacts.
+          </p>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {proofTrustPilot.map((s) => (
+              <Link
+                key={s.step}
+                href={s.href}
+                className="group rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+              >
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">{s.step} · {s.title}</p>
+                <p className="mt-3 text-sm leading-6 text-zinc-400">{s.body}</p>
+                <p className="mt-4 text-sm font-medium text-[#F2D675] group-hover:text-[#F2D675]">{s.cta} →</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-zinc-900 bg-[#0b0c0b]/30" aria-labelledby="surface-heading">
+        <div className="container-page py-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">What this surface is</p>
+          <h2 id="surface-heading" className="mt-3 max-w-2xl text-2xl text-zinc-100">Research · infrastructure intent · commercial</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+            One public layer, three modes of engagement. Mixing them is how claims outrun evidence — keep the boundaries explicit.
+          </p>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {surfaceMap.map((s) => (
+              <Link
+                key={s.label}
+                href={s.href}
+                className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/35"
+              >
+                <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">{s.label}</p>
+                <p className="mt-2 text-sm leading-6 text-zinc-400">{s.body}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -216,7 +312,7 @@ export default function HomePage() {
       <section className="container-page border-b border-zinc-900 py-12" aria-labelledby="audience-heading">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">Start here</p>
         <h2 id="audience-heading" className="mt-3 text-2xl text-zinc-100">Paths by role</h2>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">Choose a route that matches how you evaluate systems. Every path ends at evidence or an explicit limitation — not marketing claims.</p>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">Institutional buyers start with the pathway; auditors start with Verify. Every path still ends at evidence or an explicit limitation — not marketing claims.</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {audiencePaths.map((a) => (
             <Link key={a.role} href={a.href} className={`rounded-xl border p-4 transition hover:border-[#B8860B]/40 sm:p-5 ${a.primary ? "border-emerald-800/40 bg-emerald-950/15" : "border-zinc-800 bg-black/30"}`}>
@@ -303,10 +399,13 @@ export default function HomePage() {
       <section className="container-page py-12 sm:py-14">
         <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-6 text-center sm:p-8">
           <h2 className="font-cinzel text-2xl text-zinc-100">Ready to engage</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">Inspect evidence, read Limitations, then apply for a fixed-scope design partner pilot with written success criteria.</p>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            Verify sealed evidence, read Limitations, then apply for a fixed-scope design partner pilot —
+            written success criteria before any operational claim.
+          </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/verify/" className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black">Verify the evidence</Link>
-            <Link href="/limitations/" className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]">Limitations</Link>
+            <Link href="/product/" className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]">Institutional pathway</Link>
             <Link href="/contact/?intent=design-partner" className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100">Apply · design partner</Link>
           </div>
         </div>
