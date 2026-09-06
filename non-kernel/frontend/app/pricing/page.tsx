@@ -96,7 +96,7 @@ export default function PricingPage() {
             </Link>
             <Link
               href="/institutional-pilots/"
-              className="royal-button royal-button-ghost rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
+              className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
             >
               Pilot pathway detail
             </Link>
@@ -105,6 +105,18 @@ export default function PricingPage() {
               className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
             >
               Product
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
+            >
+              Limitations
+            </Link>
+            <Link
+              href="/governance-model/"
+              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
+            >
+              Governance model
             </Link>
           </div>
         </div>
@@ -174,9 +186,14 @@ export default function PricingPage() {
             <span>Blanket certification language without evidence</span>
           </li>
         </ul>
-        <Link href="/limitations/" className="mt-4 inline-block text-sm text-[#F2D675]">
-          See Limitations →
-        </Link>
+        <div className="mt-4 flex flex-wrap gap-4 text-sm">
+          <Link href="/limitations/" className="text-[#F2D675]">
+            See Limitations →
+          </Link>
+          <Link href="/proof/" className="text-zinc-400">
+            Proof Registry →
+          </Link>
+        </div>
       </section>
 
       <section className="container-page py-14">
@@ -195,9 +212,15 @@ export default function PricingPage() {
             </Link>
             <Link
               href="/institutional-pilots/"
-              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
             >
               Pilot pathway
+            </Link>
+            <Link
+              href="/product/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Product
             </Link>
           </div>
         </div>
