@@ -60,7 +60,11 @@
 .ri-evidence-badge--unavailable .ri-evidence-badge__mark,
 .ri-evidence-badge--pending .ri-evidence-badge__mark { opacity: .7; }
 
-/* Replace decorative spectacle with quiet institutional geometry. */
+/* The full wordmark belongs at institutional reading widths; the seal alone is the mobile mark. */
+@media (max-width: 639px) {
+  .ri-seal > span:last-child { display: none !important; }
+}
+
 .ri-witness-frame {
   border: 1px solid var(--ri-line);
   position: relative;
