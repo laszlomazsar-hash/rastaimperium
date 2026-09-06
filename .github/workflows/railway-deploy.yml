@@ -1,14 +1,20 @@
 name: Railway Deploy
 
-# Primary production path: Railway native GitHub integration on main
-# (triggered after build-static-site.yml refreshes backend/static/).
+# Manual force-redeploy + automatic chain after Build Static Site succeeds.
+# Primary automated path is now the railway-redeploy job inside
+# build-static-site.yml. This workflow remains for:
+#   - workflow_dispatch force-redeploy with optional service override
+#   - workflow_run backup if the in-workflow CLI step was skipped
 #
-# This workflow is a manual force-redeploy via Railway CLI.
 # Multi-service projects MUST set secrets.RAILWAY_SERVICE or pass the
 # service input — otherwise `railway up` fails with:
 #   Multiple services found. Please specify a service via the `--service` flag.
 
 on:
+  workflow_run:
+    workflows: ["Build Static Site"]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       service:
@@ -21,13 +27,23 @@ on:
         default: production
         type: string
 
+concurrency:
+  group: railway-deploy-${{ github.event.workflow_run.head_branch || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
+    # Skip failed static builds; always allow manual dispatch
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -48,8 +64,12 @@ jobs:
           set -euo pipefail
 
           if [ -z "${RAILWAY_TOKEN:-}" ]; then
-            echo "::error title=Missing Railway token::Set the RAILWAY_TOKEN GitHub Actions secret to a valid Railway project/account token."
-            exit 1
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              echo "::error title=Missing Railway token::Set the RAILWAY_TOKEN GitHub Actions secret."
+              exit 1
+            fi
+            echo "::notice title=Railway CLI skipped::RAILWAY_TOKEN not set; relying on Railway native GitHub integration."
+            exit 0
           fi
 
           SERVICE="${INPUT_SERVICE:-${SECRET_SERVICE:-}}"
@@ -64,7 +84,7 @@ jobs:
             status=$?
             set -e
             if [ "$status" -ne 0 ]; then
-              echo "::error title=Service required::Railway project has multiple services. Re-run with the service input, or set the RAILWAY_SERVICE repository secret to the production service name."
+              echo "::error title=Service required::Railway project has multiple services. Re-run with the service input, or set the RAILWAY_SERVICE repository secret."
               exit 1
             fi
           fi
