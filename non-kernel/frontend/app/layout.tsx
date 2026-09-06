@@ -171,6 +171,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Link>
                   </li>
                   <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/architecture">
+                      Architecture
+                    </Link>
+                  </li>
+                  <li>
                     <Link className="transition hover:text-[#F2D675]" href="/technology">
                       Technology
                     </Link>
