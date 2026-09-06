@@ -38,7 +38,9 @@ export default function AuditPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Phase 10.2 · Independent review
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl text-zinc-100 sm:text-5xl">Auditor handoff</h1>
+          <h1 className="mt-4 max-w-3xl font-cinzel text-4xl text-zinc-100 sm:text-5xl">
+            Auditor handoff
+          </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
             You do not need to trust Rasta Imperium to reproduce this evidence.
           </p>
@@ -54,12 +56,44 @@ export default function AuditPage() {
               Not a certification
             </span>
           </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/proof/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/evidence/"
+              className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
+            >
+              Evidence Explorer
+            </Link>
+            <Link
+              href="/challenge/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Challenge Lab
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Limitations
+            </Link>
+            <Link
+              href="/governance-model/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Governance model
+            </Link>
+          </div>
         </div>
       </section>
 
       <section className="container-page space-y-10 py-12">
-        <article className="rounded-xl border border-zinc-800 bg-black/30 p-6">
-          <h2 className="text-lg text-zinc-100">Verification ladder</h2>
+        <article className="royal-panel rounded-xl border p-6">
+          <h2 className="font-cinzel text-lg text-zinc-100">Verification ladder</h2>
           <ul className="mt-4 space-y-3">
             {ladder.map((row) => (
               <li
@@ -75,8 +109,8 @@ export default function AuditPage() {
           </ul>
         </article>
 
-        <article className="rounded-xl border border-zinc-800 bg-black/30 p-6">
-          <h2 className="text-lg text-zinc-100">Frozen artifacts</h2>
+        <article className="royal-panel rounded-xl border p-6">
+          <h2 className="font-cinzel text-lg text-zinc-100">Frozen artifacts</h2>
           <ul className="mt-3 space-y-2 font-mono text-xs text-zinc-400">
             <li>ART-L7-REPLAY-001 — valid-path sealed capsule</li>
             <li>ART-L7-REJECT-001 — illegal-transition sealed capsule</li>
@@ -96,8 +130,8 @@ export default function AuditPage() {
           </div>
         </article>
 
-        <article className="rounded-xl border border-zinc-800 bg-black/30 p-6">
-          <h2 className="text-lg text-zinc-100">Reproduce offline</h2>
+        <article className="royal-panel rounded-xl border p-6">
+          <h2 className="font-cinzel text-lg text-zinc-100">Reproduce offline</h2>
           <p className="mt-2 text-sm text-zinc-400">
             Implementations: Node.js · Python 3 · Go. Each computes hashes independently.
           </p>
@@ -120,8 +154,8 @@ go build -o verify_replay verify_art_l7_replay_001.go
           </div>
         </article>
 
-        <article className="rounded-xl border border-zinc-800 bg-black/30 p-6">
-          <h2 className="text-lg text-zinc-100">Challenge the evidence</h2>
+        <article className="royal-panel rounded-xl border p-6">
+          <h2 className="font-cinzel text-lg text-zinc-100">Challenge the evidence</h2>
           <p className="mt-2 text-sm text-zinc-400">
             Self-administered adversarial tests — not a security certification.
           </p>
@@ -135,8 +169,8 @@ go build -o verify_replay verify_art_l7_replay_001.go
           </Link>
         </article>
 
-        <article className="rounded-xl border border-zinc-800 p-6">
-          <h2 className="text-lg text-zinc-100">Expected PASS condition</h2>
+        <article className="royal-panel rounded-xl border p-6">
+          <h2 className="font-cinzel text-lg text-zinc-100">Expected PASS condition</h2>
           <p className="mt-2 text-sm leading-7 text-zinc-400">
             Independent run matches sealed expected hashes for both capsules across implementations
             you execute. Disagreement is as valuable as agreement — report environment, commands,
@@ -145,7 +179,7 @@ go build -o verify_replay verify_art_l7_replay_001.go
         </article>
 
         <article className="rounded-xl border border-amber-900/40 bg-amber-950/20 p-6">
-          <h2 className="text-lg text-amber-100">Not claimed</h2>
+          <h2 className="font-cinzel text-lg text-amber-100">Not claimed</h2>
           <p className="mt-2 text-sm text-zinc-400">
             Production deployment, LIVE telemetry, full-kernel parity, complete attack coverage,
             external certification.{" "}
@@ -154,6 +188,34 @@ go build -o verify_replay verify_art_l7_replay_001.go
             </Link>
           </p>
         </article>
+
+        <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
+          <h2 className="font-cinzel text-xl text-zinc-100">Institutional next steps</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            Independent reproduction is public. Scoped pilots and formal audit inquiries follow
+            after Limitations and sealed capsules.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/contact/?intent=audit"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+            >
+              Open audit inquiry
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
+            >
+              Design partner pilots
+            </Link>
+            <Link
+              href="/product/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Product pathway
+            </Link>
+          </div>
+        </div>
 
         <div className="flex flex-wrap gap-4 text-sm">
           <Link href="/trust/" className="text-zinc-400">
