@@ -41,6 +41,38 @@ export default function EvidencePage() {
           <div className="mt-6">
             <TrustStatus compact />
           </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/proof/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/challenge/"
+              className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
+            >
+              Challenge Lab
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Limitations
+            </Link>
+            <Link
+              href="/audit/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Auditor handoff
+            </Link>
+            <Link
+              href="/governance-model/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Governance model
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -150,6 +182,36 @@ export default function EvidencePage() {
         <Link href="/limitations/" className="mt-4 inline-block text-sm text-[#F2D675]">
           Full Limitations list →
         </Link>
+      </section>
+
+      <section className="container-page py-14">
+        <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
+          <h2 className="font-cinzel text-xl text-zinc-100">After evidence review</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            Commercial discussion follows sealed artifacts and explicit boundaries — not the other way
+            around.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/product/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+            >
+              Product pathway
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
+            >
+              Design partner pilots
+            </Link>
+            <Link
+              href="/contact/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   );
