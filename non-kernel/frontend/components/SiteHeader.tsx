@@ -23,12 +23,15 @@ const tabletPrimary = [
 
 const moreLinks = [
   { href: "/why-deterministic-governance", label: "Why Deterministic" },
+  { href: "/governance-model", label: "Governance model" },
+  { href: "/architecture", label: "Architecture" },
+  { href: "/technology", label: "Technology" },
+  { href: "/evidence", label: "Evidence" },
+  { href: "/limitations", label: "Limitations" },
   { href: "/observatory", label: "Observatory" },
   { href: "/blueprint", label: "Blueprint" },
-  { href: "/technology", label: "Technology" },
   { href: "/codex", label: "Codex" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/limitations", label: "Limitations" },
   { href: "/library", label: "Library" },
   { href: "/design-system", label: "Design System" },
   { href: "/research", label: "Research" },
@@ -37,7 +40,22 @@ const moreLinks = [
   { href: "/invest", label: "Invest" },
 ];
 
-const tabletMoreLinks = moreLinks;
+const desktopMoreLinks = [
+  { href: "/why-deterministic-governance", label: "Why Deterministic" },
+  { href: "/governance-model", label: "Governance model" },
+  { href: "/architecture", label: "Architecture" },
+  { href: "/technology", label: "Technology" },
+  { href: "/evidence", label: "Evidence" },
+  { href: "/limitations", label: "Limitations" },
+  { href: "/codex", label: "Codex" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/library", label: "Library" },
+  { href: "/design-system", label: "Design System" },
+  { href: "/research", label: "Research" },
+  { href: "/about", label: "About" },
+  { href: "/thanks-and-praise", label: "Thanks & Praise" },
+  { href: "/invest", label: "Invest" },
+];
 
 const mobilePrimary = desktopPrimary;
 
@@ -142,7 +160,7 @@ export default function SiteHeader() {
                 </Link>
               </li>
             ))}
-            <MoreMenu open={moreOpen} setOpen={setMoreOpen} links={tabletMoreLinks} />
+            <MoreMenu open={moreOpen} setOpen={setMoreOpen} links={moreLinks} />
             <li>
               <Link
                 href="/contact"
@@ -166,23 +184,7 @@ export default function SiteHeader() {
                 </Link>
               </li>
             ))}
-            <MoreMenu
-              open={moreOpen}
-              setOpen={setMoreOpen}
-              links={[
-                { href: "/why-deterministic-governance", label: "Why Deterministic" },
-                { href: "/technology", label: "Technology" },
-                { href: "/codex", label: "Codex" },
-                { href: "/pricing", label: "Pricing" },
-                { href: "/limitations", label: "Limitations" },
-                { href: "/library", label: "Library" },
-                { href: "/design-system", label: "Design System" },
-                { href: "/research", label: "Research" },
-                { href: "/about", label: "About" },
-                { href: "/thanks-and-praise", label: "Thanks & Praise" },
-                { href: "/invest", label: "Invest" },
-              ]}
-            />
+            <MoreMenu open={moreOpen} setOpen={setMoreOpen} links={desktopMoreLinks} />
             <li>
               <Link
                 href="/contact"
