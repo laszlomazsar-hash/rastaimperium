@@ -56,18 +56,49 @@ export default function AuditPage() {
               Not a certification
             </span>
           </div>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-emerald-800/40 bg-emerald-950/20 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-400/90">
+                Status
+              </p>
+              <p className="mt-2 text-sm font-semibold text-zinc-100">Offline reproduction earned</p>
+              <p className="mt-1 text-xs leading-5 text-zinc-500">
+                Frozen capsules + multi-language verifiers published. External review remains OPEN.
+              </p>
+            </div>
+            <div className="rounded-xl border border-zinc-800 bg-black/30 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
+                Scope
+              </p>
+              <p className="mt-2 text-sm font-semibold text-zinc-100">Sealed L7 artifacts</p>
+              <p className="mt-1 text-xs leading-5 text-zinc-500">
+                Not full-kernel parity, not production LIVE evidence, not a formal certification.
+              </p>
+            </div>
+            <div className="rounded-xl border border-[#B8860B]/35 bg-[#B8860B]/5 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
+                Action
+              </p>
+              <p className="mt-2 text-sm font-semibold text-zinc-100">Reproduce or challenge</p>
+              <p className="mt-1 text-xs leading-5 text-zinc-500">
+                Run verifiers offline; report agreement or disagreement with environment and hashes.
+              </p>
+            </div>
+          </div>
+
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/proof/"
+              href="/verify/"
               className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
             >
-              Proof Registry
+              Verify
             </Link>
             <Link
-              href="/evidence/"
+              href="/proof/"
               className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
             >
-              Evidence Explorer
+              Proof Registry
             </Link>
             <Link
               href="/challenge/"
@@ -80,12 +111,6 @@ export default function AuditPage() {
               className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
             >
               Limitations
-            </Link>
-            <Link
-              href="/governance-model/"
-              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
-            >
-              Governance model
             </Link>
           </div>
         </div>

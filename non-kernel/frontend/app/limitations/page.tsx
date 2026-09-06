@@ -57,24 +57,55 @@ export default function LimitationsPage() {
             Unproven does not mean false. It means sealed public artifacts are not yet attached.
             Read this page before treating any performance figure or production claim as verified.
           </p>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-zinc-700/60 bg-zinc-950/40 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
+                Status
+              </p>
+              <p className="mt-2 text-sm font-semibold text-zinc-100">Explicit unproven list</p>
+              <p className="mt-1 text-xs leading-5 text-zinc-500">
+                Benchmarks, LIVE telemetry, and certification language stay labelled UNAVAILABLE.
+              </p>
+            </div>
+            <div className="rounded-xl border border-zinc-800 bg-black/30 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
+                Scope
+              </p>
+              <p className="mt-2 text-sm font-semibold text-zinc-100">Public surface only</p>
+              <p className="mt-1 text-xs leading-5 text-zinc-500">
+                Capsule VERIFIED does not extend to production fleets or unpublished kernels.
+              </p>
+            </div>
+            <div className="rounded-xl border border-[#B8860B]/35 bg-[#B8860B]/5 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
+                Action
+              </p>
+              <p className="mt-2 text-sm font-semibold text-zinc-100">Read before claims</p>
+              <p className="mt-1 text-xs leading-5 text-zinc-500">
+                Then inspect Proof Registry or reproduce offline via Verify.
+              </p>
+            </div>
+          </div>
+
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/proof/"
+              href="/verify/"
               className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+            >
+              Verify
+            </Link>
+            <Link
+              href="/proof/"
+              className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
             >
               Proof Registry
             </Link>
             <Link
-              href="/challenge/"
-              className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
-            >
-              Challenge Lab
-            </Link>
-            <Link
-              href="/governance-model/"
+              href="/audit/"
               className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
             >
-              Governance model
+              Auditor handoff
             </Link>
           </div>
         </div>

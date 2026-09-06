@@ -4,31 +4,38 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import RISeal from "./RISeal";
 
-/** Full primary set — desktop (lg+) */
+/**
+ * Verification-First Visual Hierarchy v1 — primary nav prioritises the
+ * independent verification journey over product/platform surfaces.
+ */
 const desktopPrimary = [
-  { href: "/product", label: "Product" },
-  { href: "/applications", label: "Apps" },
-  { href: "/observatory", label: "Observatory" },
-  { href: "/blueprint", label: "Blueprint" },
+  { href: "/verify", label: "Verify" },
   { href: "/proof", label: "Proof" },
-  { href: "/institutional-pilots", label: "Pilots" },
+  { href: "/trust", label: "Trust" },
+  { href: "/audit", label: "Audit" },
+  { href: "/limitations", label: "Limitations" },
+  { href: "/product", label: "Product" },
 ];
 
 /** Condensed primary — tablet (md–lg) */
 const tabletPrimary = [
-  { href: "/product", label: "Product" },
-  { href: "/applications", label: "Apps" },
+  { href: "/verify", label: "Verify" },
   { href: "/proof", label: "Proof" },
-  { href: "/institutional-pilots", label: "Pilots" },
+  { href: "/trust", label: "Trust" },
+  { href: "/limitations", label: "Limitations" },
 ];
 
 const moreLinks = [
+  { href: "/audit", label: "Audit" },
+  { href: "/evidence", label: "Evidence" },
+  { href: "/challenge", label: "Challenge Lab" },
+  { href: "/product", label: "Product" },
+  { href: "/institutional-pilots", label: "Pilots" },
   { href: "/why-deterministic-governance", label: "Why Deterministic" },
   { href: "/governance-model", label: "Governance model" },
   { href: "/architecture", label: "Architecture" },
   { href: "/technology", label: "Technology" },
-  { href: "/evidence", label: "Evidence" },
-  { href: "/limitations", label: "Limitations" },
+  { href: "/applications", label: "Apps" },
   { href: "/observatory", label: "Observatory" },
   { href: "/blueprint", label: "Blueprint" },
   { href: "/codex", label: "Codex" },
@@ -42,12 +49,16 @@ const moreLinks = [
 ];
 
 const desktopMoreLinks = [
+  { href: "/evidence", label: "Evidence" },
+  { href: "/challenge", label: "Challenge Lab" },
+  { href: "/institutional-pilots", label: "Pilots" },
   { href: "/why-deterministic-governance", label: "Why Deterministic" },
   { href: "/governance-model", label: "Governance model" },
   { href: "/architecture", label: "Architecture" },
   { href: "/technology", label: "Technology" },
-  { href: "/evidence", label: "Evidence" },
-  { href: "/limitations", label: "Limitations" },
+  { href: "/applications", label: "Apps" },
+  { href: "/observatory", label: "Observatory" },
+  { href: "/blueprint", label: "Blueprint" },
   { href: "/codex", label: "Codex" },
   { href: "/pricing", label: "Pricing" },
   { href: "/library", label: "Library" },
@@ -58,7 +69,14 @@ const desktopMoreLinks = [
   { href: "/invest", label: "Invest" },
 ];
 
-const mobilePrimary = desktopPrimary;
+const mobilePrimary = [
+  { href: "/verify", label: "Verify" },
+  { href: "/proof", label: "Proof" },
+  { href: "/trust", label: "Trust" },
+  { href: "/audit", label: "Audit" },
+  { href: "/limitations", label: "Limitations" },
+  { href: "/product", label: "Product" },
+];
 
 function MoreMenu({
   open,
