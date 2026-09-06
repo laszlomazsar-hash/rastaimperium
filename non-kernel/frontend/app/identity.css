@@ -38,6 +38,28 @@
 .ri-status--historical, .ri-status--demonstration, .ri-status--partial, .ri-status--indeterminate { color: var(--ri-caution); }
 .ri-status--unavailable { color: #9ca3af; }
 
+/* Compact evidence badges: explicit text plus a non-colour shape cue. */
+.ri-evidence-badge { box-shadow: none; }
+.ri-evidence-badge--verified { border-color: rgba(16,185,129,.55); background: rgba(6,78,59,.28); color: #a7f3d0; }
+.ri-evidence-badge--caution { border-color: rgba(212,154,58,.4); background: rgba(120,53,15,.18); color: #fde68a; }
+.ri-evidence-badge--historical { border-color: rgba(148,163,184,.4); background: rgba(51,65,85,.2); color: #cbd5e1; }
+.ri-evidence-badge--target { border-color: rgba(184,134,11,.42); background: rgba(120,82,9,.15); color: #f2d675; }
+.ri-evidence-badge--unavailable { border-color: rgba(82,82,91,.6); background: rgba(24,24,27,.35); color: #a1a1aa; }
+.ri-evidence-badge--pending { border-color: rgba(82,82,91,.5); background: rgba(24,24,27,.25); color: #a1a1aa; }
+.ri-evidence-badge__mark {
+  width: .38rem;
+  height: .38rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.ri-evidence-badge--verified .ri-evidence-badge__mark { background: currentColor; }
+.ri-evidence-badge--caution .ri-evidence-badge__mark { border-radius: 1px; }
+.ri-evidence-badge--historical .ri-evidence-badge__mark { border-radius: 0; }
+.ri-evidence-badge--target .ri-evidence-badge__mark { transform: rotate(45deg); border-radius: 0; }
+.ri-evidence-badge--unavailable .ri-evidence-badge__mark,
+.ri-evidence-badge--pending .ri-evidence-badge__mark { opacity: .7; }
+
 /* Replace decorative spectacle with quiet institutional geometry. */
 .ri-witness-frame {
   border: 1px solid var(--ri-line);
