@@ -3,6 +3,7 @@ import Link from "next/link";
 import Script from "next/script";
 import SiteHeader from "../components/SiteHeader";
 import "./globals.css";
+import "./identity.css";
 
 export const metadata: Metadata = {
   title: {
@@ -100,232 +101,68 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     Follow the work
                   </p>
                   <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
-                    <a
-                      className="text-zinc-300 transition hover:text-[#F2D675]"
-                      href="https://www.linkedin.com/in/laszlo-mazsar-97744aa4?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      LinkedIn
-                    </a>
-                    <a
-                      className="text-zinc-300 transition hover:text-[#F2D675]"
-                      href="https://x.com/mazsarlaszlo"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      X
-                    </a>
-                    <a
-                      className="text-zinc-300 transition hover:text-[#F2D675]"
-                      href="https://github.com/laszlomazsar-hash"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      GitHub
-                    </a>
-                    <a
-                      className="text-zinc-300 transition hover:text-[#F2D675]"
-                      href="https://substack.com/@codexbylaszlo"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Substack
-                    </a>
+                    <a className="text-zinc-300 transition hover:text-[#F2D675]" href="https://www.linkedin.com/in/laszlo-mazsar-97744aa4?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noreferrer">LinkedIn</a>
+                    <a className="text-zinc-300 transition hover:text-[#F2D675]" href="https://x.com/mazsarlaszlo" target="_blank" rel="noreferrer">X</a>
+                    <a className="text-zinc-300 transition hover:text-[#F2D675]" href="https://github.com/laszlomazsar-hash" target="_blank" rel="noreferrer">GitHub</a>
+                    <a className="text-zinc-300 transition hover:text-[#F2D675]" href="https://substack.com/@codexbylaszlo" target="_blank" rel="noreferrer">Substack</a>
                   </div>
                 </nav>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Explore
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Explore</p>
                 <ul className="mt-4 space-y-2 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/vision">
-                      Vision
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/why-deterministic-governance">
-                      Why Deterministic
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/product">
-                      Product
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/applications">
-                      Applications
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/observatory">
-                      Observatory
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/blueprint">
-                      Blueprint
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/architecture">
-                      Architecture
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/technology">
-                      Technology
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/codex">
-                      Codex
-                    </Link>
-                  </li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/vision">Vision</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/why-deterministic-governance">Why Deterministic</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/product">Product</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/applications">Applications</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/observatory">Observatory</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/blueprint">Blueprint</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/architecture">Architecture</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/technology">Technology</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/codex">Codex</Link></li>
                 </ul>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Verify
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Verify</p>
                 <ul className="mt-4 space-y-2 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/trust">
-                      Trust Console
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/proof">
-                      Proof Registry
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/evidence">
-                      Evidence Explorer
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/challenge">
-                      Challenge Lab
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/audit">
-                      Auditor Handoff
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/limitations">
-                      Limitations
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/governance-model">
-                      Governance model
-                    </Link>
-                  </li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/trust">Trust Console</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/proof">Proof Registry</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/evidence">Evidence Explorer</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/challenge">Challenge Lab</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/audit">Auditor Handoff</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/limitations">Limitations</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/governance-model">Governance model</Link></li>
                 </ul>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Library
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Library</p>
                 <ul className="mt-4 space-y-2 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/library">
-                      Library
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/design-system">
-                      Design System
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/research">
-                      Research
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/case-studies">
-                      Case studies
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/pricing">
-                      Pricing posture
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/about-evo-v-kernel">
-                      EVO-V Kernel
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/about">
-                      About
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise">
-                      Thanks & Praise
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/invest">
-                      Invest
-                    </Link>
-                  </li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/library">Library</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/design-system">Design System</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/research">Research</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/case-studies">Case studies</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/pricing">Pricing posture</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/about-evo-v-kernel">EVO-V Kernel</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/about">About</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise">Thanks & Praise</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/invest">Invest</Link></li>
                 </ul>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Engage
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#B8860B]">Engage</p>
                 <ul className="mt-4 space-y-2 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/product">
-                      Product pathway
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/institutional-pilots">
-                      Design partner pilots
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/contact/?intent=design-partner">
-                      Apply for pilot
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/contact">
-                      Contact
-                    </Link>
-                  </li>
-                  <li>
-                    <a
-                      className="transition hover:text-[#F2D675]"
-                      href="https://github.com/laszlomazsar-hash/rastaimperium"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Repository
-                    </a>
-                  </li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/product">Product pathway</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/institutional-pilots">Design partner pilots</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/contact/?intent=design-partner">Apply for pilot</Link></li>
+                  <li><Link className="transition hover:text-[#F2D675]" href="/contact">Contact</Link></li>
+                  <li><a className="transition hover:text-[#F2D675]" href="https://github.com/laszlomazsar-hash/rastaimperium" target="_blank" rel="noreferrer">Repository</a></li>
                 </ul>
               </div>
             </div>
             <p className="mt-12 border-t border-zinc-900 pt-6 text-xs text-zinc-600">
               Rasta Imperium is the public constitutional and verification layer — not the EVO-V
               execution runtime. Unproven claims are labelled; see{" "}
-              <Link href="/limitations/" className="text-zinc-500 underline hover:text-[#F2D675]">
-                Limitations
-              </Link>
-              .
+              <Link href="/limitations/" className="text-zinc-500 underline hover:text-[#F2D675]">Limitations</Link>.
             </p>
           </div>
         </footer>

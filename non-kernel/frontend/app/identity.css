@@ -1,0 +1,95 @@
+:root {
+  --ri-void: #070807;
+  --ri-bone: #f3eedf;
+  --ri-gold: #b88718;
+  --ri-gold-bright: #f2d675;
+  --ri-verify: #10b981;
+  --ri-reject: #d14b4b;
+  --ri-caution: #d49a3a;
+  --ri-line: rgba(242, 214, 117, 0.22);
+}
+
+.ri-institutional-mark { color: var(--ri-gold-bright); }
+.ri-machine { font-family: "Courier New", monospace; letter-spacing: 0.045em; }
+
+/* Evidence-first semantic states. Never rely on colour alone. */
+.ri-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font: 600 0.64rem/1 "Courier New", monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ri-status::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.ri-status--verified, .ri-status--operational { color: var(--ri-verify); }
+.ri-status--verified::before { background: currentColor; }
+.ri-status--rejected { color: var(--ri-reject); }
+.ri-status--rejected::before { border-radius: 0; transform: rotate(45deg); }
+.ri-status--historical, .ri-status--demonstration, .ri-status--partial, .ri-status--indeterminate { color: var(--ri-caution); }
+.ri-status--unavailable { color: #9ca3af; }
+
+/* Compact evidence badges: explicit text plus a non-colour shape cue. */
+.ri-evidence-badge { box-shadow: none; }
+.ri-evidence-badge--verified { border-color: rgba(16,185,129,.55); background: rgba(6,78,59,.28); color: #a7f3d0; }
+.ri-evidence-badge--caution { border-color: rgba(212,154,58,.4); background: rgba(120,53,15,.18); color: #fde68a; }
+.ri-evidence-badge--historical { border-color: rgba(148,163,184,.4); background: rgba(51,65,85,.2); color: #cbd5e1; }
+.ri-evidence-badge--target { border-color: rgba(184,134,11,.42); background: rgba(120,82,9,.15); color: #f2d675; }
+.ri-evidence-badge--unavailable { border-color: rgba(82,82,91,.6); background: rgba(24,24,27,.35); color: #a1a1aa; }
+.ri-evidence-badge--pending { border-color: rgba(82,82,91,.5); background: rgba(24,24,27,.25); color: #a1a1aa; }
+.ri-evidence-badge__mark {
+  width: .38rem;
+  height: .38rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.ri-evidence-badge--verified .ri-evidence-badge__mark { background: currentColor; }
+.ri-evidence-badge--caution .ri-evidence-badge__mark { border-radius: 1px; }
+.ri-evidence-badge--historical .ri-evidence-badge__mark { border-radius: 0; }
+.ri-evidence-badge--target .ri-evidence-badge__mark { transform: rotate(45deg); border-radius: 0; }
+.ri-evidence-badge--unavailable .ri-evidence-badge__mark,
+.ri-evidence-badge--pending .ri-evidence-badge__mark { opacity: .7; }
+
+/* The full wordmark belongs at institutional reading widths; the seal alone is the mobile mark. */
+@media (max-width: 639px) {
+  .ri-seal > span:last-child { display: none !important; }
+}
+
+.ri-witness-frame {
+  border: 1px solid var(--ri-line);
+  position: relative;
+  background: linear-gradient(135deg, rgba(242,214,117,.035), rgba(16,185,129,.018));
+}
+.ri-witness-frame::before,
+.ri-witness-frame::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.ri-witness-frame::before {
+  inset: 0.65rem;
+  border: 1px solid rgba(242,214,117,.075);
+}
+.ri-witness-frame::after {
+  width: 4px;
+  height: 4px;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  background: var(--ri-gold-bright);
+  box-shadow: 0 -1.4rem 0 rgba(242,214,117,.4), 0 1.4rem 0 rgba(242,214,117,.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ri-witness-frame::after { box-shadow: none; }
+}

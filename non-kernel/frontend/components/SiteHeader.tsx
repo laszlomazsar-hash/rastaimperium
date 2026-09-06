@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import RISeal from "./RISeal";
 
 /** Full primary set — desktop (lg+) */
 const desktopPrimary = [
@@ -136,16 +137,8 @@ export default function SiteHeader() {
   return (
     <header className="royal-header sticky top-0 z-50 border-b border-[#B8860B]/25 bg-[#090a09]/92 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-2.5 sm:px-6 sm:py-3 md:gap-3 lg:px-8">
-        <Link href="/" className="royal-brand shrink-0" onClick={() => setOpen(false)}>
-          <span className="royal-brand-mark" aria-hidden="true">
-            RI
-          </span>
-          <span className="hidden text-sm font-semibold tracking-[0.16em] text-[#D4AF37] transition hover:text-[#F2D675] xs:inline sm:inline">
-            RASTA IMPERIUM
-          </span>
-          <span className="text-sm font-semibold tracking-[0.14em] text-[#D4AF37] sm:hidden">
-            RASTA
-          </span>
+        <Link href="/" className="royal-brand shrink-0" onClick={() => setOpen(false)} aria-label="Rasta Imperium home">
+          <RISeal size={34} showWordmark />
         </Link>
 
         <nav aria-label="Primary tablet" className="hidden items-center md:flex lg:hidden">
