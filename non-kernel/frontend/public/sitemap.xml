@@ -17,9 +17,12 @@
   <url><loc>https://rastaimperium.com/governance/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://rastaimperium.com/governance/codex/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://rastaimperium.com/pillars/</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://rastaimperium.com/architecture/</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://rastaimperium.com/vision/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://rastaimperium.com/blueprint/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://rastaimperium.com/technology/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://rastaimperium.com/technology/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rastaimperium.com/technology/evo-v/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://rastaimperium.com/technology/verification/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://rastaimperium.com/applications/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://rastaimperium.com/observatory/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://rastaimperium.com/codex/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -29,4 +32,5 @@
   <url><loc>https://rastaimperium.com/research/</loc><changefreq>monthly</changefreq><priority>0.65</priority></url>
   <url><loc>https://rastaimperium.com/design-system/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://rastaimperium.com/invest/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://rastaimperium.com/thanks-and-praise/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 </urlset>
