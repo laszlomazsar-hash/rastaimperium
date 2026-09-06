@@ -143,6 +143,24 @@ export default function TechnologyPage() {
                 >
                   Governance model
                 </Link>
+                <Link
+                  href="/proof/"
+                  className="rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+                >
+                  Proof Registry
+                </Link>
+                <Link
+                  href="/limitations/"
+                  className="rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+                >
+                  Limitations
+                </Link>
+                <Link
+                  href="/architecture/"
+                  className="rounded-lg border border-zinc-600 px-5 py-3 text-sm font-semibold text-zinc-100"
+                >
+                  Architecture split
+                </Link>
               </div>
             </div>
 
@@ -264,6 +282,34 @@ export default function TechnologyPage() {
               </p>
             </Link>
           ))}
+        </div>
+
+        <div className="mt-14 rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
+          <h2 className="font-cinzel text-xl text-zinc-100">From architecture to engagement</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            Technical posture orients operators. Sealed evidence and written pilot scope define what
+            can be claimed in production.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/institutional-pilots/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+            >
+              Design partner pilots
+            </Link>
+            <Link
+              href="/contact/"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
+            >
+              Contact
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Limitations
+            </Link>
+          </div>
         </div>
       </section>
     </main>
