@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   title: "Invest & Support — Rasta Imperium",
   description:
     "Support sovereign AI infrastructure. Community contributions and institutional engagement paths for EVO-V constitutional governance.",
+  openGraph: {
+    title: "Invest & Support — Rasta Imperium",
+    description:
+      "Community support and institutional product path. Not a securities offering. Evidence-bound claims on Proof and Limitations.",
+    url: "https://rastaimperium.com/invest/",
+  },
 };
 
 const funding = [
@@ -30,7 +36,7 @@ export default function InvestPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Invest & support
           </p>
-          <h1 className="mt-5 text-4xl text-zinc-100 sm:text-5xl">Invest in sovereignty</h1>
+          <h1 className="mt-5 font-cinzel text-4xl text-zinc-100 sm:text-5xl">Invest in sovereignty</h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
             Support the public constitutional layer and the path toward deterministic governance.
             Community contributions and institutional engagement are separate channels — both
@@ -39,7 +45,7 @@ export default function InvestPage() {
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/product/"
-              className="rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
             >
               Institutional product path
             </Link>
@@ -60,10 +66,10 @@ export default function InvestPage() {
       </section>
 
       <section className="container-page border-b border-zinc-900 py-12">
-        <h2 className="text-2xl text-zinc-100">What support funds</h2>
+        <h2 className="font-cinzel text-2xl text-zinc-100">What support funds</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {funding.map((f) => (
-            <div key={f.title} className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+            <div key={f.title} className="royal-panel rounded-xl border p-6">
               <h3 className="text-lg text-[#F2D675]">{f.title}</h3>
               <p className="mt-3 text-sm leading-6 text-zinc-400">{f.body}</p>
             </div>
@@ -73,11 +79,11 @@ export default function InvestPage() {
 
       <section className="container-page border-b border-zinc-900 py-12">
         <div className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-xl border border-[#B8860B]/30 bg-black/30 p-8">
+          <div className="royal-panel rounded-xl border border-[#B8860B]/30 p-8">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
               Community · direct transfer
             </p>
-            <h2 className="mt-3 text-2xl text-zinc-100">Bank transfer (UK)</h2>
+            <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Bank transfer (UK)</h2>
             <p className="mt-2 text-sm text-zinc-500">Santander UK · personal account of Laszlo Mazsar</p>
             <dl className="mt-6 space-y-3 font-mono text-sm">
               <div className="flex justify-between border-b border-zinc-800 pb-2">
@@ -103,11 +109,11 @@ export default function InvestPage() {
             </p>
           </div>
 
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-8">
+          <div className="royal-panel rounded-xl border p-8">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
               Institutional · commercial
             </p>
-            <h2 className="mt-3 text-2xl text-zinc-100">Design partners & enterprise</h2>
+            <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Design partners & enterprise</h2>
             <p className="mt-3 text-sm leading-7 text-zinc-400">
               For councils, regulated teams, and enterprise buyers: paid pilots, audit paths, and
               runtime modules under written scope. Start with Product and Pricing posture — not a
@@ -143,13 +149,13 @@ export default function InvestPage() {
       </section>
 
       <section className="container-page py-12">
-        <h2 className="text-center text-2xl text-zinc-100">Other ways to support</h2>
+        <h2 className="text-center font-cinzel text-2xl text-zinc-100">Other ways to support</h2>
         <div className="mx-auto mt-8 grid max-w-2xl gap-4 sm:grid-cols-2">
           <a
             href="https://mazsar.gumroad.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-xl border border-zinc-800 bg-black/30 p-6 text-center transition hover:border-[#B8860B]/40"
+            className="royal-panel rounded-xl border p-6 text-center transition hover:border-[#B8860B]/40"
           >
             <p className="font-semibold text-[#F2D675]">Digital products</p>
             <p className="mt-2 text-sm text-zinc-500">mazsar.gumroad.com</p>
@@ -158,7 +164,7 @@ export default function InvestPage() {
             href="https://www.amazon.co.uk/stores/Laszlo-Mazsar/author/B0DT3YJKQH"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-xl border border-zinc-800 bg-black/30 p-6 text-center transition hover:border-[#B8860B]/40"
+            className="royal-panel rounded-xl border p-6 text-center transition hover:border-[#B8860B]/40"
           >
             <p className="font-semibold text-[#F2D675]">Books</p>
             <p className="mt-2 text-sm text-zinc-500">Amazon author page</p>
