@@ -13,7 +13,7 @@ export default function AboutPage() {
       <section className="border-b border-[#B8860B]/20">
         <div className="container-page py-16 lg:py-24">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">About</p>
-          <h1 className="mt-5 max-w-3xl text-4xl leading-tight text-zinc-100 sm:text-5xl">
+          <h1 className="mt-5 max-w-3xl font-cinzel text-4xl leading-tight text-zinc-100 sm:text-5xl">
             Constitutional intelligence, built in public.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
@@ -24,15 +24,27 @@ export default function AboutPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/product/"
-              className="rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
             >
               Product pathway
             </Link>
             <Link
-              href="/observatory/"
+              href="/governance-model/"
               className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
             >
-              Observatory demo
+              Governance model
+            </Link>
+            <Link
+              href="/proof/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+            >
+              Limitations
             </Link>
             <Link
               href="/thanks-and-praise/"
@@ -48,7 +60,7 @@ export default function AboutPage() {
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Founder</p>
-            <h2 className="mt-3 text-2xl text-zinc-100">Laszlo Mazsar</h2>
+            <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Laszlo Mazsar</h2>
             <p className="mt-2 text-sm text-zinc-500">Founder & AI Systems Architect</p>
             <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-300">
               I architect constitutional intelligence systems intended to enforce epistemic integrity
@@ -95,7 +107,7 @@ export default function AboutPage() {
               </a>
             </div>
           </div>
-          <aside className="rounded-xl border border-zinc-800 bg-black/30 p-6">
+          <aside className="royal-panel rounded-xl border p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
               What institutional buyers should expect
             </p>
@@ -114,6 +126,9 @@ export default function AboutPage() {
               <Link href="/pricing/" className="text-zinc-400">
                 Pricing →
               </Link>
+              <Link href="/pillars/" className="text-zinc-400">
+                Seven Articles →
+              </Link>
             </div>
           </aside>
         </div>
@@ -121,28 +136,37 @@ export default function AboutPage() {
 
       <section className="container-page border-b border-zinc-900 py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">Mission</p>
-        <h2 className="mt-3 max-w-2xl text-2xl text-zinc-100">
+        <h2 className="mt-3 max-w-2xl font-cinzel text-2xl text-zinc-100">
           Make autonomous decisions reconstructible before they scale.
         </h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+          <div className="royal-panel rounded-xl border p-5">
             <h3 className="text-[#F2D675]">Verify</h3>
             <p className="mt-2 text-sm leading-6 text-zinc-400">
               Public proof registry, challenge lab, and auditor handoff paths.
             </p>
+            <Link href="/proof/" className="mt-3 inline-block text-sm text-[#F2D675]">
+              Proof Registry →
+            </Link>
           </div>
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+          <div className="royal-panel rounded-xl border p-5">
             <h3 className="text-[#F2D675]">Pilot</h3>
             <p className="mt-2 text-sm leading-6 text-zinc-400">
               Scoped design partner programs for regulated and high-accountability environments.
             </p>
+            <Link href="/institutional-pilots/" className="mt-3 inline-block text-sm text-[#F2D675]">
+              Pilot pathway →
+            </Link>
           </div>
-          <div className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+          <div className="royal-panel rounded-xl border p-5">
             <h3 className="text-[#F2D675]">Govern</h3>
             <p className="mt-2 text-sm leading-6 text-zinc-400">
               Runtime and hosted modules remain a separate commercial layer — documented here, sold
               under explicit scope.
             </p>
+            <Link href="/product/" className="mt-3 inline-block text-sm text-[#F2D675]">
+              Product pathway →
+            </Link>
           </div>
         </div>
       </section>
@@ -160,7 +184,7 @@ export default function AboutPage() {
               ["Audit path", "/contact/?intent=audit", "Audit inquiry"],
             ] as const
           ).map(([title, href, cta]) => (
-            <div key={title} className="rounded-xl border border-zinc-800 bg-black/30 p-5">
+            <div key={title} className="royal-panel rounded-xl border p-5">
               <h3 className="text-lg text-zinc-100">{title}</h3>
               <Link href={href} className="mt-4 inline-block text-sm text-[#F2D675]">
                 {cta} →
@@ -173,7 +197,7 @@ export default function AboutPage() {
       <section className="container-page py-14">
         <div className="flex flex-col gap-6 rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl text-zinc-100">Engage</h2>
+            <h2 className="font-cinzel text-xl text-zinc-100">Engage</h2>
             <p className="mt-2 max-w-lg text-sm text-zinc-400">
               Institutional pilots, research collaboration, or a commercial brief — start at Contact
               after Limitations and Proof.
@@ -182,13 +206,13 @@ export default function AboutPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/product/"
-              className="rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
             >
               Product pathway
             </Link>
             <Link
               href="/contact/?intent=design-partner"
-              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
+              className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
             >
               Apply · design partner
             </Link>
