@@ -1,9 +1,13 @@
 # Railway deployment workflow fix
 
 - [x] Review the current Railway workflow and CLI deployment contract.
-- [x] Remove the hard dependency on the unknown Railway service name from the deployment workflow.
-- [x] Replace the ambiguous CLI auto-deploy path with a manual note because Railway’s native GitHub integration already owns production deployment.
-- [x] Push the workflow fix and verify the resulting native Railway production run.
+- [x] Root cause: multi-service project → `railway up` requires `--service`.
+- [x] Restore CLI force-redeploy workflow with service input + `RAILWAY_SERVICE` secret fallback.
+- [x] Clear errors when token or service is missing/ambiguous.
+- [ ] Set repository secret `RAILWAY_SERVICE` to the production service name (one-time, in GitHub Settings → Secrets).
+- [ ] Optional: re-run **Actions → Railway Deploy → Run workflow** with the service name to verify CLI path.
+
+Primary auto path remains Railway native GitHub integration after `build-static-site.yml` refreshes `backend/static/`.
 
 # Thanks & Praise page
 
