@@ -73,20 +73,47 @@ jobs:
           fi
 
           SERVICE="${INPUT_SERVICE:-${SECRET_SERVICE:-}}"
+          ENVIRONMENT="${RAILWAY_ENVIRONMENT}"
 
           if [ -n "$SERVICE" ]; then
-            echo "Deploying service='$SERVICE' environment='$RAILWAY_ENVIRONMENT'"
-            railway up --ci --service "$SERVICE" --environment "$RAILWAY_ENVIRONMENT"
+            echo "Deploying service='${SERVICE}' environment='${ENVIRONMENT}'"
+            
+            # Validate service exists before attempting deploy
+            if ! railway service list --environment "${ENVIRONMENT}" 2>/dev/null | grep -q "^${SERVICE}"; then
+              echo "::error title=Service not found::Service '${SERVICE}' not found in Railway environment '${ENVIRONMENT}'."
+              echo ""
+              echo "Current project topology:"
+              railway service list --environment "${ENVIRONMENT}" 2>/dev/null || {
+                echo "  (Failed to query services. Verify RAILWAY_TOKEN has project access.)"
+              }
+              echo ""
+              echo "Expected service topology for Rasta Imperium:"
+              echo "  Project: Rasta Imperium"
+              echo "  Environment: production"
+              echo "  Service name: web"
+              echo ""
+              if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+                echo "To fix:"
+                echo "  1. Set RAILWAY_SERVICE to 'web' in repository secrets, OR"
+                echo "  2. Pass service='web' when running this workflow manually"
+              else
+                echo "To fix: Set RAILWAY_SERVICE = 'web' in Settings → Secrets and variables → Actions"
+              fi
+              exit 1
+            fi
+            
+            railway up --ci --service "${SERVICE}" --environment "${ENVIRONMENT}"
           else
             echo "No service specified (input or RAILWAY_SERVICE secret). Attempting project default…"
             set +e
-            railway up --ci --environment "$RAILWAY_ENVIRONMENT"
+            railway up --ci --environment "${ENVIRONMENT}"
             status=$?
             set -e
             if [ "$status" -ne 0 ]; then
-              echo "::error title=Service required::Railway project has multiple services. Re-run with the service input, or set the RAILWAY_SERVICE repository secret."
+              echo "::error title=Service required::Railway project has multiple services. Re-run with the service input, or set the RAILWAY_SERVICE repository secret to 'web'."
               exit 1
             fi
           fi
 
           echo "Railway CLI deploy submitted."
+

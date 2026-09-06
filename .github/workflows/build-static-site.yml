@@ -111,23 +111,42 @@ jobs:
           fi
 
           SERVICE="${RAILWAY_SERVICE:-}"
-          echo "static_changed=${STATIC_CHANGED:-unknown} environment=${RAILWAY_ENVIRONMENT}"
+          ENVIRONMENT="${RAILWAY_ENVIRONMENT}"
+          echo "static_changed=${STATIC_CHANGED:-unknown} environment=${ENVIRONMENT}"
 
-          if [ -n "$SERVICE" ]; then
-            echo "Deploying service='$SERVICE'"
-            railway up --ci --service "$SERVICE" --environment "$RAILWAY_ENVIRONMENT"
-          else
-            echo "RAILWAY_SERVICE not set — attempting project default service"
-            set +e
-            railway up --ci --environment "$RAILWAY_ENVIRONMENT"
-            status=$?
-            set -e
-            if [ "$status" -ne 0 ]; then
-              echo "::error title=Service required::Multi-service Railway project detected."
-              echo "Set the RAILWAY_SERVICE repository secret to the production service name,"
-              echo "or re-run Railway Deploy workflow_dispatch with the service input."
-              exit 1
-            fi
+          if [ -z "$SERVICE" ]; then
+            echo "::error title=RAILWAY_SERVICE not set::Multi-service Railway project detected."
+            echo ""
+            echo "The RAILWAY_SERVICE GitHub repository secret MUST be set to the production service name."
+            echo ""
+            echo "Expected service topology for Rasta Imperium:"
+            echo "  Project: Rasta Imperium"
+            echo "  Environment: production"
+            echo "  Service name: web"
+            echo ""
+            echo "Fix:"
+            echo "  1. Go to Settings → Secrets and variables → Actions"
+            echo "  2. Create/update RAILWAY_SERVICE = 'web'"
+            echo "  3. Re-run this workflow"
+            echo ""
+            exit 1
           fi
 
+          echo "Deploying service='${SERVICE}' environment='${ENVIRONMENT}'"
+
+          # Validate service exists before attempting deploy
+          if ! railway service list --environment "${ENVIRONMENT}" 2>/dev/null | grep -q "^${SERVICE}"; then
+            echo "::error title=Service not found::Service '${SERVICE}' not found in Railway environment '${ENVIRONMENT}'."
+            echo ""
+            echo "Current project topology:"
+            railway service list --environment "${ENVIRONMENT}" 2>/dev/null || {
+              echo "  (Failed to query services. Verify RAILWAY_TOKEN has project access.)"
+            }
+            echo ""
+            echo "Verify RAILWAY_SERVICE is set correctly and re-run."
+            exit 1
+          fi
+
+          railway up --ci --service "${SERVICE}" --environment "${ENVIRONMENT}"
           echo "Railway CLI deploy submitted."
+
