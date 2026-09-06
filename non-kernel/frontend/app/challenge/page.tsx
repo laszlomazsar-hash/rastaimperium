@@ -9,7 +9,7 @@ import { TrustStatus } from "../../components/evidence/TrustStatus";
 
 function ChallengeDetail({ c }: { c: Challenge }) {
   return (
-    <article className="rounded-xl border border-zinc-800 bg-[#0b0c0b]/90 p-5 sm:p-6">
+    <article className="royal-panel rounded-xl border p-5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="font-mono text-[11px] text-zinc-500">{c.challengeId}</p>
@@ -93,13 +93,39 @@ export default function ChallengeLabPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Adversarial verification
           </p>
-          <h1 className="mt-4 text-4xl text-zinc-100 sm:text-5xl">Challenge Lab</h1>
+          <h1 className="mt-4 font-cinzel text-4xl text-zinc-100 sm:text-5xl">Challenge Lab</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
             Safe, deterministic challenge fixtures. Select a challenge and inspect input, expected
             behaviour, result, invariant, and reason. No endpoint here can modify production state.
           </p>
           <div className="mt-6">
             <TrustStatus compact />
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/proof/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
+            >
+              Proof Registry
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
+            >
+              Limitations
+            </Link>
+            <Link
+              href="/governance-model/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Governance model
+            </Link>
+            <Link
+              href="/pillars/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Pillars
+            </Link>
           </div>
         </div>
       </section>
@@ -139,14 +165,32 @@ export default function ChallengeLabPage() {
           <div>{selected && <ChallengeDetail c={selected} />}</div>
         </div>
 
-        <div className="mt-12 rounded-xl border border-zinc-800 p-6 text-center">
-          <p className="text-sm text-zinc-400">Institutional path after challenge review</p>
-          <Link
-            href="/institutional-pilots"
-            className="mt-4 inline-block rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-semibold text-black"
-          >
-            Institutional pilots →
-          </Link>
+        <div className="mt-14 rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
+          <h2 className="font-cinzel text-xl text-zinc-100">Institutional path after challenge review</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            Adversarial fixtures are public and non-destructive. Scoped pilots map a written subset
+            of invariants onto your stack after Limitations and Proof.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/institutional-pilots/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+            >
+              Design partner pilots
+            </Link>
+            <Link
+              href="/product/"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
+            >
+              Product pathway
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Limitations
+            </Link>
+          </div>
         </div>
       </section>
     </main>
