@@ -1,17 +1,72 @@
 name: Railway Deploy
 
-# Railway's native GitHub integration deploys the connected production service
-# from main. This workflow is intentionally manual-only so it cannot create a
-# second, ambiguous deployment path when the project contains multiple services.
+# Primary production path: Railway native GitHub integration on main
+# (triggered after build-static-site.yml refreshes backend/static/).
+#
+# This workflow is a manual force-redeploy via Railway CLI.
+# Multi-service projects MUST set secrets.RAILWAY_SERVICE or pass the
+# service input — otherwise `railway up` fails with:
+#   Multiple services found. Please specify a service via the `--service` flag.
 
 on:
   workflow_dispatch:
+    inputs:
+      service:
+        description: "Railway service name (required if project has multiple services)"
+        required: false
+        type: string
+      environment:
+        description: "Railway environment name"
+        required: false
+        default: production
+        type: string
 
 jobs:
-  deployment-note:
+  deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - name: Explain deployment source
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Railway CLI
+        run: npm install --global @railway/cli
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_ENVIRONMENT: ${{ inputs.environment || secrets.RAILWAY_ENVIRONMENT || 'production' }}
+          INPUT_SERVICE: ${{ inputs.service }}
+          SECRET_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
+        shell: bash
         run: |
-          echo "Railway native GitHub integration owns production deployment."
-          echo "Use the Railway project deployment panel to redeploy or inspect logs."
+          set -euo pipefail
+
+          if [ -z "${RAILWAY_TOKEN:-}" ]; then
+            echo "::error title=Missing Railway token::Set the RAILWAY_TOKEN GitHub Actions secret to a valid Railway project/account token."
+            exit 1
+          fi
+
+          SERVICE="${INPUT_SERVICE:-${SECRET_SERVICE:-}}"
+
+          if [ -n "$SERVICE" ]; then
+            echo "Deploying service='$SERVICE' environment='$RAILWAY_ENVIRONMENT'"
+            railway up --ci --service "$SERVICE" --environment "$RAILWAY_ENVIRONMENT"
+          else
+            echo "No service specified (input or RAILWAY_SERVICE secret). Attempting project default…"
+            set +e
+            railway up --ci --environment "$RAILWAY_ENVIRONMENT"
+            status=$?
+            set -e
+            if [ "$status" -ne 0 ]; then
+              echo "::error title=Service required::Railway project has multiple services. Re-run with the service input, or set the RAILWAY_SERVICE repository secret to the production service name."
+              exit 1
+            fi
+          fi
+
+          echo "Railway CLI deploy submitted."
