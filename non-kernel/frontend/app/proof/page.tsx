@@ -74,6 +74,32 @@ export default function ProofRegistryPage() {
           <div className="mt-6">
             <TrustStatus compact />
           </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/governance-model/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
+            >
+              Governance model
+            </Link>
+            <Link
+              href="/pillars/"
+              className="rounded-lg border border-[#B8860B]/50 px-4 py-2.5 text-sm font-semibold text-[#F2D675]"
+            >
+              Pillars
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm font-semibold text-zinc-200"
+            >
+              Limitations
+            </Link>
+            <Link
+              href="/challenge/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm font-semibold text-zinc-200"
+            >
+              Challenge Lab
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -219,6 +245,36 @@ export default function ProofRegistryPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="container-page border-t border-zinc-900 py-14">
+        <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
+          <h2 className="font-cinzel text-2xl text-zinc-100">Evidence inspected. Ready for the next step?</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+            After reviewing sealed capsules and explicit Limitations, map a fixed-scope subset onto
+            your stack under written success criteria.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/product/"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+            >
+              Product pathway
+            </Link>
+            <Link
+              href="/institutional-pilots/"
+              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
+            >
+              Design partner pilots
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
+            >
+              Limitations first
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   );
