@@ -124,6 +124,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     >
                       GitHub
                     </a>
+                    <a
+                      className="text-zinc-300 transition hover:text-[#F2D675]"
+                      href="https://substack.com/@codexbylaszlo"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Substack
+                    </a>
                   </div>
                 </nav>
               </div>

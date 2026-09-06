@@ -85,6 +85,14 @@ export default function AboutPage() {
               >
                 GitHub →
               </a>
+              <a
+                href="https://substack.com/@codexbylaszlo"
+                target="_blank"
+                rel="noreferrer"
+                className="text-zinc-400"
+              >
+                Substack →
+              </a>
             </div>
           </div>
           <aside className="rounded-xl border border-zinc-800 bg-black/30 p-6">
