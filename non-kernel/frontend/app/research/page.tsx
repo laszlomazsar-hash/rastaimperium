@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   title: "Research — Publications & Proofs",
   description:
     "Research surface for publications, sealed artifacts, repositories, and witness-style verification concepts. Evidence-bound; unproven claims labelled.",
+  openGraph: {
+    title: "Research — Publications & Proofs",
+    description:
+      "Sealed capsules, Evidence Explorer, Challenge Lab, and doctrine entry points. Unproven claims stay labelled.",
+    url: "https://rastaimperium.com/research/",
+  },
 };
 
 const tracks = [
@@ -33,6 +39,12 @@ const tracks = [
     status: "CONSTITUTIONAL",
   },
   {
+    title: "Governance model",
+    detail: "Systems properties and Articles map — doctrine to sealed evidence",
+    href: "/governance-model/",
+    status: "DOCTRINE",
+  },
+  {
     title: "Blueprint stack",
     detail: "Nine-layer civilization architecture: purpose → invariants → evidence",
     href: "/blueprint/",
@@ -51,12 +63,6 @@ const tracks = [
     status: "LIBRARY",
   },
   {
-    title: "Applications & Genesis",
-    detail: "Kernel, Observatory, Fitness DSL, and demonstration ecosystem surfaces",
-    href: "/applications/",
-    status: "PRODUCT SURFACE",
-  },
-  {
     title: "Design partner path",
     detail: "Institutional pilots with written scope — research collaboration entry for labs",
     href: "/institutional-pilots/",
@@ -72,7 +78,7 @@ export default function ResearchPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
             Research surface
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl text-zinc-100 sm:text-5xl">
+          <h1 className="mt-4 max-w-3xl font-cinzel text-4xl text-zinc-100 sm:text-5xl">
             Research, artifacts, and proofs
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
@@ -83,15 +89,21 @@ export default function ResearchPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/proof/"
-              className="rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-2.5 text-sm font-bold text-black"
             >
               Proof Registry
             </Link>
             <Link
               href="/library/"
-              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+              className="rounded-lg border border-[#B8860B]/40 px-5 py-2.5 text-sm text-[#F2D675]"
             >
               Library
+            </Link>
+            <Link
+              href="/limitations/"
+              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-sm text-zinc-100"
+            >
+              Limitations
             </Link>
             <Link
               href="/contact/?intent=research"
@@ -109,7 +121,7 @@ export default function ResearchPage() {
             <Link
               key={t.title}
               href={t.href}
-              className="rounded-xl border border-zinc-800 bg-black/30 p-5 transition hover:border-[#B8860B]/40"
+              className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
             >
               <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
                 {t.status}
@@ -121,7 +133,7 @@ export default function ResearchPage() {
           ))}
         </div>
 
-        <div className="mt-12 rounded-xl border border-zinc-800 bg-black/20 p-6">
+        <div className="mt-12 royal-panel rounded-xl border p-6">
           <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Boundary</p>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-400">
             Research on this surface is evidence-oriented. Production deployment, live telemetry, and
