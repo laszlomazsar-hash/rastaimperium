@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TrustStatus } from "../components/evidence/TrustStatus";
-import { ClaimEvidence } from "../components/evidence/ClaimEvidence";
 import { generateTelemetrySnapshot, telemetryStatusLabel } from "./motion/telemetry";
 
 const civilizationStack = [
@@ -277,7 +276,12 @@ export default function HomePage() {
         <ul className="mt-6 max-w-2xl space-y-3 text-sm text-zinc-300">
           {trustPillars.map((p) => (<li key={p} className="flex gap-2"><span className="text-[#B8860B]">·</span><span>{p}</span></li>))}
         </ul>
-        <div className="mt-8"><ClaimEvidence claimId="home-trust-pillars" /></div>
+        <div className="mt-8 flex flex-wrap gap-4 text-sm">
+          <Link href="/proof/" className="font-semibold text-[#F2D675]">Proof Registry →</Link>
+          <Link href="/evidence/" className="text-zinc-400 hover:text-[#F2D675]">Evidence Explorer →</Link>
+          <Link href="/challenge/" className="text-zinc-400 hover:text-[#F2D675]">Challenge Lab →</Link>
+          <Link href="/trust/" className="text-zinc-400 hover:text-[#F2D675]">Trust Console →</Link>
+        </div>
       </section>
 
       <section className="container-page py-14">
