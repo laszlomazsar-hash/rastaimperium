@@ -1,5 +1,10 @@
 name: Build Static Site
 
+# Automated production path for rastaimperium.com:
+# 1) Next.js static export → backend/static/
+# 2) Commit export on main (triggers Railway native GitHub deploy if linked)
+# 3) Optional Railway CLI force-redeploy when RAILWAY_TOKEN (+ RAILWAY_SERVICE) are set
+
 on:
   push:
     branches: [main]
@@ -8,6 +13,10 @@ on:
       - ".github/workflows/build-static-site.yml"
   workflow_dispatch:
 
+concurrency:
+  group: static-site-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -15,6 +24,8 @@ jobs:
   export-static-site:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      static_changed: ${{ steps.publish.outputs.changed }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -37,15 +48,86 @@ jobs:
         run: npm run build
 
       - name: Publish static export to repository
+        id: publish
         shell: bash
         run: |
+          set -euo pipefail
           rsync -a --delete non-kernel/frontend/out/ backend/static/
+
           if test -z "$(git status --porcelain -- backend/static)"; then
             echo "Static output is already current."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add backend/static
           git commit -m "build: refresh static website export"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "Published backend/static to main."
+
+  railway-redeploy:
+    name: Railway redeploy
+    needs: export-static-site
+    if: success()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Railway CLI
+        run: npm install --global @railway/cli
+
+      - name: Redeploy production service
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT || 'production' }}
+          RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
+          STATIC_CHANGED: ${{ needs.export-static-site.outputs.static_changed }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${RAILWAY_TOKEN:-}" ]; then
+            echo "::notice title=Railway CLI skipped::RAILWAY_TOKEN secret is not set."
+            echo "Static export is on main. If Railway GitHub integration is linked to this repo,"
+            echo "it should redeploy automatically from the backend/static commit (or the triggering push)."
+            echo "To enable CLI force-redeploy, set repository secrets:"
+            echo "  RAILWAY_TOKEN   — Railway project/account token"
+            echo "  RAILWAY_SERVICE — production service name (required for multi-service projects)"
+            echo "  RAILWAY_ENVIRONMENT — optional, defaults to production"
+            exit 0
+          fi
+
+          SERVICE="${RAILWAY_SERVICE:-}"
+          echo "static_changed=${STATIC_CHANGED:-unknown} environment=${RAILWAY_ENVIRONMENT}"
+
+          if [ -n "$SERVICE" ]; then
+            echo "Deploying service='$SERVICE'"
+            railway up --ci --service "$SERVICE" --environment "$RAILWAY_ENVIRONMENT"
+          else
+            echo "RAILWAY_SERVICE not set — attempting project default service"
+            set +e
+            railway up --ci --environment "$RAILWAY_ENVIRONMENT"
+            status=$?
+            set -e
+            if [ "$status" -ne 0 ]; then
+              echo "::error title=Service required::Multi-service Railway project detected."
+              echo "Set the RAILWAY_SERVICE repository secret to the production service name,"
+              echo "or re-run Railway Deploy workflow_dispatch with the service input."
+              exit 1
+            fi
+          fi
+
+          echo "Railway CLI deploy submitted."
