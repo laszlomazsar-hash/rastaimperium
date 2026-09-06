@@ -1,0 +1,69 @@
+:root {
+  --ri-void: #070807;
+  --ri-bone: #f3eedf;
+  --ri-gold: #b88718;
+  --ri-gold-bright: #f2d675;
+  --ri-verify: #10b981;
+  --ri-reject: #d14b4b;
+  --ri-caution: #d49a3a;
+  --ri-line: rgba(242, 214, 117, 0.22);
+}
+
+.ri-institutional-mark { color: var(--ri-gold-bright); }
+.ri-machine { font-family: "Courier New", monospace; letter-spacing: 0.045em; }
+
+/* Evidence-first semantic states. Never rely on colour alone. */
+.ri-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font: 600 0.64rem/1 "Courier New", monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ri-status::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.ri-status--verified, .ri-status--operational { color: var(--ri-verify); }
+.ri-status--verified::before { background: currentColor; }
+.ri-status--rejected { color: var(--ri-reject); }
+.ri-status--rejected::before { border-radius: 0; transform: rotate(45deg); }
+.ri-status--historical, .ri-status--demonstration, .ri-status--partial, .ri-status--indeterminate { color: var(--ri-caution); }
+.ri-status--unavailable { color: #9ca3af; }
+
+/* Replace decorative spectacle with quiet institutional geometry. */
+.ri-witness-frame {
+  border: 1px solid var(--ri-line);
+  position: relative;
+  background: linear-gradient(135deg, rgba(242,214,117,.035), rgba(16,185,129,.018));
+}
+.ri-witness-frame::before,
+.ri-witness-frame::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.ri-witness-frame::before {
+  inset: 0.65rem;
+  border: 1px solid rgba(242,214,117,.075);
+}
+.ri-witness-frame::after {
+  width: 4px;
+  height: 4px;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  background: var(--ri-gold-bright);
+  box-shadow: 0 -1.4rem 0 rgba(242,214,117,.4), 0 1.4rem 0 rgba(242,214,117,.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ri-witness-frame::after { box-shadow: none; }
+}
