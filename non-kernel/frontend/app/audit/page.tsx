@@ -170,10 +170,26 @@ python3 non-kernel/frontend/scripts/verify_art_l7_replay_001.py ./ART-L7-REPLAY-
 go build -o verify_replay verify_art_l7_replay_001.go
 ./verify_replay ./ART-L7-REPLAY-001.json`}</pre>
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
-            <Link href="/verify/" className="text-[#F2D675]">
+            <a
+              className="text-[#F2D675] hover:underline"
+              href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Pure Verifier README →
+            </a>
+            <a
+              className="text-[#F2D675] hover:underline"
+              href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Reproduce Offline (one-command) →
+            </a>
+            <Link href="/verify/" className="text-zinc-400 hover:text-[#F2D675]">
               Verification hub →
             </Link>
-            <Link href="/verify/art-l7-replay-001/" className="text-zinc-400">
+            <Link href="/verify/art-l7-replay-001/" className="text-zinc-400 hover:text-[#F2D675]">
               Replay capsule guide →
             </Link>
           </div>

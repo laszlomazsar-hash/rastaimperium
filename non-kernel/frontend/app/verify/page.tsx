@@ -54,6 +54,39 @@ export default function VerifyHubPage() {
               </p>
             </div>
           </div>
+
+          {/* New: direct entry to pure-verifier docs */}
+          <div className="mt-6 rounded-xl border border-[#B8860B]/30 bg-[#0b0c0b]/60 p-4 sm:p-5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
+              Offline reproduction entry points
+            </p>
+            <div className="mt-3 flex flex-wrap gap-4 text-sm">
+              <a
+                className="text-[#F2D675] hover:underline"
+                href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Pure Verifier README →
+              </a>
+              <a
+                className="text-[#F2D675] hover:underline"
+                href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Reproduce Offline (one-command) →
+              </a>
+              <a
+                className="text-zinc-400 hover:text-[#F2D675]"
+                href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/EVIDENCE_MANIFEST.md"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Living Evidence Manifest →
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
