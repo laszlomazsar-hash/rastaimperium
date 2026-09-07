@@ -1,134 +1,37 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import RISeal from "./RISeal";
 
 /**
- * Verification-First Visual Hierarchy v1 — primary nav prioritises the
- * independent verification journey over product/platform surfaces.
+ * Phase C — Constitutional technology navigation.
+ * Labels map only to existing routes. No invented destinations.
+ *
+ * Visitor questions answered:
+ * - What is this?     → Imperium · System · Codex
+ * - Can I inspect it? → Evidence · Verify · Audit
+ * - Can I engage?     → Consulting
  */
-const desktopPrimary = [
-  { href: "/verify", label: "Verify" },
-  { href: "/proof", label: "Proof" },
-  { href: "/trust", label: "Trust" },
-  { href: "/audit", label: "Audit" },
-  { href: "/limitations", label: "Limitations" },
-  { href: "/product", label: "Product" },
-];
-
-/** Condensed primary — tablet (md–lg) */
-const tabletPrimary = [
-  { href: "/verify", label: "Verify" },
-  { href: "/proof", label: "Proof" },
-  { href: "/trust", label: "Trust" },
-  { href: "/limitations", label: "Limitations" },
-];
-
-const moreLinks = [
-  { href: "/audit", label: "Audit" },
-  { href: "/evidence", label: "Evidence" },
-  { href: "/challenge", label: "Challenge Lab" },
-  { href: "/product", label: "Product" },
-  { href: "/institutional-pilots", label: "Pilots" },
-  { href: "/why-deterministic-governance", label: "Why Deterministic" },
-  { href: "/governance-model", label: "Governance model" },
-  { href: "/architecture", label: "Architecture" },
-  { href: "/technology", label: "Technology" },
-  { href: "/applications", label: "Apps" },
-  { href: "/observatory", label: "Observatory" },
-  { href: "/blueprint", label: "Blueprint" },
+const primaryNav = [
+  { href: "/", label: "Imperium" },
+  { href: "/blueprint", label: "System" },
   { href: "/codex", label: "Codex" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/library", label: "Library" },
-  { href: "/design-system", label: "Design System" },
-  { href: "/research", label: "Research" },
-  { href: "/about", label: "About" },
-  { href: "/thanks-and-praise", label: "Thanks & Praise" },
-  { href: "/invest", label: "Invest" },
-];
-
-const desktopMoreLinks = [
-  { href: "/evidence", label: "Evidence" },
-  { href: "/challenge", label: "Challenge Lab" },
-  { href: "/institutional-pilots", label: "Pilots" },
-  { href: "/why-deterministic-governance", label: "Why Deterministic" },
-  { href: "/governance-model", label: "Governance model" },
-  { href: "/architecture", label: "Architecture" },
-  { href: "/technology", label: "Technology" },
-  { href: "/applications", label: "Apps" },
-  { href: "/observatory", label: "Observatory" },
-  { href: "/blueprint", label: "Blueprint" },
-  { href: "/codex", label: "Codex" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/library", label: "Library" },
-  { href: "/design-system", label: "Design System" },
-  { href: "/research", label: "Research" },
-  { href: "/about", label: "About" },
-  { href: "/thanks-and-praise", label: "Thanks & Praise" },
-  { href: "/invest", label: "Invest" },
-];
-
-const mobilePrimary = [
-  { href: "/verify", label: "Verify" },
-  { href: "/proof", label: "Proof" },
-  { href: "/trust", label: "Trust" },
+  { href: "/proof", label: "Evidence" },
+  { href: "/verify", label: "Verify", emphasize: true },
   { href: "/audit", label: "Audit" },
-  { href: "/limitations", label: "Limitations" },
-  { href: "/product", label: "Product" },
-];
+  { href: "/institutional-pilots", label: "Consulting" },
+] as const;
 
-function MoreMenu({
-  open,
-  setOpen,
-  links,
-}: {
-  open: boolean;
-  setOpen: (v: boolean) => void;
-  links: { href: string; label: string }[];
-}) {
-  return (
-    <li className="relative">
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => setOpen(!open)}
-        onBlur={() => {
-          window.setTimeout(() => setOpen(false), 180);
-        }}
-        className="flex items-center gap-1 rounded-md px-2 py-2 text-xs transition hover:bg-[#B8860B]/10 hover:text-[#F2D675] md:px-2.5 md:text-sm"
-      >
-        More
-        <svg className="h-3.5 w-3.5 opacity-70" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path
-            fillRule="evenodd"
-            d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </button>
-      {open && (
-        <div className="absolute right-0 top-full z-50 mt-1 max-h-[70vh] min-w-[13rem] overflow-y-auto rounded-lg border border-[#B8860B]/30 bg-[#0c0e0c] py-2 shadow-2xl shadow-black/50">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="block px-4 py-2 text-sm text-zinc-300 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
-              onClick={() => setOpen(false)}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </li>
-  );
+function isActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export default function SiteHeader() {
+  const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -144,6 +47,10 @@ export default function SiteHeader() {
   }, [open]);
 
   useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const onChange = () => {
       if (mq.matches) setOpen(false);
@@ -153,73 +60,102 @@ export default function SiteHeader() {
   }, []);
 
   return (
-    <header className="royal-header sticky top-0 z-50 border-b border-[#B8860B]/25 bg-[#090a09]/92 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-2.5 sm:px-6 sm:py-3 md:gap-3 lg:px-8">
-        <Link href="/" className="royal-brand shrink-0" onClick={() => setOpen(false)} aria-label="Rasta Imperium home">
+    <header className="royal-header sticky top-0 z-50 border-b border-[rgba(242,214,117,0.2)] bg-[#090a09]/94 backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6 sm:py-3 lg:px-8">
+        <Link
+          href="/"
+          className="royal-brand shrink-0"
+          onClick={() => setOpen(false)}
+          aria-label="Rasta Imperium home"
+        >
           <RISeal size={34} showWordmark />
         </Link>
 
-        <nav aria-label="Primary tablet" className="hidden items-center md:flex lg:hidden">
-          <ul className="flex items-center gap-0 text-xs text-zinc-300 sm:text-sm">
-            {tabletPrimary.map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className="block rounded-md px-2 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-            <MoreMenu open={moreOpen} setOpen={setMoreOpen} links={moreLinks} />
-            <li>
-              <Link
-                href="/contact"
-                className="ml-0.5 block rounded-md border border-[#B8860B]/50 px-2.5 py-1.5 text-[#F2D675] transition hover:bg-[#B8860B] hover:text-black"
-              >
-                Contact
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
+        {/* Desktop primary */}
         <nav aria-label="Primary" className="hidden items-center lg:flex">
           <ul className="flex items-center gap-0.5 text-sm text-zinc-300">
-            {desktopPrimary.map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className="block rounded-md px-2.5 py-2 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-            <MoreMenu open={moreOpen} setOpen={setMoreOpen} links={desktopMoreLinks} />
-            <li>
-              <Link
-                href="/contact"
-                className="ml-1 block rounded-md border border-[#B8860B]/50 px-3 py-2 text-[#F2D675] transition hover:bg-[#B8860B] hover:text-black"
-              >
-                Contact
-              </Link>
-            </li>
+            {primaryNav.map((item) => {
+              const active = isActive(pathname, item.href);
+              const emphasize = "emphasize" in item && item.emphasize;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    className={
+                      emphasize
+                        ? `rounded-md px-2.5 py-2 font-semibold transition ${
+                            active
+                              ? "bg-[#D4AF37] text-black"
+                              : "text-[#F2D675] hover:bg-[#B8860B]/15"
+                          }`
+                        : `rounded-md px-2.5 py-2 transition ${
+                            active
+                              ? "bg-[#B8860B]/15 text-[#F2D675]"
+                              : "hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
+                          }`
+                    }
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2 md:hidden">
+        {/* Tablet condensed */}
+        <nav aria-label="Primary tablet" className="hidden items-center md:flex lg:hidden">
+          <ul className="flex items-center gap-0 text-xs text-zinc-300 sm:text-sm">
+            {primaryNav
+              .filter((i) =>
+                ["/", "/proof", "/verify", "/audit", "/institutional-pilots"].includes(i.href)
+              )
+              .map((item) => {
+                const active = isActive(pathname, item.href);
+                const emphasize = "emphasize" in item && item.emphasize;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      className={
+                        emphasize
+                          ? `rounded-md px-2 py-2 font-semibold transition ${
+                              active
+                                ? "bg-[#D4AF37] text-black"
+                                : "text-[#F2D675] hover:bg-[#B8860B]/15"
+                            }`
+                          : `rounded-md px-2 py-2 transition ${
+                              active
+                                ? "bg-[#B8860B]/15 text-[#F2D675]"
+                                : "hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
+                            }`
+                      }
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+          </ul>
+        </nav>
+
+        {/* Mobile controls */}
+        <div className="flex items-center gap-2 lg:hidden">
           <Link
-            href="/contact"
-            className="rounded-md border border-[#B8860B]/40 px-2.5 py-1.5 text-xs font-semibold text-[#F2D675]"
+            href="/verify"
+            className="rounded-md border border-[#B8860B]/50 px-2.5 py-1.5 text-xs font-semibold text-[#F2D675] transition hover:bg-[#B8860B]/15 md:hidden"
           >
-            Contact
+            Verify
           </Link>
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
-            className="rounded-md border border-zinc-700 p-2 text-zinc-200 transition hover:border-[#B8860B]/50"
+            className="rounded-md border border-zinc-700 p-2.5 text-zinc-200 transition hover:border-[#B8860B]/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F2D675]"
           >
             {open ? (
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -234,50 +170,62 @@ export default function SiteHeader() {
         </div>
       </div>
 
+      {/* Mobile panel */}
       {open && (
-        <div className="border-t border-[#B8860B]/20 bg-[#0a0c0a] md:hidden">
-          <nav aria-label="Mobile" className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-              Primary
+        <div
+          id="mobile-nav"
+          className="border-t border-[rgba(242,214,117,0.15)] bg-[#0a0c0a] md:hidden"
+        >
+          <nav aria-label="Mobile" className="mx-auto max-w-7xl px-4 py-5 sm:px-6">
+            <p className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+              Navigation
             </p>
-            <ul className="grid grid-cols-2 gap-1 sm:grid-cols-3">
-              {mobilePrimary.map((l) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-md px-3 py-2.5 text-sm text-zinc-200 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <p className="mb-2 mt-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-              More
-            </p>
-            <ul className="grid grid-cols-2 gap-1 sm:grid-cols-3">
-              {moreLinks
-                .filter((l) => !mobilePrimary.some((p) => p.href === l.href))
-                .map((l) => (
-                  <li key={l.href}>
+            <ul className="space-y-1">
+              {primaryNav.map((item) => {
+                const active = isActive(pathname, item.href);
+                const emphasize = "emphasize" in item && item.emphasize;
+                return (
+                  <li key={item.href}>
                     <Link
-                      href={l.href}
+                      href={item.href}
                       onClick={() => setOpen(false)}
-                      className="block rounded-md px-3 py-2.5 text-sm text-zinc-300 transition hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
+                      aria-current={active ? "page" : undefined}
+                      className={
+                        emphasize
+                          ? `block rounded-lg px-4 py-3.5 text-base font-semibold transition ${
+                              active
+                                ? "bg-[#D4AF37] text-black"
+                                : "bg-[#B8860B]/10 text-[#F2D675]"
+                            }`
+                          : `block rounded-lg px-4 py-3.5 text-base transition ${
+                              active
+                                ? "bg-[#B8860B]/15 text-[#F2D675]"
+                                : "text-zinc-200 hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
+                            }`
+                      }
                     >
-                      {l.label}
+                      {item.label}
                     </Link>
                   </li>
-                ))}
+                );
+              })}
             </ul>
-            <Link
-              href="/contact/?intent=design-partner"
-              onClick={() => setOpen(false)}
-              className="mt-4 block rounded-lg bg-[#D4AF37] px-4 py-3 text-center text-sm font-bold text-black"
-            >
-              Apply · design partner
-            </Link>
+            <div className="mt-5 border-t border-zinc-800 pt-4">
+              <Link
+                href="/limitations"
+                onClick={() => setOpen(false)}
+                className="block rounded-lg px-4 py-3 text-sm text-zinc-400 transition hover:text-[#F2D675]"
+              >
+                Limitations
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setOpen(false)}
+                className="mt-1 block rounded-lg px-4 py-3 text-sm text-zinc-400 transition hover:text-[#F2D675]"
+              >
+                Contact
+              </Link>
+            </div>
           </nav>
         </div>
       )}
