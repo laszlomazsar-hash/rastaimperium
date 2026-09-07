@@ -1,0 +1,76 @@
+{
+  "manifestVersion": "1.0.0",
+  "updated": "2026-09-07T19:28:00Z",
+  "surface": "Rasta Imperium public verification layer",
+  "description": "Machine-readable index of every public claim and its current evidence status. Capsule-scoped VERIFIED only. See Limitations for full boundary.",
+  "claims": [
+    {
+      "id": "ART-L7-REPLAY-001",
+      "status": "VERIFIED",
+      "scope": "capsule-only",
+      "invariant": "INV-001 replay_parity",
+      "artifact": "/evidence/artifacts/ART-L7-REPLAY-001.json",
+      "verifiers": ["node", "python"],
+      "hash": "3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f",
+      "note": "Independent Node + Python pure verifiers pass. FROZEN."
+    },
+    {
+      "id": "ART-L7-REJECT-001",
+      "status": "VERIFIED",
+      "scope": "capsule-only",
+      "invariant": "INV-002 illegal_transition_rejection",
+      "artifact": "/evidence/artifacts/ART-L7-REJECT-001.json",
+      "verifiers": ["node", "python"],
+      "hash": "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
+      "note": "Illegal lifecycle edge rejection with sealed receipt. FROZEN."
+    },
+    {
+      "id": "ART-L7-PARITY-001",
+      "status": "VERIFIED",
+      "scope": "capsule-only (Node + Python pure verifiers)",
+      "invariant": "cross_implementation_parity",
+      "artifact": "/evidence/artifacts/ART-L7-PARITY-001.json",
+      "verifiers": ["node", "python"],
+      "note": "Exact hash agreement across independent runtimes. FROZEN."
+    },
+    {
+      "id": "PROOF-CHAIN-001",
+      "status": "DEMONSTRATION",
+      "scope": "design documentation",
+      "invariant": "append-only ledger integrity",
+      "note": "Hash-linked design documented; no sealed production ledger artifact yet."
+    },
+    {
+      "id": "performance-benchmarks",
+      "status": "UNAVAILABLE",
+      "note": "No sealed public benchmark capsules published. Ops/sec, latency, and reliability figures remain unclaimed on this surface."
+    },
+    {
+      "id": "live-telemetry",
+      "status": "UNAVAILABLE",
+      "note": "Observatory and status panels are DEMONSTRATION / synthetic. Not live monitoring of production agents or EVO-V runtime."
+    },
+    {
+      "id": "full-kernel-parity",
+      "status": "UNAVAILABLE",
+      "note": "VERIFIED labels apply only to the sealed public capsules listed above, not to full production fleets or unpublished kernels."
+    },
+    {
+      "id": "production-certification",
+      "status": "UNAVAILABLE",
+      "note": "Court-ready, hardware-enforced, or 100% equivalence language is constitutional intent or capsule-scoped only. Full production certification is not asserted."
+    }
+  ],
+  "boundary": {
+    "thisSurfaceIs": [
+      "Public constitutional and verification layer for EVO-V",
+      "Evidence-bound claims with explicit provenance labels",
+      "Replayable, challengeable artifacts for auditors"
+    ],
+    "thisSurfaceIsNot": [
+      "The execution runtime or production kernel",
+      "A SaaS product or live monitoring dashboard",
+      "A source of unpublished performance guarantees"
+    ]
+  }
+}
