@@ -1,0 +1,82 @@
+/* ==========================================================================
+   RASTA IMPERIUM — Design System Tokens (Phase B)
+   Presentation layer only. Does not alter evidence semantics.
+   ========================================================================== */
+
+:root {
+  /* ——— Canvas & Surfaces (hierarchy) ——— */
+  --ri-canvas: #070807;
+  --ri-surface-1: #0b0c0b;          /* structural */
+  --ri-surface-2: #0f120d;          /* elevated structural */
+  --ri-surface-3: #131710;          /* evidence surface */
+  --ri-surface-4: #1a1f18;          /* critical result */
+
+  /* ——— Borders ——— */
+  --ri-border-subtle: rgba(242, 214, 117, 0.12);
+  --ri-border-default: rgba(242, 214, 117, 0.24);
+  --ri-border-strong: rgba(242, 214, 117, 0.42);
+  --ri-border-evidence: rgba(30, 138, 75, 0.35);
+
+  /* ——— Text ——— */
+  --ri-text-primary: #f4f4f0;
+  --ri-text-secondary: #c7c9c2;
+  --ri-text-muted: #8f968a;
+  --ri-text-technical: #a8b0a0;
+
+  /* ——— Institutional gold (restrained) ——— */
+  --ri-gold: #d4af37;
+  --ri-gold-soft: #f2d675;
+  --ri-gold-deep: #b88718;
+
+  /* ——— Status colors (semantic only) ——— */
+  --ri-verified: #1e8a4b;
+  --ri-verified-bg: rgba(30, 138, 75, 0.12);
+  --ri-verified-border: rgba(30, 138, 75, 0.45);
+
+  --ri-demonstration: #b88718;
+  --ri-demonstration-bg: rgba(184, 135, 24, 0.12);
+  --ri-demonstration-border: rgba(184, 135, 24, 0.4);
+
+  --ri-unavailable: #5c6358;
+  --ri-unavailable-bg: rgba(92, 99, 88, 0.15);
+  --ri-unavailable-border: rgba(92, 99, 88, 0.45);
+
+  --ri-invalid: #a92d2d;
+  --ri-invalid-bg: rgba(169, 45, 45, 0.14);
+  --ri-invalid-border: rgba(169, 45, 45, 0.5);
+
+  --ri-spec-drift: #c47a2c;
+  --ri-indeterminate: #6b7280;
+  --ri-malformed: #7f1d1d;
+
+  /* ——— Typography ——— */
+  --ri-font-display: "Cinzel", Georgia, serif;
+  --ri-font-body: "Raleway", system-ui, sans-serif;
+  --ri-font-technical: "Courier New", ui-monospace, monospace;
+
+  /* ——— Spacing scale ——— */
+  --ri-space-1: 0.25rem;
+  --ri-space-2: 0.5rem;
+  --ri-space-3: 0.75rem;
+  --ri-space-4: 1rem;
+  --ri-space-5: 1.5rem;
+  --ri-space-6: 2rem;
+  --ri-space-8: 3rem;
+  --ri-space-10: 4rem;
+
+  /* ——— Radius ——— */
+  --ri-radius-sm: 0.375rem;
+  --ri-radius-md: 0.75rem;
+  --ri-radius-lg: 1rem;
+  --ri-radius-xl: 1.25rem;
+
+  /* ——— Shadows ——— */
+  --ri-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --ri-shadow-md: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --ri-shadow-lg: 0 24px 70px rgba(0, 0, 0, 0.42);
+
+  /* ——— Motion ——— */
+  --ri-transition-fast: 150ms ease;
+  --ri-transition: 220ms ease;
+  --ri-transition-slow: 350ms ease;
+}
