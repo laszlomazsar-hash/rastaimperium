@@ -3,275 +3,324 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { proofs } from "../../data/evidence/manifest";
-import type { ProofType, VerificationStatus } from "../../data/evidence/types";
-import { ProvenanceBadge, VerificationBadge } from "../../components/evidence/ProvenanceBadge";
-import { TrustStatus } from "../../components/evidence/TrustStatus";
+import type { VerificationStatus } from "../../data/evidence/types";
+import {
+  StatusBadge,
+  EvidenceChain,
+  ReproduceOffline,
+  TrustRail,
+  type EvidenceStatus,
+} from "@/components/design-system";
 
-const proofTypes: Array<ProofType | "all"> = [
-  "all",
-  "deterministic_replay",
-  "receipt_verification",
-  "chain_integrity",
-  "lifecycle_transition",
-  "illegal_transition_rejection",
-  "invariant_enforcement",
-  "cross_implementation_parity",
-  "adversarial_rejection",
-  "governance_decision",
-  "transparency_verification",
-];
-
-const statuses: Array<VerificationStatus | "all"> = [
+const STATUS_FILTERS: Array<VerificationStatus | "all"> = [
   "all",
   "VERIFIED",
   "DEMONSTRATION",
-  "TARGET",
-  "HISTORICAL",
   "UNAVAILABLE",
-  "PENDING",
 ];
 
+/** Map manifest verification status onto design-system EvidenceStatus */
+function toEvidenceStatus(s: VerificationStatus): EvidenceStatus {
+  if (s === "VERIFIED") return "VERIFIED";
+  if (s === "DEMONSTRATION") return "DEMONSTRATION";
+  if (s === "UNAVAILABLE") return "UNAVAILABLE";
+  // TARGET / HISTORICAL / PENDING → present as UNAVAILABLE for epistemic filter
+  // HISTORICAL provenance remains separate via notes
+  return "UNAVAILABLE";
+}
+
+function claimText(p: (typeof proofs)[number]): string {
+  if (p.notes?.includes("Capsule-scoped"))
+    return p.description + " " + (p.notes || "");
+  return p.description;
+}
+
+function evidenceText(p: (typeof proofs)[number]): string {
+  if (p.artifactId) {
+    return `Sealed public capsule ${p.artifactId}${p.hash ? ` · hash ${p.hash.slice(0, 16)}…` : ""}. Source: ${p.source}.`;
+  }
+  return `Source: ${p.source}. ${p.inputFixture ? `Fixture: ${p.inputFixture}.` : ""}`;
+}
+
+function verificationText(p: (typeof proofs)[number]): string {
+  const parts = [p.verificationMethod];
+  if (p.observedOutcome) parts.push(`Observed: ${p.observedOutcome}`);
+  if (p.expectedOutcome) parts.push(`Expected: ${p.expectedOutcome}`);
+  return parts.filter(Boolean).join(" · ");
+}
+
+function reproductionText(p: (typeof proofs)[number]): string {
+  if (p.replayAvailable) {
+    return `${p.verificationMethod} — offline, no network required, no mutation of the artifact.`;
+  }
+  return "Reproduction not available as a sealed capsule on this surface. Inspect documentation source.";
+}
+
+function limitationsText(p: (typeof proofs)[number]): string {
+  if (p.notes) return p.notes;
+  if (p.status === "VERIFIED")
+    return "Capsule-scoped only. Does not establish production LIVE telemetry or full-kernel parity.";
+  if (p.status === "DEMONSTRATION")
+    return "Design / documentation demonstration. Not production evidence.";
+  return "No sealed public artifact is attached. Claim is not made on this surface.";
+}
+
 export default function ProofRegistryPage() {
-  const [q, setQ] = useState("");
-  const [type, setType] = useState<(typeof proofTypes)[number]>("all");
-  const [status, setStatus] = useState<(typeof statuses)[number]>("all");
-  const [invariant, setInvariant] = useState("");
-  const [implementation, setImplementation] = useState("");
+  const [status, setStatus] = useState<(typeof STATUS_FILTERS)[number]>("all");
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
-    const query = q.trim().toLowerCase();
-    return proofs.filter((p) => {
-      if (type !== "all" && p.proofType !== type) return false;
-      if (status !== "all" && p.status !== status) return false;
-      if (invariant && !(p.invariant ?? "").toLowerCase().includes(invariant.toLowerCase()))
-        return false;
-      if (
-        implementation &&
-        !(p.implementation ?? "").toLowerCase().includes(implementation.toLowerCase())
-      )
-        return false;
-      if (!query) return true;
-      const hay = [p.proofId, p.title, p.description, p.invariant, p.source, p.relatedClaim]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-      return hay.includes(query);
-    });
-  }, [q, type, status, invariant, implementation]);
+    if (status === "all") return proofs;
+    return proofs.filter((p) => p.status === status);
+  }, [status]);
+
+  const counts = useMemo(() => {
+    const c = { all: proofs.length, VERIFIED: 0, DEMONSTRATION: 0, UNAVAILABLE: 0 };
+    for (const p of proofs) {
+      if (p.status === "VERIFIED") c.VERIFIED++;
+      else if (p.status === "DEMONSTRATION") c.DEMONSTRATION++;
+      else if (p.status === "UNAVAILABLE") c.UNAVAILABLE++;
+    }
+    return c;
+  }, []);
 
   return (
     <main className="royal-page overflow-hidden">
-      <section className="border-b border-[#B8860B]/20">
-        <div className="container-page py-16 lg:py-20">
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
-            Public proof library
+      {/* Header */}
+      <section className="border-b border-[rgba(242,214,117,0.18)]">
+        <div className="container-page py-14 sm:py-16 lg:py-20">
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
+            Public record
           </p>
-          <h1 className="mt-4 font-cinzel text-4xl text-zinc-100 sm:text-5xl">Proof Registry</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
-            Structured proof records. Filter by type, status, invariant, and implementation. No
-            fabricated production hashes — unavailable evidence is labelled as such.
+          <h1 className="mt-3 font-cinzel text-4xl text-zinc-100 sm:text-5xl">
+            Evidence Observatory
+          </h1>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-400 sm:text-lg sm:leading-8">
+            Inspect the public evidence behind the system. This registry is a presentation of the
+            Living Evidence Manifest — not a second source of truth.
           </p>
-          <div className="mt-6">
-            <TrustStatus compact />
-          </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/governance-model/"
-              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
-            >
-              Governance model
-            </Link>
-            <Link
-              href="/pillars/"
-              className="rounded-lg border border-[#B8860B]/50 px-4 py-2.5 text-sm font-semibold text-[#F2D675]"
-            >
-              Pillars
-            </Link>
-            <Link
-              href="/limitations/"
-              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm font-semibold text-zinc-200"
-            >
-              Limitations
-            </Link>
-            <Link
-              href="/challenge/"
-              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm font-semibold text-zinc-200"
-            >
-              Challenge Lab
-            </Link>
+
+          <dl className="mt-8 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-lg border border-emerald-800/35 bg-emerald-950/15 p-4">
+              <dt className="font-mono text-[10px] uppercase tracking-wider text-emerald-300">
+                VERIFIED
+              </dt>
+              <dd className="mt-1 text-sm text-zinc-300">
+                Sealed capsule with independent pure-verifier reproduction.
+              </dd>
+            </div>
+            <div className="rounded-lg border border-amber-900/35 bg-amber-950/10 p-4">
+              <dt className="font-mono text-[10px] uppercase tracking-wider text-amber-200">
+                DEMONSTRATION
+              </dt>
+              <dd className="mt-1 text-sm text-zinc-300">
+                Design or documentation surface. Not production evidence.
+              </dd>
+            </div>
+            <div className="rounded-lg border border-zinc-700 bg-black/20 p-4">
+              <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                UNAVAILABLE
+              </dt>
+              <dd className="mt-1 text-sm text-zinc-300">
+                No sealed public artifact. Claim is not made on this surface.
+              </dd>
+            </div>
+          </dl>
+
+          <div className="mt-8">
+            <TrustRail />
           </div>
         </div>
       </section>
 
-      <section className="container-page py-10">
-        <div className="royal-panel grid gap-3 rounded-xl border p-4 sm:grid-cols-2 lg:grid-cols-5">
-          <label className="block text-xs text-zinc-500 lg:col-span-2">
-            Search
-            <input
-              type="search"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="proofId, title, invariant…"
-              className="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
-            />
-          </label>
-          <label className="block text-xs text-zinc-500">
-            Proof type
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value as typeof type)}
-              className="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
-            >
-              {proofTypes.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="block text-xs text-zinc-500">
-            Status
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value as typeof status)}
-              className="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
-            >
-              {statuses.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="block text-xs text-zinc-500">
-            Invariant contains
-            <input
-              value={invariant}
-              onChange={(e) => setInvariant(e.target.value)}
-              className="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
-            />
-          </label>
-          <label className="block text-xs text-zinc-500 sm:col-span-2 lg:col-span-2">
-            Implementation contains
-            <input
-              value={implementation}
-              onChange={(e) => setImplementation(e.target.value)}
-              className="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
-            />
-          </label>
+      {/* Filters */}
+      <section className="border-b border-zinc-900 bg-[#0b0c0b]/40">
+        <div className="container-page py-6">
+          <div
+            role="tablist"
+            aria-label="Filter by evidence status"
+            className="flex flex-wrap gap-2"
+          >
+            {STATUS_FILTERS.map((s) => {
+              const active = status === s;
+              const label = s === "all" ? "All" : s;
+              const count =
+                s === "all"
+                  ? counts.all
+                  : s === "VERIFIED"
+                    ? counts.VERIFIED
+                    : s === "DEMONSTRATION"
+                      ? counts.DEMONSTRATION
+                      : counts.UNAVAILABLE;
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setStatus(s)}
+                  className={`rounded-lg border px-3 py-2 font-mono text-xs uppercase tracking-wider transition ${
+                    active
+                      ? "border-[#D4AF37] bg-[#D4AF37]/15 text-[#F2D675]"
+                      : "border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200"
+                  }`}
+                >
+                  {label}
+                  <span className="ml-2 text-zinc-500">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+          <p className="mt-3 font-mono text-xs text-zinc-500">
+            Showing {filtered.length} of {proofs.length} records
+          </p>
         </div>
+      </section>
 
-        <p className="mt-4 font-mono text-xs text-zinc-500">
-          {filtered.length} of {proofs.length} proofs
-        </p>
+      {/* Evidence chains */}
+      <section className="container-page py-10 sm:py-12">
+        <ul className="space-y-6">
+          {filtered.map((p) => {
+            const es = toEvidenceStatus(p.status);
+            const isOpen = expanded === p.proofId;
+            return (
+              <li key={p.proofId} id={p.proofId}>
+                <article className="rounded-xl border border-[rgba(242,214,117,0.2)] bg-[rgba(15,18,13,0.92)]">
+                  {/* Accession header */}
+                  <header className="flex flex-wrap items-start justify-between gap-3 border-b border-[rgba(242,214,117,0.1)] px-4 py-4 sm:px-5">
+                    <div className="min-w-0">
+                      <p className="font-mono text-sm font-semibold text-[#f2d675]">
+                        {p.artifactId ?? p.proofId}
+                      </p>
+                      <h2 className="mt-1 text-base text-zinc-100 sm:text-lg">{p.title}</h2>
+                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+                        {p.proofType.replace(/_/g, " ")}
+                        {p.invariant ? ` · ${p.invariant}` : ""}
+                        {p.engineVersion ? ` · ${p.engineVersion}` : ""}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <StatusBadge status={es} />
+                      {p.notes?.toUpperCase().includes("FROZEN") && (
+                        <StatusBadge status="FROZEN" />
+                      )}
+                      {p.provenance === "HISTORICAL" && (
+                        <StatusBadge status="HISTORICAL" />
+                      )}
+                    </div>
+                  </header>
 
-        <ul className="mt-6 space-y-4">
-          {filtered.map((p) => (
-            <li key={p.proofId} id={p.proofId}>
-              <article className="royal-panel rounded-xl border p-5 sm:p-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <p className="font-mono text-[11px] text-zinc-500">{p.proofId}</p>
-                    <h2 className="mt-1 text-lg text-zinc-100">{p.title}</h2>
+                  {/* Compact summary always visible */}
+                  <div className="px-4 py-4 sm:px-5">
+                    <p className="text-sm leading-6 text-zinc-300">{p.description}</p>
+
+                    <div className="mt-4 flex flex-wrap gap-3 text-sm">
+                      <button
+                        type="button"
+                        onClick={() => setExpanded(isOpen ? null : p.proofId)}
+                        className="text-[#F2D675] hover:underline"
+                        aria-expanded={isOpen}
+                      >
+                        {isOpen ? "Collapse chain" : "Inspect chain →"}
+                      </button>
+                      {p.replayAvailable && (
+                        <Link href="/verify/" className="text-zinc-400 hover:text-[#F2D675]">
+                          Verify →
+                        </Link>
+                      )}
+                      {p.replayAvailable && (
+                        <Link href="/audit/" className="text-zinc-400 hover:text-[#F2D675]">
+                          Reproduce offline →
+                        </Link>
+                      )}
+                      {p.source.startsWith("/") && (
+                        <a
+                          href={p.source}
+                          className="text-zinc-500 hover:text-zinc-300"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View capsule →
+                        </a>
+                      )}
+                      <Link href="/limitations/" className="text-zinc-500 hover:text-zinc-300">
+                        Limitations →
+                      </Link>
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    <VerificationBadge status={p.status} />
-                    <ProvenanceBadge kind={p.provenance} />
-                    <span className="rounded border border-zinc-700 px-2 py-0.5 font-mono text-[10px] text-zinc-400">
-                      {p.proofType}
-                    </span>
-                  </div>
-                </div>
-                <p className="mt-3 text-sm leading-7 text-zinc-400">{p.description}</p>
-                <dl className="mt-4 grid gap-2 text-xs sm:grid-cols-2">
-                  {p.invariant && (
-                    <div>
-                      <dt className="text-zinc-500">Invariant</dt>
-                      <dd className="font-mono text-zinc-300">{p.invariant}</dd>
+
+                  {/* Expanded evidence chain */}
+                  {isOpen && (
+                    <div className="border-t border-[rgba(242,214,117,0.1)] px-4 py-4 sm:px-5">
+                      <EvidenceChain
+                        artifactId={p.artifactId ?? p.proofId}
+                        status={es}
+                        claim={claimText(p)}
+                        evidence={evidenceText(p)}
+                        verification={verificationText(p)}
+                        reproduction={reproductionText(p)}
+                        limitations={limitationsText(p)}
+                      />
+                      {p.hash && (
+                        <p className="mt-4 break-all font-mono text-[11px] text-zinc-500">
+                          Hash: {p.hash}
+                        </p>
+                      )}
                     </div>
                   )}
-                  <div>
-                    <dt className="text-zinc-500">Verification method</dt>
-                    <dd className="text-zinc-300">{p.verificationMethod}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-zinc-500">Source</dt>
-                    <dd className="text-zinc-300">{p.source}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-zinc-500">Replay available</dt>
-                    <dd className="font-mono text-zinc-300">{p.replayAvailable ? "yes" : "no"}</dd>
-                  </div>
-                  {p.expectedOutcome && (
-                    <div className="sm:col-span-2">
-                      <dt className="text-zinc-500">Expected</dt>
-                      <dd className="text-zinc-300">{p.expectedOutcome}</dd>
-                    </div>
-                  )}
-                  {p.observedOutcome && (
-                    <div className="sm:col-span-2">
-                      <dt className="text-zinc-500">Observed</dt>
-                      <dd className="text-zinc-300">{p.observedOutcome}</dd>
-                    </div>
-                  )}
-                  {p.hash && (
-                    <div>
-                      <dt className="text-zinc-500">Hash</dt>
-                      <dd className="font-mono text-zinc-300">{p.hash}</dd>
-                    </div>
-                  )}
-                  {p.artifactId && (
-                    <div>
-                      <dt className="text-zinc-500">Artifact</dt>
-                      <dd className="font-mono text-zinc-300">{p.artifactId}</dd>
-                    </div>
-                  )}
-                </dl>
-                {p.notes && <p className="mt-3 text-xs text-zinc-500">{p.notes}</p>}
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {p.relatedClaim && (
-                    <Link
-                      href={`/evidence`}
-                      className="text-xs text-[#F2D675] hover:underline"
-                    >
-                      Related claim {p.relatedClaim}
-                    </Link>
-                  )}
-                  <Link href="/challenge" className="text-xs text-zinc-400 hover:text-zinc-200">
-                    Challenge related invariants →
-                  </Link>
-                </div>
-              </article>
-            </li>
-          ))}
+                </article>
+              </li>
+            );
+          })}
         </ul>
+
+        {filtered.length === 0 && (
+          <p className="py-12 text-center text-sm text-zinc-500">
+            No records match this filter.
+          </p>
+        )}
       </section>
 
-      <section className="container-page border-t border-zinc-900 py-14">
-        <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
-          <h2 className="font-cinzel text-2xl text-zinc-100">Evidence inspected. Ready for the next step?</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
-            After reviewing sealed capsules and explicit Limitations, map a fixed-scope subset onto
-            your stack under written success criteria.
+      {/* Reproduce offline */}
+      <section className="border-t border-zinc-900 bg-[#0b0c0b]/30">
+        <div className="container-page py-12">
+          <ReproduceOffline />
+        </div>
+      </section>
+
+      {/* Manifest bridge */}
+      <section className="border-t border-zinc-900">
+        <div className="container-page py-12">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#d4af37]">
+            Authoritative source
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/product/"
-              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+          <h2 className="mt-2 font-cinzel text-xl text-zinc-100">Living Evidence Manifest</h2>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-400">
+            This page is a human-readable presentation. The machine-readable manifest and frozen
+            capsules remain the source of truth.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-4 text-sm">
+            <a
+              href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/EVIDENCE_MANIFEST.md"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[#F2D675] hover:underline"
             >
-              Product pathway
+              Human-readable manifest →
+            </a>
+            <a
+              href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/EVIDENCE_MANIFEST.json"
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-400 hover:text-[#F2D675]"
+            >
+              Raw JSON →
+            </a>
+            <Link href="/audit/" className="text-zinc-400 hover:text-[#F2D675]">
+              Auditor handoff →
             </Link>
-            <Link
-              href="/institutional-pilots/"
-              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
-            >
-              Design partner pilots
-            </Link>
-            <Link
-              href="/limitations/"
-              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
-            >
-              Limitations first
+            <Link href="/limitations/" className="text-zinc-500 hover:text-zinc-300">
+              Full limitations →
             </Link>
           </div>
         </div>
