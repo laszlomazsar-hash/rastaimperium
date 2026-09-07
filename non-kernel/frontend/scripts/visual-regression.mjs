@@ -16,6 +16,7 @@ const baselineRoot = path.join(frontendRoot, "tests/visual-baselines");
 const artifactRoot = path.join(frontendRoot, "visual-regression/artifacts");
 const temporaryRoot = path.join(frontendRoot, "visual-regression/.tmp");
 const updateBaselines = process.argv.includes("--update");
+const determinismCheck = process.argv.includes("--determinism-check");
 // Bumped after adding /explore/ (Phase E.2 discovery atlas).
 // If inventory drifts, update this number only after reviewing the new route list, then run test:visual:update.
 const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 58);
@@ -28,12 +29,39 @@ const viewports = [
   { name: "mobile", width: 390, height: 844 },
 ];
 
+/**
+ * Injected only when serving HTML with ?__visual_regression=1.
+ * Production pages without that query are unchanged.
+ *
+ * Neutralizes decorative ambient layers that freeze at nondeterministic
+ * animation keyframes even after animation:none (body sacred geometry +
+ * glow pulse). Does not hide semantic content (headings, form, links).
+ */
 const visualRegressionOverlay = `
 <style id="visual-regression-overlay">
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
     caret-color: transparent !important;
+  }
+  /* Decorative ambient only — not layout or copy */
+  body::before,
+  body::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .royal-hero::before {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+  }
+  .panel,
+  .royal-header,
+  header.royal-header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
   .opacity-0 { opacity: 1 !important; }
   .translate-y-8 { transform: none !important; }
@@ -235,12 +263,50 @@ function compareScreenshots(baselineBuffer, actualBuffer) {
   };
 }
 
+/** Double-capture selected routes; report current-vs-current ratios (no baseline write). */
+async function runDeterminismCheck(browser) {
+  const targets = [
+    { route: "/contact/", viewport: viewports.find((v) => v.name === "mobile") },
+    { route: "/contact/", viewport: viewports.find((v) => v.name === "desktop") },
+    { route: "/blueprint/", viewport: viewports.find((v) => v.name === "desktop") },
+    { route: "/blueprint/", viewport: viewports.find((v) => v.name === "mobile") },
+  ];
+  const outDir = path.join(artifactRoot, "determinism");
+  await mkdir(outDir, { recursive: true });
+  let anyFail = false;
+
+  for (const { route, viewport } of targets) {
+    const a = await captureViewport(browser, route, viewport);
+    const b = await captureViewport(browser, route, viewport);
+    const comparison = compareScreenshots(a, b);
+    const label = `${viewport.name} ${route}`;
+    const pct = (comparison.differenceRatio * 100).toFixed(4);
+    const name = `${viewport.name}-${routeName(route)}`;
+    await writeFile(path.join(outDir, `${name}.a.png`), a);
+    await writeFile(path.join(outDir, `${name}.b.png`), b);
+    if (comparison.differenceRatio > maxDiffPixelRatio) {
+      anyFail = true;
+      await writeFile(path.join(outDir, `${name}.diff.png`), comparison.diffBuffer);
+      process.stderr.write(`DETERMINISM FAIL ${label}: ${pct}% changed (threshold ${(maxDiffPixelRatio * 100).toFixed(1)}%)\n`);
+    } else {
+      process.stdout.write(`DETERMINISM PASS ${label}: ${pct}% changed\n`);
+    }
+  }
+
+  if (anyFail) {
+    process.exitCode = 1;
+    process.stderr.write(`Determinism artifacts: ${outDir}\n`);
+  } else {
+    process.stdout.write(`\nDeterminism check passed for contact + blueprint (current-vs-current).\n`);
+  }
+}
+
 async function run() {
   const routes = await discoverRoutes(staticRoot);
-  if (routes.length !== expectedRouteCount) {
+  if (!determinismCheck && routes.length !== expectedRouteCount) {
     throw new Error(
       `Route inventory changed: expected ${expectedRouteCount} routes, found ${routes.length}. ` +
-        `Review new routes, set VISUAL_EXPECTED_ROUTES or update expectedRouteCount, then run npm run test:visual:update.`,
+        `Review new routes, set VISUAL_EXPECTED_ROUTES or update expectedRouteCount, then run test:visual:update.`,
     );
   }
 
@@ -261,10 +327,16 @@ async function run() {
     headless: true,
     args: ["--no-sandbox", "--disable-gpu", "--hide-scrollbars"],
   });
-  const failures = [];
-  let checked = 0;
 
   try {
+    if (determinismCheck) {
+      await runDeterminismCheck(browser);
+      return;
+    }
+
+    const failures = [];
+    let checked = 0;
+
     for (const viewport of viewports) {
       const baselineDirectory = path.join(baselineRoot, viewport.name);
       const artifactDirectory = path.join(artifactRoot, viewport.name);
@@ -306,20 +378,20 @@ async function run() {
         }
       }
     }
+
+    if (failures.length > 0) {
+      process.stderr.write(`\nVisual regression failures (${failures.length}/${checked} captures):\n${failures.map((failure) => `- ${failure}`).join("\n")}\n`);
+      process.stderr.write(`Diff artifacts: ${artifactRoot}\n`);
+      process.exitCode = 1;
+      return;
+    }
+
+    process.stdout.write(`\nVisual regression suite passed: ${checked} captures across ${routes.length} routes and ${viewports.length} viewports.\n`);
   } finally {
     await browser.close();
     await rm(temporaryRoot, { recursive: true, force: true });
     await new Promise((resolve) => server.close(resolve));
   }
-
-  if (failures.length > 0) {
-    process.stderr.write(`\nVisual regression failures (${failures.length}/${checked} captures):\n${failures.map((failure) => `- ${failure}`).join("\n")}\n`);
-    process.stderr.write(`Diff artifacts: ${artifactRoot}\n`);
-    process.exitCode = 1;
-    return;
-  }
-
-  process.stdout.write(`\nVisual regression suite passed: ${checked} captures across ${routes.length} routes and ${viewports.length} viewports.\n`);
 }
 
 run().catch((error) => {
