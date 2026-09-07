@@ -17,9 +17,9 @@ const baselineRoot = path.join(frontendRoot, "tests/visual-baselines");
 const artifactRoot = path.join(frontendRoot, "visual-regression/artifacts");
 const temporaryRoot = path.join(frontendRoot, "visual-regression/.tmp");
 const updateBaselines = process.argv.includes("--update");
-// Bumped after adding /design-system/ and /why-deterministic-governance/ (and related export routes).
+// Bumped after adding /explore/ (Phase E.2 discovery atlas).
 // If inventory drifts, update this number only after reviewing the new route list, then run test:visual:update.
-const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 57);
+const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 58);
 const maxDiffPixelRatio = 0.002;
 
 const viewports = [

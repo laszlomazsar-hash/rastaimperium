@@ -84,9 +84,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <footer className="royal-footer border-t border-[rgba(242,214,117,0.18)] bg-[#090a09] py-12 sm:py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-10 text-sm sm:grid-cols-2 lg:grid-cols-5">
+            <div className="grid gap-10 text-sm sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
               {/* Brand */}
-              <div className="max-w-sm lg:col-span-1">
+              <div className="max-w-sm sm:col-span-2 lg:col-span-1 xl:col-span-1">
                 <Link
                   href="/"
                   className="font-cinzel text-lg tracking-[0.16em] text-[#D4AF37] transition hover:text-[#F2D675]"
@@ -97,12 +97,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Constitutional intelligence infrastructure. Deterministic governance,
                   verifiable evidence, accountable autonomy.
                 </p>
+                <p className="mt-4">
+                  <Link
+                    href="/explore/"
+                    className="text-sm text-[#F2D675] transition hover:underline"
+                  >
+                    Full atlas · Explore →
+                  </Link>
+                </p>
               </div>
 
-              {/* Explore */}
+              {/* Core journeys */}
               <div>
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Explore
+                  Core
                 </p>
                 <ul className="mt-4 space-y-2.5 text-zinc-400">
                   <li>
@@ -111,53 +119,156 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/blueprint">
+                    <Link className="transition hover:text-[#F2D675]" href="/blueprint/">
                       System
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/codex">
+                    <Link className="transition hover:text-[#F2D675]" href="/codex/">
                       Codex
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/proof">
+                    <Link className="transition hover:text-[#F2D675]" href="/proof/">
                       Evidence
                     </Link>
                   </li>
-                </ul>
-              </div>
-
-              {/* Verify */}
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Verify
-                </p>
-                <ul className="mt-4 space-y-2.5 text-zinc-400">
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/verify">
+                    <Link className="transition hover:text-[#F2D675]" href="/verify/">
                       Verify
                     </Link>
                   </li>
                   <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/audit">
+                    <Link className="transition hover:text-[#F2D675]" href="/audit/">
                       Audit
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/limitations">
-                      Limitations
                     </Link>
                   </li>
                 </ul>
               </div>
 
-              {/* Technical */}
+              {/* Applications */}
               <div>
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Technical
+                  Applications
                 </p>
                 <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/applications/">
+                      Applications
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/case-studies/">
+                      Case studies
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/product/">
+                      Product
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/observatory/">
+                      Observatory
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Civilization */}
+              <div>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+                  Civilization
+                </p>
+                <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/about/">
+                      About
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/empire/">
+                      Empire
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/vision/">
+                      Vision
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/pillars/">
+                      Pillars
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise/">
+                      Thanks &amp; Praise
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Knowledge + system docs */}
+              <div>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+                  Knowledge
+                </p>
+                <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/library/">
+                      Library
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/research/">
+                      Research
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/architecture/">
+                      Architecture
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/governance/">
+                      Governance
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/systems/">
+                      Systems
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/explore/">
+                      Full atlas
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Institutional + technical */}
+              <div>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+                  Institutional
+                </p>
+                <ul className="mt-4 space-y-2.5 text-zinc-400">
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/institutional-pilots/">
+                      Consulting
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/contact/">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="transition hover:text-[#F2D675]" href="/limitations/">
+                      Limitations
+                    </Link>
+                  </li>
                   <li>
                     <a
                       className="transition hover:text-[#F2D675]"
@@ -181,41 +292,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li>
                     <a
                       className="transition hover:text-[#F2D675]"
-                      href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/EVIDENCE_MANIFEST.md"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Living Evidence Manifest
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="transition hover:text-[#F2D675]"
                       href="https://github.com/laszlomazsar-hash/rastaimperium"
                       target="_blank"
                       rel="noreferrer"
                     >
                       GitHub
                     </a>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Institutional */}
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Institutional
-                </p>
-                <ul className="mt-4 space-y-2.5 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/institutional-pilots">
-                      Consulting
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/contact">
-                      Contact
-                    </Link>
                   </li>
                 </ul>
               </div>
@@ -227,6 +309,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 execution runtime. Unproven claims are labelled; see{" "}
                 <Link href="/limitations/" className="text-zinc-500 underline hover:text-[#F2D675]">
                   Limitations
+                </Link>
+                . Wider public surfaces are indexed under{" "}
+                <Link href="/explore/" className="text-zinc-500 underline hover:text-[#F2D675]">
+                  Explore
                 </Link>
                 .
               </p>
