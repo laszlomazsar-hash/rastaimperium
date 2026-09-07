@@ -1,7 +1,6 @@
 import { createServer } from "node:http";
 import { createReadStream } from "node:fs";
 import { mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
-import { spawn } from "node:child_process";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
@@ -21,6 +20,8 @@ const updateBaselines = process.argv.includes("--update");
 // If inventory drifts, update this number only after reviewing the new route list, then run test:visual:update.
 const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 58);
 const maxDiffPixelRatio = 0.002;
+/** Bounded post-readiness settle (ms). Deterministic; not a substitute for readiness. */
+const SETTLE_MS = 100;
 
 const viewports = [
   { name: "desktop", width: 1440, height: 1000 },
@@ -145,40 +146,68 @@ function startStaticServer() {
   });
 }
 
-function stopCaptureProcess(child) {
-  if (child.exitCode === null) child.kill("SIGKILL");
+/**
+ * Wait until the document is visually ready for a deterministic screenshot:
+ * - document.readyState complete
+ * - document.fonts.ready (when available)
+ * - in-document <img> elements finished (complete; broken optional images do not block)
+ * - short bounded settle for layout/paint
+ */
+async function waitForVisualReady(page) {
+  await page.waitForFunction(() => document.readyState === "complete", null, { timeout: 15_000 });
+
+  await page.evaluate(async () => {
+    if (document.fonts && document.fonts.ready) {
+      try {
+        await document.fonts.ready;
+      } catch {
+        /* fonts API failure must not abort capture */
+      }
+    }
+
+    const images = Array.from(document.images || []);
+    await Promise.all(
+      images.map(
+        (img) =>
+          new Promise((resolve) => {
+            if (img.complete) {
+              resolve();
+              return;
+            }
+            const done = () => resolve();
+            img.addEventListener("load", done, { once: true });
+            img.addEventListener("error", done, { once: true });
+            // Safety: do not hang forever on stalled optional assets
+            setTimeout(done, 5_000);
+          }),
+      ),
+    );
+  });
+
+  await sleep(SETTLE_MS);
 }
 
-async function captureViewport(browserExecutable, route, viewport, outputPath) {
-  await rm(outputPath, { force: true });
+async function captureViewport(browser, route, viewport) {
   const targetUrl = `http://127.0.0.1:4180${route}?__visual_regression=1`;
-  const child = spawn(browserExecutable, [
-    "--headless=new",
-    "--no-sandbox",
-    "--disable-gpu",
-    "--disable-background-networking",
-    "--disable-component-update",
-    "--disable-extensions",
-    "--disable-notifications",
-    "--hide-scrollbars",
-    `--window-size=${viewport.width},${viewport.height}`,
-    `--screenshot=${outputPath}`,
-    targetUrl,
-  ], { stdio: "ignore" });
-
-  for (let attempt = 0; attempt < 150; attempt += 1) {
-    if (await isFile(outputPath)) {
-      await sleep(150);
-      const screenshot = await readFile(outputPath);
-      stopCaptureProcess(child);
-      return screenshot;
-    }
-    if (child.exitCode !== null) break;
-    await sleep(100);
+  const context = await browser.newContext({
+    viewport: { width: viewport.width, height: viewport.height },
+    deviceScaleFactor: 1,
+    reducedMotion: "reduce",
+  });
+  const page = await context.newPage();
+  try {
+    await page.goto(targetUrl, { waitUntil: "load", timeout: 30_000 });
+    await waitForVisualReady(page);
+    const screenshot = await page.screenshot({
+      type: "png",
+      fullPage: false,
+      animations: "disabled",
+      caret: "hide",
+    });
+    return screenshot;
+  } finally {
+    await context.close();
   }
-
-  stopCaptureProcess(child);
-  throw new Error(`Timed out capturing ${route} at ${viewport.name}`);
 }
 
 function compareScreenshots(baselineBuffer, actualBuffer) {
@@ -227,6 +256,11 @@ async function run() {
   await mkdir(temporaryRoot, { recursive: true });
 
   const server = await startStaticServer();
+  const browser = await chromium.launch({
+    executablePath: browserExecutable,
+    headless: true,
+    args: ["--no-sandbox", "--disable-gpu", "--hide-scrollbars"],
+  });
   const failures = [];
   let checked = 0;
 
@@ -241,11 +275,10 @@ async function run() {
 
       for (const route of routes) {
         const name = routeName(route);
-        const capturePath = path.join(temporaryDirectory, `${name}.png`);
         const baselinePath = path.join(baselineDirectory, `${name}.png`);
         const actualPath = path.join(artifactDirectory, `${name}.actual.png`);
         const diffPath = path.join(artifactDirectory, `${name}.diff.png`);
-        const actual = await captureViewport(browserExecutable, route, viewport, capturePath);
+        const actual = await captureViewport(browser, route, viewport);
         checked += 1;
 
         if (updateBaselines) {
@@ -274,6 +307,7 @@ async function run() {
       }
     }
   } finally {
+    await browser.close();
     await rm(temporaryRoot, { recursive: true, force: true });
     await new Promise((resolve) => server.close(resolve));
   }
