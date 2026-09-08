@@ -1,7 +1,7 @@
 {
   "version": "3.6.0",
-  "title": "Rasta Imperium \u2014 Constitutional AI Governance",
-  "description": "A codex-driven governance platform with dashboards, consulting, enterprise workspaces, and subscription revenue.",
+  "title": "Rasta Imperium — Constitutional AI Governance",
+  "description": "Constitutional design principles and verification surface for deterministic governance. Public claims remain evidence-bound; production runtime, dashboards, and commercial modules are separate and scoped.",
   "metadata": {
     "architectureVersion": "3.6.0",
     "sourceOfTruth": "docs/ARCHITECTURE_CANONICAL.md",
@@ -107,7 +107,7 @@
     {
       "layer": 7,
       "name": "Codex Layer",
-      "description": "Articles I\u2013VII as constitutional framework"
+      "description": "Articles I–VII as constitutional framework"
     },
     {
       "layer": 8,
@@ -126,10 +126,7 @@
       "title": "Containment",
       "description": "Safe boundaries and mutation quarantine",
       "templateType": "internal-mdx",
-      "linksTo": [
-        "II",
-        "IV"
-      ],
+      "linksTo": ["II", "IV"],
       "revisionHistory": [
         {
           "version": "1.0.0",
@@ -149,10 +146,7 @@
       "title": "Observability",
       "description": "100% trace coverage across all layers",
       "templateType": "consulting-mdx",
-      "linksTo": [
-        "III",
-        "IV"
-      ],
+      "linksTo": ["III", "IV"],
       "revisionHistory": [
         {
           "version": "1.0.0",
@@ -172,10 +166,7 @@
       "title": "Interruptibility",
       "description": "Human-in-loop and auto-rollback gates",
       "templateType": "consulting-mdx",
-      "linksTo": [
-        "II",
-        "V"
-      ],
+      "linksTo": ["II", "V"],
       "revisionHistory": [
         {
           "version": "1.0.0",
@@ -190,10 +181,7 @@
       "title": "Accountability",
       "description": "Immutable audit trails and attribution",
       "templateType": "internal-mdx",
-      "linksTo": [
-        "II",
-        "V"
-      ],
+      "linksTo": ["II", "V"],
       "revisionHistory": [
         {
           "version": "1.0.0",
@@ -208,10 +196,7 @@
       "title": "Legitimacy",
       "description": "Governance rituals and deployment workflows",
       "templateType": "consulting-mdx",
-      "linksTo": [
-        "III",
-        "IV"
-      ],
+      "linksTo": ["III", "IV"],
       "revisionHistory": [
         {
           "version": "1.0.0",
@@ -226,10 +211,7 @@
       "title": "Alignment",
       "description": "Value coherence and drift detection",
       "templateType": "internal-mdx",
-      "linksTo": [
-        "II",
-        "VII"
-      ],
+      "linksTo": ["II", "VII"],
       "revisionHistory": [
         {
           "version": "1.0.0",
@@ -244,9 +226,7 @@
       "title": "Temporal Asymmetry",
       "description": "Long-term stewardship over short-term optimization",
       "templateType": "internal-mdx",
-      "linksTo": [
-        "VI"
-      ],
+      "linksTo": ["VI"],
       "revisionHistory": [
         {
           "version": "1.0.0",
@@ -411,12 +391,7 @@
     },
     "workspaceModel": {
       "isolation": "per-client schema + row-level access policies",
-      "roleMatrix": [
-        "owner",
-        "governance-admin",
-        "analyst",
-        "readonly"
-      ],
+      "roleMatrix": ["owner", "governance-admin", "analyst", "readonly"],
       "seatAllocation": [
         {
           "tier": "Standard",
@@ -458,11 +433,7 @@
         "recurring": "monthly"
       }
     ],
-    "usageBillingMeters": [
-      "tokens",
-      "seats",
-      "api_calls"
-    ],
+    "usageBillingMeters": ["tokens", "seats", "api_calls"],
     "featureAccess": {
       "dashboardWidgets": true,
       "codexTemplates": true
@@ -533,10 +504,7 @@
     "consultingVisibility": {
       "enabled": true,
       "reportCadence": "weekly",
-      "linkedDashboards": [
-        "SoulEcho Dashboard",
-        "Enterprise Dashboard"
-      ]
+      "linkedDashboards": ["SoulEcho Dashboard", "Enterprise Dashboard"]
     }
   },
   "admin": {
@@ -557,36 +525,15 @@
     "dashboard": "React/Streamlit",
     "db": "PostgreSQL",
     "hosting": "Vercel (web), Render (API/dashboard), Docker local dev",
-    "security": [
-      "Auth",
-      "API keys",
-      "Rate limiting",
-      "WAF",
-      "Audit logging"
-    ],
+    "security": ["Auth", "API keys", "Rate limiting", "WAF", "Audit logging"],
     "deployment": "Zero-downtime, auto-scaling"
   },
   "revenueModel": {
-    "highTicket": [
-      "Governance Architecture (\u00a325k)",
-      "Enterprise Certification (\u00a335k)"
-    ],
-    "midTier": [
-      "Containment \u00a315k",
-      "Observability \u00a312k",
-      "Interruptibility \u00a318k"
-    ],
-    "entry": [
-      "Codex Diagnostic \u00a32.5k"
-    ],
-    "workshops": [
-      "Constitutional Physics \u00a35k/seat"
-    ],
-    "subscription": [
-      "\u00a347/mo Standard",
-      "\u00a3197/mo Pro",
-      "\u00a35000/mo Enterprise"
-    ]
+    "highTicket": ["Governance Architecture (£25k)", "Enterprise Certification (£35k)"],
+    "midTier": ["Containment £15k", "Observability £12k", "Interruptibility £18k"],
+    "entry": ["Codex Diagnostic £2.5k"],
+    "workshops": ["Constitutional Physics £5k/seat"],
+    "subscription": ["£47/mo Standard", "£197/mo Pro", "£5000/mo Enterprise"]
   },
   "strategicPositioning": {
     "identity": "Constitutional AI Governance Architect",
@@ -599,8 +546,8 @@
       "npm install && npm run build && vercel --prod",
       "git push render main",
       "pip install -r requirements.txt && render deploy",
-      "Cloudflare \u2192 rastaimperium.com \u2192 Vercel",
-      "Cloudflare \u2192 jah.rastaimperium.com \u2192 Render"
+      "Cloudflare → rastaimperium.com → Vercel",
+      "Cloudflare → jah.rastaimperium.com → Render"
     ],
     "metricsDay1": {
       "traffic": "5k unique visitors",
