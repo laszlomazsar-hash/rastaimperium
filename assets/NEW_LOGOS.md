@@ -1,27 +1,27 @@
 # New Rasta Imperium Logos (2026-09-08)
 
-High-fidelity brand assets + live seal updates.
+## Status
+- **Source integration complete**: RISeal component + both favicons updated to LM monogram + star geometry.
+- **Binary JPGs**: Available on Google Drive (connector has payload limits for large binaries).
 
-## Files on Google Drive
-- **3D ornate LM icon** (hexagonal gold frame + white LM + star):  
-  https://drive.google.com/file/d/19ufZd7o4RCIBW1HVbdNvtDi6hU9snWjp/view
-- **Clean white logo** (black field + gold/white LM hexagon + wordmark):  
-  https://drive.google.com/file/d/1u9VIHgNlm8xX8rkrJ60k426_0DRgCZoZ/view
+## Google Drive downloads
+- 3D ornate LM icon: https://drive.google.com/file/d/19ufZd7o4RCIBW1HVbdNvtDi6hU9snWjp/view
+- Clean white logo: https://drive.google.com/file/d/1u9VIHgNlm8xX8rkrJ60k426_0DRgCZoZ/view
 
-## Already integrated (this session)
-- `non-kernel/frontend/components/RISeal.tsx` → new LM monogram + central star geometry
-- `non-kernel/frontend/public/favicon.svg` → matching new seal
-- `backend/static/favicon.svg` → matching new seal
+## How to finish (30 seconds)
+1. Download the two JPGs from Drive.
+2. Go to https://github.com/laszlomazsar-hash/rastaimperium/tree/main/backend/static/images
+3. Click “Add file” → “Upload files”.
+4. Drop them in as:
+   - `logo-lm-3d.jpg`
+   - `logo-rasta-imperium-white.jpg`
+5. Commit. Railway will redeploy automatically.
 
-## Remaining (drop the JPGs in)
-1. Download both JPGs from Drive.
-2. Place them via GitHub web UI or local commit into:
-   - `backend/static/images/logo-lm-3d.jpg`
-   - `backend/static/images/logo-rasta-imperium-white.jpg`
-   - (optional) `non-kernel/frontend/public/images/`
-3. Railway will pick up the next push / redeploy.
+Placeholders currently live at:
+- `backend/static/images/logo-lm-3d.jpg.b64`
+- `backend/static/images/logo-rasta-imperium-white.jpg.b64`
 
-## Notes
-- Existing `assets/logo-lm.svg` already closely matches the clean white version.
-- The 3D icon is ideal for hero sections, OG images, and app icons.
-- Favicon and header seal are now live with the new geometry.
+## Already live on main
+- `non-kernel/frontend/components/RISeal.tsx`
+- `non-kernel/frontend/public/favicon.svg`
+- `backend/static/favicon.svg`
