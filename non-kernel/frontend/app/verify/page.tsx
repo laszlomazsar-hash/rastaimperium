@@ -4,6 +4,7 @@ import {
   StatusBadge,
   ReproduceOffline,
   TrustRail,
+  TrustLadder,
 } from "../../components/design-system";
 
 export const metadata: Metadata = {
@@ -88,6 +89,10 @@ export default function VerifyConsolePage() {
           </p>
 
           <TrustRail className="mt-8" />
+
+          <div className="mt-6">
+            <TrustLadder variant="full" current="verify" />
+          </div>
 
           {/* Five questions */}
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
