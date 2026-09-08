@@ -6,5 +6,6 @@ export { ArtifactCard } from "./ArtifactCard";
 export type { ArtifactCardProps } from "./ArtifactCard";
 export { TrustRail } from "./TrustRail";
 export { ReproduceOffline } from "./ReproduceOffline";
+export { TrustLadder } from "./TrustLadder";
 export { LayerCard } from "./LayerCard";
 export type { LayerCardProps } from "./LayerCard";
