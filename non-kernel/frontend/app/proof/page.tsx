@@ -9,6 +9,7 @@ import {
   EvidenceChain,
   ReproduceOffline,
   TrustRail,
+  TrustLadder,
   type EvidenceStatus,
 } from "@/components/design-system";
 
@@ -129,6 +130,10 @@ export default function ProofRegistryPage() {
 
           <div className="mt-8">
             <TrustRail />
+          </div>
+
+          <div className="mt-4">
+            <TrustLadder variant="compact" current="proof" />
           </div>
         </div>
       </section>
