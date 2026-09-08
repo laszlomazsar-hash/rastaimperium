@@ -1,0 +1,14 @@
+Binary logo files exceed practical payload size for the GitHub connector in this session (~75–400 KB JPEG).
+
+**Direct links (Google Drive):**
+- 3D ornate icon: https://drive.google.com/file/d/19ufZd7o4RCIBW1HVbdNvtDi6hU9snWjp/view
+- White logo: https://drive.google.com/file/d/1u9VIHgNlm8xX8rkrJ60k426_0DRgCZoZ/view
+
+**Recommended:**
+1. Download both from Drive.
+2. On GitHub.com → rastaimperium repo → backend/static/images/ → Add file → Upload files.
+3. Name them:
+   - logo-lm-3d.jpg
+   - logo-rasta-imperium-white.jpg
+
+Source updates (RISeal component + favicons) are already live on main.
