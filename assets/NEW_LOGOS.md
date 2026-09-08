@@ -1,10 +1,23 @@
-# New Rasta Imperium Logos
+# New Rasta Imperium Logos (2026-09-08)
 
-These high-quality logos have been prepared for the site:
+High-fidelity brand assets added for the site.
 
-- **3D Icon (LM monogram with ornate gold frame)**: Available in Google Drive: https://drive.google.com/file/d/19ufZd7o4RCIBW1HVbdNvtDi6hU9snWjp/view
-- **White logo with text**: Available in Google Drive: https://drive.google.com/file/d/1u9VIHgNlm8xX8rkrJ60k426_0DRgCZoZ/view
+## Files (Google Drive)
+- **3D ornate LM icon** (hexagonal gold frame + white LM + star):  
+  https://drive.google.com/file/d/19ufZd7o4RCIBW1HVbdNvtDi6hU9snWjp/view
+- **Clean white logo** (black field + gold/white LM hexagon + wordmark):  
+  https://drive.google.com/file/d/1u9VIHgNlm8xX8rkrJ60k426_0DRgCZoZ/view
 
-Please download and place into `backend/static/images/` or `assets/` as needed (e.g. as `logo-lm-3d.jpg` and `logo-rasta-imperium-white.jpg`).
+## Integration steps
+1. Download both JPGs.
+2. Place them in:
+   - `backend/static/images/logo-lm-3d.jpg`
+   - `backend/static/images/logo-rasta-imperium-white.jpg`
+   (or `non-kernel/frontend/public/` for Next.js public assets)
+3. The institutional seal component (`non-kernel/frontend/components/RISeal.tsx`) has already been updated to the new LM + star geometry.
+4. Rebuild / redeploy (Railway will pick up the commit).
 
-Then update references in templates/static HTML as appropriate.
+## Notes
+- Existing `assets/logo-lm.svg` and `backend/static/images/logo-lm.jpg` remain as fallbacks.
+- The new 3D icon is ideal for hero / og-image / app icon use.
+- The clean white version matches the current wordmark treatment on the homepage.
