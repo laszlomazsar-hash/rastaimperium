@@ -13,6 +13,7 @@
     "check:route-emojis": "node scripts/check-route-emojis.mjs",
     "verify:no-emoji": "node scripts/verify-no-emoji.mjs",
     "check:semantic-icons": "node scripts/check-semantic-emoji-literals.mjs",
+    "verify:assets": "node scripts/verify-asset-integrity.mjs",
     "test:visual": "node scripts/visual-regression.mjs",
     "test:visual:update": "node scripts/visual-regression.mjs --update"
   },
