@@ -34,7 +34,7 @@ function signatureMatches(path) {
   const ext = extname(path).toLowerCase();
   const bytes = readFileSync(path).subarray(0, 64);
   if (ext === ".jpg" || ext === ".jpeg") return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
-  if (ext === ".png") return bytes.equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+  if (ext === ".png") return bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
   if (ext === ".gif") return ["GIF87a", "GIF89a"].includes(bytes.subarray(0, 6).toString("ascii"));
   if (ext === ".webp") return bytes.subarray(0, 4).toString("ascii") === "RIFF" && bytes.subarray(8, 12).toString("ascii") === "WEBP";
   if (ext === ".avif") return bytes.includes(Buffer.from("ftypavif")) || bytes.includes(Buffer.from("ftypavis"));
