@@ -1,5 +1,7 @@
 # New Rasta Imperium Logos (2026-09-09)
 
+> **Superseded by** [`LOGO_SYSTEM.md`](./LOGO_SYSTEM.md) for the full canonical hierarchy, integrity rules, and usage policy.
+
 ## Status
 - **Source integration complete**: RISeal component + both favicons updated to LM monogram + star geometry.
 - **Binary JPGs committed on `main`** as real JPEG blobs (not placeholders).
