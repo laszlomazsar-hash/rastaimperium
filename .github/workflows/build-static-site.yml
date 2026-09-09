@@ -41,6 +41,10 @@ jobs:
         working-directory: non-kernel/frontend
         run: npm ci --no-audit --no-fund
 
+      - name: Verify source asset integrity
+        working-directory: non-kernel/frontend
+        run: npm run verify:assets
+
       - name: Build static export
         working-directory: non-kernel/frontend
         run: npm run build
@@ -50,6 +54,15 @@ jobs:
         run: |
           set -euo pipefail
           rsync -a --delete non-kernel/frontend/out/ backend/static/
+
+          echo "Verifying exported assets after rsync --delete"
+          test -f backend/static/images/logo-lm-3d.jpg
+          test -f backend/static/images/logo-rasta-imperium-white.jpg
+          test "$(stat -c%s backend/static/images/logo-lm-3d.jpg)" -gt 2
+          test "$(stat -c%s backend/static/images/logo-rasta-imperium-white.jpg)" -gt 2
+          grep -R --fixed-strings ".b64" backend/static/images >/dev/null && {
+            echo "Unexpected .b64 image asset found in static export"; exit 1;
+          } || true
 
           if test -z "$(git status --porcelain -- backend/static)"; then
             echo "Static output is already current."
