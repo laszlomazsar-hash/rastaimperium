@@ -16,6 +16,7 @@ const palette = {
  * Rasta Imperium institutional seal — updated to match the new LM monogram + star brand assets.
  * Hexagonal constitutional enclosure, LM letters, central gold star (witness).
  * Keep this geometry stable: it is a brand mark, not an evidence claim.
+ * Used in: header, footer, hero overlay, evidence surfaces.
  */
 export function RISeal({
   size = 36,
