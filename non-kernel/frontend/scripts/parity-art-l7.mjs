@@ -14,15 +14,22 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, "..");
 
 function run(cmd, args) {
   const r = spawnSync(cmd, args, { encoding: "utf8" });
   let parsed = null;
+  const out = (r.stdout || "").trim();
   try {
-    parsed = JSON.parse((r.stdout || "").trim().split("\n").filter(Boolean).slice(-1)[0] || r.stdout);
+    // Verifiers emit a single multi-line JSON object — parse the full stdout.
+    parsed = JSON.parse(out);
   } catch {
-    /* leave null */
+    // Fallback: last non-empty line (legacy single-line emitters)
+    try {
+      const last = out.split("\n").filter(Boolean).slice(-1)[0];
+      if (last) parsed = JSON.parse(last);
+    } catch {
+      /* leave null */
+    }
   }
   return {
     status: r.status,
