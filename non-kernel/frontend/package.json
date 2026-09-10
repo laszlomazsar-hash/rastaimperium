@@ -16,6 +16,7 @@
     "verify:assets": "node scripts/verify-asset-integrity.mjs",
     "verify:evidence": "node scripts/verify-evidence-boundary.mjs",
     "verify:evidence:self-test": "node scripts/verify-evidence-boundary.mjs --self-test",
+    "verify:reproducibility": "node scripts/verify-reproducibility.mjs",
     "test:visual": "node scripts/visual-regression.mjs",
     "test:visual:update": "node scripts/visual-regression.mjs --update"
   },
