@@ -81,32 +81,38 @@ export default function InvestPage() {
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="royal-panel rounded-xl border border-[#B8860B]/30 p-8">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
-              Community · direct transfer
+              Investment · private arrangements
             </p>
-            <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Bank transfer (UK)</h2>
-            <p className="mt-2 text-sm text-zinc-500">Santander UK · personal account of Laszlo Mazsar</p>
-            <dl className="mt-6 space-y-3 font-mono text-sm">
-              <div className="flex justify-between border-b border-zinc-800 pb-2">
-                <dt className="text-zinc-500">Account name</dt>
-                <dd className="text-zinc-100">Laszlo Mazsar</dd>
-              </div>
-              <div className="flex justify-between border-b border-zinc-800 pb-2">
-                <dt className="text-zinc-500">Sort code</dt>
-                <dd className="text-zinc-100">09-01-28</dd>
-              </div>
-              <div className="flex justify-between border-b border-zinc-800 pb-2">
-                <dt className="text-zinc-500">Account number</dt>
-                <dd className="text-zinc-100">30627007</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-zinc-500">Reference</dt>
-                <dd className="text-[#F2D675]">EVO-V-INVEST</dd>
-              </div>
-            </dl>
-            <p className="mt-6 text-xs leading-5 text-zinc-500">
-              Contributions are voluntary support for public work. This is not a securities offering
-              and not a claim of verified financial return.
+            <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">Discuss investment arrangements</h2>
+            <p className="mt-3 text-sm leading-7 text-zinc-400">
+              Payment and transfer instructions are not published on this website. After an exploratory
+              discussion and appropriate due diligence, arrangements are shared through a private,
+              documented channel.
             </p>
+            <p className="mt-4 text-xs leading-5 text-zinc-500">
+              This page is informational. It is not a securities offering, and submitting a contact
+              form does not constitute an investment agreement.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/contact/?intent=investment"
+                className="rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-bold text-black"
+              >
+                Discuss investment
+              </Link>
+              <Link
+                href="/investment/"
+                className="rounded-lg border border-zinc-600 px-4 py-2 text-sm text-zinc-100"
+              >
+                Investment thesis
+              </Link>
+              <Link
+                href="/proof/"
+                className="rounded-lg border border-zinc-600 px-4 py-2 text-sm text-zinc-100"
+              >
+                Review evidence
+              </Link>
+            </div>
           </div>
 
           <div className="royal-panel rounded-xl border p-8">
