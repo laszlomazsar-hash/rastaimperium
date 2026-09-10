@@ -1,6 +1,6 @@
 # Rasta Imperium — Canonical Logo System
 
-**Status:** Production (2026-09)
+**Status:** Production (2026-09) · Phase 15 LM primary
 **Principle:** One coherent identity. Do not introduce unrelated marks.
 **Rule:** Visual identity must reinforce verification, provenance, constitutional order, and institutional seriousness. Never generic AI SaaS, cyberpunk, crypto, or neon theatre.
 
@@ -11,7 +11,7 @@
 | Rank | Role | Implementation | Primary use |
 |------|------|----------------|-------------|
 | **A** | Primary wordmark | Text “RASTA IMPERIUM” (Cinzel) | Header titles, hero H1, footer brand |
-| **B** | LM / Imperium monogram | `RISeal.tsx` (SVG) | Header brand, mobile, compact UI, favicon geometry |
+| **B** | LM monogram (primary mark) | `RISeal.tsx` (SVG) | Header brand, mobile, compact UI, favicon geometry |
 | **C** | Constitutional seal | Same `RISeal` (gold / bone / ink) | Verify, Proof, Trust, Audit, evidence surfaces |
 | **D** | 3D hero mark | `logo-lm-3d.jpg` + `RIHeroMark.tsx` | Homepage hero only |
 | **E** | Monochrome / white | `logo-rasta-imperium-white.jpg` + seal variants | Dark grounds, OG, print, reserve |
@@ -39,7 +39,7 @@ Do not invent a second primary mark.
 
 | Asset | Location | Notes |
 |-------|----------|-------|
-| `RISeal.tsx` | `non-kernel/frontend/components/RISeal.tsx` | Hexagonal enclosure + LM + central star (witness). Variants: gold, bone, ink. |
+| `RISeal.tsx` | `non-kernel/frontend/components/RISeal.tsx` | Hexagonal enclosure + **LM monogram primary** (no brand star). Variants: gold, bone, ink. |
 | `RIHeroMark.tsx` | `non-kernel/frontend/components/RIHeroMark.tsx` | Hero treatment: raster + restrained CSS perspective hover. |
 | `favicon.svg` | `non-kernel/frontend/public/favicon.svg` (+ mirrored in static) | Matches RISeal geometry |
 | `icon.png` | `non-kernel/frontend/public/icon.png` | 192×192 |
@@ -67,9 +67,6 @@ Do not invent a second primary mark.
    - `npm run verify:assets` (runs `scripts/verify-asset-integrity.mjs`)
    - Build workflow post-rsync tests both logos exist and size > 2 bytes
 
-Previous failure mode that is now prevented:
-> valid binary → wrong frontend/static location → rsync/export removes it → production falls back to older logo
-
 ---
 
 ## 3-D / motion policy
@@ -78,7 +75,16 @@ Previous failure mode that is now prevented:
 - Implementation: static JPEG + CSS `perspective` / hover transform under `motion-safe`.
 - **No** WebGL, continuous spin, particles, or large 3-D dependencies.
 - `prefers-reduced-motion: reduce` must yield a beautiful static identity, not a broken one.
-- Animation must never carry information required for evidence interfaces.
+
+---
+
+## Brand star policy (Phase 15)
+
+- **Primary brand mark:** constructed **LM monogram** inside hexagonal enclosure (`RISeal`).
+- **Do not** use a five-pointed star as the Rasta Imperium logo.
+- Content, Codex, or constitutional stars that are **not** the logo may remain.
+- Favicon and header must match `RISeal` geometry (LM primary).
+- 3D raster: `logo-lm-3d.jpg` remains the premium hero artefact (valid JPEG).
 
 ---
 
@@ -88,8 +94,8 @@ Previous failure mode that is now prevented:
 |---------|-----------|
 | Homepage hero | `RIHeroMark` (3-D JPEG + CSS depth) |
 | Global header | `RISeal` + wordmark text |
-| Mobile header | Compact `RISeal` (wordmark hidden ≤639px via identity.css) |
-| Footer brand | `RISeal` + wordmark (aligned with header) |
+| Mobile header | Compact `RISeal` |
+| Footer brand | `RISeal` + wordmark |
 | Verify / Proof / Trust / Audit | Restrained `RISeal` only |
 | Favicon / tab | `favicon.svg` / `icon.png` |
 | Open Graph | `og-image.png` |
@@ -99,9 +105,9 @@ Previous failure mode that is now prevented:
 ## Design language (preserve)
 
 - Dignified + ceremonial + evidence-led
-- Deep earth / obsidian, Rasta green, Rasta gold (`#F2D675` / `#D4AF37` / `#B88718`), Rasta red accents where justified
-- Cinzel for display, Raleway (or system UI) for body, Courier / mono for evidence and hash surfaces
-- Sacred / ceremonial geometry (hexagon, star/witness)
+- Deep earth / obsidian, Rasta green, Rasta gold, Rasta red accents where justified
+- Cinzel for display, Raleway (or system UI) for body, mono for evidence
+- Sacred / ceremonial geometry (hexagon, LM monogram, witness point)
 
 ---
 
@@ -109,9 +115,7 @@ Previous failure mode that is now prevented:
 
 - Any new logo asset must be real binary (correct magic bytes) and mirrored into both `public/images/` and `backend/static/images/`.
 - Do not modify EVO-V kernel / verifier / constitutional logic for visual work.
-- Prefer documentation and integrity enforcement over new visual variants.
 
 ---
 
-*Last formalised: 2026-09-10. Derived from live production inspection and repository audit on main.*
-*Footer brand updated to RISeal on same date.*
+*Last formalised: 2026-09-10. Phase 15: LM monogram primary brand mark.*
