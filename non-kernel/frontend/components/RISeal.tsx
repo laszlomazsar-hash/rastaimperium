@@ -13,10 +13,11 @@ const palette = {
 } as const;
 
 /**
- * Rasta Imperium institutional seal — updated to match the new LM monogram + star brand assets.
- * Hexagonal constitutional enclosure, LM letters, central gold star (witness).
- * Keep this geometry stable: it is a brand mark, not an evidence claim.
- * Used in: header, footer, hero overlay, evidence surfaces.
+ * Rasta Imperium institutional seal — LM monogram primary brand mark.
+ * Hexagonal constitutional enclosure + constructed LM (Identity · Witness · Verification).
+ * Brand identity uses the monogram, not a five-pointed star.
+ * Content/codex stars elsewhere are unrelated and must not be removed globally.
+ * Brand mark only — not an evidence claim.
  */
 export function RISeal({
   size = 36,
@@ -36,38 +37,46 @@ export function RISeal({
         height={size}
         viewBox="0 0 64 64"
         role="img"
-        aria-label="Rasta Imperium seal"
+        aria-label="Rasta Imperium LM monogram"
         focusable="false"
       >
-        {/* Outer hexagon */}
+        {/* Outer hexagon — constitutional enclosure */}
         <path
           d="M32 4 L55 17 L55 47 L32 60 L9 47 L9 17 Z"
           fill="none"
           stroke={c.mark}
-          strokeWidth="2.5"
+          strokeWidth="2.4"
           strokeLinejoin="round"
         />
         {/* Inner hexagon */}
         <path
-          d="M32 11 L49 21 L49 43 L32 53 L15 43 L15 21 Z"
+          d="M32 12 L48 21 L48 43 L32 52 L16 43 L16 21 Z"
           fill="none"
           stroke={c.secondary}
-          strokeWidth="1.5"
+          strokeWidth="1.35"
           strokeLinejoin="round"
-          opacity="0.85"
+          opacity="0.9"
         />
-        {/* LM monogram (simplified, matches new assets) */}
-        <g fill="none" stroke={c.mark} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+        {/*
+          Constructed LM monogram (not plain text).
+          L: vertical + baseline with architectural terminals.
+          M: twin peaks sharing a clear negative-space valley.
+          Geometry tuned for small sizes (favicon / header).
+        */}
+        <g
+          fill="none"
+          stroke={c.mark}
+          strokeWidth="2.6"
+          strokeLinecap="square"
+          strokeLinejoin="miter"
+        >
           {/* L */}
-          <path d="M22 20 L22 44 L31 44" />
+          <path d="M20 19 L20 45 L30 45" />
           {/* M */}
-          <path d="M34 44 L34 20 L40 32 L46 20 L46 44" />
+          <path d="M33 45 L33 19 L39.5 34 L46 19 L46 45" />
         </g>
-        {/* Central star (witness) */}
-        <g transform="translate(32, 32)" fill={c.fill}>
-          <polygon points="0,-5.5 1.5,-1.5 5.5,0 1.5,1.5 0,5.5 -1.5,1.5 -5.5,0 -1.5,-1.5" />
-          <polygon points="0,-5.5 1.5,-1.5 5.5,0 1.5,1.5 0,5.5 -1.5,1.5 -5.5,0 -1.5,-1.5" transform="rotate(45)" opacity="0.9" />
-        </g>
+        {/* Subtle witness point — accountability mark, not a brand star */}
+        <circle cx="32" cy="50.5" r="1.15" fill={c.secondary} opacity="0.95" />
       </svg>
       {showWordmark && (
         <span
