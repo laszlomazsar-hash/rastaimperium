@@ -67,30 +67,32 @@ export default function EvidencePage() {
               Limitations
             </Link>
             <Link
-              href="/verify/"
+              href="/audit/"
               className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
             >
-              Verify
+              Auditor handoff
+            </Link>
+            <Link
+              href="/governance-model/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Governance model
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="container-page border-b border-zinc-900 py-12">
-        <h2 className="font-cinzel text-2xl text-zinc-100">Claims</h2>
-        <p className="mt-2 max-w-2xl text-sm text-zinc-400">
-          Each claim carries an explicit verification status. Open the Observatory to inspect
-          registry records with filters and reproduction links.
-        </p>
-        <div className="mt-8 space-y-4">
+      <section className="container-page py-12">
+        <h2 className="font-cinzel text-xl text-zinc-100">Claims</h2>
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {claims.map((c) => (
-            <ClaimEvidence key={c.claimId} claim={c} />
+            <ClaimEvidence key={c.claimId} claimId={c.claimId} />
           ))}
         </div>
       </section>
 
-      <section className="container-page border-b border-zinc-900 py-12">
-        <h2 className="font-cinzel text-2xl text-zinc-100">Evidence objects</h2>
+      <section className="container-page border-t border-zinc-900 py-12">
+        <h2 className="font-cinzel text-xl text-zinc-100">Evidence objects</h2>
         <ul className="mt-6 space-y-3">
           {evidence.map((e) => (
             <li
@@ -107,8 +109,8 @@ export default function EvidencePage() {
         </ul>
       </section>
 
-      <section className="container-page py-12">
-        <h2 className="font-cinzel text-2xl text-zinc-100">Benchmark figures</h2>
+      <section className="container-page border-t border-zinc-900 py-12">
+        <h2 className="font-cinzel text-xl text-zinc-100">Benchmark figures</h2>
         <p className="mt-2 text-sm text-zinc-400">
           Benchmark labels remain UNAVAILABLE unless a sealed public artifact exists.
         </p>
