@@ -75,9 +75,11 @@ export default function InvestmentPage() {
             </Link>
           </div>
           <p className="mt-6 max-w-2xl text-xs leading-5 text-zinc-500">
-            Investment discussions are exploratory and subject to appropriate diligence and
-            documentation. This page is not an offer of securities, a subscription mechanism, or a
-            claim of completed fundraising.
+            Investment discussions are exploratory and subject to appropriate due diligence and
+            documentation. Payment instructions are shared only through a private channel after
+            discussion — never published on this website. This page is not an offer of securities, a
+            subscription mechanism, or a claim of completed fundraising. Submitting a contact form
+            does not constitute an investment agreement.
           </p>
         </div>
       </section>
