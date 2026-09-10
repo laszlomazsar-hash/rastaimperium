@@ -43,8 +43,14 @@ export default function EvidencePage() {
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/proof/"
+              href="/observatory/"
               className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
+            >
+              Open Evidence Observatory
+            </Link>
+            <Link
+              href="/proof/"
+              className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
             >
               Proof Registry
             </Link>
@@ -61,156 +67,69 @@ export default function EvidencePage() {
               Limitations
             </Link>
             <Link
-              href="/audit/"
+              href="/verify/"
               className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
             >
-              Auditor handoff
-            </Link>
-            <Link
-              href="/governance-model/"
-              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
-            >
-              Governance model
+              Verify
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="container-page py-12">
-        <h2 className="font-cinzel text-xl text-zinc-100">Claims</h2>
-        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+      <section className="container-page border-b border-zinc-900 py-12">
+        <h2 className="font-cinzel text-2xl text-zinc-100">Claims</h2>
+        <p className="mt-2 max-w-2xl text-sm text-zinc-400">
+          Each claim carries an explicit verification status. Open the Observatory to inspect
+          registry records with filters and reproduction links.
+        </p>
+        <div className="mt-8 space-y-4">
           {claims.map((c) => (
-            <ClaimEvidence key={c.claimId} claimId={c.claimId} />
+            <ClaimEvidence key={c.claimId} claim={c} />
           ))}
         </div>
       </section>
 
-      <section className="container-page border-t border-zinc-900 py-12">
-        <h2 className="font-cinzel text-xl text-zinc-100">Evidence records</h2>
-        <ul className="mt-6 space-y-4">
+      <section className="container-page border-b border-zinc-900 py-12">
+        <h2 className="font-cinzel text-2xl text-zinc-100">Evidence objects</h2>
+        <ul className="mt-6 space-y-3">
           {evidence.map((e) => (
-            <li key={e.evidenceId} id={e.evidenceId}>
-              <article className="royal-panel rounded-xl border p-5">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <div>
-                    <p className="font-mono text-[11px] text-zinc-500">{e.evidenceId}</p>
-                    <h3 className="mt-1 text-lg text-zinc-100">{e.title}</h3>
-                  </div>
-                  <div className="flex gap-2">
-                    <VerificationBadge status={e.verificationStatus} />
-                    <ProvenanceBadge kind={e.provenance} />
-                  </div>
-                </div>
-                <p className="mt-3 text-sm leading-7 text-zinc-400">{e.description}</p>
-                <dl className="mt-4 grid gap-2 text-xs sm:grid-cols-2">
-                  <div>
-                    <dt className="text-zinc-500">Source</dt>
-                    <dd className="text-zinc-300">{e.source}</dd>
-                  </div>
-                  {e.verificationMethod && (
-                    <div>
-                      <dt className="text-zinc-500">Verification method</dt>
-                      <dd className="text-zinc-300">{e.verificationMethod}</dd>
-                    </div>
-                  )}
-                  {e.hash && (
-                    <div>
-                      <dt className="text-zinc-500">Hash</dt>
-                      <dd className="font-mono text-zinc-300">{e.hash}</dd>
-                    </div>
-                  )}
-                  {e.artifactId && (
-                    <div>
-                      <dt className="text-zinc-500">Artifact</dt>
-                      <dd className="font-mono text-zinc-300">{e.artifactId}</dd>
-                    </div>
-                  )}
-                </dl>
-                <div className="mt-3 flex flex-wrap gap-3 text-xs">
-                  {e.proofIds.map((pid) => (
-                    <Link key={pid} href={`/proof#${pid}`} className="text-[#F2D675] hover:underline">
-                      {pid}
-                    </Link>
-                  ))}
-                  {e.relatedTrustSections.map((s) => (
-                    <Link key={s} href="/trust" className="text-zinc-500 hover:text-zinc-300">
-                      Trust · {s}
-                    </Link>
-                  ))}
-                </div>
-                {e.notes && <p className="mt-3 text-xs text-zinc-500">{e.notes}</p>}
-              </article>
+            <li
+              key={e.evidenceId}
+              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-black/25 px-4 py-3"
+            >
+              <div>
+                <p className="font-mono text-sm text-[#F2D675]">{e.evidenceId}</p>
+                <p className="mt-1 text-sm text-zinc-400">{e.title}</p>
+              </div>
+              <ProvenanceBadge provenance={e.provenance} />
             </li>
           ))}
         </ul>
       </section>
 
-      <section className="container-page border-t border-zinc-900 py-12">
-        <h2 className="font-cinzel text-xl text-zinc-100">Benchmark provenance</h2>
-        <p className="mt-2 text-sm text-zinc-500">
-          Historical figures retained with explicit status. UNAVAILABLE until public artifacts exist.
-          Not claimed on the homepage.
+      <section className="container-page py-12">
+        <h2 className="font-cinzel text-2xl text-zinc-100">Benchmark figures</h2>
+        <p className="mt-2 text-sm text-zinc-400">
+          Benchmark labels remain UNAVAILABLE unless a sealed public artifact exists.
         </p>
-        <div className="royal-panel mt-6 overflow-x-auto rounded-xl border p-4">
-          <table className="w-full min-w-[640px] text-left text-sm">
-            <thead>
-              <tr className="border-b border-zinc-800 text-xs uppercase tracking-wider text-zinc-500">
-                <th className="py-2 pr-4">Metric</th>
-                <th className="py-2 pr-4">Value</th>
-                <th className="py-2 pr-4">Target</th>
-                <th className="py-2 pr-4">Status</th>
-                <th className="py-2">Provenance</th>
-              </tr>
-            </thead>
-            <tbody>
-              {benchmarks.map((b) => (
-                <tr key={b.benchmarkId} className="border-b border-zinc-900">
-                  <td className="py-3 pr-4 text-zinc-200">{b.metric}</td>
-                  <td className="py-3 pr-4 font-mono text-zinc-100">{b.value}</td>
-                  <td className="py-3 pr-4 font-mono text-zinc-400">{b.target}</td>
-                  <td className="py-3 pr-4">
-                    <VerificationBadge status={b.verificationStatus} />
-                  </td>
-                  <td className="py-3">
-                    <ProvenanceBadge kind={b.provenance} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <Link href="/limitations/" className="mt-4 inline-block text-sm text-[#F2D675]">
-          Full Limitations list →
-        </Link>
-      </section>
-
-      <section className="container-page py-14">
-        <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
-          <h2 className="font-cinzel text-xl text-zinc-100">After evidence review</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
-            Commercial discussion follows sealed artifacts and explicit boundaries — not the other way
-            around.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/product/"
-              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
+        <ul className="mt-6 space-y-3">
+          {benchmarks.map((b) => (
+            <li
+              key={b.benchmarkId}
+              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-zinc-800 px-4 py-3"
             >
-              Product pathway
-            </Link>
-            <Link
-              href="/institutional-pilots/"
-              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
-            >
-              Design partner pilots
-            </Link>
-            <Link
-              href="/contact/"
-              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
-            >
-              Contact
-            </Link>
-          </div>
+              <div>
+                <p className="text-sm text-zinc-200">{b.label}</p>
+                <p className="font-mono text-xs text-zinc-500">{b.benchmarkId}</p>
+              </div>
+              <VerificationBadge status={b.verificationStatus} />
+            </li>
+          ))}
+        </ul>
+        <div className="mt-10">
+          <Link href="/observatory/" className="text-[#F2D675] hover:underline">
+            Open Evidence Observatory →
+          </Link>
         </div>
       </section>
     </main>
