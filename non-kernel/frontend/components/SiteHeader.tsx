@@ -38,6 +38,7 @@ const navGroups: NavGroup[] = [
     label: "Proof",
     tone: "proof",
     items: [
+      { href: "/observatory", label: "Observatory" },
       { href: "/proof", label: "Proof Registry" },
       { href: "/evidence", label: "Evidence" },
       { href: "/verify", label: "Verify", emphasize: true },
@@ -64,7 +65,7 @@ const navGroups: NavGroup[] = [
 const desktopTop: NavItem[] = [
   { href: "/", label: "Imperium" },
   { href: "/blueprint", label: "System" },
-  { href: "/proof", label: "Proof" },
+  { href: "/observatory", label: "Proof" },
   { href: "/verify", label: "Verify", emphasize: true },
   { href: "/evaluate", label: "Evaluate" },
   { href: "/institutional-pilots", label: "Engage" },
@@ -213,7 +214,7 @@ export default function SiteHeader() {
           <ul className="flex items-center gap-0 text-xs text-zinc-300 sm:text-sm">
             {[
               { href: "/", label: "Imperium" },
-              { href: "/proof", label: "Proof" },
+              { href: "/observatory", label: "Observatory" },
               { href: "/verify", label: "Verify", emphasize: true as const },
               { href: "/evaluate", label: "Evaluate" },
               { href: "/institutional-pilots", label: "Pilots" },
