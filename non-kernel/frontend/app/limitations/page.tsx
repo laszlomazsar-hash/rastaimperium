@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import EvidenceJourneyNav from "@/components/EvidenceJourneyNav";
 
 export const metadata: Metadata = {
   title: "Limitations — What AI governance claims we have not proven",
@@ -14,184 +15,145 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Limitations — What we have not proven",
     description:
-      "Honest boundary of the public verification surface. Inspect what is VERIFIED vs UNAVAILABLE before any commercial discussion.",
+      "Public evidence is capsule-scoped. LIVE telemetry, benchmarks, full-kernel parity, and certification remain UNAVAILABLE until sealed artifacts exist.",
     url: "https://rastaimperium.com/limitations/",
   },
 };
 
-const boundaries = [
+const unavailable = [
   {
-    label: "UNAVAILABLE · performance benchmarks",
-    body: "Ops/sec, latency, human approval rate, and reliability figures that appeared in earlier materials are not claimed as VERIFIED on this surface. They remain labelled UNAVAILABLE until sealed public benchmark capsules are published.",
+    title: "Production LIVE telemetry",
+    body: "No public sealed live agent or fleet telemetry is published on this surface.",
   },
   {
-    label: "UNAVAILABLE · production LIVE telemetry",
-    body: "Observatory and homepage status panels are DEMONSTRATION / synthetic. They are not live monitoring of production agents or the EVO-V execution runtime.",
+    title: "Performance benchmarks as VERIFIED",
+    body: "Ops/sec, latency, and reliability figures are not VERIFIED without sealed public benchmark capsules.",
   },
   {
-    label: "BOUNDARY · capsule scope",
-    body: "VERIFIED labels on ART-L7-REPLAY-001, ART-L7-REJECT-001, and ART-L7-PARITY-001 apply only to those sealed public capsules and pure verifiers — not to full production fleets or unpublished kernels.",
+    title: "Full EVO-V kernel parity",
+    body: "Public pure-verifier agreement on L7 capsules is not equivalent to full-kernel production parity.",
   },
   {
-    label: "BOUNDARY · certification language",
-    body: "Court-ready, hardware-enforced, and 100% equivalence language is constitutional intent or capsule-scoped where independent verifiers exist. Full production certification is not asserted without sealed artifacts and written engagement scope.",
+    title: "Regulatory certification",
+    body: "No certification, regulatory approval, or court-ready assurance language is claimed from the public baseline.",
   },
   {
-    label: "BOUNDARY · commercial guarantees",
-    body: "No self-serve SaaS SLA, unlimited agent coverage, or outcome guarantee is published on this surface. Design partner pilots define written success criteria and non-goals before any production path.",
+    title: "Commercial traction metrics",
+    body: "Customer counts, revenue, valuation, and deployment scale are not established by public evidence.",
   },
-];
+] as const;
+
+const verifiedScope = [
+  {
+    id: "ART-L7-REPLAY-001",
+    body: "Valid-path deterministic replay under a sealed public capsule (INV-001 family).",
+  },
+  {
+    id: "ART-L7-REJECT-001",
+    body: "Illegal lifecycle transition rejection with sealed receipt under pure semantics.",
+  },
+  {
+    id: "ART-L7-PARITY-001",
+    body: "Exact hash agreement across independent Node and Python pure verifiers for the sealed parity capsule.",
+  },
+] as const;
 
 export default function LimitationsPage() {
   return (
     <main className="royal-page overflow-hidden">
+      <EvidenceJourneyNav />
       <section className="border-b border-[#B8860B]/20">
-        <div className="container-page py-16 lg:py-24">
+        <div className="container-page py-16 lg:py-20">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
-            Epistemic hygiene
+            Honesty boundary
           </p>
-          <h1 className="mt-5 max-w-3xl font-cinzel text-4xl leading-tight text-zinc-100 sm:text-5xl">
+          <h1 className="mt-4 font-cinzel text-4xl text-zinc-100 sm:text-5xl">
             What we have not proven
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
-            Unproven does not mean false. It means sealed public artifacts are not yet attached.
-            Read this page before treating any performance figure or production claim as verified.
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
+            VERIFIED means the declared verification conditions were satisfied within the stated
+            scope. It does not mean universal correctness, production health, or certification.
           </p>
-
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-zinc-700/60 bg-zinc-950/40 p-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-                Status
-              </p>
-              <p className="mt-2 text-sm font-semibold text-zinc-100">Explicit unproven list</p>
-              <p className="mt-1 text-xs leading-5 text-zinc-500">
-                Benchmarks, LIVE telemetry, and certification language stay labelled UNAVAILABLE.
-              </p>
-            </div>
-            <div className="rounded-xl border border-zinc-800 bg-black/30 p-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
-                Scope
-              </p>
-              <p className="mt-2 text-sm font-semibold text-zinc-100">Public surface only</p>
-              <p className="mt-1 text-xs leading-5 text-zinc-500">
-                Capsule VERIFIED does not extend to production fleets or unpublished kernels.
-              </p>
-            </div>
-            <div className="rounded-xl border border-[#B8860B]/35 bg-[#B8860B]/5 p-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
-                Action
-              </p>
-              <p className="mt-2 text-sm font-semibold text-zinc-100">Read before claims</p>
-              <p className="mt-1 text-xs leading-5 text-zinc-500">
-                Then inspect Proof Registry or reproduce offline via Verify.
-              </p>
-            </div>
-          </div>
-
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/verify/"
-              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
             >
-              Verify
+              Verify offline
             </Link>
             <Link
-              href="/proof/"
-              className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
+              href="/observatory/"
+              className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
             >
-              Proof Registry
+              Evidence Observatory
             </Link>
             <Link
-              href="/audit/"
-              className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
+              href="/evaluate/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
             >
-              Auditor handoff
+              Evaluate evidence
             </Link>
           </div>
         </div>
       </section>
 
       <section className="container-page border-b border-zinc-900 py-12">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
-          Explicit boundaries
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-emerald-400/90">
+          What is VERIFIED · capsule-scoped
         </p>
-        <h2 className="mt-3 font-cinzel text-2xl text-zinc-100">
-          What stays labelled until evidence exists
-        </h2>
-        <div className="mt-8 space-y-4">
-          {boundaries.map((b) => (
-            <div key={b.label} className="royal-panel rounded-xl border p-6">
-              <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">
-                {b.label}
-              </p>
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-400">{b.body}</p>
-            </div>
+        <h2 className="mt-2 font-cinzel text-2xl text-zinc-100">Public baseline only</h2>
+        <ul className="mt-8 space-y-3">
+          {verifiedScope.map((v) => (
+            <li
+              key={v.id}
+              className="rounded-xl border border-emerald-900/40 bg-emerald-950/10 px-4 py-4"
+            >
+              <p className="font-mono text-sm text-[#F2D675]">{v.id}</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-300">{v.body}</p>
+            </li>
           ))}
-        </div>
+        </ul>
+        <p className="mt-6 text-sm text-zinc-500">
+          ART-L7-PARITY-002 remains historical and is not part of the current Living Evidence Manifest
+          VERIFIED set.
+        </p>
       </section>
 
       <section className="container-page border-b border-zinc-900 py-12">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B8860B]">
-          Related surfaces
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
+          UNAVAILABLE
         </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <Link
-            href="/proof/"
-            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
-          >
-            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Evidence</p>
-            <p className="mt-2 font-semibold text-zinc-100">Proof Registry</p>
-            <p className="mt-2 text-sm text-zinc-400">Sealed capsules and structured proof records.</p>
-            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
-          </Link>
-          <Link
-            href="/pillars/"
-            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
-          >
-            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Doctrine</p>
-            <p className="mt-2 font-semibold text-zinc-100">Seven Articles</p>
-            <p className="mt-2 text-sm text-zinc-400">Constitutional intent vs partial evidence labels.</p>
-            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
-          </Link>
-          <Link
-            href="/why-deterministic-governance/"
-            className="royal-panel block rounded-xl border p-5 transition hover:border-[#B8860B]/40"
-          >
-            <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4AF37]">Plain language</p>
-            <p className="mt-2 font-semibold text-zinc-100">Why deterministic</p>
-            <p className="mt-2 text-sm text-zinc-400">Board-facing explainer before commercial terms.</p>
-            <p className="mt-3 text-sm text-[#F2D675]">Open →</p>
-          </Link>
-        </div>
+        <h2 className="mt-2 font-cinzel text-2xl text-zinc-100">Not established by the public baseline</h2>
+        <ul className="mt-8 space-y-4">
+          {unavailable.map((u) => (
+            <li key={u.title} className="rounded-xl border border-zinc-800 bg-black/25 p-5">
+              <h3 className="text-base text-zinc-100">{u.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">{u.body}</p>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      <section className="container-page py-14">
-        <div className="rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
-          <h2 className="font-cinzel text-2xl text-zinc-100">Evaluate evidence first</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
-            Start with the Proof Registry and Challenge Lab. Commercial discussion follows evidence,
-            not the other way around.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/proof/"
-              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
-            >
-              Open Proof Registry
-            </Link>
-            <Link
-              href="/institutional-pilots/"
-              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
-            >
-              Design partner pilots
-            </Link>
-            <Link
-              href="/product/"
-              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
-            >
-              Product pathway
-            </Link>
-          </div>
+      <section className="container-page py-12">
+        <h2 className="font-cinzel text-xl text-zinc-100">Continue the journey</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400">
+          Unproven does not mean false. It means the public record does not yet support the claim.
+          Inspect evidence, verify offline, challenge fixtures, then evaluate whether a bounded pilot
+          is justified.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3 text-sm">
+          <Link href="/observatory/" className="text-[#F2D675] hover:underline">
+            Observatory →
+          </Link>
+          <Link href="/verify/" className="text-zinc-400 hover:text-[#F2D675]">
+            Verify →
+          </Link>
+          <Link href="/challenge/" className="text-zinc-400 hover:text-[#F2D675]">
+            Challenge →
+          </Link>
+          <Link href="/evaluate/" className="text-zinc-400 hover:text-[#F2D675]">
+            Evaluate →
+          </Link>
         </div>
       </section>
     </main>
