@@ -15,7 +15,7 @@
  *   node scripts/verify-evidence-boundary.mjs --self-test
  */
 
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, existsSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, existsSync, readdirSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,16 +25,6 @@ const frontendRoot = resolve(__dirname, "..");
 const repoRoot = resolve(frontendRoot, "../..");
 
 const VALID_STATUSES = new Set(["VERIFIED", "DEMONSTRATION", "UNAVAILABLE"]);
-const PUBLIC_SURFACE_GLOBS = [
-  // Source pages that can reach production static export
-  "non-kernel/frontend/app/verify",
-  "non-kernel/frontend/app/proof",
-  "non-kernel/frontend/app/audit",
-  "non-kernel/frontend/app/evidence",
-  "non-kernel/frontend/app/page.tsx",
-  "non-kernel/frontend/data/evidence",
-  "README.md",
-];
 
 /** Historical-only IDs that must not appear as public VERIFIED promotions */
 const HISTORICAL_ONLY_IDS = new Set(["ART-L7-PARITY-002"]);
@@ -42,30 +32,6 @@ const HISTORICAL_ONLY_IDS = new Set(["ART-L7-PARITY-002"]);
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
-
-function collectFiles(dir, acc = []) {
-  if (!existsSync(dir)) return acc;
-  const { readdirSync, statSync } = awaitFs();
-  for (const name of readdirSync(dir)) {
-    if (name === "node_modules" || name === ".next" || name === "out") continue;
-    const p = join(dir, name);
-    const st = statSync(p);
-    if (st.isDirectory()) collectFiles(p, acc);
-    else if (/\.(tsx?|jsx?|mjs|cjs|md|json|txt)$/i.test(name)) acc.push(p);
-  }
-  return acc;
-}
-
-function awaitFs() {
-  // sync fs helpers bound for collectFiles
-  return {
-    readdirSync: (await import("node:fs")).readdirSync,
-    statSync: (await import("node:fs")).statSync,
-  };
-}
-
-// Use sync imports only — rewrite collect without dynamic import
-import { readdirSync, statSync } from "node:fs";
 
 function walkFiles(dir, acc = []) {
   if (!existsSync(dir)) return acc;
@@ -118,10 +84,10 @@ function verifiedIds(byId) {
   return [...byId.entries()].filter(([, c]) => c.status === "VERIFIED").map(([id]) => id);
 }
 
-/**
- * Detect public promotion of VERIFIED for an ID.
- * Heuristic: within a sliding window, ID co-occurs with VERIFIED badge/status language.
- */
+function escapeReg(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function findVerifiedPromotions(text, knownIds) {
   const promotions = new Set();
   for (const id of knownIds) {
@@ -130,9 +96,6 @@ function findVerifiedPromotions(text, knownIds) {
       "g",
     );
     if (re.test(text)) promotions.add(id);
-  }
-  // Also catch StatusBadge status="VERIFIED" near id in JSX
-  for (const id of knownIds) {
     const jsx = new RegExp(
       `${escapeReg(id)}[\\s\\S]{0,120}?status=[\"']VERIFIED[\"']|status=[\"']VERIFIED[\"'][\\s\\S]{0,120}?${escapeReg(id)}`,
       "g",
@@ -142,32 +105,30 @@ function findVerifiedPromotions(text, knownIds) {
   return promotions;
 }
 
-function escapeReg(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function rel(repoRoot, abs) {
+  return abs.startsWith(repoRoot) ? abs.slice(repoRoot.length + 1) : abs;
 }
 
 function validateArtifacts(repoRoot, byId, errors) {
   for (const [id, claim] of byId) {
     if (claim.status !== "VERIFIED") continue;
-    const rel = claim.artifact;
-    if (!rel || typeof rel !== "string") {
+    const relArtifact = claim.artifact;
+    if (!relArtifact || typeof relArtifact !== "string") {
       errors.push(`VERIFIED ${id}: missing artifact path in manifest`);
       continue;
     }
-    // Public static source of truth for export
-    const publicPath = join(repoRoot, "non-kernel/frontend/public", rel.replace(/^\//, ""));
+    const publicPath = join(repoRoot, "non-kernel/frontend/public", relArtifact.replace(/^\//, ""));
     const dataPath = join(repoRoot, "non-kernel/frontend/data/evidence/artifacts", `${id}.json`);
-    const backendPath = join(repoRoot, "backend/static", rel.replace(/^\//, ""));
+    const backendPath = join(repoRoot, "backend/static", relArtifact.replace(/^\//, ""));
 
     if (!existsSync(publicPath)) {
-      errors.push(`VERIFIED ${id}: missing public export source ${publicPath}`);
+      errors.push(`VERIFIED ${id}: missing public export source ${rel(repoRoot, publicPath)}`);
     } else {
       try {
         const art = readJson(publicPath);
         if (art.artifactId && art.artifactId !== id) {
           errors.push(`VERIFIED ${id}: artifactId mismatch in public JSON (${art.artifactId})`);
         }
-        // Ensure file is real JSON object
         if (typeof art !== "object" || art === null) {
           errors.push(`VERIFIED ${id}: public artifact is not a JSON object`);
         }
@@ -176,7 +137,6 @@ function validateArtifacts(repoRoot, byId, errors) {
       }
     }
 
-    // Mirror check when backend static already present (post-export optional)
     if (existsSync(backendPath)) {
       try {
         readJson(backendPath);
@@ -185,7 +145,6 @@ function validateArtifacts(repoRoot, byId, errors) {
       }
     }
 
-    // data mirror optional but if present must match id
     if (existsSync(dataPath)) {
       try {
         const art = readJson(dataPath);
@@ -218,19 +177,15 @@ function validatePublicSurfaces(repoRoot, verifiedSet, errors) {
     else files.push(root);
   }
 
-  // All ART-L7- IDs that might appear
   const artIdRe = /ART-L7-[A-Z0-9-]+/g;
-  const allSeen = new Set();
 
   for (const file of files) {
     const text = readFileSync(file, "utf8");
-    const ids = text.match(artIdRe) || [];
-    for (const id of ids) allSeen.add(id);
+    const idsInFile = text.match(artIdRe) || [];
+    const candidateIds = new Set([...idsInFile, ...verifiedSet, ...HISTORICAL_ONLY_IDS]);
 
-    // Historical-only must not be promoted as VERIFIED on public surfaces
     for (const hist of HISTORICAL_ONLY_IDS) {
       if (!text.includes(hist)) continue;
-      // allow documentation phrases that explicitly deny current status
       const denies =
         /not part of the public|historical report|not.*VERIFIED|historical-only|not served from the static/i.test(
           text,
@@ -243,34 +198,25 @@ function validatePublicSurfaces(repoRoot, verifiedSet, errors) {
       }
     }
 
-    // Any ART-L7- ID promoted as VERIFIED must be in verifiedSet
-    const promotions = findVerifiedPromotions(text, [...allSeen, ...verifiedSet, ...HISTORICAL_ONLY_IDS]);
+    const promotions = findVerifiedPromotions(text, [...candidateIds]);
     for (const id of promotions) {
-      if (!verifiedSet.has(id)) {
-        // Skip if the same file explicitly denies current verified status for this id
-        const denyNear =
-          new RegExp(
-            `${escapeReg(id)}[\\s\\S]{0,200}?(?:not part of the public|historical|not.*manifest VERIFIED|UNAVAILABLE)`,
-            "i",
-          ).test(text) ||
-          new RegExp(
-            `(?:historical|not part of the public)[\\s\\S]{0,200}?${escapeReg(id)}`,
-            "i",
-          ).test(text);
-        if (!denyNear) {
-          errors.push(
-            `${rel(repoRoot, file)}: promotes ${id} as VERIFIED but Living Evidence Manifest does not`,
-          );
-        }
+      if (verifiedSet.has(id)) continue;
+      const denyNear =
+        new RegExp(
+          `${escapeReg(id)}[\\s\\S]{0,200}?(?:not part of the public|historical|not.*manifest VERIFIED|UNAVAILABLE)`,
+          "i",
+        ).test(text) ||
+        new RegExp(
+          `(?:historical|not part of the public)[\\s\\S]{0,200}?${escapeReg(id)}`,
+          "i",
+        ).test(text);
+      if (!denyNear) {
+        errors.push(
+          `${rel(repoRoot, file)}: promotes ${id} as VERIFIED but Living Evidence Manifest does not`,
+        );
       }
     }
   }
-
-  return allSeen;
-}
-
-function rel(repoRoot, abs) {
-  return abs.startsWith(repoRoot) ? abs.slice(repoRoot.length + 1) : abs;
 }
 
 function runGate(repoRoot) {
@@ -285,14 +231,12 @@ function runGate(repoRoot) {
     errors.push("Manifest has zero VERIFIED claims — unexpected for public surface");
   }
 
-  // Required public set (contract for this phase)
   for (const required of ["ART-L7-REPLAY-001", "ART-L7-REJECT-001", "ART-L7-PARITY-001"]) {
     if (!verified.has(required)) {
       errors.push(`Required public VERIFIED capsule missing from manifest: ${required}`);
     }
   }
 
-  // PARITY-002 must not be VERIFIED in manifest
   const p2 = byId.get("ART-L7-PARITY-002");
   if (p2 && p2.status === "VERIFIED") {
     errors.push("ART-L7-PARITY-002 must not be VERIFIED in Living Evidence Manifest (historical only)");
@@ -319,103 +263,48 @@ function selfTest() {
   }
 
   function minimalManifest(claims) {
-    return JSON.stringify(
-      {
-        manifestVersion: "1.0.0",
-        claims,
-      },
-      null,
-      2,
-    );
+    return JSON.stringify({ manifestVersion: "1.0.0", claims }, null, 2);
   }
 
-  // --- PASS case: three VERIFIED capsules ---
+  const three = [
+    { id: "ART-L7-REPLAY-001", status: "VERIFIED", artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json" },
+    { id: "ART-L7-REJECT-001", status: "VERIFIED", artifact: "/evidence/artifacts/ART-L7-REJECT-001.json" },
+    { id: "ART-L7-PARITY-001", status: "VERIFIED", artifact: "/evidence/artifacts/ART-L7-PARITY-001.json" },
+  ];
+
   {
     const root = join(base, "pass");
-    const claims = [
-      {
-        id: "ART-L7-REPLAY-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-      },
-      {
-        id: "ART-L7-REJECT-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-REJECT-001.json",
-      },
-      {
-        id: "ART-L7-PARITY-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-PARITY-001.json",
-      },
-    ];
-    write("pass/docs/evidence/EVIDENCE_MANIFEST.json", minimalManifest(claims));
+    write("pass/docs/evidence/EVIDENCE_MANIFEST.json", minimalManifest(three));
     for (const id of ["ART-L7-REPLAY-001", "ART-L7-REJECT-001", "ART-L7-PARITY-001"]) {
       write(`pass/non-kernel/frontend/public/evidence/artifacts/${id}.json`, minimalCapsule(id));
     }
     write(
       "pass/non-kernel/frontend/app/verify/page.tsx",
-      `const id = "ART-L7-REPLAY-001"; <StatusBadge status="VERIFIED" />`,
+      'const id = "ART-L7-REPLAY-001"; <StatusBadge status="VERIFIED" />',
     );
     write("pass/README.md", "# ok\n");
     const { errors } = runGate(root);
     results.push({ name: "PASS current three VERIFIED", ok: errors.length === 0, errors });
   }
 
-  // --- FAIL: fake VERIFIED on verify page ---
   {
     const root = join(base, "fake");
-    const claims = [
-      {
-        id: "ART-L7-REPLAY-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-      },
-      {
-        id: "ART-L7-REJECT-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-REJECT-001.json",
-      },
-      {
-        id: "ART-L7-PARITY-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-PARITY-001.json",
-      },
-    ];
-    write("fake/docs/evidence/EVIDENCE_MANIFEST.json", minimalManifest(claims));
+    write("fake/docs/evidence/EVIDENCE_MANIFEST.json", minimalManifest(three));
     for (const id of ["ART-L7-REPLAY-001", "ART-L7-REJECT-001", "ART-L7-PARITY-001"]) {
       write(`fake/non-kernel/frontend/public/evidence/artifacts/${id}.json`, minimalCapsule(id));
     }
     write(
       "fake/non-kernel/frontend/app/verify/page.tsx",
-      `<h3>ART-L7-PARITY-002</h3><StatusBadge status="VERIFIED" />`,
+      '<h3>ART-L7-PARITY-002</h3><StatusBadge status="VERIFIED" />',
     );
     const { errors } = runGate(root);
     const hit = errors.some((e) => e.includes("PARITY-002") && e.includes("VERIFIED"));
     results.push({ name: "FAIL verify promotes PARITY-002", ok: hit, errors });
   }
 
-  // --- FAIL: missing public JSON ---
   {
     const root = join(base, "missing");
-    const claims = [
-      {
-        id: "ART-L7-REPLAY-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-      },
-      {
-        id: "ART-L7-REJECT-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-REJECT-001.json",
-      },
-      {
-        id: "ART-L7-PARITY-001",
-        status: "VERIFIED",
-        artifact: "/evidence/artifacts/ART-L7-PARITY-001.json",
-      },
-    ];
-    write("missing/docs/evidence/EVIDENCE_MANIFEST.json", minimalManifest(claims));
+    write("missing/docs/evidence/EVIDENCE_MANIFEST.json", minimalManifest(three));
     write(
       "missing/non-kernel/frontend/public/evidence/artifacts/ART-L7-REPLAY-001.json",
       minimalCapsule("ART-L7-REPLAY-001"),
@@ -424,33 +313,19 @@ function selfTest() {
       "missing/non-kernel/frontend/public/evidence/artifacts/ART-L7-REJECT-001.json",
       minimalCapsule("ART-L7-REJECT-001"),
     );
-    // PARITY-001 missing
     const { errors } = runGate(root);
     const hit = errors.some((e) => e.includes("PARITY-001") && e.includes("missing public"));
     results.push({ name: "FAIL missing public JSON", ok: hit, errors });
   }
 
-  // --- FAIL: invalid status ---
   {
     const root = join(base, "badstatus");
     write(
       "badstatus/docs/evidence/EVIDENCE_MANIFEST.json",
       minimalManifest([
-        {
-          id: "ART-L7-REPLAY-001",
-          status: "PROVEN",
-          artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-        },
-        {
-          id: "ART-L7-REJECT-001",
-          status: "VERIFIED",
-          artifact: "/evidence/artifacts/ART-L7-REJECT-001.json",
-        },
-        {
-          id: "ART-L7-PARITY-001",
-          status: "VERIFIED",
-          artifact: "/evidence/artifacts/ART-L7-PARITY-001.json",
-        },
+        { id: "ART-L7-REPLAY-001", status: "PROVEN", artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json" },
+        { id: "ART-L7-REJECT-001", status: "VERIFIED", artifact: "/evidence/artifacts/ART-L7-REJECT-001.json" },
+        { id: "ART-L7-PARITY-001", status: "VERIFIED", artifact: "/evidence/artifacts/ART-L7-PARITY-001.json" },
       ]),
     );
     for (const id of ["ART-L7-REPLAY-001", "ART-L7-REJECT-001", "ART-L7-PARITY-001"]) {
@@ -461,32 +336,13 @@ function selfTest() {
     results.push({ name: "FAIL invalid status vocabulary", ok: hit, errors });
   }
 
-  // --- FAIL: duplicate ID ---
   {
     const root = join(base, "dup");
     write(
       "dup/docs/evidence/EVIDENCE_MANIFEST.json",
       minimalManifest([
-        {
-          id: "ART-L7-REPLAY-001",
-          status: "VERIFIED",
-          artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-        },
-        {
-          id: "ART-L7-REPLAY-001",
-          status: "VERIFIED",
-          artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-        },
-        {
-          id: "ART-L7-REJECT-001",
-          status: "VERIFIED",
-          artifact: "/evidence/artifacts/ART-L7-REJECT-001.json",
-        },
-        {
-          id: "ART-L7-PARITY-001",
-          status: "VERIFIED",
-          artifact: "/evidence/artifacts/ART-L7-PARITY-001.json",
-        },
+        ...three,
+        { id: "ART-L7-REPLAY-001", status: "VERIFIED", artifact: "/evidence/artifacts/ART-L7-REPLAY-001.json" },
       ]),
     );
     for (const id of ["ART-L7-REPLAY-001", "ART-L7-REJECT-001", "ART-L7-PARITY-001"]) {
