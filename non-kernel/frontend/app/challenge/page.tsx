@@ -23,31 +23,35 @@ function ChallengeDetail({ c }: { c: Challenge }) {
           <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">What is tested</dt>
           <dd className="mt-1">{c.description}</dd>
         </div>
-        {c.invariant && (
-          <div>
-            <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Invariant</dt>
-            <dd className="mt-1">{c.invariant}</dd>
-          </div>
-        )}
-        {c.expectedBehaviour && (
-          <div>
-            <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Expected behaviour</dt>
-            <dd className="mt-1">{c.expectedBehaviour}</dd>
-          </div>
-        )}
-        {c.resultSummary && (
-          <div>
-            <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Result</dt>
-            <dd className="mt-1">{c.resultSummary}</dd>
-          </div>
-        )}
-        {c.limitations && (
-          <div>
-            <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Does not establish</dt>
-            <dd className="mt-1 text-zinc-400">{c.limitations}</dd>
-          </div>
-        )}
+        <div>
+          <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Invariant</dt>
+          <dd className="mt-1">{c.invariant}</dd>
+        </div>
+        <div>
+          <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Input</dt>
+          <dd className="mt-1 font-mono text-xs text-zinc-400">{c.input}</dd>
+        </div>
+        <div>
+          <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Expected</dt>
+          <dd className="mt-1">{c.expected}</dd>
+        </div>
+        <div>
+          <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Result</dt>
+          <dd className="mt-1">{c.result}</dd>
+        </div>
+        <div>
+          <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Reason</dt>
+          <dd className="mt-1 text-zinc-400">{c.reason}</dd>
+        </div>
+        <div>
+          <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Verification</dt>
+          <dd className="mt-1 font-mono text-xs">{c.verification}</dd>
+        </div>
       </dl>
+      <p className="mt-4 text-xs leading-5 text-zinc-500">
+        Challenges are deterministic, non-destructive, and isolated from production. They do not
+        establish production performance, certification, or full-kernel parity.
+      </p>
       <div className="mt-5 flex flex-wrap gap-3 text-sm">
         {c.proofId && (
           <Link href={`/proof#${c.proofId}`} className="text-[#F2D675] hover:underline">
