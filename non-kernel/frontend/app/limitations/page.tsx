@@ -13,48 +13,37 @@ export const metadata: Metadata = {
     "deterministic AI transparency",
   ],
   openGraph: {
-    title: "Limitations — What we have not proven",
+    title: "Limitations — Honest boundary of public evidence",
     description:
-      "Public evidence is capsule-scoped. LIVE telemetry, benchmarks, full-kernel parity, and certification remain UNAVAILABLE until sealed artifacts exist.",
+      "Honest boundary of the public verification surface. Inspect what is VERIFIED, DEMONSTRATION, and UNAVAILABLE before institutional evaluation.",
     url: "https://rastaimperium.com/limitations/",
   },
 };
 
-const unavailable = [
+const boundaries = [
   {
-    title: "Production LIVE telemetry",
-    body: "No public sealed live agent or fleet telemetry is published on this surface.",
+    label: "UNAVAILABLE · performance benchmarks",
+    body: "Ops/sec, latency, human approval rate, and reliability figures are not VERIFIED without sealed public benchmark capsules.",
   },
   {
-    title: "Performance benchmarks as VERIFIED",
-    body: "Ops/sec, latency, and reliability figures are not VERIFIED without sealed public benchmark capsules.",
+    label: "UNAVAILABLE · production LIVE telemetry",
+    body: "No public sealed live agent or fleet telemetry is published on this surface. Synthetic Observatory panels are DEMONSTRATION only.",
   },
   {
-    title: "Full EVO-V kernel parity",
-    body: "Public pure-verifier agreement on L7 capsules is not equivalent to full-kernel production parity.",
+    label: "UNAVAILABLE · full EVO-V kernel parity",
+    body: "Public pure-verifier agreement on L7 capsules is not equivalent to full-kernel production parity or continuous runtime health.",
   },
   {
-    title: "Regulatory certification",
+    label: "UNAVAILABLE · regulatory certification",
     body: "No certification, regulatory approval, or court-ready assurance language is claimed from the public baseline.",
   },
   {
-    title: "Commercial traction metrics",
-    body: "Customer counts, revenue, valuation, and deployment scale are not established by public evidence.",
-  },
-] as const;
-
-const verifiedScope = [
-  {
-    id: "ART-L7-REPLAY-001",
-    body: "Valid-path deterministic replay under a sealed public capsule (INV-001 family).",
+    label: "Scope · capsule-only VERIFIED",
+    body: "ART-L7-REPLAY-001, ART-L7-REJECT-001, and ART-L7-PARITY-001 are VERIFIED only within sealed public capsule scope. ART-L7-PARITY-002 remains historical and outside the current Living Evidence Manifest VERIFIED set.",
   },
   {
-    id: "ART-L7-REJECT-001",
-    body: "Illegal lifecycle transition rejection with sealed receipt under pure semantics.",
-  },
-  {
-    id: "ART-L7-PARITY-001",
-    body: "Exact hash agreement across independent Node and Python pure verifiers for the sealed parity capsule.",
+    label: "UI is presentation",
+    body: "Website cards and journey navigation do not establish truth. Offline pure verifiers and sealed artifacts remain authoritative.",
   },
 ] as const;
 
@@ -73,6 +62,7 @@ export default function LimitationsPage() {
           <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
             VERIFIED means the declared verification conditions were satisfied within the stated
             scope. It does not mean universal correctness, production health, or certification.
+            Unproven does not mean false — it means the public record does not yet support the claim.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -86,6 +76,12 @@ export default function LimitationsPage() {
               className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
             >
               Evidence Observatory
+            </Link>
+            <Link
+              href="/proof/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Proof Registry
             </Link>
             <Link
               href="/evaluate/"
@@ -103,7 +99,20 @@ export default function LimitationsPage() {
         </p>
         <h2 className="mt-2 font-cinzel text-2xl text-zinc-100">Public baseline only</h2>
         <ul className="mt-8 space-y-3">
-          {verifiedScope.map((v) => (
+          {[
+            {
+              id: "ART-L7-REPLAY-001",
+              body: "Valid-path deterministic replay under a sealed public capsule (INV-001 family).",
+            },
+            {
+              id: "ART-L7-REJECT-001",
+              body: "Illegal lifecycle transition rejection with sealed receipt under pure semantics.",
+            },
+            {
+              id: "ART-L7-PARITY-001",
+              body: "Exact hash agreement across independent Node and Python pure verifiers for the sealed parity capsule.",
+            },
+          ].map((v) => (
             <li
               key={v.id}
               className="rounded-xl border border-emerald-900/40 bg-emerald-950/10 px-4 py-4"
@@ -113,33 +122,30 @@ export default function LimitationsPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-6 text-sm text-zinc-500">
-          ART-L7-PARITY-002 remains historical and is not part of the current Living Evidence Manifest
-          VERIFIED set.
-        </p>
       </section>
 
       <section className="container-page border-b border-zinc-900 py-12">
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
-          UNAVAILABLE
-        </p>
-        <h2 className="mt-2 font-cinzel text-2xl text-zinc-100">Not established by the public baseline</h2>
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">Boundaries</p>
+        <h2 className="mt-2 font-cinzel text-2xl text-zinc-100">Explicit limits of the public record</h2>
         <ul className="mt-8 space-y-4">
-          {unavailable.map((u) => (
-            <li key={u.title} className="rounded-xl border border-zinc-800 bg-black/25 p-5">
-              <h3 className="text-base text-zinc-100">{u.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-400">{u.body}</p>
+          {boundaries.map((b) => (
+            <li key={b.label} className="rounded-xl border border-zinc-800 bg-black/25 p-5">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-400">{b.label}</h3>
+              <p className="mt-2 text-sm leading-6 text-zinc-300">{b.body}</p>
             </li>
           ))}
         </ul>
+        <p className="mt-6 text-sm text-zinc-500">
+          Benchmarks, LIVE telemetry, and certification remain UNAVAILABLE until sealed public
+          artifacts exist and pass independent pure verification.
+        </p>
       </section>
 
       <section className="container-page py-12">
         <h2 className="font-cinzel text-xl text-zinc-100">Continue the journey</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400">
-          Unproven does not mean false. It means the public record does not yet support the claim.
           Inspect evidence, verify offline, challenge fixtures, then evaluate whether a bounded pilot
-          is justified.
+          is justified. Contact submission does not create an investment or pilot agreement.
         </p>
         <div className="mt-8 flex flex-wrap gap-3 text-sm">
           <Link href="/observatory/" className="text-[#F2D675] hover:underline">
