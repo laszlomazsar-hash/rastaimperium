@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import EvidenceJourneyNav from "@/components/EvidenceJourneyNav";
 import { claims, evidence, benchmarks } from "../../data/evidence/manifest";
 import { ProvenanceBadge, VerificationBadge } from "../../components/evidence/ProvenanceBadge";
 import { TrustStatus } from "../../components/evidence/TrustStatus";
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
 export default function EvidencePage() {
   return (
     <main className="royal-page overflow-hidden">
+      <EvidenceJourneyNav />
       <section className="border-b border-[#B8860B]/20">
         <div className="container-page py-16 lg:py-20">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
