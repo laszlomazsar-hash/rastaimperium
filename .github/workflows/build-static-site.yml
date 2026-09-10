@@ -10,6 +10,7 @@ on:
     branches: [main]
     paths:
       - "non-kernel/frontend/**"
+      - "docs/evidence/**"
       - ".github/workflows/build-static-site.yml"
   workflow_dispatch:
 
@@ -45,6 +46,12 @@ jobs:
         working-directory: non-kernel/frontend
         run: npm run verify:assets
 
+      - name: Verify public evidence boundary
+        working-directory: non-kernel/frontend
+        run: |
+          npm run verify:evidence:self-test
+          npm run verify:evidence
+
       - name: Build static export
         working-directory: non-kernel/frontend
         run: npm run build
@@ -64,6 +71,14 @@ jobs:
             echo "Unexpected .b64 image asset found in static export"; exit 1;
           } || true
 
+          echo "Verifying public evidence capsules after rsync --delete"
+          test -f backend/static/evidence/artifacts/ART-L7-REPLAY-001.json
+          test -f backend/static/evidence/artifacts/ART-L7-REJECT-001.json
+          test -f backend/static/evidence/artifacts/ART-L7-PARITY-001.json
+          python3 -c "import json; json.load(open('backend/static/evidence/artifacts/ART-L7-REPLAY-001.json'))"
+          python3 -c "import json; json.load(open('backend/static/evidence/artifacts/ART-L7-REJECT-001.json'))"
+          python3 -c "import json; json.load(open('backend/static/evidence/artifacts/ART-L7-PARITY-001.json'))"
+
           if test -z "$(git status --porcelain -- backend/static)"; then
             echo "Static output is already current."
             exit 0
@@ -76,4 +91,3 @@ jobs:
           git push
           echo "Published backend/static to main."
           echo "Railway GitHub integration will detect this commit and deploy automatically."
-
