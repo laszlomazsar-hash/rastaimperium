@@ -52,6 +52,10 @@ jobs:
           npm run verify:evidence:self-test
           npm run verify:evidence
 
+      - name: Verify offline reproducibility (VERIFIED capsules)
+        working-directory: non-kernel/frontend
+        run: npm run verify:reproducibility
+
       - name: Build static export
         working-directory: non-kernel/frontend
         run: npm run build
