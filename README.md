@@ -38,6 +38,49 @@ Production performance, live telemetry, and full kernel parity are **not** claim
 3. Execution occurs in separate EVO-V repositories and operational systems.
 4. Claims on this surface are evidence-bound: VERIFIED, DEMONSTRATION, or UNAVAILABLE.
 
+## What is currently VERIFIED (capsule-scoped)
+
+Authoritative index: [`docs/evidence/EVIDENCE_MANIFEST.json`](docs/evidence/EVIDENCE_MANIFEST.json)
+
+| ID | Invariant | Status |
+|----|-----------|--------|
+| ART-L7-REPLAY-001 | INV-001 replay_parity | VERIFIED |
+| ART-L7-REJECT-001 | INV-002 illegal_transition_rejection | VERIFIED |
+| ART-L7-PARITY-001 | cross_implementation_parity (Node + Python) | VERIFIED |
+
+Public capsule JSON (static export):
+
+- https://rastaimperium.com/evidence/artifacts/ART-L7-REPLAY-001.json
+- https://rastaimperium.com/evidence/artifacts/ART-L7-REJECT-001.json
+- https://rastaimperium.com/evidence/artifacts/ART-L7-PARITY-001.json
+
+## How to reproduce offline
+
+Do not trust the website UI. Use the pure verifiers against a downloaded capsule.
+
+```bash
+# Replay (Node)
+node non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs path/to/ART-L7-REPLAY-001.json
+# Replay (Python)
+python3 non-kernel/frontend/scripts/verify_art_l7_replay_001.py path/to/ART-L7-REPLAY-001.json
+
+# Reject path (Node / Python)
+node non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs path/to/ART-L7-REJECT-001.json
+python3 non-kernel/frontend/scripts/verify_art_l7_reject_001.py path/to/ART-L7-REJECT-001.json
+```
+
+Exit `0` only when recomputed hashes match the sealed `expected.*` values.
+Guides: [`docs/evidence/REPRODUCE_OFFLINE.md`](docs/evidence/REPRODUCE_OFFLINE.md) · [`docs/evidence/PURE_VERIFIER_README.md`](docs/evidence/PURE_VERIFIER_README.md)
+
+## What is not verified
+
+- Performance benchmarks (ops/sec, latency, reliability)
+- LIVE production telemetry
+- Full EVO-V kernel parity
+- Production / court-ready certification
+
+See [Limitations](https://rastaimperium.com/limitations).
+
 ## Primary site routes
 
 | Path | Role |
@@ -47,6 +90,7 @@ Production performance, live telemetry, and full kernel parity are **not** claim
 | `/pillars` | Seven constitutional articles (status-labelled) |
 | `/proof` | Proof Registry |
 | `/evidence` | Evidence Explorer |
+| `/verify` | Verification console |
 | `/challenge` | Challenge Lab |
 | `/limitations` | Explicit unproven list |
 | `/trust` | Trust Console |
@@ -60,7 +104,7 @@ Production performance, live telemetry, and full kernel parity are **not** claim
 
 ## Docs (repo)
 
-- `docs/` evidence boundary and related materials where present
+- `docs/evidence/` — Living Evidence Manifest, pure-verifier docs, sealed capsules references
 - Frontend: `non-kernel/frontend/` (Next.js static export)
 - CI: `.github/workflows/build-static-site.yml` → `backend/static/` → Railway
 
