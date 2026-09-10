@@ -51,6 +51,15 @@ const engagementPaths = [
     label: "Open an audit inquiry",
     intent: "audit",
   },
+  {
+    code: "06",
+    title: "Investment discussion",
+    description:
+      "Exploratory capital or strategic partnership conversations. Evidence-bound; not an offer of securities.",
+    prompt: "Investment discussion",
+    label: "Discuss investment",
+    intent: "investment",
+  },
 ];
 
 function inquiryHref(subject: string) {
@@ -65,6 +74,7 @@ function ContactBody() {
   const isCommercial = intent === "commercial";
   const isResearch = intent === "research";
   const isInstitutional = intent === "institutional";
+  const isInvestment = intent === "investment";
 
   const bannerTitle = isPilot
     ? "Design partner pilot intake"
@@ -76,7 +86,9 @@ function ContactBody() {
           ? "Research collaboration"
           : isInstitutional
             ? "Institutional governance inquiry"
-            : "Begin with the governance question that matters.";
+            : isInvestment
+              ? "Investment discussion"
+              : "Begin with the governance question that matters.";
 
   const bannerBody = isPilot
     ? "You are on the design partner path. Share decision context, systems in scope, compliance requirements, and success criteria. Indicative pilot investment is $50k–$150k for an 8–12 week fixed scope."
@@ -88,7 +100,9 @@ function ContactBody() {
           ? "Share the research question, collaboration model, and any publication or evidence constraints. This surface remains evidence-bound."
           : isInstitutional
             ? "Share the institutional context, decision boundary, and what accountable autonomy must look like for your environment."
-            : "Rasta Imperium works at the boundary of constitutional intelligence, verifiable systems, and accountable deployment. Select a path below or send context via the form.";
+            : isInvestment
+              ? "Share organisation, role, investment interest, and strategic fit. Discussions are exploratory and subject to diligence. Review Proof and Limitations first."
+              : "Rasta Imperium works at the boundary of constitutional intelligence, verifiable systems, and accountable deployment. Select a path below or send context via the form.";
 
   return (
     <main className="royal-page relative overflow-hidden text-zinc-100">
@@ -141,7 +155,9 @@ function ContactBody() {
                         ? "Commercial brief inquiry"
                         : isResearch
                           ? "Research collaboration inquiry"
-                          : "Rasta Imperium inquiry",
+                          : isInvestment
+                            ? "Investment discussion"
+                            : "Rasta Imperium inquiry",
                 )}
                 className="royal-button royal-button-ghost rounded-lg border border-[#D4AF37]/45 px-6 py-3 text-sm font-semibold text-[#F2D675] transition hover:border-[#F2D675] hover:bg-[#D4AF37]/10"
               >
@@ -158,7 +174,7 @@ function ContactBody() {
 
           <aside className="royal-panel rounded-xl border p-6 sm:p-7">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">
-              {isPilot ? "Pilot checklist" : "A useful first note"}
+              {isPilot ? "Pilot checklist" : isInvestment ? "Investment checklist" : "A useful first note"}
             </p>
             {isPilot ? (
               <ul className="mt-4 space-y-2 text-sm leading-6 text-zinc-300">
@@ -167,6 +183,13 @@ function ContactBody() {
                 <li>· Risk surface in scope</li>
                 <li>· Success criteria for 8–12 weeks</li>
                 <li>· Compliance context (if any)</li>
+              </ul>
+            ) : isInvestment ? (
+              <ul className="mt-4 space-y-2 text-sm leading-6 text-zinc-300">
+                <li>· Organisation & role</li>
+                <li>· Investment interest</li>
+                <li>· Strategic / technical fit</li>
+                <li>· Evidence reviewed (Proof / Limitations)</li>
               </ul>
             ) : (
               <p className="mt-4 text-base leading-7 text-zinc-200">
@@ -209,7 +232,8 @@ function ContactBody() {
                   intent === path.intent ||
                   (isPilot && path.intent === "design-partner") ||
                   (isCommercial && path.intent === "commercial") ||
-                  (isAudit && path.intent === "audit")
+                  (isAudit && path.intent === "audit") ||
+                  (isInvestment && path.intent === "investment")
                     ? "border-[#D4AF37]/70"
                     : ""
                 }`}
@@ -287,7 +311,7 @@ function ContactBody() {
         <div className="mt-12 flex flex-col justify-between gap-6 border-t border-zinc-800 pt-8 sm:flex-row sm:items-center">
           <p className="max-w-2xl text-sm leading-6 text-zinc-400">
             For a complete public orientation before writing, review Limitations, Proof, Product,
-            Pricing, and the pilot pathway.
+            Pricing, Investment, and the pilot pathway.
           </p>
           <div className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold text-[#F2D675]">
             <Link href="/limitations/" className="transition hover:text-white">
@@ -296,17 +320,14 @@ function ContactBody() {
             <Link href="/proof/" className="transition hover:text-white">
               Proof
             </Link>
+            <Link href="/investment/" className="transition hover:text-white">
+              Investment
+            </Link>
             <Link href="/product/" className="transition hover:text-white">
               Product
             </Link>
-            <Link href="/pricing/" className="transition hover:text-white">
-              Pricing
-            </Link>
             <Link href="/institutional-pilots/" className="transition hover:text-white">
               Pilots
-            </Link>
-            <Link href="/observatory/" className="transition hover:text-white">
-              Observatory
             </Link>
           </div>
         </div>
