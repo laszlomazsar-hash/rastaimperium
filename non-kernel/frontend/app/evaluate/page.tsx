@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import EvidenceJourneyNav from "@/components/EvidenceJourneyNav";
 
 export const metadata: Metadata = {
   title: "Evaluate — How an institution inspects Rasta Imperium",
@@ -62,6 +63,7 @@ const steps = [
 export default function EvaluatePage() {
   return (
     <main className="royal-page overflow-hidden">
+      <EvidenceJourneyNav />
       <section className="border-b border-[rgba(242,214,117,0.2)]">
         <div className="container-page py-14 lg:py-20">
           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
