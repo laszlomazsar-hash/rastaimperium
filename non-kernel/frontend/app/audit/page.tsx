@@ -10,7 +10,12 @@ export const metadata: Metadata = {
 const ladder = [
   { level: 1, label: "Offline reproduction", status: "EARNED", tone: "earned" },
   { level: 2, label: "External human review", status: "OPEN", tone: "open" },
-  { level: 3, label: "Independent implementation (Go)", status: "EARNED", tone: "earned" },
+  {
+    level: 3,
+    label: "Cross-implementation parity (Node + Python public)",
+    status: "EARNED",
+    tone: "earned",
+  },
   { level: 4, label: "Adversarial challenge + hardening", status: "EARNED", tone: "earned" },
   { level: 5, label: "Full EVO-V parity", status: "UNAVAILABLE", tone: "none" },
   { level: 6, label: "Production / LIVE evidence", status: "UNAVAILABLE", tone: "none" },
@@ -135,13 +140,18 @@ export default function AuditPage() {
         </article>
 
         <article className="royal-panel rounded-xl border p-6">
-          <h2 className="font-cinzel text-lg text-zinc-100">Frozen artifacts</h2>
+          <h2 className="font-cinzel text-lg text-zinc-100">Frozen artifacts (public surface)</h2>
           <ul className="mt-3 space-y-2 font-mono text-xs text-zinc-400">
-            <li>ART-L7-REPLAY-001 — valid-path sealed capsule</li>
-            <li>ART-L7-REJECT-001 — illegal-transition sealed capsule</li>
-            <li>ART-L7-PARITY-001 — Node ↔ Python</li>
-            <li>ART-L7-PARITY-002 — Node ↔ Python ↔ Go</li>
+            <li>ART-L7-REPLAY-001 — valid-path sealed capsule · VERIFIED</li>
+            <li>ART-L7-REJECT-001 — illegal-transition sealed capsule · VERIFIED</li>
+            <li>ART-L7-PARITY-001 — Node ↔ Python parity · VERIFIED</li>
           </ul>
+          <p className="mt-3 text-xs leading-5 text-zinc-500">
+            ART-L7-PARITY-002 (Node ↔ Python ↔ Go) exists as a historical report under{" "}
+            <code className="text-zinc-400">non-kernel/frontend/data/evidence/artifacts/</code> in the
+            repository. It is not part of the public Living Evidence Manifest VERIFIED set and is not
+            served from the static export path.
+          </p>
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
             <a className="text-[#F2D675] hover:underline" href="/evidence/artifacts/ART-L7-REPLAY-001.json">
               Download REPLAY capsule
@@ -149,8 +159,8 @@ export default function AuditPage() {
             <a className="text-[#F2D675] hover:underline" href="/evidence/artifacts/ART-L7-REJECT-001.json">
               Download REJECT capsule
             </a>
-            <a className="text-zinc-400 hover:underline" href="/evidence/artifacts/ART-L7-PARITY-002.json">
-              Parity report
+            <a className="text-[#F2D675] hover:underline" href="/evidence/artifacts/ART-L7-PARITY-001.json">
+              Download PARITY-001 report
             </a>
           </div>
         </article>
@@ -158,17 +168,10 @@ export default function AuditPage() {
         <article className="royal-panel rounded-xl border p-6">
           <h2 className="font-cinzel text-lg text-zinc-100">Reproduce offline</h2>
           <p className="mt-2 text-sm text-zinc-400">
-            Implementations: Node.js · Python 3 · Go. Each computes hashes independently.
+            Public pure verifiers: Node.js and Python 3. Each computes hashes independently from the
+            sealed capsule. Exit 0 only on sealed hash match.
           </p>
-          <pre className="mt-4 overflow-x-auto rounded-lg border border-zinc-800 bg-black/50 p-4 font-mono text-xs text-zinc-300">{`# Example — Node replay
-node non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs ./ART-L7-REPLAY-001.json
-# EXIT 0 + sealed hash match required
-
-python3 non-kernel/frontend/scripts/verify_art_l7_replay_001.py ./ART-L7-REPLAY-001.json
-
-# Go (from scripts/impl-c)
-go build -o verify_replay verify_art_l7_replay_001.go
-./verify_replay ./ART-L7-REPLAY-001.json`}</pre>
+          <pre className="mt-4 overflow-x-auto rounded-lg border border-zinc-800 bg-black/50 p-4 font-mono text-xs text-zinc-300">{`# Example — Node replay\nnode non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs ./ART-L7-REPLAY-001.json\n# EXIT 0 + sealed hash match required\n\npython3 non-kernel/frontend/scripts/verify_art_l7_replay_001.py ./ART-L7-REPLAY-001.json\n\n# Reject path\nnode non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs ./ART-L7-REJECT-001.json\npython3 non-kernel/frontend/scripts/verify_art_l7_reject_001.py ./ART-L7-REJECT-001.json`}</pre>
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
             <a
               className="text-[#F2D675] hover:underline"
