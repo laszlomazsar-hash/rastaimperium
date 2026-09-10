@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import SiteHeader from "../components/SiteHeader";
+import RISeal from "../components/RISeal";
 import "./globals.css";
 import "./identity.css";
 
@@ -85,13 +86,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <footer className="royal-footer border-t border-[rgba(242,214,117,0.18)] bg-[#090a09] py-12 sm:py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-10 text-sm sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-              {/* Brand */}
+              {/* Brand — canonical seal + wordmark (matches header identity) */}
               <div className="max-w-sm sm:col-span-2 lg:col-span-1 xl:col-span-1">
                 <Link
                   href="/"
-                  className="font-cinzel text-lg tracking-[0.16em] text-[#D4AF37] transition hover:text-[#F2D675]"
+                  className="inline-flex items-center transition hover:opacity-90"
+                  aria-label="Rasta Imperium home"
                 >
-                  RASTA IMPERIUM
+                  <RISeal size={32} showWordmark />
                 </Link>
                 <p className="mt-4 leading-6 text-zinc-400">
                   Constitutional intelligence infrastructure. Deterministic governance,
