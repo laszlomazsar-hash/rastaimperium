@@ -44,24 +44,31 @@ export default function InvestPage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href="/product/"
+              href="/investment/"
               className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
             >
-              Institutional product path
+              Investment thesis
             </Link>
             <Link
-              href="/proof/"
+              href="/observatory/"
               className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
             >
-              Proof Registry
+              Evidence Observatory
             </Link>
             <Link
-              href="/limitations/"
+              href="/contact/?intent=investment"
               className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
             >
-              Limitations
+              Discuss investment
             </Link>
           </div>
+          <p className="mx-auto mt-4 max-w-xl text-xs text-zinc-500">
+            Canonical institutional investment surface:{" "}
+            <Link href="/investment/" className="text-[#F2D675] hover:underline">
+              /investment/
+            </Link>
+            . This page is a support and orientation entry point.
+          </p>
         </div>
       </section>
 
@@ -194,7 +201,7 @@ export default function InvestPage() {
             Applications →
           </Link>
           <Link href="/observatory/" className="text-zinc-400">
-            Observatory demo →
+            Observatory →
           </Link>
         </div>
       </section>
