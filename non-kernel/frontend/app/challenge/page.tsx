@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import EvidenceJourneyNav from "@/components/EvidenceJourneyNav";
 import { useState } from "react";
 import { challenges } from "../../data/evidence/manifest";
 import type { Challenge } from "../../data/evidence/types";
@@ -9,75 +10,60 @@ import { TrustStatus } from "../../components/evidence/TrustStatus";
 
 function ChallengeDetail({ c }: { c: Challenge }) {
   return (
-    <article className="royal-panel rounded-xl border p-5 sm:p-6">
-      <div className="flex flex-wrap items-start justify-between gap-2">
+    <article className="rounded-xl border border-[rgba(242,214,117,0.2)] bg-[rgba(15,18,13,0.92)] p-5 sm:p-6">
+      <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="font-mono text-[11px] text-zinc-500">{c.challengeId}</p>
-          <h2 className="mt-1 text-xl text-zinc-100">{c.title}</h2>
+          <p className="font-mono text-sm text-[#F2D675]">{c.challengeId}</p>
+          <h2 className="mt-1 text-lg text-zinc-100">{c.title}</h2>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <span className="rounded border border-emerald-700/40 bg-emerald-950/30 px-2 py-0.5 font-mono text-[10px] uppercase text-emerald-300">
-            {c.verification}
-          </span>
-          <ProvenanceBadge kind={c.provenance} />
-        </div>
-      </div>
-      <p className="mt-3 text-sm text-zinc-400">{c.description}</p>
-
-      <dl className="mt-6 space-y-4 text-sm">
+        <ProvenanceBadge provenance={c.provenance} />
+      </header>
+      <dl className="mt-5 space-y-3 text-sm leading-6 text-zinc-300">
         <div>
-          <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">Input</dt>
-          <dd className="mt-1 rounded border border-zinc-800 bg-black/40 p-3 font-mono text-xs text-zinc-300">
-            {c.input}
-          </dd>
+          <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">What is tested</dt>
+          <dd className="mt-1">{c.description}</dd>
         </div>
-        <div>
-          <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">
-            Expected
-          </dt>
-          <dd className="mt-1 text-zinc-300">{c.expected}</dd>
-        </div>
-        <div>
-          <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">Result</dt>
-          <dd className="mt-1 text-zinc-300">{c.result}</dd>
-        </div>
-        <div>
-          <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">
-            Invariant
-          </dt>
-          <dd className="mt-1 font-mono text-xs text-zinc-300">{c.invariant}</dd>
-        </div>
-        <div>
-          <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">Reason</dt>
-          <dd className="mt-1 text-zinc-300">{c.reason}</dd>
-        </div>
-        {c.receipt && (
+        {c.invariant && (
           <div>
-            <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">
-              Receipt
-            </dt>
-            <dd className="mt-1 font-mono text-xs text-zinc-400">{c.receipt}</dd>
+            <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Invariant</dt>
+            <dd className="mt-1">{c.invariant}</dd>
           </div>
         )}
-        {c.hash && (
+        {c.expectedBehaviour && (
           <div>
-            <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">Hash</dt>
-            <dd className="mt-1 font-mono text-xs text-zinc-400">{c.hash}</dd>
+            <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Expected behaviour</dt>
+            <dd className="mt-1">{c.expectedBehaviour}</dd>
+          </div>
+        )}
+        {c.resultSummary && (
+          <div>
+            <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Result</dt>
+            <dd className="mt-1">{c.resultSummary}</dd>
+          </div>
+        )}
+        {c.limitations && (
+          <div>
+            <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Does not establish</dt>
+            <dd className="mt-1 text-zinc-400">{c.limitations}</dd>
           </div>
         )}
       </dl>
-
-      <ul className="mt-6 flex flex-wrap gap-3 text-[11px] text-zinc-500">
-        <li>deterministic</li>
-        <li>non-destructive</li>
-        <li>isolated from production</li>
-      </ul>
-
-      {c.proofId && (
-        <Link href={`/proof#${c.proofId}`} className="mt-4 inline-block text-xs text-[#F2D675]">
-          Related proof {c.proofId} →
+      <div className="mt-5 flex flex-wrap gap-3 text-sm">
+        {c.proofId && (
+          <Link href={`/proof#${c.proofId}`} className="text-[#F2D675] hover:underline">
+            Related proof →
+          </Link>
+        )}
+        <Link href="/verify/" className="text-zinc-400 hover:text-[#F2D675]">
+          Verify offline →
         </Link>
-      )}
+        <Link href="/limitations/" className="text-zinc-500 hover:text-zinc-300">
+          Limitations →
+        </Link>
+        <Link href="/evaluate/" className="text-zinc-500 hover:text-zinc-300">
+          Evaluate →
+        </Link>
+      </div>
     </article>
   );
 }
@@ -88,6 +74,7 @@ export default function ChallengeLabPage() {
 
   return (
     <main className="royal-page overflow-hidden">
+      <EvidenceJourneyNav />
       <section className="border-b border-[#B8860B]/20">
         <div className="container-page py-16 lg:py-20">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
@@ -103,10 +90,22 @@ export default function ChallengeLabPage() {
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
+              href="/verify/"
+              className="rounded-lg border border-[#B8860B]/40 px-4 py-2.5 text-sm text-[#F2D675]"
+            >
+              Verify offline
+            </Link>
+            <Link
               href="/proof/"
               className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-bold text-black"
             >
               Proof Registry
+            </Link>
+            <Link
+              href="/evaluate/"
+              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
+            >
+              Evaluate evidence
             </Link>
             <Link
               href="/limitations/"
@@ -115,82 +114,50 @@ export default function ChallengeLabPage() {
               Limitations
             </Link>
             <Link
-              href="/governance-model/"
+              href="/observatory/"
               className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
             >
-              Governance model
-            </Link>
-            <Link
-              href="/pillars/"
-              className="rounded-lg border border-zinc-600 px-4 py-2.5 text-sm text-zinc-100"
-            >
-              Pillars
+              Observatory
             </Link>
           </div>
         </div>
       </section>
 
       <section className="container-page py-12">
-        <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,16rem)_1fr]">
           <nav aria-label="Challenge list">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
-              Challenges
-            </p>
-            <ul className="mt-3 space-y-2">
+            <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Challenges</p>
+            <ul className="mt-3 space-y-1">
               {challenges.map((c) => (
                 <li key={c.challengeId}>
                   <button
                     type="button"
                     onClick={() => setSelectedId(c.challengeId)}
-                    className={`w-full rounded-lg border px-3 py-2.5 text-left text-sm transition ${
-                      selected?.challengeId === c.challengeId
-                        ? "border-[#B8860B]/50 bg-[#B8860B]/10 text-[#F2D675]"
-                        : "border-zinc-800 text-zinc-300 hover:border-zinc-600"
+                    className={`w-full rounded-md px-3 py-2 text-left text-sm transition ${
+                      selectedId === c.challengeId
+                        ? "bg-[#D4AF37]/15 text-[#F2D675]"
+                        : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
                     }`}
                   >
-                    <span className="block font-medium">{c.title}</span>
-                    <span className="mt-0.5 block font-mono text-[10px] text-zinc-500">
-                      {c.challengeId}
-                    </span>
+                    {c.challengeId}
                   </button>
                 </li>
               ))}
             </ul>
-            <p className="mt-6 text-xs leading-5 text-zinc-500">
-              Results are precomputed demonstration fixtures aligned with published invariants.
-              Running them does not execute the EVO-V kernel in this browser.
-            </p>
           </nav>
-
           <div>{selected && <ChallengeDetail c={selected} />}</div>
         </div>
 
-        <div className="mt-14 rounded-xl border border-[#B8860B]/25 bg-[#0b0c0b]/80 p-8 text-center">
-          <h2 className="font-cinzel text-xl text-zinc-100">Institutional path after challenge review</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
-            Adversarial fixtures are public and non-destructive. Scoped pilots map a written subset
-            of invariants onto your stack after Limitations and Proof.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/institutional-pilots/"
-              className="royal-button royal-button-primary rounded-lg bg-[#D4AF37] px-6 py-3 text-sm font-bold text-black"
-            >
-              Design partner pilots
-            </Link>
-            <Link
-              href="/product/"
-              className="rounded-lg border border-[#B8860B]/40 px-6 py-3 text-sm text-[#F2D675]"
-            >
-              Product pathway
-            </Link>
-            <Link
-              href="/limitations/"
-              className="rounded-lg border border-zinc-600 px-6 py-3 text-sm text-zinc-100"
-            >
-              Limitations
-            </Link>
-          </div>
+        <div className="mt-12 flex flex-wrap gap-3 text-sm">
+          <Link href="/institutional-pilots/" className="text-[#F2D675] hover:underline">
+            Institutional pilots →
+          </Link>
+          <Link href="/product/" className="text-zinc-400 hover:text-[#F2D675]">
+            Product →
+          </Link>
+          <Link href="/limitations/" className="text-zinc-500 hover:text-zinc-300">
+            Limitations →
+          </Link>
         </div>
       </section>
     </main>
