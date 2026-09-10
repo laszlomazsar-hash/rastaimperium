@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import EvidenceJourneyNav from "@/components/EvidenceJourneyNav";
 import ObservatoryRegistry from "./ObservatoryRegistry";
 import ObservatoryClient from "./ObservatoryClient";
 
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
 export default function ObservatoryPage() {
   return (
     <main className="royal-page overflow-hidden">
+      <EvidenceJourneyNav />
       <section className="border-b border-[rgba(242,214,117,0.2)]">
         <div className="container-page py-14 lg:py-20">
           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
