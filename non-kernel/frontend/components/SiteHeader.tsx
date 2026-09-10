@@ -5,10 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import RISeal from "./RISeal";
 
-/**
- * Hierarchical institutional navigation.
- * Labels map only to existing routes (plus /investment).
- */
+/** Hierarchical institutional navigation — UNDERSTAND / SYSTEM / PROOF / ENGAGE */
 
 type NavItem = { href: string; label: string; emphasize?: boolean };
 type NavGroup = { id: string; label: string; items: NavItem[]; tone?: "proof" | "engage" | "default" };
@@ -19,19 +16,21 @@ const navGroups: NavGroup[] = [
     label: "Understand",
     items: [
       { href: "/", label: "Imperium" },
-      { href: "/vision", label: "Vision" },
       { href: "/about", label: "About" },
+      { href: "/vision", label: "Vision" },
+      { href: "/pillars", label: "Pillars" },
+      { href: "/codex", label: "Codex" },
     ],
   },
   {
     id: "system",
     label: "System",
     items: [
-      { href: "/blueprint", label: "System" },
       { href: "/architecture", label: "Architecture" },
+      { href: "/blueprint", label: "Blueprint" },
+      { href: "/technology", label: "Technology" },
       { href: "/governance", label: "Governance" },
       { href: "/research", label: "Research" },
-      { href: "/codex", label: "Codex" },
     ],
   },
   {
@@ -39,11 +38,13 @@ const navGroups: NavGroup[] = [
     label: "Proof",
     tone: "proof",
     items: [
-      { href: "/proof", label: "Evidence" },
+      { href: "/proof", label: "Proof Registry" },
+      { href: "/evidence", label: "Evidence" },
       { href: "/verify", label: "Verify", emphasize: true },
-      { href: "/audit", label: "Audit" },
       { href: "/challenge", label: "Challenge" },
+      { href: "/evaluate", label: "Evaluate" },
       { href: "/limitations", label: "Limitations" },
+      { href: "/audit", label: "Audit" },
     ],
   },
   {
@@ -51,9 +52,10 @@ const navGroups: NavGroup[] = [
     label: "Engage",
     tone: "engage",
     items: [
+      { href: "/product", label: "Product" },
       { href: "/institutional-pilots", label: "Institutional Pilots" },
-      { href: "/consulting", label: "Consulting" },
       { href: "/investment", label: "Investment" },
+      { href: "/consulting", label: "Consulting" },
       { href: "/contact", label: "Contact" },
     ],
   },
@@ -64,6 +66,7 @@ const desktopTop: NavItem[] = [
   { href: "/blueprint", label: "System" },
   { href: "/proof", label: "Proof" },
   { href: "/verify", label: "Verify", emphasize: true },
+  { href: "/evaluate", label: "Evaluate" },
   { href: "/institutional-pilots", label: "Engage" },
 ];
 
@@ -146,14 +149,17 @@ export default function SiteHeader() {
           <ul className="flex items-center gap-0.5 text-sm text-zinc-300">
             {desktopTop.map((item) => {
               const active = isActive(pathname, item.href);
-              const isEngage = item.label === "Engage";
-              const isSystem = item.label === "System";
-              const isProof = item.label === "Proof";
               const panelId =
-                isSystem ? "system" : isProof ? "proof" : isEngage ? "engage" : null;
+                item.label === "System"
+                  ? "system"
+                  : item.label === "Proof"
+                    ? "proof"
+                    : item.label === "Engage"
+                      ? "engage"
+                      : null;
               return (
                 <li
-                  key={item.href}
+                  key={item.href + item.label}
                   className="relative"
                   onMouseEnter={() => panelId && setDesktopOpen(panelId)}
                   onMouseLeave={() => setDesktopOpen(null)}
@@ -180,7 +186,7 @@ export default function SiteHeader() {
                     {item.label}
                   </Link>
                   {panelId && desktopOpen === panelId && (
-                    <div className="absolute left-0 top-full z-50 min-w-[12rem] pt-2" role="menu">
+                    <div className="absolute left-0 top-full z-50 min-w-[13rem] pt-2" role="menu">
                       <div className="rounded-lg border border-zinc-800 bg-[#0b0c0b] py-2 shadow-xl">
                         {navGroups
                           .find((g) => g.id === panelId)
@@ -209,7 +215,7 @@ export default function SiteHeader() {
               { href: "/", label: "Imperium" },
               { href: "/proof", label: "Proof" },
               { href: "/verify", label: "Verify", emphasize: true as const },
-              { href: "/investment", label: "Invest" },
+              { href: "/evaluate", label: "Evaluate" },
               { href: "/institutional-pilots", label: "Pilots" },
             ].map((item) => {
               const active = isActive(pathname, item.href);
@@ -225,7 +231,8 @@ export default function SiteHeader() {
                               ? "bg-[#D4AF37] text-black"
                               : "text-[#F2D675] hover:bg-[#B8860B]/15"
                           }`
-                        : `rounded-md px-2 py-2 transition ${\n                            active
+                        : `rounded-md px-2 py-2 transition ${
+                            active
                               ? "bg-[#B8860B]/15 text-[#F2D675]"
                               : "hover:bg-[#B8860B]/10 hover:text-[#F2D675]"
                           }`
