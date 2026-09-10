@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     "AI governance evidence",
     "sealed capsules",
   ],
+  alternates: {
+    canonical: "https://rastaimperium.com/proof/",
+  },
   openGraph: {
     title: "Proof Registry — Sealed AI governance evidence",
     description:

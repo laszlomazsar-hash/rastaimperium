@@ -64,9 +64,8 @@ export const metadata: Metadata = {
     ],
   },
   robots: { index: true, follow: true },
-  alternates: {
-    canonical: "https://rastaimperium.com",
-  },
+  // Do not set a global alternates.canonical here — it incorrectly forces the
+  // homepage URL onto every route. Page layouts set their own where needed.
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
