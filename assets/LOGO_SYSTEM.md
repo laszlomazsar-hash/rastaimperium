@@ -88,9 +88,9 @@ Previous failure mode that is now prevented:
 |---------|-----------|
 | Homepage hero | `RIHeroMark` (3-D JPEG + CSS depth) |
 | Global header | `RISeal` + wordmark text |
-| Mobile header | Compact `RISeal` |
+| Mobile header | Compact `RISeal` (wordmark hidden ≤639px via identity.css) |
+| Footer brand | `RISeal` + wordmark (aligned with header) |
 | Verify / Proof / Trust / Audit | Restrained `RISeal` only |
-| Footer | Text wordmark (Cinzel) |
 | Favicon / tab | `favicon.svg` / `icon.png` |
 | Open Graph | `og-image.png` |
 
@@ -114,3 +114,4 @@ Previous failure mode that is now prevented:
 ---
 
 *Last formalised: 2026-09-10. Derived from live production inspection and repository audit on main.*
+*Footer brand updated to RISeal on same date.*
