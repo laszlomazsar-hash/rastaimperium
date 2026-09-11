@@ -10,8 +10,11 @@ import {
   ReproduceOffline,
   TrustRail,
   TrustLadder,
+  EvidenceGraph,
+  VerificationReceipt,
   type EvidenceStatus,
 } from "@/components/design-system";
+import { listReceipts } from "@/data/evidence/receipts";
 
 const STATUS_FILTERS: Array<VerificationStatus | "all"> = [
   "all",
@@ -20,13 +23,10 @@ const STATUS_FILTERS: Array<VerificationStatus | "all"> = [
   "UNAVAILABLE",
 ];
 
-/** Map manifest verification status onto design-system EvidenceStatus */
 function toEvidenceStatus(s: VerificationStatus): EvidenceStatus {
   if (s === "VERIFIED") return "VERIFIED";
   if (s === "DEMONSTRATION") return "DEMONSTRATION";
   if (s === "UNAVAILABLE") return "UNAVAILABLE";
-  // TARGET / HISTORICAL / PENDING → present as UNAVAILABLE for epistemic filter
-  // HISTORICAL provenance remains separate via notes
   return "UNAVAILABLE";
 }
 
@@ -87,7 +87,6 @@ export default function ProofRegistryPage() {
 
   return (
     <main className="royal-page overflow-hidden">
-      {/* Header */}
       <section className="border-b border-[rgba(242,214,117,0.18)]">
         <div className="container-page py-14 sm:py-16 lg:py-20">
           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
@@ -103,25 +102,19 @@ export default function ProofRegistryPage() {
 
           <dl className="mt-8 grid gap-4 sm:grid-cols-3">
             <div className="rounded-lg border border-emerald-800/35 bg-emerald-950/15 p-4">
-              <dt className="font-mono text-[10px] uppercase tracking-wider text-emerald-300">
-                VERIFIED
-              </dt>
+              <dt className="font-mono text-[10px] uppercase tracking-wider text-emerald-300">VERIFIED</dt>
               <dd className="mt-1 text-sm text-zinc-300">
                 Sealed capsule with independent pure-verifier reproduction.
               </dd>
             </div>
             <div className="rounded-lg border border-amber-900/35 bg-amber-950/10 p-4">
-              <dt className="font-mono text-[10px] uppercase tracking-wider text-amber-200">
-                DEMONSTRATION
-              </dt>
+              <dt className="font-mono text-[10px] uppercase tracking-wider text-amber-200">DEMONSTRATION</dt>
               <dd className="mt-1 text-sm text-zinc-300">
                 Design or documentation surface. Not production evidence.
               </dd>
             </div>
             <div className="rounded-lg border border-zinc-700 bg-black/20 p-4">
-              <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
-                UNAVAILABLE
-              </dt>
+              <dt className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">UNAVAILABLE</dt>
               <dd className="mt-1 text-sm text-zinc-300">
                 No sealed public artifact. Claim is not made on this surface.
               </dd>
@@ -131,21 +124,15 @@ export default function ProofRegistryPage() {
           <div className="mt-8">
             <TrustRail />
           </div>
-
           <div className="mt-4">
             <TrustLadder variant="compact" current="proof" />
           </div>
         </div>
       </section>
 
-      {/* Filters */}
       <section className="border-b border-zinc-900 bg-[#0b0c0b]/40">
         <div className="container-page py-6">
-          <div
-            role="tablist"
-            aria-label="Filter by evidence status"
-            className="flex flex-wrap gap-2"
-          >
+          <div role="tablist" aria-label="Filter by evidence status" className="flex flex-wrap gap-2">
             {STATUS_FILTERS.map((s) => {
               const active = status === s;
               const label = s === "all" ? "All" : s;
@@ -182,7 +169,6 @@ export default function ProofRegistryPage() {
         </div>
       </section>
 
-      {/* Evidence chains */}
       <section className="container-page py-10 sm:py-12">
         <ul className="space-y-6">
           {filtered.map((p) => {
@@ -191,7 +177,6 @@ export default function ProofRegistryPage() {
             return (
               <li key={p.proofId} id={p.proofId}>
                 <article className="rounded-xl border border-[rgba(242,214,117,0.2)] bg-[rgba(15,18,13,0.92)]">
-                  {/* Accession header */}
                   <header className="flex flex-wrap items-start justify-between gap-3 border-b border-[rgba(242,214,117,0.1)] px-4 py-4 sm:px-5">
                     <div className="min-w-0">
                       <p className="font-mono text-sm font-semibold text-[#f2d675]">
@@ -206,19 +191,13 @@ export default function ProofRegistryPage() {
                     </div>
                     <div className="flex flex-wrap gap-2">
                       <StatusBadge status={es} />
-                      {p.notes?.toUpperCase().includes("FROZEN") && (
-                        <StatusBadge status="FROZEN" />
-                      )}
-                      {p.provenance === "HISTORICAL" && (
-                        <StatusBadge status="HISTORICAL" />
-                      )}
+                      {p.notes?.toUpperCase().includes("FROZEN") && <StatusBadge status="FROZEN" />}
+                      {p.provenance === "HISTORICAL" && <StatusBadge status="HISTORICAL" />}
                     </div>
                   </header>
 
-                  {/* Compact summary always visible */}
                   <div className="px-4 py-4 sm:px-5">
                     <p className="text-sm leading-6 text-zinc-300">{p.description}</p>
-
                     <div className="mt-4 flex flex-wrap gap-3 text-sm">
                       <button
                         type="button"
@@ -233,18 +212,21 @@ export default function ProofRegistryPage() {
                           Verify →
                         </Link>
                       )}
+                      {p.artifactId && p.status === "VERIFIED" && (
+                        <Link
+                          href={`#receipt-${p.artifactId}`}
+                          className="text-zinc-400 hover:text-[#F2D675]"
+                        >
+                          Receipt →
+                        </Link>
+                      )}
                       {p.replayAvailable && (
                         <Link href="/audit/" className="text-zinc-400 hover:text-[#F2D675]">
                           Reproduce offline →
                         </Link>
                       )}
                       {p.source.startsWith("/") && (
-                        <a
-                          href={p.source}
-                          className="text-zinc-500 hover:text-zinc-300"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
+                        <a href={p.source} className="text-zinc-500 hover:text-zinc-300" target="_blank" rel="noreferrer">
                           View capsule →
                         </a>
                       )}
@@ -254,7 +236,6 @@ export default function ProofRegistryPage() {
                     </div>
                   </div>
 
-                  {/* Expanded evidence chain */}
                   {isOpen && (
                     <div className="border-t border-[rgba(242,214,117,0.1)] px-4 py-4 sm:px-5">
                       <EvidenceChain
@@ -280,20 +261,46 @@ export default function ProofRegistryPage() {
         </ul>
 
         {filtered.length === 0 && (
-          <p className="py-12 text-center text-sm text-zinc-500">
-            No records match this filter.
-          </p>
+          <p className="py-12 text-center text-sm text-zinc-500">No records match this filter.</p>
         )}
       </section>
 
-      {/* Reproduce offline */}
+      <section className="border-t border-[rgba(242,214,117,0.18)]">
+        <div className="container-page py-12 sm:py-16">
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
+            Assurance records
+          </p>
+          <h2 className="mt-3 font-cinzel text-2xl text-zinc-100 sm:text-3xl">
+            Verification Receipts
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
+            Public receipts for the sealed L7 capsules. The UI is not the authority — inspect the
+            sealed artifact and pure verifier.
+          </p>
+          <div className="mt-8 space-y-8">
+            {listReceipts().map((receipt) => (
+              <div key={receipt.artifactId} id={`receipt-${receipt.artifactId}`} className="space-y-4">
+                <EvidenceGraph
+                  artifactId={receipt.artifactId}
+                  claimStatement={
+                    receipt.invariantDescription
+                      ? `Claim for ${receipt.artifactId}: ${receipt.invariantDescription}`
+                      : undefined
+                  }
+                />
+                <VerificationReceipt data={receipt} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="border-t border-zinc-900 bg-[#0b0c0b]/30">
         <div className="container-page py-12">
           <ReproduceOffline />
         </div>
       </section>
 
-      {/* Manifest bridge */}
       <section className="border-t border-zinc-900">
         <div className="container-page py-12">
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#d4af37]">
