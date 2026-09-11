@@ -17,10 +17,9 @@ const artifactRoot = path.join(frontendRoot, "visual-regression/artifacts");
 const temporaryRoot = path.join(frontendRoot, "visual-regression/.tmp");
 const updateBaselines = process.argv.includes("--update");
 const determinismCheck = process.argv.includes("--determinism-check");
-// Bumped 58 → 60 after CI static export inventory (2026-09-11).
-// Phase 22 Step 5 does not add app routes. If inventory drifts again,
-// review the new route list, update this number, then run test:visual:update.
-const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 60);
+// Bumped 60 → 61 after Phase 22 Step 8 governance-crosswalk static export (2026-09-11).
+// Step 9 evidence/export lands in static after merge; bump again then if inventory is 62.
+const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 61);
 const maxDiffPixelRatio = 0.002;
 /** Bounded post-readiness settle (ms). Deterministic; not a substitute for readiness. */
 const SETTLE_MS = 100;
