@@ -4,22 +4,29 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 /**
- * Institutional evidence journey — presentation only.
- * Does not perform verification or alter evidence status.
+ * Canonical public assurance journey — Phase 22 consolidation.
+ * Presentation only. Does not perform verification or alter evidence status.
+ *
+ * Observe → Inspect → Challenge → Verify → Reproduce → Assess → Crosswalk → Pilot → Decide
  */
-const STEPS = [
-  { href: "/observatory/", label: "Observe", short: "01" },
-  { href: "/evidence/", label: "Inspect", short: "02" },
-  { href: "/verify/", label: "Verify", short: "03" },
-  { href: "/challenge/", label: "Challenge", short: "04" },
-  { href: "/limitations/", label: "Limitations", short: "05" },
-  { href: "/evaluate/", label: "Evaluate", short: "06" },
+export const ASSURANCE_JOURNEY_STEPS = [
+  { href: "/product/", label: "Observe", short: "01", match: ["/product", "/observatory", "/"] },
+  { href: "/proof/", label: "Inspect", short: "02", match: ["/proof", "/evidence"] },
+  { href: "/challenge/", label: "Challenge", short: "03", match: ["/challenge"] },
+  { href: "/verify/", label: "Verify", short: "04", match: ["/verify"] },
+  { href: "/evidence/export/", label: "Reproduce", short: "05", match: ["/evidence/export"] },
+  { href: "/limitations/", label: "Assess", short: "06", match: ["/limitations"] },
+  { href: "/governance-crosswalk/", label: "Crosswalk", short: "07", match: ["/governance-crosswalk"] },
+  { href: "/institutional-pilots/", label: "Pilot", short: "08", match: ["/institutional-pilots"] },
+  { href: "/evaluate/", label: "Decide", short: "09", match: ["/evaluate", "/contact"] },
 ] as const;
 
-function isActive(pathname: string, href: string) {
-  const base = href.replace(/\/$/, "") || "/";
-  if (base === "/") return pathname === "/";
-  return pathname === base || pathname.startsWith(`${base}/`);
+function isActive(pathname: string, match: readonly string[]) {
+  const p = pathname.replace(/\/$/, "") || "/";
+  return match.some((m) => {
+    if (m === "/") return p === "/";
+    return p === m || p.startsWith(`${m}/`);
+  });
 }
 
 export default function EvidenceJourneyNav() {
@@ -27,13 +34,13 @@ export default function EvidenceJourneyNav() {
 
   return (
     <nav
-      aria-label="Evidence evaluation journey"
+      aria-label="Public assurance journey"
       className="border-b border-zinc-900/80 bg-[#0b0c0b]/50"
     >
       <div className="container-page overflow-x-auto py-3">
         <ol className="flex min-w-max items-center gap-1 sm:gap-2">
-          {STEPS.map((step, i) => {
-            const active = isActive(pathname, step.href);
+          {ASSURANCE_JOURNEY_STEPS.map((step, i) => {
+            const active = isActive(pathname, step.match);
             return (
               <li key={step.href} className="flex items-center gap-1 sm:gap-2">
                 {i > 0 && (
