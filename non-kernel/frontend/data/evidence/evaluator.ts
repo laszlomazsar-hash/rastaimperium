@@ -1,6 +1,6 @@
 /**
  * Evaluator Console — workflow stages only.
- * Phase 22 Step 7 (+ Step 8 crosswalk link).
+ * Phase 22 Steps 7–10.
  *
  * No assurance scores, compliance percentages, or production claims.
  * Evidence is linked to existing public surfaces and L7 receipts only.
@@ -21,14 +21,11 @@ export interface EvaluatorStage {
   label: string;
   title: string;
   body: string;
-  /** Primary public destination */
   href: string;
   linkLabel: string;
-  /** Optional secondary links */
   secondary?: Array<{ href: string; label: string }>;
 }
 
-/** Ordered institutional evaluation path. Not a scoring algorithm. */
 export const EVALUATOR_STAGES: EvaluatorStage[] = [
   {
     id: "define",
@@ -72,6 +69,7 @@ export const EVALUATOR_STAGES: EvaluatorStage[] = [
     href: "/verify/",
     linkLabel: "Verify console →",
     secondary: [
+      { href: "/evidence/export/", label: "Evidence export →" },
       {
         href: "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md",
         label: "Reproduce offline docs →",
@@ -83,7 +81,7 @@ export const EVALUATOR_STAGES: EvaluatorStage[] = [
     n: "05",
     label: "ASSESS",
     title: "Assess limitations",
-    body: "Separate what sealed capsules establish from what remains unestablished: production-wide behaviour, full-kernel parity, LIVE telemetry, certification, and organizational compliance. Use the governance crosswalk for evidence-alignment context — not compliance claims.",
+    body: "Separate what sealed capsules establish from what remains unestablished. Use the governance crosswalk for evidence-alignment context — not compliance claims.",
     href: "/limitations/",
     linkLabel: "Limitations →",
     secondary: [
@@ -98,6 +96,10 @@ export const EVALUATOR_STAGES: EvaluatorStage[] = [
     body: "Where public evidence is insufficient for production-wide conclusions, a design-partner pilot can generate scoped evidence under institutional controls. No pilot outcomes are claimed here.",
     href: "/institutional-pilots/",
     linkLabel: "Institutional pilots →",
+    secondary: [
+      { href: "/evidence/export/", label: "Evidence export →" },
+      { href: "/governance-crosswalk/", label: "Crosswalk →" },
+    ],
   },
   {
     id: "decide",
@@ -114,7 +116,6 @@ export const EVALUATOR_STAGES: EvaluatorStage[] = [
   },
 ];
 
-/** Canonical public artifacts referenced by the console. */
 export const EVALUATOR_ARTIFACTS = [
   {
     artifactId: "ART-L7-REPLAY-001",
@@ -136,7 +137,6 @@ export const EVALUATOR_ARTIFACTS = [
   },
 ] as const;
 
-/** Inspection checklist — interaction aid only. Never computes a score. */
 export const EVALUATOR_CHECKLIST = [
   { id: "boundary", label: "Boundary defined" },
   { id: "evidence", label: "Relevant evidence identified" },

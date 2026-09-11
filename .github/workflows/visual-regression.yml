@@ -75,6 +75,8 @@ jobs:
         working-directory: non-kernel/frontend
         env:
           VISUAL_CHROMIUM_EXECUTABLE: ${{ steps.chromium.outputs.executable }}
+          # Phase 22 Step 9 added /evidence/export/ to static inventory (62 routes).
+          VISUAL_EXPECTED_ROUTES: "62"
         run: |
           if [ "${{ inputs.update_baselines }}" = "true" ]; then
             npm run test:visual:update
