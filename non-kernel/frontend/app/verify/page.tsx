@@ -54,6 +54,7 @@ const CAPSULES = [
     download: "/evidence/artifacts/ART-L7-REPLAY-001.json",
     guide: "/verify/art-l7-replay-001/",
     proof: "/proof/#PROOF-REPLAY-001",
+    receipt: "/proof/#receipt-ART-L7-REPLAY-001",
     limitations:
       "Does not prove production deployment health, LIVE telemetry, or full EVO-V kernel parity.",
   },
@@ -67,6 +68,7 @@ const CAPSULES = [
     download: "/evidence/artifacts/ART-L7-REJECT-001.json",
     guide: "/verify/",
     proof: "/proof/#PROOF-ILLEGAL-001",
+    receipt: "/proof/#receipt-ART-L7-REJECT-001",
     limitations:
       "Capsule-scoped rejection proof only. Not a general security certification.",
   },
@@ -80,6 +82,7 @@ const CAPSULES = [
     download: "/evidence/artifacts/ART-L7-PARITY-001.json",
     guide: "/verify/",
     proof: "/proof/#PROOF-PARITY-001",
+    receipt: "/proof/#receipt-ART-L7-PARITY-001",
     limitations:
       "Parity among pure verifiers for this capsule — not full-kernel parity or production runtime agreement.",
   },
@@ -183,6 +186,9 @@ export default function VerifyPage() {
                   </a>
                   <Link href={c.proof} className="text-zinc-400 hover:text-[#F2D675]">
                     Open proof record
+                  </Link>
+                  <Link href={c.receipt} className="text-zinc-400 hover:text-[#F2D675]">
+                    View receipt
                   </Link>
                   <Link href="/challenge/" className="text-zinc-400 hover:text-[#F2D675]">
                     Challenge Lab
