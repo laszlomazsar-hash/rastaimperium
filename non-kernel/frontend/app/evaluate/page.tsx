@@ -1,80 +1,42 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import EvidenceJourneyNav from "@/components/EvidenceJourneyNav";
+import { EvaluatorConsole } from "@/components/assurance/EvaluatorConsole";
 
 export const metadata: Metadata = {
-  title: "Evaluate — How an institution inspects Rasta Imperium",
+  title: "Evaluate — Public AI assurance evaluation path",
   description:
-    "A structured path for institutional evaluation: define boundary, map governance requirements, inspect VERIFIED evidence, run challenges, define a pilot, decide whether to scale.",
+    "Institutional evaluator console: define a boundary, inspect sealed evidence, challenge invariants, verify offline, assess limitations, and decide the next step — without assurance scores or production claims.",
   alternates: { canonical: "https://rastaimperium.com/evaluate/" },
   openGraph: {
     title: "Evaluate — Rasta Imperium",
     description:
-      "From public evidence to a bounded pilot decision. No production claims beyond sealed capsules.",
+      "Inspect evidence, challenge boundaries, verify artifacts, assess limitations. Institutional judgement remains with the evaluator.",
     url: "https://rastaimperium.com/evaluate/",
   },
 };
-
-const steps = [
-  {
-    n: "01",
-    title: "Define the boundary",
-    body: "What system, workflow, or agent domain is being evaluated? Write the decision surface before tooling.",
-    href: "/product/",
-    link: "Product boundary →",
-  },
-  {
-    n: "02",
-    title: "Map governance requirements",
-    body: "Which rules, constraints, approvals, and audit obligations must remain enforceable and inspectable?",
-    href: "/governance/",
-    link: "Governance →",
-  },
-  {
-    n: "03",
-    title: "Inspect existing evidence",
-    body: "Which claims are VERIFIED, DEMONSTRATION, or UNAVAILABLE? Start from the Living Evidence Manifest and sealed capsules only.",
-    href: "/proof/",
-    link: "Proof Registry →",
-  },
-  {
-    n: "04",
-    title: "Run deterministic challenges",
-    body: "Reproduce offline with pure Node and Python verifiers. Probe illegal transitions and fixtures in Challenge Lab.",
-    href: "/verify/",
-    link: "Verify →",
-  },
-  {
-    n: "05",
-    title: "Define the pilot",
-    body: "Write scope, success criteria, exclusions, and evidence requirements before any commercial kickoff.",
-    href: "/institutional-pilots/",
-    link: "Institutional pilots →",
-  },
-  {
-    n: "06",
-    title: "Decide whether to scale",
-    body: "Continue, revise, or stop — only after evidence and pilot boundary justify the next step. Production is not assumed.",
-    href: "/limitations/",
-    link: "Limitations →",
-  },
-] as const;
 
 export default function EvaluatePage() {
   return (
     <main className="royal-page overflow-hidden">
       <EvidenceJourneyNav />
+
       <section className="border-b border-[rgba(242,214,117,0.2)]">
         <div className="container-page py-14 lg:py-20">
           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
             Institutional evaluation
           </p>
           <h1 className="mt-4 max-w-3xl font-cinzel text-4xl leading-[1.08] text-zinc-50 sm:text-5xl">
-            How an institution evaluates Rasta Imperium
+            Evaluator Console
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-zinc-300">
-            A decision path from public evidence to a bounded pilot — without treating capsule-scoped
-            VERIFIED results as production certification.
+            Move from public evidence to an informed next step: define the boundary, inspect
+            sealed capsules, challenge invariants, verify offline, assess limitations, and decide
+            whether a bounded pilot is warranted.
+          </p>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-500">
+            Rasta Imperium supplies the evidence structure. The evaluator supplies institutional
+            judgement. No assurance score is computed on this surface.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -84,40 +46,24 @@ export default function EvaluatePage() {
               Start with evidence
             </Link>
             <Link
-              href="/verify/"
+              href="/challenge/"
               className="rounded-lg border border-[#B8860B]/40 px-5 py-3 text-sm text-[#F2D675]"
             >
-              Verify offline
+              Challenge Lab
             </Link>
             <Link
-              href="/challenge/"
+              href="/verify/"
               className="rounded-lg border border-zinc-600 px-5 py-3 text-sm text-zinc-100"
             >
-              Challenge Lab
+              Verify offline
             </Link>
           </div>
         </div>
       </section>
 
       <section className="border-b border-zinc-900/80">
-        <div className="container-page py-12 sm:py-16">
-          <ol className="space-y-6">
-            {steps.map((s) => (
-              <li
-                key={s.n}
-                className="grid gap-3 rounded-xl border border-zinc-800 bg-black/25 p-5 sm:grid-cols-[4rem_1fr_auto] sm:items-start sm:gap-6"
-              >
-                <span className="font-mono text-sm text-[#D4AF37]">{s.n}</span>
-                <div>
-                  <h2 className="font-cinzel text-xl text-zinc-100">{s.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-zinc-400">{s.body}</p>
-                </div>
-                <Link href={s.href} className="text-sm text-[#F2D675] hover:underline sm:pt-1">
-                  {s.link}
-                </Link>
-              </li>
-            ))}
-          </ol>
+        <div className="container-page py-10 sm:py-14">
+          <EvaluatorConsole />
         </div>
       </section>
 
@@ -128,7 +74,9 @@ export default function EvaluatePage() {
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/10 p-4">
-              <p className="font-mono text-[10px] uppercase tracking-wider text-emerald-300">VERIFIED</p>
+              <p className="font-mono text-[10px] uppercase tracking-wider text-emerald-300">
+                VERIFIED
+              </p>
               <p className="mt-2 text-sm text-zinc-300">
                 Sealed public capsules REPLAY-001, REJECT-001, PARITY-001 — capsule-scoped only.
               </p>
@@ -137,7 +85,9 @@ export default function EvaluatePage() {
               <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                 DEMONSTRATION
               </p>
-              <p className="mt-2 text-sm text-zinc-400">Design and documentation surfaces — not production proof.</p>
+              <p className="mt-2 text-sm text-zinc-400">
+                Design and documentation surfaces — not production proof.
+              </p>
             </div>
             <div className="rounded-xl border border-zinc-800 bg-black/25 p-4">
               <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
@@ -149,40 +99,15 @@ export default function EvaluatePage() {
             </div>
           </div>
 
-          <div className="mt-10 rounded-xl border border-[rgba(242,214,117,0.2)] bg-[rgba(15,18,13,0.6)] p-5">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#d4af37]">
-              Public verification receipts
+          <div className="mt-8 rounded-xl border border-[rgba(242,214,117,0.15)] bg-[rgba(15,18,13,0.5)] p-5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">
+              Authority boundary
             </p>
-            <p className="mt-2 text-sm text-zinc-400">
-              Inspect the sealed L7 evidence before any pilot discussion. The UI is not the
-              authority — the sealed artifact and pure verifier are.
+            <p className="mt-2 text-sm leading-6 text-zinc-400">
+              Production authority remains <strong className="text-zinc-300">NOT ESTABLISHED</strong>{" "}
+              on the public surface. The UI is not the authority. Institutional approval is not
+              issued by this console.
             </p>
-            <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/proof/#receipt-ART-L7-REPLAY-001"
-                  className="text-[#F2D675] hover:underline"
-                >
-                  ART-L7-REPLAY-001 · INV-001 · receipt
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/proof/#receipt-ART-L7-REJECT-001"
-                  className="text-[#F2D675] hover:underline"
-                >
-                  ART-L7-REJECT-001 · INV-002 · receipt
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/proof/#receipt-ART-L7-PARITY-001"
-                  className="text-[#F2D675] hover:underline"
-                >
-                  ART-L7-PARITY-001 · parity · receipt
-                </Link>
-              </li>
-            </ul>
           </div>
 
           <div className="mt-8 flex flex-wrap gap-4 text-sm">
@@ -192,7 +117,10 @@ export default function EvaluatePage() {
             <Link href="/institutional-pilots/" className="text-[#F2D675] hover:underline">
               Bounded pilots →
             </Link>
-            <Link href="/contact/?intent=institutional" className="text-zinc-400 hover:text-[#F2D675]">
+            <Link
+              href="/contact/?intent=institutional"
+              className="text-zinc-400 hover:text-[#F2D675]"
+            >
               Contact →
             </Link>
           </div>
