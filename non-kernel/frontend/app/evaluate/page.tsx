@@ -148,6 +148,43 @@ export default function EvaluatePage() {
               </p>
             </div>
           </div>
+
+          <div className="mt-10 rounded-xl border border-[rgba(242,214,117,0.2)] bg-[rgba(15,18,13,0.6)] p-5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#d4af37]">
+              Public verification receipts
+            </p>
+            <p className="mt-2 text-sm text-zinc-400">
+              Inspect the sealed L7 evidence before any pilot discussion. The UI is not the
+              authority — the sealed artifact and pure verifier are.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/proof/#receipt-ART-L7-REPLAY-001"
+                  className="text-[#F2D675] hover:underline"
+                >
+                  ART-L7-REPLAY-001 · INV-001 · receipt
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/proof/#receipt-ART-L7-REJECT-001"
+                  className="text-[#F2D675] hover:underline"
+                >
+                  ART-L7-REJECT-001 · INV-002 · receipt
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/proof/#receipt-ART-L7-PARITY-001"
+                  className="text-[#F2D675] hover:underline"
+                >
+                  ART-L7-PARITY-001 · parity · receipt
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           <div className="mt-8 flex flex-wrap gap-4 text-sm">
             <Link href="/limitations/" className="text-zinc-400 hover:text-[#F2D675]">
               Full limitations →
