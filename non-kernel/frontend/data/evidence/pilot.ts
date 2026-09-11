@@ -1,5 +1,5 @@
 /**
- * Institutional pilot readiness — Phase 22 Step 10.
+ * Institutional pilot readiness — Phase 22 Step 10 (+ Step 11 journey align).
  * Bounded evaluation model. Not certification. Not production approval.
  */
 
@@ -156,16 +156,16 @@ export const PILOT_TEMPLATE_FIELDS = [
   "Pilot outcome (evaluator-controlled)",
 ] as const;
 
+/** Same labels as EvidenceJourneyNav; used on pilot surface. */
 export const ASSURANCE_JOURNEY = [
-  { label: "Observe", href: "/" },
+  { label: "Observe", href: "/product/" },
   { label: "Inspect", href: "/proof/" },
   { label: "Challenge", href: "/challenge/" },
   { label: "Verify", href: "/verify/" },
   { label: "Reproduce", href: "/evidence/export/" },
   { label: "Assess", href: "/limitations/" },
   { label: "Crosswalk", href: "/governance-crosswalk/" },
-  { label: "Define Pilot", href: "/institutional-pilots/" },
-  { label: "Contact", href: "/contact/?intent=design-partner" },
+  { label: "Pilot", href: "/institutional-pilots/" },
   { label: "Decide", href: "/evaluate/" },
 ] as const;
 
