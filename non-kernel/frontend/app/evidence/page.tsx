@@ -9,7 +9,7 @@ import { ClaimEvidence } from "../../components/evidence/ClaimEvidence";
 export const metadata: Metadata = {
   title: "Evidence Explorer — Claim → Proof → Artifact",
   description:
-    "Unified evidence layer for deterministic AI governance: claims, proofs, sealed capsules, and explicit UNAVAILABLE labels. Inspect provenance before you trust performance figures.",
+    "Unified evidence layer for deterministic AI governance: claims, proofs, sealed capsules, and explicit UNAVAILABLE labels. Quantitative figures are never marked VERIFIED without sealed artifacts.",
   keywords: [
     "AI evidence explorer",
     "claim proof artifact",
@@ -114,7 +114,8 @@ export default function EvidencePage() {
       <section className="container-page border-t border-zinc-900 py-12">
         <h2 className="font-cinzel text-xl text-zinc-100">Benchmark figures</h2>
         <p className="mt-2 text-sm text-zinc-400">
-          Benchmark labels remain UNAVAILABLE unless a sealed public artifact exists.
+          Benchmark values remain UNAVAILABLE until a sealed public artifact exists. No quantitative
+          figure is published without that evidence.
         </p>
         <ul className="mt-6 space-y-3">
           {benchmarks.map((b) => (
@@ -123,8 +124,9 @@ export default function EvidencePage() {
               className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-zinc-800 px-4 py-3"
             >
               <div>
-                <p className="text-sm text-zinc-200">{b.label}</p>
-                <p className="font-mono text-xs text-zinc-500">{b.benchmarkId}</p>
+                <p className="text-sm text-zinc-200">{b.metric}</p>
+                <p className="mt-0.5 text-sm text-zinc-500">{b.value}</p>
+                <p className="font-mono text-xs text-zinc-600">{b.benchmarkId}</p>
               </div>
               <VerificationBadge status={b.verificationStatus} />
             </li>
