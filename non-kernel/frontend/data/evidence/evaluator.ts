@@ -1,6 +1,6 @@
 /**
  * Evaluator Console — workflow stages only.
- * Phase 22 Step 7.
+ * Phase 22 Step 7 (+ Step 8 crosswalk link).
  *
  * No assurance scores, compliance percentages, or production claims.
  * Evidence is linked to existing public surfaces and L7 receipts only.
@@ -83,9 +83,12 @@ export const EVALUATOR_STAGES: EvaluatorStage[] = [
     n: "05",
     label: "ASSESS",
     title: "Assess limitations",
-    body: "Separate what sealed capsules establish from what remains unestablished: production-wide behaviour, full-kernel parity, LIVE telemetry, certification, and organizational compliance.",
+    body: "Separate what sealed capsules establish from what remains unestablished: production-wide behaviour, full-kernel parity, LIVE telemetry, certification, and organizational compliance. Use the governance crosswalk for evidence-alignment context — not compliance claims.",
     href: "/limitations/",
     linkLabel: "Limitations →",
+    secondary: [
+      { href: "/governance-crosswalk/", label: "Governance crosswalk →" },
+    ],
   },
   {
     id: "pilot",
