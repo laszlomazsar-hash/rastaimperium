@@ -9,6 +9,10 @@ import { ProvenanceBadge } from "../../components/evidence/ProvenanceBadge";
 import { TrustStatus } from "../../components/evidence/TrustStatus";
 
 function ChallengeDetail({ c }: { c: Challenge }) {
+  const isIllegalTransition =
+    c.challengeId === "CHAL-ILLEGAL-TRANSITION-001" ||
+    (typeof c.invariant === "string" && c.invariant.includes("INV-002"));
+
   return (
     <article className="rounded-xl border border-[rgba(242,214,117,0.2)] bg-[rgba(15,18,13,0.92)] p-5 sm:p-6">
       <header className="flex flex-wrap items-start justify-between gap-3">
@@ -56,6 +60,14 @@ function ChallengeDetail({ c }: { c: Challenge }) {
         {c.proofId && (
           <Link href={`/proof#${c.proofId}`} className="text-[#F2D675] hover:underline">
             Related proof →
+          </Link>
+        )}
+        {isIllegalTransition && (
+          <Link
+            href="/proof/#receipt-ART-L7-REJECT-001"
+            className="text-[#F2D675] hover:underline"
+          >
+            Verification receipt (ART-L7-REJECT-001) →
           </Link>
         )}
         <Link href="/verify/" className="text-zinc-400 hover:text-[#F2D675]">
