@@ -55,7 +55,7 @@ export const claims: Claim[] = [
   },
   {
     claimId: "CLAIM-BENCH-OPS",
-    statement: "1,548+ operations per second (benchmark figure on homepage).",
+    statement: "Public operations-per-second performance claim — no sealed benchmark artifact published.",
     category: "performance",
     relatedInvariantIds: [],
     evidenceIds: ["EVD-BENCH-OPS-001"],
@@ -65,7 +65,7 @@ export const claims: Claim[] = [
   },
   {
     claimId: "CLAIM-BENCH-LAT",
-    statement: "System response time ≤ 45 ms (benchmark figure on homepage).",
+    statement: "Public latency performance claim — no sealed benchmark artifact published.",
     category: "performance",
     relatedInvariantIds: [],
     evidenceIds: ["EVD-BENCH-LAT-001"],
@@ -75,7 +75,7 @@ export const claims: Claim[] = [
   },
   {
     claimId: "CLAIM-BENCH-APPROVAL",
-    statement: "95.2% human approval rate (benchmark figure on homepage).",
+    statement: "Public human-approval rate claim — no sealed study artifact published.",
     category: "quality",
     relatedInvariantIds: [],
     evidenceIds: ["EVD-BENCH-APPROVAL-001"],
@@ -85,7 +85,7 @@ export const claims: Claim[] = [
   },
   {
     claimId: "CLAIM-BENCH-REL",
-    statement: "99.7% system reliability (benchmark figure on homepage).",
+    statement: "Public system-reliability claim — no sealed reliability study artifact published.",
     category: "reliability",
     relatedInvariantIds: [],
     evidenceIds: ["EVD-BENCH-REL-001"],
@@ -203,10 +203,11 @@ export const evidence: Evidence[] = [
   {
     evidenceId: "EVD-BENCH-OPS-001",
     title: "Ops/sec benchmark — provenance pending",
-    description: "Homepage displays 1,548+ ops/sec. No public benchmark artifact ID is attached yet.",
+    description:
+      "No sealed public ops/sec benchmark artifact is published. Status remains UNAVAILABLE until an independently inspectable capsule exists.",
     claimIds: ["CLAIM-BENCH-OPS"],
     proofIds: [],
-    source: "Homepage presentation (historical figure)",
+    source: "No sealed public benchmark artifact (UNAVAILABLE)",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     relatedInvariantIds: [],
@@ -215,10 +216,11 @@ export const evidence: Evidence[] = [
   {
     evidenceId: "EVD-BENCH-LAT-001",
     title: "Latency benchmark — provenance pending",
-    description: "Homepage displays ≤45 ms response time. No public benchmark artifact ID is attached yet.",
+    description:
+      "No sealed public latency benchmark artifact is published. Status remains UNAVAILABLE until an independently inspectable capsule exists.",
     claimIds: ["CLAIM-BENCH-LAT"],
     proofIds: [],
-    source: "Homepage presentation (historical figure)",
+    source: "No sealed public benchmark artifact (UNAVAILABLE)",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     relatedInvariantIds: [],
@@ -227,10 +229,11 @@ export const evidence: Evidence[] = [
   {
     evidenceId: "EVD-BENCH-APPROVAL-001",
     title: "Human approval rate — provenance pending",
-    description: "Homepage displays 95.2% human approval. No public study artifact is attached yet.",
+    description:
+      "No sealed public human-approval study artifact is published. Status remains UNAVAILABLE until an independently inspectable capsule exists.",
     claimIds: ["CLAIM-BENCH-APPROVAL"],
     proofIds: [],
-    source: "Homepage presentation (historical figure)",
+    source: "No sealed public benchmark artifact (UNAVAILABLE)",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     relatedInvariantIds: [],
@@ -239,10 +242,11 @@ export const evidence: Evidence[] = [
   {
     evidenceId: "EVD-BENCH-REL-001",
     title: "Reliability figure — provenance pending",
-    description: "Homepage displays 99.7% reliability. No public reliability study artifact is attached yet.",
+    description:
+      "No sealed public reliability study artifact is published. Status remains UNAVAILABLE until an independently inspectable capsule exists.",
     claimIds: ["CLAIM-BENCH-REL"],
     proofIds: [],
-    source: "Homepage presentation (historical figure)",
+    source: "No sealed public benchmark artifact (UNAVAILABLE)",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     relatedInvariantIds: [],
@@ -254,8 +258,7 @@ export const proofs: Proof[] = [
   {
     proofId: "PROOF-REPLAY-001",
     title: "Deterministic replay parity — ART-L7-REPLAY-001",
-    description:
-      "INV-001 verified for sealed public capsule ART-L7-REPLAY-001.",
+    description: "INV-001 verified for sealed public capsule ART-L7-REPLAY-001.",
     status: "VERIFIED",
     proofType: "deterministic_replay",
     invariant: "INV-001",
@@ -339,9 +342,9 @@ export const benchmarks: Benchmark[] = [
   {
     benchmarkId: "BENCH-OPS-001",
     metric: "Operations Per Second",
-    value: "1,548+",
-    target: "1,000",
-    result: "EXCEEDED (claimed)",
+    value: "Not established",
+    target: "Not established",
+    result: "UNAVAILABLE — no sealed public artifact",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     evidenceId: "EVD-BENCH-OPS-001",
@@ -349,9 +352,9 @@ export const benchmarks: Benchmark[] = [
   {
     benchmarkId: "BENCH-LAT-001",
     metric: "System Response Time",
-    value: "45ms",
-    target: "< 50ms",
-    result: "PASSED (claimed)",
+    value: "Not established",
+    target: "Not established",
+    result: "UNAVAILABLE — no sealed public artifact",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     evidenceId: "EVD-BENCH-LAT-001",
@@ -359,9 +362,9 @@ export const benchmarks: Benchmark[] = [
   {
     benchmarkId: "BENCH-APPROVAL-001",
     metric: "Human Approval Rate",
-    value: "95.2%",
-    target: "90.0%",
-    result: "EXCEEDED (claimed)",
+    value: "Not established",
+    target: "Not established",
+    result: "UNAVAILABLE — no sealed public artifact",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     evidenceId: "EVD-BENCH-APPROVAL-001",
@@ -369,9 +372,9 @@ export const benchmarks: Benchmark[] = [
   {
     benchmarkId: "BENCH-REL-001",
     metric: "System Reliability",
-    value: "99.7%",
-    target: "99.5%",
-    result: "EXCEEDED (claimed)",
+    value: "Not established",
+    target: "Not established",
+    result: "UNAVAILABLE — no sealed public artifact",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
     evidenceId: "EVD-BENCH-REL-001",
