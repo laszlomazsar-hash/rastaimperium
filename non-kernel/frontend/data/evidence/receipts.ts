@@ -6,7 +6,7 @@
  *
  * No observed/expected hashes are invented.
  * Production authority is always false on this surface.
- * Phase 22 Step 5 / Phase 25 Step 3.
+ * Phase 22 Step 5 / Phase 25 Step 4.
  */
 
 import type { VerificationReceiptData } from "@/components/design-system/VerificationReceipt";
@@ -19,14 +19,17 @@ function toEvidenceStatus(
   if (s === "VERIFIED") return "VERIFIED";
   if (s === "DEMONSTRATION") return "DEMONSTRATION";
   if (s === "UNAVAILABLE") return "UNAVAILABLE";
+  // TARGET / HISTORICAL / PENDING never become VERIFIED
   return "UNAVAILABLE";
 }
 
 /**
- * Canonical receipts for sealed public capsules.
- * Keys are artifact IDs. Do not invent receipts for unpublished artifacts.
+ * Canonical receipts for sealed public capsules (L7 + L3).
+ * Status and scope are taken from the Living Evidence Manifest / sealed artifacts.
+ * Expected / Observed remain "Not established" until a pure-verifier run
+ * is performed by the evaluator offline.
  */
-const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
+export const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
   "ART-L3-DECISION-001": {
     artifactId: "ART-L3-DECISION-001",
     artifactPath: "/evidence/artifacts/ART-L3-DECISION-001.json",
@@ -50,6 +53,10 @@ const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
       "Seal is over the canonical payload; file SHA is transport integrity only.",
     ],
     artifactUrl: "/evidence/artifacts/ART-L3-DECISION-001.json",
+    verifierUrl:
+      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/L3_DECISION_VERIFICATION.md",
+    reproductionUrl:
+      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/L3_DECISION_VERIFICATION.md",
   },
   "ART-L7-REPLAY-001": {
     artifactId: "ART-L7-REPLAY-001",
@@ -62,7 +69,8 @@ const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
       path: "non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs · verify_art_l7_replay_001.py",
       reproductionAvailable: true,
     },
-    artifactHash: "3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f",
+    artifactHash:
+      "3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f",
     expected: undefined,
     observed: undefined,
     status: toEvidenceStatus("VERIFIED"),
@@ -73,6 +81,11 @@ const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
       "VERIFIED applies only to the sealed public capsule under independent pure-engine replay.",
     ],
     artifactUrl: "/evidence/artifacts/ART-L7-REPLAY-001.json",
+    verifierUrl:
+      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md",
+    reproductionUrl:
+      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md",
+    modifiers: ["FROZEN", "HISTORICAL"],
   },
   "ART-L7-REJECT-001": {
     artifactId: "ART-L7-REJECT-001",
@@ -85,26 +98,32 @@ const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
       path: "non-kernel/frontend/scripts/verify-art-l7-reject-001.mjs · verify_art_l7_reject_001.py",
       reproductionAvailable: true,
     },
-    artifactHash: "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
+    artifactHash:
+      "4e208e48227cb5387b8d745f2cb5e35db3ec80c2f1844ce4b3b185c0c6a21f5a",
     expected: undefined,
     observed: undefined,
     status: toEvidenceStatus("VERIFIED"),
     scope: "Capsule-scoped only",
     productionAuthority: false,
     limitations: [
-      "Does not prove production EVO-V health, LIVE telemetry, or full-kernel parity.",
+      "Capsule-scoped rejection proof only. Not a general security certification.",
       "Complements valid-path ART-L7-REPLAY-001 with adversarial rejection.",
     ],
     artifactUrl: "/evidence/artifacts/ART-L7-REJECT-001.json",
+    verifierUrl:
+      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md",
+    reproductionUrl:
+      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md",
+    modifiers: ["FROZEN", "HISTORICAL"],
   },
   "ART-L7-PARITY-001": {
     artifactId: "ART-L7-PARITY-001",
     artifactPath: "/evidence/artifacts/ART-L7-PARITY-001.json",
     invariantId: "cross_implementation_parity",
     invariantDescription:
-      "cross_implementation_parity — independent Node and Python pure verifiers agree on sealed hashes.",
+      "Independent Node and Python pure verifiers produce identical sealed hashes for the same capsule.",
     verifier: {
-      implementation: "Node + Python pure verifiers",
+      implementation: "Node + Python pure verifiers (parity gate)",
       path: "non-kernel/frontend/scripts/parity-art-l7.mjs",
       reproductionAvailable: true,
     },
@@ -115,10 +134,14 @@ const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
     scope: "Capsule-scoped (Node + Python pure verifiers)",
     productionAuthority: false,
     limitations: [
-      "Does not prove production EVO-V health, LIVE telemetry, or full-kernel parity.",
-      "Parity is over sealed public capsules only.",
+      "Parity among pure verifiers for this capsule — not full-kernel parity or production runtime agreement.",
     ],
     artifactUrl: "/evidence/artifacts/ART-L7-PARITY-001.json",
+    verifierUrl:
+      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md",
+    reproductionUrl:
+      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md",
+    modifiers: ["FROZEN", "HISTORICAL"],
   },
 };
 
