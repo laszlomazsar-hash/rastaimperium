@@ -1,12 +1,9 @@
 /**
- * Phase 9 — Verifiable Architecture
- * Evidence-linked civilization stack (L1–L9).
+ * Architecture layer definitions for the public evidence surface.
  * Honesty rule: VERIFIED only when sealed artifacts exist.
  */
 
-import type { ProvenanceKind, VerificationStatus } from "./types";
-
-export type ArchitectureLayerId =
+export type LayerId =
   | "L1"
   | "L2"
   | "L3"
@@ -17,8 +14,22 @@ export type ArchitectureLayerId =
   | "L8"
   | "L9";
 
+export type VerificationStatus =
+  | "VERIFIED"
+  | "DEMONSTRATION"
+  | "UNAVAILABLE"
+  | "TARGET"
+  | "PENDING";
+
+export type Provenance =
+  | "LIVE"
+  | "DEMONSTRATION"
+  | "HISTORICAL"
+  | "TARGET"
+  | "UNAVAILABLE";
+
 export interface ArchitectureLayer {
-  layerId: ArchitectureLayerId;
+  layerId: LayerId;
   name: string;
   purpose: string;
   inputs: string[];
@@ -33,7 +44,7 @@ export interface ArchitectureLayer {
   verificationLabel: string;
   challengeHref: string;
   verificationStatus: VerificationStatus;
-  provenance: ProvenanceKind;
+  provenance: Provenance;
   notes?: string;
 }
 
@@ -41,17 +52,17 @@ export const architectureLayers: ArchitectureLayer[] = [
   {
     layerId: "L9",
     name: "Cosmology Layer",
-    purpose: "Mythic narrative and civilizational meaning — orientation, not runtime control.",
-    inputs: ["Doctrine documents", "Published works", "Institutional narrative constraints"],
-    outputs: ["Shared meaning frame", "Public positioning", "Engagement pathways"],
+    purpose: "Foundational orientation of the system within a constitutional frame.",
+    inputs: ["Constitutional intent", "Mission framing"],
+    outputs: ["Orientation statements", "Scope boundaries"],
     invariantIds: [],
-    invariantNotes: ["No machine-checkable invariant published on this public surface."],
+    invariantNotes: ["Doctrine-level orientation; not a sealed cryptographic invariant set."],
     evidenceIds: [],
     proofIds: [],
     challengeIds: [],
-    implementation: "Documentation / doctrine (Blueprint PDFs, library)",
-    verificationHref: "/evidence/",
-    verificationLabel: "Browse evidence catalog",
+    implementation: "Public doctrine surfaces (/codex, /pillars)",
+    verificationHref: "/codex/",
+    verificationLabel: "Codex",
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
@@ -59,17 +70,17 @@ export const architectureLayers: ArchitectureLayer[] = [
   {
     layerId: "L8",
     name: "Constitutional Layer",
-    purpose: "Seven Articles — hardware-enforced governance physics as constitutional constraints.",
-    inputs: ["Constitutional articles", "Capability boundaries", "Policy constraints"],
-    outputs: ["Admissible action space", "Governance ruleset references"],
+    purpose: "Seven Articles and constitutional constraint framing.",
+    inputs: ["Articles doctrine", "Constraint intent"],
+    outputs: ["Constitutional constraints (design)", "Governance posture"],
     invariantIds: [],
-    invariantNotes: ["Constitutional articles referenced in doctrine; formal public proof set not attached."],
+    invariantNotes: ["Articles remain design principles without sealed executable L8 evidence."],
     evidenceIds: [],
     proofIds: [],
     challengeIds: [],
-    implementation: "Governance model documentation · constitution modules (repo)",
-    verificationHref: "/governance-model/",
-    verificationLabel: "Governance model",
+    implementation: "/codex · /pillars",
+    verificationHref: "/codex/",
+    verificationLabel: "Codex",
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
@@ -77,79 +88,57 @@ export const architectureLayers: ArchitectureLayer[] = [
   {
     layerId: "L7",
     name: "Identity + Trust Layer",
-    purpose: "Immutable replay ledger and cryptographic proofs — public verification centre of gravity.",
-    inputs: [
-      "Ordered event stream",
-      "Fixed version bundle",
-      "Canonicalization profile",
-      "Receipt / ledger head candidates",
-    ],
-    outputs: [
-      "State hash",
-      "Receipt hash",
-      "Ledger head hash",
-      "Rejection receipts on illegal edges",
-      "Counterexample payloads on failure",
-    ],
+    purpose: "Deterministic replay, illegal transition rejection, and cross-runtime parity.",
+    inputs: ["Sealed event streams", "Lifecycle transitions", "Independent pure verifiers"],
+    outputs: ["Terminal state hashes", "Rejection receipts", "Parity results"],
     invariantIds: ["INV-001", "INV-002"],
     invariantNotes: [
       "INV-001 replay_parity — VERIFIED for ART-L7-REPLAY-001 only.",
       "INV-002 family illegal transition rejection — VERIFIED for ART-L7-REJECT-001 only.",
     ],
-    evidenceIds: [
-      "EVD-REPLAY-DOC-001",
-      "EVD-REPLAY-ART-001",
-      "EVD-REJECT-ART-001",
-      "EVD-LEDGER-DOC-001",
-      "EVD-LIFECYCLE-DOC-001",
-    ],
-    proofIds: ["PROOF-REPLAY-001", "PROOF-CHAIN-001", "PROOF-ILLEGAL-001"],
-    challengeIds: [
-      "CHAL-ILLEGAL-TRANSITION-001",
-      "CHAL-REPLAY-MISMATCH-001",
-      "CHAL-ALTERED-RECEIPT-001",
-    ],
-    implementation: "ART-L7-REPLAY-001 + ART-L7-REJECT-001 · standalone Node verifiers",
+    evidenceIds: ["EVD-REPLAY-ART-001", "EVD-REJECT-ART-001"],
+    proofIds: ["PROOF-REPLAY-001", "PROOF-ILLEGAL-001"],
+    challengeIds: ["CHAL-ILLEGAL-TRANSITION-001", "CHAL-REPLAY-MISMATCH-001"],
+    implementation: "Sealed public capsules + independent Node/Python pure verifiers",
     verificationHref: "/proof/#PROOF-REPLAY-001",
-    verificationLabel: "PROOF-REPLAY-001 + PROOF-ILLEGAL-001",
+    verificationLabel: "Proof Registry",
     challengeHref: "/challenge/",
     verificationStatus: "VERIFIED",
     provenance: "HISTORICAL",
-    notes:
-      "Two FROZEN capsules: valid-path replay + illegal-edge rejection. Not production EVO-V certification.",
+    notes: "Capsule-scoped VERIFIED only. Not production LIVE telemetry or full-kernel parity.",
   },
   {
     layerId: "L6",
     name: "Epistemic Governance Layer",
     purpose: "Bayesian calibration and drift detection for epistemic integrity.",
-    inputs: ["Observation streams", "Calibration priors", "Drift thresholds"],
+    inputs: ["Belief states", "Observation streams", "Calibration targets"],
     outputs: ["Drift signals", "Calibration status", "Admissibility hints"],
     invariantIds: [],
-    invariantNotes: ["Drift / calibration invariants not yet linked to public evidence IDs."],
+    invariantNotes: ["No sealed L6 public evidence capsule."],
     evidenceIds: [],
     proofIds: [],
     challengeIds: [],
-    implementation: "Epistemic modules (repo documentation); public artifacts pending",
-    verificationHref: "/evidence/",
-    verificationLabel: "Evidence Explorer",
+    implementation: "Implementation material only; not public L6 evidence",
+    verificationHref: "/limitations/",
+    verificationLabel: "Limitations",
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
   },
   {
     layerId: "L5",
-    name: "Deterministic Intelligence Layer",
-    purpose: "Causal modeling and symbolic reasoning under constitutional constraints.",
-    inputs: ["Structured state", "Causal hypotheses", "Symbolic rules"],
-    outputs: ["Causal assessments", "Symbolic conclusions", "Constrained recommendations"],
+    name: "Intelligence Layer",
+    purpose: "Reasoning and decision-support intelligence under governance constraints.",
+    inputs: ["Task context", "Governance constraints", "Model outputs"],
+    outputs: ["Reasoning traces (target)", "Decision proposals"],
     invariantIds: [],
-    invariantNotes: ["No public proof IDs attached for causal/symbolic determinism yet."],
+    invariantNotes: ["No sealed L5 public evidence capsule."],
     evidenceIds: [],
     proofIds: [],
     challengeIds: [],
-    implementation: "Intelligence layer documentation; runtime outside Rasta Imperium surface",
-    verificationHref: "/proof/",
-    verificationLabel: "Proof Registry",
+    implementation: "Not published as sealed public evidence",
+    verificationHref: "/limitations/",
+    verificationLabel: "Limitations",
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
@@ -157,17 +146,17 @@ export const architectureLayers: ArchitectureLayer[] = [
   {
     layerId: "L4",
     name: "Agentic Infrastructure Layer",
-    purpose: "Deep Seed agent orchestration within bounded governance fields.",
-    inputs: ["Agent intents", "Capability grants", "Orchestration policies"],
-    outputs: ["Coordinated agent actions", "Orchestration receipts (target)"],
+    purpose: "Deep Seed agent orchestration under governed operation.",
+    inputs: ["Agent tasks", "Orchestration policies", "Sandbox boundaries"],
+    outputs: ["Orchestration records (target)", "Bounded agent outcomes"],
     invariantIds: [],
-    invariantNotes: ["Agent boundary invariants not published as public evidence records."],
+    invariantNotes: ["No sealed multi-agent L4 public evidence capsule."],
     evidenceIds: [],
     proofIds: [],
     challengeIds: [],
-    implementation: "Agent orchestration design docs; demos are not production execution",
-    verificationHref: "/evidence/",
-    verificationLabel: "Evidence Explorer",
+    implementation: "Not published as sealed public evidence",
+    verificationHref: "/limitations/",
+    verificationLabel: "Limitations",
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
@@ -178,20 +167,21 @@ export const architectureLayers: ArchitectureLayer[] = [
     purpose: "Real-time invariant enforcement on operational transitions.",
     inputs: ["Operational events", "Enforcement policies", "Invariant registry"],
     outputs: ["Allow / reject decisions", "Enforcement audit records (target)"],
-    invariantIds: ["INV-001", "INV-002"],
+    invariantIds: ["INV-001", "INV-002", "INV-L3-001"],
     invariantNotes: [
-      "Shares enforcement dependency on INV-001 / INV-002 where lifecycle and replay apply.",
+      "INV-L3-001 deterministic operational transition decision — VERIFIED for ART-L3-DECISION-001 only (capsule-scoped).",
+      "Shares complementary lifecycle posture with INV-001 / INV-002 where L7 capsules apply.",
     ],
     evidenceIds: ["EVD-REPLAY-DOC-001", "EVD-REPLAY-ART-001", "EVD-REJECT-ART-001", "EVD-LIFECYCLE-DOC-001"],
     proofIds: ["PROOF-REPLAY-001", "PROOF-ILLEGAL-001"],
     challengeIds: ["CHAL-ILLEGAL-TRANSITION-001", "CHAL-REPLAY-MISMATCH-001"],
-    implementation: "Operational enforcement path via sealed valid + reject capsules",
-    verificationHref: "/proof/#PROOF-ILLEGAL-001",
-    verificationLabel: "Open related proofs",
+    implementation: "Capsule-scoped deterministic transition decision (ART-L3-DECISION-001); L7 holds complementary identity/replay capsules",
+    verificationHref: "/evidence/artifacts/ART-L3-DECISION-001.json",
+    verificationLabel: "Open ART-L3-DECISION-001 capsule",
     challengeHref: "/challenge/",
-    verificationStatus: "DEMONSTRATION",
-    provenance: "DEMONSTRATION",
-    notes: "L3 remains demonstration-level; L7 holds the earned VERIFIED capsules.",
+    verificationStatus: "VERIFIED",
+    provenance: "HISTORICAL",
+    notes: "VERIFIED — capsule-scoped deterministic L3 decision evidence (ART-L3-DECISION-001 / INV-L3-001). This verifies the sealed decision contract and its reproducibility. It does not establish production enforcement or verification of the full EVO-V runtime.",
   },
   {
     layerId: "L2",
@@ -208,33 +198,29 @@ export const architectureLayers: ArchitectureLayer[] = [
     verificationHref: "/institutional-pilots/",
     verificationLabel: "Institutional pilots",
     challengeHref: "/challenge/",
-    verificationStatus: "UNAVAILABLE",
-    provenance: "UNAVAILABLE",
+    verificationStatus: "DEMONSTRATION",
+    provenance: "DEMONSTRATION",
   },
   {
     layerId: "L1",
     name: "Human Interface Layer",
-    purpose: "Progressive initiation and witness portals — human oversight surface.",
-    inputs: ["Human operators", "Witness requests", "Oversight policies"],
-    outputs: ["UI surfaces", "Witness views", "Human approval paths (target)"],
+    purpose: "Public verification surfaces and human-facing assurance journeys.",
+    inputs: ["Evidence packages", "Evaluator intent", "Navigation requests"],
+    outputs: ["Inspectable surfaces", "Reproduction paths", "Decision ownership clarity"],
     invariantIds: [],
-    invariantNotes: ["UI is not a substitute for ledger proof."],
+    invariantNotes: ["UI is not the authority; sealed artifacts and pure verifiers are."],
     evidenceIds: [],
     proofIds: [],
     challengeIds: [],
-    implementation: "This public site (Rasta Imperium) as constitutional/verification presentation",
-    verificationHref: "/trust/",
-    verificationLabel: "Trust Console",
+    implementation: "Public site · /proof · /verify · /blueprint",
+    verificationHref: "/proof/",
+    verificationLabel: "Proof Registry",
     challengeHref: "/challenge/",
     verificationStatus: "DEMONSTRATION",
     provenance: "DEMONSTRATION",
   },
 ];
 
-export function getArchitectureLayer(id: ArchitectureLayerId): ArchitectureLayer | undefined {
+export function getArchitectureLayer(id: LayerId): ArchitectureLayer | undefined {
   return architectureLayers.find((l) => l.layerId === id);
-}
-
-export function architectureLayersByEvidenceDensity(): ArchitectureLayer[] {
-  return [...architectureLayers].sort((a, b) => b.evidenceIds.length - a.evidenceIds.length);
 }
