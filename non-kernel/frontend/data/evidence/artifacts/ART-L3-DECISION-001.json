@@ -1,0 +1,85 @@
+{
+  "artifactId": "ART-L3-DECISION-001",
+  "layer": "L3",
+  "invariantId": "INV-L3-001",
+  "schemaVersion": "ri-l3-decision-1.0.0",
+  "fixtureVersion": "1.0.0",
+  "status": "SEALED",
+  "productionAuthority": false,
+  "title": "Deterministic operational transition decision capsule",
+  "immutable": true,
+  "freeze": {
+    "status": "FROZEN",
+    "policy": "Do not mutate this object. Changes require ART-L3-DECISION-002+.",
+    "sealed_at": "2026-09-13T00:00:00Z"
+  },
+  "canonicalization": {
+    "algorithm": "json-canonical-sorted-keys-1",
+    "encoding": "UTF-8",
+    "rejectNonFiniteNumbers": true
+  },
+  "hash": {
+    "algorithm": "SHA-256"
+  },
+  "policySnapshot": {
+    "schemaVersion": "ri-l3-policy-1.0.0",
+    "states": ["INGESTED", "NORMALIZED", "VERIFIED", "CORRELATED", "ARCHIVED", "CONTESTED"],
+    "events": ["STATE_TRANSITION"],
+    "legalTransitions": [
+      {"from_state": "INGESTED", "event": "STATE_TRANSITION", "to_state": "NORMALIZED"},
+      {"from_state": "NORMALIZED", "event": "STATE_TRANSITION", "to_state": "VERIFIED"},
+      {"from_state": "VERIFIED", "event": "STATE_TRANSITION", "to_state": "CORRELATED"},
+      {"from_state": "CORRELATED", "event": "STATE_TRANSITION", "to_state": "ARCHIVED"},
+      {"from_state": "INGESTED", "event": "STATE_TRANSITION", "to_state": "CONTESTED"},
+      {"from_state": "NORMALIZED", "event": "STATE_TRANSITION", "to_state": "CONTESTED"},
+      {"from_state": "VERIFIED", "event": "STATE_TRANSITION", "to_state": "CONTESTED"},
+      {"from_state": "CORRELATED", "event": "STATE_TRANSITION", "to_state": "CONTESTED"},
+      {"from_state": "ARCHIVED", "event": "STATE_TRANSITION", "to_state": "CONTESTED"}
+    ]
+  },
+  "cases": [
+    {"caseId": "L3-LEGAL-001", "request": {"from_state": "INGESTED", "event": "STATE_TRANSITION", "to_state": "NORMALIZED"}, "expected": {"decision": "ALLOW", "reason": "TRANSITION_PERMITTED"}},
+    {"caseId": "L3-ILLEGAL-001", "request": {"from_state": "VERIFIED", "event": "STATE_TRANSITION", "to_state": "INGESTED"}, "expected": {"decision": "DENY", "reason": "ILLEGAL_TRANSITION"}},
+    {"caseId": "L3-UNKNOWN-STATE-001", "request": {"from_state": "NOT_A_STATE", "event": "STATE_TRANSITION", "to_state": "NORMALIZED"}, "expected": {"decision": "DENY", "reason": "UNKNOWN_STATE"}},
+    {"caseId": "L3-UNKNOWN-EVENT-001", "request": {"from_state": "INGESTED", "event": "UNKNOWN_EVENT_TYPE", "to_state": "NORMALIZED"}, "expected": {"decision": "DENY", "reason": "UNKNOWN_EVENT"}},
+    {"caseId": "L3-MALFORMED-001", "request": {"from_state": "", "event": "STATE_TRANSITION", "to_state": "NORMALIZED"}, "expected": {"decision": "DENY", "reason": "INVALID_REQUEST"}}
+  ],
+  "expectedResult": {
+    "schemaVersion": "ri-l3-result-1.0.0",
+    "artifactId": "ART-L3-DECISION-001",
+    "invariantId": "INV-L3-001",
+    "results": [
+      {"caseId": "L3-LEGAL-001", "decision": "ALLOW", "reason": "TRANSITION_PERMITTED"},
+      {"caseId": "L3-ILLEGAL-001", "decision": "DENY", "reason": "ILLEGAL_TRANSITION"},
+      {"caseId": "L3-UNKNOWN-STATE-001", "decision": "DENY", "reason": "UNKNOWN_STATE"},
+      {"caseId": "L3-UNKNOWN-EVENT-001", "decision": "DENY", "reason": "UNKNOWN_EVENT"},
+      {"caseId": "L3-MALFORMED-001", "decision": "DENY", "reason": "INVALID_REQUEST"}
+    ]
+  },
+  "expectedDigest": "88db345296504fa85c62d108ba24b9e64a772a764043bd85419c47ad51ad8577",
+  "scope": "Capsule-scoped deterministic L3 decision fixture. Not production EVO-V runtime enforcement.",
+  "limitations": [
+    "Does not establish production enforcement of the operational FSM.",
+    "Does not establish full EVO-V runtime verification.",
+    "Does not establish L4 multi-agent, L5 intelligence, L6 epistemic, or L8 constitutional evidence.",
+    "Does not establish certification, regulatory conformity, or universal governance.",
+    "productionAuthority remains false / NOT ESTABLISHED."
+  ],
+  "algorithm": {
+    "hash": "sha256",
+    "canonicalization": "json-canonical-sorted-keys-1",
+    "decision_precedence": [
+      "malformed request → INVALID_REQUEST",
+      "unknown from_state → UNKNOWN_STATE",
+      "unknown to_state → UNKNOWN_STATE",
+      "unknown event → UNKNOWN_EVENT",
+      "legal tuple → ALLOW / TRANSITION_PERMITTED",
+      "otherwise → DENY / ILLEGAL_TRANSITION"
+    ]
+  },
+  "reproduction": {
+    "guide": "docs/evidence/L3_DECISION_VERIFICATION.md",
+    "node": "node non-kernel/frontend/scripts/verify-art-l3-decision-001.mjs",
+    "python": "python3 scripts/verify_art_l3_decision_001.py"
+  }
+}
