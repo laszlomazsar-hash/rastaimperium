@@ -1,12 +1,12 @@
 /**
  * Normalized Verification Receipt data derived solely from:
  * - docs/evidence/EVIDENCE_MANIFEST.json
- * - sealed public capsules ART-L7-*
+ * - sealed public capsules ART-L7-* and ART-L3-DECISION-001
  * - existing pure-verifier documentation
  *
  * No observed/expected hashes are invented.
  * Production authority is always false on this surface.
- * Phase 22 Step 5.
+ * Phase 22 Step 5 / Phase 25 Step 3.
  */
 
 import type { VerificationReceiptData } from "@/components/design-system/VerificationReceipt";
@@ -19,17 +19,39 @@ function toEvidenceStatus(
   if (s === "VERIFIED") return "VERIFIED";
   if (s === "DEMONSTRATION") return "DEMONSTRATION";
   if (s === "UNAVAILABLE") return "UNAVAILABLE";
-  // TARGET / HISTORICAL / PENDING never become VERIFIED
+  // TARGET / HISTORICAL and other non-badge statuses degrade to UNAVAILABLE for UI.
   return "UNAVAILABLE";
 }
 
 /**
- * Canonical receipts for the three sealed L7 capsules.
- * Status and scope are taken verbatim from the Living Evidence Manifest.
- * Expected / Observed remain "Not established" until a pure-verifier run
- * is performed by the evaluator offline.
+ * Canonical receipts for sealed public capsules.
+ * Keys are artifact IDs. Do not invent receipts for unpublished artifacts.
  */
-export const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
+const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
+  "ART-L3-DECISION-001": {
+    artifactId: "ART-L3-DECISION-001",
+    artifactPath: "/evidence/artifacts/ART-L3-DECISION-001.json",
+    invariantId: "INV-L3-001",
+    invariantDescription:
+      "deterministic_operational_transition_decision — ALLOW/DENY under frozen policySnapshot with stable reason codes; sealed digest reproducible offline.",
+    verifier: {
+      implementation: "Node + Python pure verifiers",
+      path: "non-kernel/frontend/scripts/verify-art-l3-decision-001.mjs · scripts/verify_art_l3_decision_001.py",
+      reproductionAvailable: true,
+    },
+    artifactHash: "88db345296504fa85c62d108ba24b9e64a772a764043bd85419c47ad51ad8577",
+    expected: undefined,
+    observed: undefined,
+    status: toEvidenceStatus("VERIFIED"),
+    scope: "Capsule-scoped deterministic L3 decision fixture",
+    productionAuthority: false,
+    limitations: [
+      "Does not establish production enforcement or full EVO-V runtime verification.",
+      "VERIFIED applies only to the sealed public capsule ART-L3-DECISION-001 under independent pure verifiers.",
+      "Seal is over the canonical payload; file SHA is transport integrity only.",
+    ],
+    artifactUrl: "/evidence/artifacts/ART-L3-DECISION-001.json",
+  },
   "ART-L7-REPLAY-001": {
     artifactId: "ART-L7-REPLAY-001",
     artifactPath: "/evidence/artifacts/ART-L7-REPLAY-001.json",
@@ -40,10 +62,8 @@ export const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
       path: "non-kernel/frontend/scripts/verify-art-l7-replay-001.mjs · verify_art_l7_replay_001.py",
       reproductionAvailable: true,
     },
-    // Sealed artifact hash from manifest (presentation only)
     artifactHash:
       "3f1705c85e156b965908f9b604c432461ff105333f27481df800b3b37940dc9f",
-    // Pure-verifier result hashes are produced only by offline execution
     expected: undefined,
     observed: undefined,
     status: toEvidenceStatus("VERIFIED"),
@@ -54,13 +74,7 @@ export const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
       "VERIFIED applies only to the sealed public capsule under independent pure-engine replay.",
     ],
     artifactUrl: "/evidence/artifacts/ART-L7-REPLAY-001.json",
-    verifierUrl:
-      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md",
-    reproductionUrl:
-      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md",
-    modifiers: ["FROZEN", "HISTORICAL"],
   },
-
   "ART-L7-REJECT-001": {
     artifactId: "ART-L7-REJECT-001",
     artifactPath: "/evidence/artifacts/ART-L7-REJECT-001.json",
@@ -80,25 +94,19 @@ export const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
     scope: "Capsule-scoped only",
     productionAuthority: false,
     limitations: [
-      "Capsule-scoped rejection proof only. Not a general security certification.",
+      "Does not prove production EVO-V health, LIVE telemetry, or full-kernel parity.",
       "Complements valid-path ART-L7-REPLAY-001 with adversarial rejection.",
     ],
     artifactUrl: "/evidence/artifacts/ART-L7-REJECT-001.json",
-    verifierUrl:
-      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md",
-    reproductionUrl:
-      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md",
-    modifiers: ["FROZEN", "HISTORICAL"],
   },
-
   "ART-L7-PARITY-001": {
     artifactId: "ART-L7-PARITY-001",
     artifactPath: "/evidence/artifacts/ART-L7-PARITY-001.json",
     invariantId: "cross_implementation_parity",
     invariantDescription:
-      "Independent Node and Python pure verifiers produce identical sealed hashes for the same capsule.",
+      "cross_implementation_parity — independent Node and Python pure verifiers agree on sealed hashes.",
     verifier: {
-      implementation: "Node + Python pure verifiers (parity gate)",
+      implementation: "Node + Python pure verifiers",
       path: "non-kernel/frontend/scripts/parity-art-l7.mjs",
       reproductionAvailable: true,
     },
@@ -109,14 +117,10 @@ export const L7_RECEIPTS: Record<string, VerificationReceiptData> = {
     scope: "Capsule-scoped (Node + Python pure verifiers)",
     productionAuthority: false,
     limitations: [
-      "Parity among pure verifiers for this capsule — not full-kernel parity or production runtime agreement.",
+      "Does not prove production EVO-V health, LIVE telemetry, or full-kernel parity.",
+      "Parity is over sealed public capsules only.",
     ],
     artifactUrl: "/evidence/artifacts/ART-L7-PARITY-001.json",
-    verifierUrl:
-      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md",
-    reproductionUrl:
-      "https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md",
-    modifiers: ["FROZEN", "HISTORICAL"],
   },
 };
 
