@@ -6,7 +6,7 @@ import React from "react";
 
 const ITEMS = [
   { label: "Verification-first", detail: "Claims stay labelled until artifacts exist" },
-  { label: "Frozen evidence", detail: "Sealed L7 capsules with independent verifiers" },
+  { label: "Frozen evidence", detail: "Sealed public capsules with independent verifiers" },
   { label: "Offline reproduction", detail: "Node + Python pure verifiers, no network required" },
   { label: "Living manifest", detail: "Machine-readable status of every public claim" },
 ] as const;
