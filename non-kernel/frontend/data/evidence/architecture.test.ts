@@ -48,10 +48,10 @@ describe("Phase 9 architecture layer integrity", () => {
     expect(proof?.artifactId).toBe("ART-L7-REPLAY-001");
   });
 
-  it("empty evidence arrays use explicit unavailable or demonstration posture", () => {
+  it("empty evidence arrays use explicit unavailable posture", () => {
     for (const l of architectureLayers) {
       if (l.evidenceIds.length === 0) {
-        // L1/L2 are intentional DEMONSTRATION (institutional/UI); others remain UNAVAILABLE/TARGET/PENDING
+        // L1/L2 remain intentional DEMONSTRATION (institutional/UI surfaces).
         expect(["UNAVAILABLE", "TARGET", "PENDING", "DEMONSTRATION"]).toContain(
           l.verificationStatus,
         );
