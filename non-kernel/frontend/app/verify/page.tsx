@@ -11,7 +11,7 @@ import {
 export const metadata: Metadata = {
   title: "Verify Console",
   description:
-    "Verification console for frozen L7 evidence capsules. Download, run pure offline verifiers, compare sealed hashes. Do not trust the website UI.",
+    "Verification console for frozen public evidence capsules (L3 decision + L7 identity/trust). Download, run pure offline verifiers, compare sealed hashes. Do not trust the website UI.",
 };
 
 /** Presentation only — maps pure-verifier outcomes to human language. Not a browser verifier. */
@@ -44,6 +44,20 @@ const OUTCOME_LEGEND = [
 ] as const;
 
 const CAPSULES = [
+  {
+    id: "ART-L3-DECISION-001",
+    claim:
+      "Capsule-scoped deterministic operational transition decision (INV-L3-001): ALLOW/DENY under frozen policySnapshot reproduces the sealed digest via independent pure verifiers.",
+    verification:
+      "Node and Python pure verifiers evaluate fixed cases against the sealed policy snapshot; digests must match expectedDigest.",
+    command: `$ node verify-art-l3-decision-001.mjs ./ART-L3-DECISION-001.json\n# or: python3 verify_art_l3_decision_001.py ./ART-L3-DECISION-001.json\n# RESULT: exit 0 only if decisions and sealed digest match`,
+    download: "/evidence/artifacts/ART-L3-DECISION-001.json",
+    guide: "/verify/",
+    proof: "/proof/#receipt-ART-L3-DECISION-001",
+    receipt: "/proof/#receipt-ART-L3-DECISION-001",
+    limitations:
+      "VERIFIED — capsule-scoped only. Does not establish production enforcement, full EVO-V runtime verification, or LIVE monitoring. productionAuthority remains NOT ESTABLISHED (false).",
+  },
   {
     id: "ART-L7-REPLAY-001",
     claim:
@@ -143,7 +157,11 @@ export default function VerifyPage() {
             Public VERIFIED capsules
           </p>
           <h2 className="mt-2 font-cinzel text-2xl text-zinc-100">Declared · inspected · recomputed</h2>
-          <ul className="mt-8 space-y-6">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400">
+            Each card is a presentation entry for a sealed public capsule. Authority remains the
+            artifact bytes and pure-verifier exit codes — not this page.
+          </p>
+          <ul className="mt-8 space-y-5">
             {CAPSULES.map((c) => (
               <li
                 key={c.id}
