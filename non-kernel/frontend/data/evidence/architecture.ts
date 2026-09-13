@@ -1,9 +1,12 @@
 /**
- * Architecture layer definitions for the public evidence surface.
+ * Phase 9 — Verifiable Architecture
+ * Evidence-linked civilization stack (L1–L9).
  * Honesty rule: VERIFIED only when sealed artifacts exist.
  */
 
-export type LayerId =
+import type { ProvenanceKind, VerificationStatus } from "./types";
+
+export type ArchitectureLayerId =
   | "L1"
   | "L2"
   | "L3"
@@ -14,22 +17,8 @@ export type LayerId =
   | "L8"
   | "L9";
 
-export type VerificationStatus =
-  | "VERIFIED"
-  | "DEMONSTRATION"
-  | "UNAVAILABLE"
-  | "TARGET"
-  | "PENDING";
-
-export type Provenance =
-  | "LIVE"
-  | "DEMONSTRATION"
-  | "HISTORICAL"
-  | "TARGET"
-  | "UNAVAILABLE";
-
 export interface ArchitectureLayer {
-  layerId: LayerId;
+  layerId: ArchitectureLayerId;
   name: string;
   purpose: string;
   inputs: string[];
@@ -44,7 +33,7 @@ export interface ArchitectureLayer {
   verificationLabel: string;
   challengeHref: string;
   verificationStatus: VerificationStatus;
-  provenance: Provenance;
+  provenance: ProvenanceKind;
   notes?: string;
 }
 
@@ -52,17 +41,17 @@ export const architectureLayers: ArchitectureLayer[] = [
   {
     layerId: "L9",
     name: "Cosmology Layer",
-    purpose: "Foundational orientation of the system within a constitutional frame.",
-    inputs: ["Constitutional intent", "Mission framing"],
-    outputs: ["Orientation statements", "Scope boundaries"],
+    purpose: "Mythic narrative and civilizational meaning — orientation, not runtime control.",
+    inputs: ["Doctrine documents", "Published works", "Institutional narrative constraints"],
+    outputs: ["Shared meaning frame", "Public positioning", "Engagement pathways"],
     invariantIds: [],
-    invariantNotes: ["Doctrine-level orientation; not a sealed cryptographic invariant set."],
+    invariantNotes: ["No machine-checkable invariant published on this public surface."],
     evidenceIds: [],
     proofIds: [],
     challengeIds: [],
-    implementation: "Public doctrine surfaces (/codex, /pillars)",
-    verificationHref: "/codex/",
-    verificationLabel: "Codex",
+    implementation: "Documentation / doctrine (Blueprint PDFs, library)",
+    verificationHref: "/evidence/",
+    verificationLabel: "Browse evidence catalog",
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
@@ -70,17 +59,17 @@ export const architectureLayers: ArchitectureLayer[] = [
   {
     layerId: "L8",
     name: "Constitutional Layer",
-    purpose: "Seven Articles and constitutional constraint framing.",
-    inputs: ["Articles doctrine", "Constraint intent"],
-    outputs: ["Constitutional constraints (design)", "Governance posture"],
+    purpose: "Seven Articles — hardware-enforced governance physics as constitutional constraints.",
+    inputs: ["Constitutional articles", "Capability boundaries", "Policy constraints"],
+    outputs: ["Admissible action space", "Governance ruleset references"],
     invariantIds: [],
-    invariantNotes: ["Articles remain design principles without sealed executable L8 evidence."],
+    invariantNotes: ["Constitutional articles referenced in doctrine; formal public proof set not attached."],
     evidenceIds: [],
     proofIds: [],
     challengeIds: [],
-    implementation: "/codex · /pillars",
-    verificationHref: "/codex/",
-    verificationLabel: "Codex",
+    implementation: "Governance model documentation · constitution modules (repo)",
+    verificationHref: "/governance-model/",
+    verificationLabel: "Governance model",
     challengeHref: "/challenge/",
     verificationStatus: "UNAVAILABLE",
     provenance: "UNAVAILABLE",
@@ -88,16 +77,16 @@ export const architectureLayers: ArchitectureLayer[] = [
   {
     layerId: "L7",
     name: "Identity + Trust Layer",
-    purpose: "Deterministic replay, illegal transition rejection, and cross-runtime parity.",
-    inputs: ["Sealed event streams", "Lifecycle transitions", "Independent pure verifiers"],
+    purpose: "Deterministic identity, sealed receipts, and replayable trust artifacts.",
+    inputs: ["Sealed event streams", "Version bundles", "Independent pure verifiers"],
     outputs: ["Terminal state hashes", "Rejection receipts", "Parity results"],
     invariantIds: ["INV-001", "INV-002"],
     invariantNotes: [
       "INV-001 replay_parity — VERIFIED for ART-L7-REPLAY-001 only.",
       "INV-002 family illegal transition rejection — VERIFIED for ART-L7-REJECT-001 only.",
     ],
-    evidenceIds: ["EVD-REPLAY-ART-001", "EVD-REJECT-ART-001"],
-    proofIds: ["PROOF-REPLAY-001", "PROOF-ILLEGAL-001"],
+    evidenceIds: ["EVD-REPLAY-ART-001", "EVD-REJECT-ART-001", "EVD-PARITY-ART-001"],
+    proofIds: ["PROOF-REPLAY-001", "PROOF-ILLEGAL-001", "PROOF-PARITY-001"],
     challengeIds: ["CHAL-ILLEGAL-TRANSITION-001", "CHAL-REPLAY-MISMATCH-001"],
     implementation: "Sealed public capsules + independent Node/Python pure verifiers",
     verificationHref: "/proof/#PROOF-REPLAY-001",
@@ -167,17 +156,16 @@ export const architectureLayers: ArchitectureLayer[] = [
     purpose: "Real-time invariant enforcement on operational transitions.",
     inputs: ["Operational events", "Enforcement policies", "Invariant registry"],
     outputs: ["Allow / reject decisions", "Enforcement audit records (target)"],
-    invariantIds: ["INV-001", "INV-002", "INV-L3-001"],
+    invariantIds: ["INV-001", "INV-002"],
     invariantNotes: [
-      "INV-L3-001 deterministic operational transition decision — VERIFIED for ART-L3-DECISION-001 only (capsule-scoped).",
-      "Shares complementary lifecycle posture with INV-001 / INV-002 where L7 capsules apply.",
+      "Shares enforcement dependency on INV-001 / INV-002 where lifecycle and replay apply.",
     ],
     evidenceIds: ["EVD-REPLAY-DOC-001", "EVD-REPLAY-ART-001", "EVD-REJECT-ART-001", "EVD-LIFECYCLE-DOC-001"],
     proofIds: ["PROOF-REPLAY-001", "PROOF-ILLEGAL-001"],
     challengeIds: ["CHAL-ILLEGAL-TRANSITION-001", "CHAL-REPLAY-MISMATCH-001"],
-    implementation: "Capsule-scoped deterministic transition decision (ART-L3-DECISION-001); L7 holds complementary identity/replay capsules",
-    verificationHref: "/evidence/artifacts/ART-L3-DECISION-001.json",
-    verificationLabel: "Open ART-L3-DECISION-001 capsule",
+    implementation: "Operational enforcement path via sealed valid + reject capsules",
+    verificationHref: "/proof/#PROOF-ILLEGAL-001",
+    verificationLabel: "Open related proofs",
     challengeHref: "/challenge/",
     verificationStatus: "VERIFIED",
     provenance: "HISTORICAL",
@@ -221,6 +209,18 @@ export const architectureLayers: ArchitectureLayer[] = [
   },
 ];
 
-export function getArchitectureLayer(id: LayerId): ArchitectureLayer | undefined {
+export function getArchitectureLayer(id: ArchitectureLayerId): ArchitectureLayer | undefined {
   return architectureLayers.find((l) => l.layerId === id);
+}
+
+export function architectureLayersByEvidenceDensity(): ArchitectureLayer[] {
+  const rank = (s: VerificationStatus): number => {
+    if (s === "VERIFIED") return 3;
+    if (s === "DEMONSTRATION") return 2;
+    if (s === "TARGET" || s === "PENDING") return 1;
+    return 0;
+  };
+  return [...architectureLayers].sort(
+    (a, b) => rank(b.verificationStatus) - rank(a.verificationStatus)
+  );
 }
