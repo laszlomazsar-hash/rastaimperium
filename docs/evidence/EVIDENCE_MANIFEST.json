@@ -1,6 +1,6 @@
 {
   "manifestVersion": "1.0.0",
-  "updated": "2026-09-07T19:28:00Z",
+  "updated": "2026-09-13T03:00:00Z",
   "surface": "Rasta Imperium public verification layer",
   "description": "Machine-readable index of every public claim and its current evidence status. Capsule-scoped VERIFIED only. See Limitations for full boundary.",
   "claims": [
@@ -32,6 +32,25 @@
       "artifact": "/evidence/artifacts/ART-L7-PARITY-001.json",
       "verifiers": ["node", "python"],
       "note": "Exact hash agreement across independent runtimes. FROZEN."
+    },
+    {
+      "id": "ART-L3-DECISION-001",
+      "status": "VERIFIED",
+      "layer": "L3",
+      "scope": "capsule-only",
+      "invariant": "INV-L3-001 deterministic_operational_transition_decision",
+      "artifact": "/evidence/artifacts/ART-L3-DECISION-001.json",
+      "verifiers": ["node", "python"],
+      "hash": "88db345296504fa85c62d108ba24b9e64a772a764043bd85419c47ad51ad8577",
+      "productionAuthority": false,
+      "note": "Independent Node + Python pure verifiers pass. FROZEN. Capsule-scoped only — not production enforcement. Public L3 UI remains DEMONSTRATION until Phase 25 Step 3.",
+      "limitations": [
+        "Not production enforcement",
+        "Not full EVO-V runtime verification",
+        "Not L4/L5/L6/L8 evidence",
+        "Not certification or regulatory conformity",
+        "Public site L3 label remains DEMONSTRATION until separate Step 3 integration/deploy verification"
+      ]
     },
     {
       "id": "PROOF-CHAIN-001",
