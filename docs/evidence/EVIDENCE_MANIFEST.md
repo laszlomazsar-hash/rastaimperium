@@ -14,6 +14,7 @@ This file is the human-readable companion to [`EVIDENCE_MANIFEST.json`](./EVIDEN
 | ART-L7-REPLAY-001 | INV-001 replay_parity | VERIFIED |
 | ART-L7-REJECT-001 | INV-002 illegal_transition_rejection | VERIFIED |
 | ART-L7-PARITY-001 | cross_implementation_parity | VERIFIED |
+| ART-L3-DECISION-001 | INV-L3-001 deterministic operational transition decision | VERIFIED (capsule-scoped; public UI remains DEMONSTRATION until Step 3) |
 
 ## Explicit UNAVAILABLE claims
 
@@ -26,4 +27,4 @@ See also: [Limitations](https://rastaimperium.com/limitations/) · [Proof Regist
 
 ---
 
-*Updated 2026-09-07. Capsule-scoped only. No production claims added.*
+*Updated 2026-09-13. Capsule-scoped only. No production claims added. Public L3 UI remains DEMONSTRATION until Phase 25 Step 3.*
