@@ -12,12 +12,13 @@ import {
 import { getReceipt } from "./receipts";
 
 describe("Reproducibility & evidence export", () => {
-  it("covers all three canonical L7 artifacts", () => {
+  it("covers the three canonical L7 artifacts and the sealed L3 decision capsule", () => {
     const ids = listReproducibilityRecords().map((r) => r.artifactId);
     expect(ids).toContain("ART-L7-REPLAY-001");
     expect(ids).toContain("ART-L7-REJECT-001");
     expect(ids).toContain("ART-L7-PARITY-001");
-    expect(ids).toHaveLength(3);
+    expect(ids).toContain("ART-L3-DECISION-001");
+    expect(ids).toHaveLength(4);
   });
 
   it("every record has a matching receipt and productionAuthority false", () => {
