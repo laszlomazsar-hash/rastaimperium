@@ -8,7 +8,6 @@ paths_to_add = [
     str(ROOT),
     str(ROOT / "backend" / "src"),
     str(ROOT / "non-kernel" / "frontend"),
-    str(ROOT / "backend"),
 ]
 
 for p in paths_to_add:
