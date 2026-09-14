@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import unicodedata
 from decimal import Decimal, ROUND_HALF_EVEN, localcontext
 from typing import Any
 
@@ -65,7 +66,14 @@ def canonicalize_float(value: float) -> str:
 
 
 def dumps_canonical(value: Any) -> str:
-    """Serialize values into canonical JSON with stable float formatting."""
+    """Serialize values into canonical JSON with stable float formatting.
+
+    Aligns with governance/specs/event-hash.md:
+    - UTF-8 NFC for strings and object keys
+    - CRLF/CR normalized to LF in strings
+    - Lexicographic key ordering
+    - Deterministic float representation
+    """
 
     if value is None:
         return "null"
@@ -76,16 +84,24 @@ def dumps_canonical(value: Any) -> str:
     if isinstance(value, float):
         return canonicalize_float(value)
     if isinstance(value, str):
-        return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+        normalised = value.replace("\r\n", "\n").replace("\r", "\n")
+        normalised = unicodedata.normalize("NFC", normalised)
+        return json.dumps(normalised, ensure_ascii=False, separators=(",", ":"))
     if isinstance(value, list):
         return "[" + ",".join(dumps_canonical(item) for item in value) + "]"
     if isinstance(value, dict):
-        keys = sorted(value)
-        parts = []
-        for key in keys:
+        normalized: dict = {}
+        for key, item in value.items():
             if not isinstance(key, str):
                 raise TypeError("Canonical JSON object keys must be strings")
-            parts.append(f"{dumps_canonical(key)}:{dumps_canonical(value[key])}")
+            nkey = unicodedata.normalize("NFC", key)
+            if nkey in normalized:
+                raise ValueError(f"Canonical JSON object keys collide after NFC: {key!r}")
+            normalized[nkey] = item
+        keys = sorted(normalized)
+        parts = []
+        for key in keys:
+            parts.append(f"{dumps_canonical(key)}:{dumps_canonical(normalized[key])}")
         return "{" + ",".join(parts) + "}"
 
     raise TypeError(f"Type {type(value)!r} is not serializable in canonical JSON")

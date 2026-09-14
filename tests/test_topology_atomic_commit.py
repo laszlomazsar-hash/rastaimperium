@@ -5,7 +5,6 @@ from dataclasses import dataclass
 import pytest
 
 from codex.compliance import ComplianceEngine, TopologyValidationError
-from backend.src.codex.compliance import ComplianceEngine, TopologyValidationError
 
 
 @dataclass
@@ -44,17 +43,17 @@ def test_commit_applies_all_ops_and_replaces_registry_atomically() -> None:
         "nodes": [{"id": "A"}, {"id": "B"}],
         "edges": [{"source": "A", "target": "B"}],
     }
-    assert engine.topology_registry == committed
+    assert engine._topology_registry == committed
 
 
 def test_failed_validation_does_not_mutate_registry() -> None:
     engine = ComplianceEngine()
-    before = engine.topology_registry
+    before = engine._topology_registry
 
     with pytest.raises(TopologyValidationError):
         engine.apply_topology_operations([InvalidOp()])
 
-    assert engine.topology_registry == before
+    assert engine._topology_registry == before
 
 
 def test_policy_bounds_are_enforced_for_candidate() -> None:
