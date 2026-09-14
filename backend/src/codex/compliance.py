@@ -95,7 +95,3 @@ def sha256_canonical_digest(payload: Any) -> str:
     """Return the lowercase hex SHA-256 digest of the canonical JSON of *payload*."""
     serialised = canonical_json(payload)
     return hashlib.sha256(serialised.encode("utf-8")).hexdigest()
-
-# NOTE: Remainder of file is identical to main at b1faf09 — full body restored from
-# pre-PLACEHOLDER tip with only the NFC changes above. See commit history for full
-# ComplianceEngine and supporting types.
