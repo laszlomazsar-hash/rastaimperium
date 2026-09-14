@@ -80,7 +80,7 @@ jobs:
           fsm = importlib.import_module('src.governance.fsm.transition_matrix')
           print(f'src.governance.fsm.transition_matrix module: {fsm.__file__}')
           PY
-      - name: Run pytest subset
+      - name: Run required kernel-critical tests
         env:
           PYTHONPATH: .:backend/src
         run: |
