@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import unicodedata
 from decimal import Decimal, ROUND_HALF_EVEN, localcontext
 from typing import Any
 
@@ -76,16 +77,26 @@ def dumps_canonical(value: Any) -> str:
     if isinstance(value, float):
         return canonicalize_float(value)
     if isinstance(value, str):
-        return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+        # governance/specs/event-hash.md: UTF-8 NFC normalization for all strings
+        return json.dumps(
+            unicodedata.normalize("NFC", value),
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
     if isinstance(value, list):
         return "[" + ",".join(dumps_canonical(item) for item in value) + "]"
     if isinstance(value, dict):
-        keys = sorted(value)
-        parts = []
-        for key in keys:
+        # NFC-normalize string keys before sort (event-hash / canonical contract)
+        normalized: dict = {}
+        for key, item in value.items():
             if not isinstance(key, str):
                 raise TypeError("Canonical JSON object keys must be strings")
-            parts.append(f"{dumps_canonical(key)}:{dumps_canonical(value[key])}")
+            nkey = unicodedata.normalize("NFC", key)
+            if nkey in normalized:
+                raise ValueError(f"Canonical JSON object keys collide after NFC: {key!r}")
+            normalized[nkey] = item
+        keys = sorted(normalized)
+        parts = [f"{dumps_canonical(key)}:{dumps_canonical(normalized[key])}" for key in keys]
         return "{" + ",".join(parts) + "}"
 
     raise TypeError(f"Type {type(value)!r} is not serializable in canonical JSON")
