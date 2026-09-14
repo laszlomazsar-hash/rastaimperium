@@ -8,12 +8,13 @@ from typing import Any
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 
 from ..codex.compliance import ComplianceEngine, ReplayResult
 
 from ..runtime_import_guard import install_legacy_import_guard
 from .enquiries import EnquiryPayload, EnquiryResult, create_enquiry
+from . import ops_runtime
 
 install_legacy_import_guard()
 
@@ -181,6 +182,36 @@ def submit_enquiry(request: Request, payload: EnquiryPayload) -> EnquiryResult:
 
 
 # --- Static Frontend Serving ---
+
+
+@app.on_event("startup")
+def _ops_runtime_startup() -> None:
+    """Emit initial bounded heartbeat so /ops/current is not empty after boot."""
+    ops_runtime.emit_record()
+
+
+@app.get("/ops/current")
+def ops_current() -> JSONResponse:
+    """Public machine-readable current record for ri-ops-runtime-v1.
+
+    Not LIVE qualification. Not /health. Not Observatory.
+    """
+    record = ops_runtime.get_current()
+    if record is None:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "result": "UNAVAILABLE",
+                "reason": "NO_CURRENT_RECORD",
+                "detail": "No current operational record is available.",
+                "productionAuthority": False,
+            },
+            headers={"Cache-Control": "no-store"},
+        )
+    # Emit-on-retrieve: successive GETs observe new current records within process.
+    record = ops_runtime.emit_record()
+    return JSONResponse(content=record, headers={"Cache-Control": "no-store"})
+
 STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "static"
 print(f"[STATIC] STATIC_DIR={STATIC_DIR}")
 print(f"[STATIC] EXISTS={STATIC_DIR.exists()}")
