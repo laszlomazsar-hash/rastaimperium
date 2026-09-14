@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "ri-ops-event-0.1.0",
+  "artifactId": "ART-OPS-RUNTIME-CURRENT",
+  "invariantId": "INV-OPS-001",
+  "eventId": "ops-hb-2026-09-14T14-09-36-340Z-9075bd5d",
+  "producerId": "ri-ops-runtime-v1",
+  "producerVersion": "0.1.0",
+  "eventType": "OPS_HEARTBEAT",
+  "observedAt": "2026-09-14T14:09:36.340Z",
+  "sequence": 1,
+  "scope": "bounded-ops-heartbeat;not-evo-v-full-health;not-production-authority",
+  "environment": "runtime-public",
+  "payload": {
+    "note": "Runtime producer completed one emit cycle. Bounded demonstrator only.",
+    "emitKind": "heartbeat"
+  },
+  "limitations": [
+    "Does not establish LIVE continuous telemetry until LIVE gates pass.",
+    "Does not establish production authority or production monitoring.",
+    "Does not establish full EVO-V runtime health or enforcement.",
+    "Sequence is per process instance only (resets on restart; not globally persistent).",
+    "Producer identity is process-scoped, not institutional authorization.",
+    "/health is a separate signal and is not this operational evidence source."
+  ],
+  "productionAuthority": false,
+  "status": "OPERATIONAL_BOUNDED",
+  "integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "json-canonical-sorted-keys-1",
+    "digest": "3cbffafcf097ad30cd19d5e60b90815acd28879a8cb657023c0ae3d5ccac230b"
+  },
+  "canonicalization": {
+    "algorithm": "json-canonical-sorted-keys-1",
+    "encoding": "UTF-8",
+    "rejectNonFiniteNumbers": true
+  }
+}
