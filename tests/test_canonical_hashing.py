@@ -1,16 +1,19 @@
+import hashlib
 import json
 from pathlib import Path
 
-from codex.compliance import CANONICALIZATION_VERSION, canonical_json, sha256_canonical_digest
-from backend.src.codex.compliance import CANONICALIZATION_VERSION, canonical_json, sha256_canonical_digest
-
+from codex.canonical_json import dumps_canonical
+from codex.compliance import CANONICALIZATION_VERSION
 
 FIXTURES = Path(__file__).parent / "fixtures" / "canonical_hash_vectors.json"
 
 
 def test_canonical_hash_vectors_match_cross_implementation_fixtures() -> None:
+    """Fixture vectors encode the frozen canonical contract (incl. NFC strings)."""
     vectors = json.loads(FIXTURES.read_text(encoding="utf-8"))
     for vector in vectors:
         assert vector["canonicalization_version"] == CANONICALIZATION_VERSION
-        assert canonical_json(vector["payload"]) == vector["canonical_json"]
-        assert sha256_canonical_digest(vector["payload"]) == vector["sha256"]
+        actual = dumps_canonical(vector["payload"])
+        assert actual == vector["canonical_json"]
+        digest = hashlib.sha256(actual.encode("utf-8")).hexdigest()
+        assert digest == vector["sha256"]

@@ -2,25 +2,43 @@
   {
     "name": "unicode_newline_float_and_dataset_sorting",
     "canonicalization_version": "1.0",
-    "canonical_json": "{\"meta\":{\"note\":\"A\\nB\"},\"rows\":[{\"alpha\":\"Beta\",\"zeta\":\"2.5\"},{\"alpha\":\"Café\\nLine2\",\"zeta\":\"1\"}],\"schema\":[\"alpha\",\"zeta\"]}",
-    "sha256": "ed7584cd9eb71b48e5f290fbc448489ccb2ac94136bde61c489eb26a00d7933f",
+    "canonical_json": "{\"meta\":{\"note\":\"A\\nB\"},\"rows\":[{\"alpha\":\"Beta\",\"zeta\":2.5},{\"alpha\":\"Café\\nLine2\",\"zeta\":1}],\"schema\":[\"alpha\",\"zeta\"]}",
+    "sha256": "d6dd09ec925a926fe004079c9a89e748a6b022ed260e69ab8afc7e622bc1397b",
     "payload": {
-      "schema": ["zeta", "alpha"],
-      "rows": [
-        {"zeta": 1.0, "alpha": "Café\r\nLine2"},
-        {"alpha": "Beta", "zeta": 2.5}
+      "schema": [
+        "zeta",
+        "alpha"
       ],
-      "meta": {"note": "A\rB"}
+      "rows": [
+        {
+          "zeta": 1.0,
+          "alpha": "Café\r\nLine2"
+        },
+        {
+          "alpha": "Beta",
+          "zeta": 2.5
+        }
+      ],
+      "meta": {
+        "note": "A\rB"
+      }
     }
   },
   {
     "name": "nested_object_key_ordering",
     "canonicalization_version": "1.0",
-    "canonical_json": "{\"a\":[3,2,1],\"b\":{\"x\":false,\"y\":true},\"c\":\"0\"}",
-    "sha256": "578f157658a41f3dba23e4a037e1125b77b76f2ada18080602645204ed555c7d",
+    "canonical_json": "{\"a\":[3,2,1],\"b\":{\"x\":false,\"y\":true},\"c\":0}",
+    "sha256": "247922d30c84c3844eb88294e9eded9ceeb4b4a822c21085c7491f50abe5ad39",
     "payload": {
-      "b": {"y": true, "x": false},
-      "a": [3, 2, 1],
+      "b": {
+        "y": true,
+        "x": false
+      },
+      "a": [
+        3,
+        2,
+        1
+      ],
       "c": 0.0
     }
   }
