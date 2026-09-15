@@ -209,28 +209,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               >
                 Substack
               </a>
-              <span className="text-zinc-700" aria-hidden="true">
-                ·
-              </span>
-              <a
-                className="transition hover:text-[#F2D675]"
-                href="https://www.linkedin.com/in/laszlo-mazsar"
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn
-              </a>
-              <span className="text-zinc-700" aria-hidden="true">
-                ·
-              </span>
-              <a
-                className="transition hover:text-[#F2D675]"
-                href="https://x.com/laszlomazsar"
-                target="_blank"
-                rel="noreferrer"
-              >
-                X
-              </a>
             </div>
 
             <div className="mt-6">
