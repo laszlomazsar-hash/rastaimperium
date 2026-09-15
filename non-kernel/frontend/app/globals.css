@@ -146,6 +146,34 @@ code, pre, .font-courier {
   animation: fadeIn 0.4s ease-out;
 }
 
+/* ——— Phase 27: restrained section reveal (opacity + slight translate only) ——— */
+@keyframes riReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ri-reveal {
+  animation: riReveal 0.55s ease-out both;
+}
+
+.ri-reveal-delay-1 {
+  animation-delay: 0.08s;
+}
+
+.ri-reveal-delay-2 {
+  animation-delay: 0.16s;
+}
+
+.ri-reveal-delay-3 {
+  animation-delay: 0.24s;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--deep-earth); }
@@ -332,6 +360,15 @@ body {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .ri-reveal,
+  .ri-reveal-delay-1,
+  .ri-reveal-delay-2,
+  .ri-reveal-delay-3 {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
