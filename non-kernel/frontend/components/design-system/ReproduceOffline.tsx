@@ -1,6 +1,7 @@
 /**
  * ReproduceOffline — consistent bridge to auditor workflow.
  * Links only to existing documentation.
+ * Phase 27: surface alignment with sealed evidence aesthetic.
  */
 import React from "react";
 
@@ -25,9 +26,14 @@ const STEPS = [
 export function ReproduceOffline({ className = "" }: { className?: string }) {
   return (
     <section
-      className={`rounded-xl border border-[rgba(242,214,117,0.28)] bg-[rgba(15,18,13,0.92)] p-5 sm:p-6 ${className}`}
+      className={`relative overflow-hidden rounded-xl border border-[rgba(242,214,117,0.26)] bg-[rgba(15,18,13,0.94)] p-5 sm:p-6 ${className}`}
       aria-labelledby="reproduce-offline-heading"
     >
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-[#f2d675]/60 via-[#1e8a4b]/35 to-transparent"
+      />
+
       <h2
         id="reproduce-offline-heading"
         className="font-cinzel text-lg tracking-wide text-zinc-100"
