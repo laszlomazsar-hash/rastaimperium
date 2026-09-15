@@ -107,6 +107,7 @@ export const NAV_GROUPS: NavGroup[] = [
   },
 ];
 
+/** Verified external destinations only (HTTP 200 at audit time). */
 export const EXTERNAL_LINKS: NavLink[] = [
   {
     href: "https://github.com/laszlomazsar-hash/rastaimperium",
@@ -116,16 +117,6 @@ export const EXTERNAL_LINKS: NavLink[] = [
   {
     href: "https://substack.com/@laszlomazsar",
     label: "Substack",
-    external: true,
-  },
-  {
-    href: "https://www.linkedin.com/in/laszlo-mazsar",
-    label: "LinkedIn",
-    external: true,
-  },
-  {
-    href: "https://x.com/laszlomazsar",
-    label: "X",
     external: true,
   },
 ];
@@ -147,7 +138,6 @@ export function groupIsActive(pathname: string, group: NavGroup): boolean {
 export function activeGroupId(pathname: string): string | null {
   const p = pathname.replace(/\/$/, "") || "/";
 
-  // Explicit ownership for shared routes (proof appears in evidence + architecture)
   if (
     p.startsWith("/observatory") ||
     p.startsWith("/proof") ||
