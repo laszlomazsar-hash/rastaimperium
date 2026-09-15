@@ -64,9 +64,49 @@ export const metadata: Metadata = {
     ],
   },
   robots: { index: true, follow: true },
-  // Do not set a global alternates.canonical here — it incorrectly forces the
-  // homepage URL onto every route. Page layouts set their own where needed.
 };
+
+function FooterCol({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+        {title}
+      </p>
+      <ul className="mt-4 space-y-2.5 text-zinc-400">{children}</ul>
+    </div>
+  );
+}
+
+function FLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <li>
+      <Link className="transition hover:text-[#F2D675]" href={href}>
+        {children}
+      </Link>
+    </li>
+  );
+}
+
+function FExt({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <li>
+      <a
+        className="transition hover:text-[#F2D675]"
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {children}
+      </a>
+    </li>
+  );
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -84,227 +124,116 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <footer className="royal-footer border-t border-[rgba(242,214,117,0.18)] bg-[#090a09] py-12 sm:py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-10 text-sm sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-              {/* Brand — canonical seal + wordmark (matches header identity) */}
-              <div className="max-w-sm sm:col-span-2 lg:col-span-1 xl:col-span-1">
-                <Link
-                  href="/"
-                  className="inline-flex items-center transition hover:opacity-90"
-                  aria-label="Rasta Imperium home"
-                >
-                  <RISeal size={32} showWordmark />
-                </Link>
-                <p className="mt-4 leading-6 text-zinc-400">
-                  Constitutional intelligence infrastructure. Deterministic governance,
-                  verifiable evidence, accountable autonomy.
-                </p>
-                <p className="mt-4">
-                  <Link
-                    href="/explore/"
-                    className="text-sm text-[#F2D675] transition hover:underline"
-                  >
-                    Full atlas · Explore →
-                  </Link>
-                </p>
-              </div>
-
-              {/* Core journeys */}
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Core
-                </p>
-                <ul className="mt-4 space-y-2.5 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/">
-                      Imperium
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/blueprint/">
-                      System
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/codex/">
-                      Codex
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/proof/">
-                      Evidence
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/verify/">
-                      Verify
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/audit/">
-                      Audit
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Applications */}
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Applications
-                </p>
-                <ul className="mt-4 space-y-2.5 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/applications/">
-                      Applications
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/case-studies/">
-                      Case studies
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/product/">
-                      Product
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/observatory/">
-                      Observatory
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Civilization */}
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Civilization
-                </p>
-                <ul className="mt-4 space-y-2.5 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/about/">
-                      About
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/empire/">
-                      Empire
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/vision/">
-                      Vision
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/pillars/">
-                      Pillars
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/thanks-and-praise/">
-                      Thanks &amp; Praise
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Knowledge + system docs */}
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Knowledge
-                </p>
-                <ul className="mt-4 space-y-2.5 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/library/">
-                      Library
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/research/">
-                      Research
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/architecture/">
-                      Architecture
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/governance/">
-                      Governance
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/systems/">
-                      Systems
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/explore/">
-                      Full atlas
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Institutional + technical */}
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
-                  Institutional
-                </p>
-                <ul className="mt-4 space-y-2.5 text-zinc-400">
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/institutional-pilots/">
-                      Consulting
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/contact/">
-                      Contact
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="transition hover:text-[#F2D675]" href="/limitations/">
-                      Limitations
-                    </Link>
-                  </li>
-                  <li>
-                    <a
-                      className="transition hover:text-[#F2D675]"
-                      href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/PURE_VERIFIER_README.md"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Pure Verifier
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="transition hover:text-[#F2D675]"
-                      href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Reproduce Offline
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="transition hover:text-[#F2D675]"
-                      href="https://github.com/laszlomazsar-hash/rastaimperium"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      GitHub
-                    </a>
-                  </li>
-                </ul>
-              </div>
+            <div className="mb-10 max-w-xl">
+              <Link
+                href="/"
+                className="inline-flex items-center transition hover:opacity-90"
+                aria-label="Rasta Imperium home"
+              >
+                <RISeal size={32} showWordmark />
+              </Link>
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]/80">
+                Identity · Witness · Verification
+              </p>
+              <p className="mt-3 text-sm leading-6 text-zinc-400">
+                Constitutional intelligence infrastructure. Deterministic governance,
+                verifiable evidence, accountable autonomy.
+              </p>
             </div>
 
-            <div className="mt-10 border-t border-zinc-900 pt-6">
+            <div className="grid gap-10 text-sm sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+              <FooterCol title="Understand">
+                <FLink href="/">Rasta Imperium</FLink>
+                <FLink href="/about-evo-v-kernel/">EVO-V</FLink>
+                <FLink href="/why-deterministic-governance/">Why It Matters</FLink>
+                <FLink href="/vision/">Vision</FLink>
+              </FooterCol>
+
+              <FooterCol title="Evidence">
+                <FLink href="/observatory/">Observatory</FLink>
+                <FLink href="/proof/">VERIFIED Capsules</FLink>
+                <FLink href="/evidence/">Evidence Explorer</FLink>
+                <FLink href="/trust/">Status Guide</FLink>
+                <FLink href="/limitations/">Limitations</FLink>
+              </FooterCol>
+
+              <FooterCol title="Verify">
+                <FLink href="/verify/">Verification Console</FLink>
+                <FLink href="/evidence/export/">Capsule Export</FLink>
+                <FExt href="https://github.com/laszlomazsar-hash/rastaimperium/blob/main/docs/evidence/REPRODUCE_OFFLINE.md">
+                  Reproduce Offline
+                </FExt>
+                <FLink href="/challenge/">Challenge Lab</FLink>
+                <FLink href="/audit/">Auditor Handoff</FLink>
+              </FooterCol>
+
+              <FooterCol title="Architecture">
+                <FLink href="/blueprint/">Nine-Layer Stack</FLink>
+                <FLink href="/proof/">L7 — Identity + Trust</FLink>
+                <FLink href="/architecture/">Architecture Split</FLink>
+                <FLink href="/pillars/">Design Principles</FLink>
+              </FooterCol>
+
+              <FooterCol title="Codex">
+                <FLink href="/codex/">RastafarAI Codex</FLink>
+                <FLink href="/pillars/">Seven Articles</FLink>
+                <FLink href="/governance/">Constitutional Principles</FLink>
+              </FooterCol>
+
+              <FooterCol title="About">
+                <FLink href="/about/">Founder</FLink>
+                <FLink href="/institutional-pilots/">Institutional Pilots</FLink>
+                <FLink href="/evaluate/">Evaluate</FLink>
+                <FLink href="/contact/">Contact</FLink>
+                <FLink href="/explore/">Full atlas</FLink>
+              </FooterCol>
+            </div>
+
+            <div className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-zinc-900 pt-6 text-sm text-zinc-500">
+              <a
+                className="transition hover:text-[#F2D675]"
+                href="https://github.com/laszlomazsar-hash/rastaimperium"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub
+              </a>
+              <span className="text-zinc-700" aria-hidden="true">
+                ·
+              </span>
+              <a
+                className="transition hover:text-[#F2D675]"
+                href="https://substack.com/@laszlomazsar"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Substack
+              </a>
+              <span className="text-zinc-700" aria-hidden="true">
+                ·
+              </span>
+              <a
+                className="transition hover:text-[#F2D675]"
+                href="https://www.linkedin.com/in/laszlo-mazsar"
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn
+              </a>
+              <span className="text-zinc-700" aria-hidden="true">
+                ·
+              </span>
+              <a
+                className="transition hover:text-[#F2D675]"
+                href="https://x.com/laszlomazsar"
+                target="_blank"
+                rel="noreferrer"
+              >
+                X
+              </a>
+            </div>
+
+            <div className="mt-6">
               <p className="text-xs leading-6 text-zinc-600">
                 Rasta Imperium is the public constitutional and verification layer — not the EVO-V
                 execution runtime. Unproven claims are labelled; see{" "}
