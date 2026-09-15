@@ -1,5 +1,5 @@
 /* ==========================================================================
-   RASTA IMPERIUM — Design System Tokens (Phase B)
+   RASTA IMPERIUM — Design System Tokens (Phase B + visual upgrade)
    Presentation layer only. Does not alter evidence semantics.
    ========================================================================== */
 
@@ -16,6 +16,7 @@
   --ri-border-default: rgba(242, 214, 117, 0.24);
   --ri-border-strong: rgba(242, 214, 117, 0.42);
   --ri-border-evidence: rgba(30, 138, 75, 0.35);
+  --ri-border-evidence-strong: rgba(30, 138, 75, 0.58);
 
   /* ——— Text ——— */
   --ri-text-primary: #f4f4f0;
@@ -27,23 +28,25 @@
   --ri-gold: #d4af37;
   --ri-gold-soft: #f2d675;
   --ri-gold-deep: #b88718;
+  --ri-gold-bright: #f8e6a0;
 
   /* ——— Status colors (semantic only) ——— */
   --ri-verified: #1e8a4b;
-  --ri-verified-bg: rgba(30, 138, 75, 0.12);
-  --ri-verified-border: rgba(30, 138, 75, 0.45);
+  --ri-verified-bg: rgba(30, 138, 75, 0.16);
+  --ri-verified-border: rgba(30, 138, 75, 0.55);
+  --ri-verified-glow: 0 0 24px rgba(30, 138, 75, 0.12);
 
   --ri-demonstration: #b88718;
-  --ri-demonstration-bg: rgba(184, 135, 24, 0.12);
-  --ri-demonstration-border: rgba(184, 135, 24, 0.4);
+  --ri-demonstration-bg: rgba(184, 135, 24, 0.14);
+  --ri-demonstration-border: rgba(184, 135, 24, 0.48);
 
   --ri-unavailable: #5c6358;
-  --ri-unavailable-bg: rgba(92, 99, 88, 0.15);
-  --ri-unavailable-border: rgba(92, 99, 88, 0.45);
+  --ri-unavailable-bg: rgba(92, 99, 88, 0.12);
+  --ri-unavailable-border: rgba(92, 99, 88, 0.4);
 
   --ri-invalid: #a92d2d;
-  --ri-invalid-bg: rgba(169, 45, 45, 0.14);
-  --ri-invalid-border: rgba(169, 45, 45, 0.5);
+  --ri-invalid-bg: rgba(169, 45, 45, 0.16);
+  --ri-invalid-border: rgba(169, 45, 45, 0.55);
 
   --ri-spec-drift: #c47a2c;
   --ri-indeterminate: #6b7280;
@@ -74,6 +77,7 @@
   --ri-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
   --ri-shadow-md: 0 12px 40px rgba(0, 0, 0, 0.35);
   --ri-shadow-lg: 0 24px 70px rgba(0, 0, 0, 0.42);
+  --ri-shadow-sealed: 0 0 28px rgba(30, 138, 75, 0.1);
 
   /* ——— Motion ——— */
   --ri-transition-fast: 150ms ease;
