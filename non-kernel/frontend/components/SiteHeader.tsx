@@ -73,9 +73,10 @@ export default function SiteHeader() {
   const menuId = useId();
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const desktopTriggerRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  /** Blocks a single onFocus open after Escape focus restoration */
+  const suppressFocusOpen = useRef(false);
   const currentGroup = activeGroupId(pathname);
 
-  /* Mobile Escape + body scroll lock — unchanged Phase 27 behaviour */
   useEffect(() => {
     if (!mobileOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -89,7 +90,6 @@ export default function SiteHeader() {
     };
   }, [mobileOpen]);
 
-  /* Desktop Escape — close open dropdown and restore focus to its trigger */
   useEffect(() => {
     if (!desktopOpen || mobileOpen) return;
     const openId = desktopOpen;
@@ -97,9 +97,13 @@ export default function SiteHeader() {
       if (e.key !== "Escape") return;
       e.preventDefault();
       if (closeTimer.current) clearTimeout(closeTimer.current);
+      suppressFocusOpen.current = true;
       setDesktopOpen(null);
       requestAnimationFrame(() => {
         desktopTriggerRefs.current[openId]?.focus();
+        requestAnimationFrame(() => {
+          suppressFocusOpen.current = false;
+        });
       });
     };
     document.addEventListener("keydown", onKey);
@@ -131,6 +135,7 @@ export default function SiteHeader() {
   }, [mobileOpen, currentGroup]);
 
   const openDesktop = (id: string) => {
+    if (suppressFocusOpen.current) return;
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setDesktopOpen(id);
   };
@@ -167,7 +172,6 @@ export default function SiteHeader() {
           <RISeal size={34} showWordmark />
         </Link>
 
-        {/* Desktop primary */}
         <nav aria-label="Primary" className="hidden items-center lg:flex">
           <ul className="flex items-center gap-0.5">
             {NAV_GROUPS.map((group) => {
@@ -224,7 +228,6 @@ export default function SiteHeader() {
           </ul>
         </nav>
 
-        {/* Tablet condensed */}
         <nav aria-label="Primary tablet" className="hidden items-center md:flex lg:hidden">
           <ul className="flex items-center gap-0 text-sm">
             {NAV_GROUPS.filter((g) =>
@@ -273,7 +276,6 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      {/* Mobile full menu */}
       {mobileOpen && (
         <div
           id={menuId}
