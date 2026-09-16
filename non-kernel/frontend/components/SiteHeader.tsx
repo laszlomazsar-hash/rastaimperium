@@ -72,8 +72,10 @@ export default function SiteHeader() {
   const [desktopOpen, setDesktopOpen] = useState<string | null>(null);
   const menuId = useId();
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const desktopTriggerRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const currentGroup = activeGroupId(pathname);
 
+  /* Mobile Escape + body scroll lock — unchanged Phase 27 behaviour */
   useEffect(() => {
     if (!mobileOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -86,6 +88,23 @@ export default function SiteHeader() {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  /* Desktop Escape — close open dropdown and restore focus to its trigger */
+  useEffect(() => {
+    if (!desktopOpen || mobileOpen) return;
+    const openId = desktopOpen;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.preventDefault();
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+      setDesktopOpen(null);
+      requestAnimationFrame(() => {
+        desktopTriggerRefs.current[openId]?.focus();
+      });
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [desktopOpen, mobileOpen]);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -105,7 +124,6 @@ export default function SiteHeader() {
     if (!mobileOpen) return;
     const next: Record<string, boolean> = {};
     for (const g of NAV_GROUPS) {
-      // Open active group + keep Evidence/Verify expanded by default for priority
       next[g.id] =
         g.id === currentGroup || g.id === "evidence" || g.id === "verify";
     }
@@ -164,6 +182,9 @@ export default function SiteHeader() {
                 >
                   <Link
                     href={group.href}
+                    ref={(el) => {
+                      desktopTriggerRefs.current[group.id] = el;
+                    }}
                     aria-current={active ? "page" : undefined}
                     aria-haspopup="true"
                     aria-expanded={open}
