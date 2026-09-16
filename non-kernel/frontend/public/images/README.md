@@ -42,7 +42,7 @@ The next static export will publish these under `/images/archive/…`.
 
 - kebab-case filenames
 - extension must match magic bytes (JPEG starts `FF D8 FF`)
-- no placeholders, zero-byte files, or `.b64` stand-ins
+- no placeholders, zero-byte files, or encoded stand-in blobs
 - unused assets must be **audited before removal**; prefer archive over delete
 
 Phase 33 (2026-09): inventory, reference audit, and archive of unreferenced
