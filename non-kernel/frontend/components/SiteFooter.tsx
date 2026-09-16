@@ -75,11 +75,18 @@ export default function SiteFooter() {
                     <FooterLink key={item.href + item.label} item={item} />
                   ))}
                   {group.id === "about" && (
-                    <li>
-                      <Link className="transition hover:text-[#F2D675]" href="/explore/">
-                        Full atlas
-                      </Link>
-                    </li>
+                    <>
+                      <li>
+                        <Link className="transition hover:text-[#F2D675]" href="/start-here/">
+                          Start Here
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="transition hover:text-[#F2D675]" href="/explore/">
+                          Full atlas
+                        </Link>
+                      </li>
+                    </>
                   )}
                 </ul>
               </div>
