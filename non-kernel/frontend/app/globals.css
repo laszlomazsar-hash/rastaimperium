@@ -197,6 +197,10 @@ code, pre, .font-courier {
   --royal-red: #a92d2d;
   --royal-line: rgba(242, 214, 117, 0.24);
   --royal-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  /* Phase 29 — focus indicator tokens */
+  --ri-focus-color: var(--royal-gold);
+  --ri-focus-width: 2px;
+  --ri-focus-offset: 3px;
 }
 
 html {
@@ -348,9 +352,40 @@ body {
   pointer-events: none;
 }
 
+/*
+ * Phase 29 — visible keyboard focus
+ * outline only (no layout shift). :focus-visible so mouse clicks stay clean.
+ */
+:focus {
+  outline: none;
+}
+
 :focus-visible {
-  outline: 2px solid var(--royal-gold);
-  outline-offset: 4px;
+  outline: var(--ri-focus-width) solid var(--ri-focus-color);
+  outline-offset: var(--ri-focus-offset);
+  border-radius: 0.375rem;
+}
+
+/* Navigation chrome — denser surfaces, clear gold ring on dark panels */
+.royal-header a:focus-visible,
+.royal-header button:focus-visible,
+.royal-footer a:focus-visible,
+.royal-footer button:focus-visible {
+  outline: var(--ri-focus-width) solid var(--ri-focus-color);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+  box-shadow: 0 0 0 1px rgba(9, 10, 9, 0.9);
+}
+
+.royal-header [role="menu"] a:focus-visible {
+  outline-offset: 1px;
+  background-color: rgba(184, 134, 11, 0.12);
+}
+
+.royal-header [role="dialog"] a:focus-visible,
+.royal-header [role="dialog"] button:focus-visible {
+  outline-offset: 2px;
+  background-color: rgba(184, 134, 11, 0.1);
 }
 
 @media (prefers-reduced-motion: reduce) {
