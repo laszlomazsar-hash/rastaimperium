@@ -65,6 +65,12 @@ function LinkItem({
   );
 }
 
+function menuItems(): HTMLElement[] {
+  const menu = document.querySelector('[role="menu"]');
+  if (!menu) return [];
+  return Array.from(menu.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+}
+
 export default function SiteHeader() {
   const pathname = usePathname() || "/";
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -90,22 +96,68 @@ export default function SiteHeader() {
     };
   }, [mobileOpen]);
 
+  /* Desktop: Escape close + arrow / Home / End within open submenu */
   useEffect(() => {
     if (!desktopOpen || mobileOpen) return;
     const openId = desktopOpen;
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      e.preventDefault();
-      if (closeTimer.current) clearTimeout(closeTimer.current);
-      suppressFocusOpen.current = true;
-      setDesktopOpen(null);
-      requestAnimationFrame(() => {
-        desktopTriggerRefs.current[openId]?.focus();
+      if (e.key === "Escape") {
+        e.preventDefault();
+        if (closeTimer.current) clearTimeout(closeTimer.current);
+        suppressFocusOpen.current = true;
+        setDesktopOpen(null);
         requestAnimationFrame(() => {
-          suppressFocusOpen.current = false;
+          desktopTriggerRefs.current[openId]?.focus();
+          requestAnimationFrame(() => {
+            suppressFocusOpen.current = false;
+          });
         });
-      });
+        return;
+      }
+
+      const items = menuItems();
+      if (items.length === 0) return;
+
+      const active = document.activeElement as HTMLElement | null;
+      const onTrigger = active === desktopTriggerRefs.current[openId];
+      const idx = active ? items.indexOf(active) : -1;
+      const inMenu = idx >= 0;
+
+      if (!onTrigger && !inMenu) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (onTrigger || idx === items.length - 1) {
+          items[0]?.focus();
+        } else {
+          items[idx + 1]?.focus();
+        }
+        return;
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (onTrigger || idx <= 0) {
+          items[items.length - 1]?.focus();
+        } else {
+          items[idx - 1]?.focus();
+        }
+        return;
+      }
+
+      if (e.key === "Home") {
+        e.preventDefault();
+        items[0]?.focus();
+        return;
+      }
+
+      if (e.key === "End") {
+        e.preventDefault();
+        items[items.length - 1]?.focus();
+      }
     };
+
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [desktopOpen, mobileOpen]);
