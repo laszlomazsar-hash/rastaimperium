@@ -1,0 +1,36 @@
+name: Regenerate OG Image
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "non-kernel/frontend/public/og-image.svg"
+      - ".github/workflows/regenerate-og-image.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ImageMagick
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
+
+      - name: Render SVG to PNG
+        run: |
+          convert -background '#070807' -flatten \
+            non-kernel/frontend/public/og-image.svg \
+            -resize 1200x630! -depth 8 -strip \
+            non-kernel/frontend/public/og-image.png
+          file non-kernel/frontend/public/og-image.png
+          identify non-kernel/frontend/public/og-image.png
+
+      - name: Commit PNG if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "brand(og): regenerate og-image.png from RISeal SVG master (Phase 32)"
+          file_pattern: non-kernel/frontend/public/og-image.png
