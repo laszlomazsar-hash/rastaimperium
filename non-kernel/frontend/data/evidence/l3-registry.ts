@@ -40,7 +40,7 @@ export const l3Proof: Proof = {
   description:
     "INV-L3-001 verified for the sealed public L3 decision capsule.",
   status: "VERIFIED",
-  proofType: "deterministic_decision_contract",
+  proofType: "governance_decision",
   invariant: "INV-L3-001",
   inputFixture: "ART-L3-DECISION-001.json",
   expectedOutcome: "Not established",
