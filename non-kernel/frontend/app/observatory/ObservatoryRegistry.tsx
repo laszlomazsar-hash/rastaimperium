@@ -47,6 +47,13 @@ export default function ObservatoryRegistry() {
     });
   }, [status, query]);
 
+  const activeFilterDescription = [
+    status !== "all" ? `status ${status}` : null,
+    query.trim() ? `search “${query.trim()}”` : null,
+  ]
+    .filter(Boolean)
+    .join(" and ");
+
   return (
     <div>
       <div className="flex flex-col gap-4 border-b border-zinc-900 pb-6 sm:flex-row sm:items-end sm:justify-between">
@@ -92,15 +99,25 @@ export default function ObservatoryRegistry() {
           />
         </label>
       </div>
-      <p className="mt-3 font-mono text-xs text-zinc-500">
-        Showing {filtered.length} of {proofs.length} records · authoritative frontend evidence
-        manifest
+      <p className="mt-3 font-mono text-xs text-zinc-500" aria-live="polite" aria-atomic="true">
+        Showing {filtered.length} of {proofs.length} records{activeFilterDescription ? ` · active ${activeFilterDescription}` : ""} · authoritative frontend evidence manifest
       </p>
 
       <ul className="mt-8 space-y-5">
         {filtered.length === 0 && (
           <li className="rounded-xl border border-zinc-800 px-4 py-8 text-center text-sm text-zinc-400">
-            No matching evidence found.
+            <p>No matching evidence found.</p>
+            <p className="mt-2">Try a different search or status, or clear the filters to inspect the full registry.</p>
+            <button
+              type="button"
+              className="mt-4 rounded-lg border border-zinc-700 px-3 py-2 font-mono text-xs uppercase tracking-wider text-[#F2D675] hover:border-[#D4AF37]"
+              onClick={() => {
+                setStatus("all");
+                setQuery("");
+              }}
+            >
+              Clear filters
+            </button>
           </li>
         )}
         {filtered.map((p) => {
@@ -161,7 +178,14 @@ export default function ObservatoryRegistry() {
                       <p>
                         <span className="text-zinc-500">Verification · </span>
                         {p.verificationMethod}
-                        {p.observedOutcome ? ` · Observed: ${p.observedOutcome}` : ""}
+                      </p>
+                      <p>
+                        <span className="text-zinc-500">Expected · </span>
+                        {p.expectedOutcome || "Not established"}
+                      </p>
+                      <p>
+                        <span className="text-zinc-500">Observed · </span>
+                        {p.observedOutcome || "Not established"}
                       </p>
                       <p>
                         <span className="text-zinc-500">Reproduction · </span>
