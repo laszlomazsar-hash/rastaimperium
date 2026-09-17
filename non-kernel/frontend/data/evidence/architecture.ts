@@ -1,9 +1,3 @@
-/**
- * Phase 9 — Verifiable Architecture
- * Evidence-linked civilization stack (L1–L9).
- * Honesty rule: VERIFIED only when sealed artifacts exist.
- */
-
 import type { ProvenanceKind, VerificationStatus } from "./types";
 
 export type ArchitectureLayerId =
@@ -59,7 +53,7 @@ export const architectureLayers: ArchitectureLayer[] = [
   {
     layerId: "L8",
     name: "Constitutional Layer",
-    purpose: "Seven Articles — hardware-enforced governance physics as constitutional constraints.",
+    purpose: "Seven Articles — constitutional intent and governance doctrine, not established runtime enforcement.",
     inputs: ["Constitutional articles", "Capability boundaries", "Policy constraints"],
     outputs: ["Admissible action space", "Governance ruleset references"],
     invariantIds: [],
@@ -156,16 +150,16 @@ export const architectureLayers: ArchitectureLayer[] = [
     purpose: "Real-time invariant enforcement on operational transitions.",
     inputs: ["Operational events", "Enforcement policies", "Invariant registry"],
     outputs: ["Allow / reject decisions", "Enforcement audit records (target)"],
-    invariantIds: ["INV-001", "INV-002"],
+    invariantIds: ["INV-L3-001"],
     invariantNotes: [
-      "Shares enforcement dependency on INV-001 / INV-002 where lifecycle and replay apply.",
+      "INV-L3-001 — VERIFIED for sealed ART-L3-DECISION-001 only.",
     ],
-    evidenceIds: ["EVD-REPLAY-DOC-001", "EVD-REPLAY-ART-001", "EVD-REJECT-ART-001", "EVD-LIFECYCLE-DOC-001"],
-    proofIds: ["PROOF-REPLAY-001", "PROOF-ILLEGAL-001"],
+    evidenceIds: ["EVD-L3-DECISION-ART-001"],
+    proofIds: ["PROOF-L3-DECISION-001"],
     challengeIds: ["CHAL-ILLEGAL-TRANSITION-001", "CHAL-REPLAY-MISMATCH-001"],
-    implementation: "Operational enforcement path via sealed valid + reject capsules",
-    verificationHref: "/proof/#PROOF-ILLEGAL-001",
-    verificationLabel: "Open related proofs",
+    implementation: "Sealed L3 decision capsule + independent Node/Python pure verifiers",
+    verificationHref: "/proof/#PROOF-L3-DECISION-001",
+    verificationLabel: "L3 decision proof",
     challengeHref: "/challenge/",
     verificationStatus: "VERIFIED",
     provenance: "HISTORICAL",
