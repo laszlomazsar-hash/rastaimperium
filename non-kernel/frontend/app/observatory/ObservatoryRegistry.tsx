@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { proofs } from "@/data/evidence/manifest";
+import { publicProofs as proofs } from "@/data/evidence/l3-registry";
 import type { VerificationStatus } from "@/data/evidence/types";
 import { StatusBadge, type EvidenceStatus } from "@/components/design-system";
 
@@ -137,23 +137,17 @@ export default function ObservatoryRegistry() {
 
                 <div className="space-y-3 px-4 py-4 text-sm leading-6 text-zinc-300 sm:px-5">
                   <p>
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
-                      Claim ·{" "}
-                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Claim ·{" "}</span>
                     {p.description}
                   </p>
                   {p.invariant && (
                     <p>
-                      <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
-                        Invariant ·{" "}
-                      </span>
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Invariant ·{" "}</span>
                       {p.invariant}
                     </p>
                   )}
                   <p>
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
-                      Scope ·{" "}
-                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Scope ·{" "}</span>
                     {p.notes || (p.status === "VERIFIED" ? "Capsule-scoped only" : p.source)}
                   </p>
                 </div>
@@ -169,60 +163,18 @@ export default function ObservatoryRegistry() {
                   </button>
                   {isOpen && (
                     <div className="mt-4 space-y-3 text-sm leading-6 text-zinc-400">
-                      <p>
-                        <span className="text-zinc-500">Evidence · </span>
-                        {p.artifactId
-                          ? `Sealed capsule ${p.artifactId}${p.hash ? ` · ${p.hash.slice(0, 16)}…` : ""}`
-                          : `Source: ${p.source}`}
-                      </p>
-                      <p>
-                        <span className="text-zinc-500">Verification · </span>
-                        {p.verificationMethod}
-                      </p>
-                      <p>
-                        <span className="text-zinc-500">Expected · </span>
-                        {p.expectedOutcome || "Not established"}
-                      </p>
-                      <p>
-                        <span className="text-zinc-500">Observed · </span>
-                        {p.observedOutcome || "Not established"}
-                      </p>
-                      <p>
-                        <span className="text-zinc-500">Reproduction · </span>
-                        {p.replayAvailable
-                          ? "Offline pure verifiers available — no network, no mutation of the artifact."
-                          : "No sealed capsule reproduction on this surface."}
-                      </p>
-                      <p>
-                        <span className="text-zinc-500">Limitations · </span>
-                        {p.notes ||
-                          (p.status === "VERIFIED"
-                            ? "Does not establish LIVE telemetry, full-kernel parity, or certification."
-                            : "Not production evidence.")}
-                      </p>
+                      <p><span className="text-zinc-500">Evidence · </span>{p.artifactId ? `Sealed capsule ${p.artifactId}${p.hash ? ` · ${p.hash.slice(0, 16)}…` : ""}` : `Source: ${p.source}`}</p>
+                      <p><span className="text-zinc-500">Verification · </span>{p.verificationMethod}</p>
+                      <p><span className="text-zinc-500">Expected · </span>{p.expectedOutcome || "Not established"}</p>
+                      <p><span className="text-zinc-500">Observed · </span>{p.observedOutcome || "Not established"}</p>
+                      <p><span className="text-zinc-500">Reproduction · </span>{p.replayAvailable ? "Offline pure verifiers available — no network, no mutation of the artifact." : "No sealed capsule reproduction on this surface."}</p>
+                      <p><span className="text-zinc-500">Limitations · </span>{p.notes || (p.status === "VERIFIED" ? "Does not establish LIVE telemetry, full-kernel parity, or certification." : "Not production evidence.")}</p>
                       <div className="flex flex-wrap gap-3 pt-2">
-                        {p.replayAvailable && (
-                          <Link href="/verify/" className="text-[#F2D675] hover:underline">
-                            Verify this evidence →
-                          </Link>
-                        )}
-                        {p.artifactId && (
-                          <a
-                            href={p.source.startsWith("/") ? p.source : `/${p.source}`}
-                            className="text-zinc-400 hover:text-[#F2D675]"
-                          >
-                            Download JSON
-                          </a>
-                        )}
-                        <Link href="/challenge/" className="text-zinc-400 hover:text-[#F2D675]">
-                          Challenge Lab
-                        </Link>
-                        <Link href="/limitations/" className="text-zinc-500 hover:text-zinc-300">
-                          Limitations
-                        </Link>
-                        <Link href="/evaluate/" className="text-zinc-500 hover:text-zinc-300">
-                          Evaluate
-                        </Link>
+                        {p.replayAvailable && <Link href="/verify/" className="text-[#F2D675] hover:underline">Verify this evidence →</Link>}
+                        {p.artifactId && <a href={p.source.startsWith("/") ? p.source : `/${p.source}`} className="text-zinc-400 hover:text-[#F2D675]">Download JSON</a>}
+                        <Link href="/challenge/" className="text-zinc-400 hover:text-[#F2D675]">Challenge Lab</Link>
+                        <Link href="/limitations/" className="text-zinc-500 hover:text-zinc-300">Limitations</Link>
+                        <Link href="/evaluate/" className="text-zinc-500 hover:text-zinc-300">Evaluate</Link>
                       </div>
                     </div>
                   )}
