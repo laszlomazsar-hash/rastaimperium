@@ -76,7 +76,8 @@ jobs:
         env:
           VISUAL_CHROMIUM_EXECUTABLE: ${{ steps.chromium.outputs.executable }}
           # Phase 22 Step 9 added /evidence/export/ to static inventory (62 routes).
-          VISUAL_EXPECTED_ROUTES: "62"
+          # Phase 28: /start-here/ in static → 63 routes.
+          VISUAL_EXPECTED_ROUTES: "63"
         run: |
           if [ "${{ inputs.update_baselines }}" = "true" ]; then
             npm run test:visual:update
