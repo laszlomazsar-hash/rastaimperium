@@ -19,7 +19,7 @@ const updateBaselines = process.argv.includes("--update");
 const determinismCheck = process.argv.includes("--determinism-check");
 // Bumped 60 → 61 after Phase 22 Step 8 governance-crosswalk static export (2026-09-11).
 // Step 9 evidence/export lands in static after merge; bump again then if inventory is 62.
-const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 61);
+const expectedRouteCount = Number(process.env.VISUAL_EXPECTED_ROUTES || 63);
 const maxDiffPixelRatio = 0.002;
 /** Bounded post-readiness settle (ms). Deterministic; not a substitute for readiness. */
 const SETTLE_MS = 100;
