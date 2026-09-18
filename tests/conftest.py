@@ -3,12 +3,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Add paths so all test imports resolve correctly
+# Add paths so all test imports resolve correctly.
+# Do NOT insert ROOT/backend: that shadows root src/ (e.g. src.governance.fsm).
 paths_to_add = [
     str(ROOT),
     str(ROOT / "backend" / "src"),
     str(ROOT / "non-kernel" / "frontend"),
-    str(ROOT / "backend"),
 ]
 
 for p in paths_to_add:
