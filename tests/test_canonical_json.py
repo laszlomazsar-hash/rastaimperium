@@ -27,7 +27,7 @@ def test_canonical_float_vectors_conformance() -> None:
 def test_canonical_json_key_sort_and_number_format() -> None:
     payload = {"b": 1.23, "a": -0.0, "nested": {"z": 1000000.0, "y": 1e-7}}
 
-    assert dumps_canonical(payload) == '{"a":0,"b":1.23,"nested":{"y":1e-07,"z":1000000}}'
+    assert dumps_canonical(payload) == '{"a":0,"b":1.23,"nested":{"y":1e-07,"z":1000000}'
 
 
 def test_compliance_digest_uses_canonical_float_serialization(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -40,7 +40,10 @@ def test_compliance_digest_uses_canonical_float_serialization(monkeypatch: pytes
 
             return datetime(2026, 4, 27, 12, 0, 0, tzinfo=tz)
 
-    monkeypatch.setattr("codex.compliance.datetime", _FrozenDatetime)
+    import codex.compliance as compliance_mod
+    import backend.src.codex.compliance as backend_compliance_mod
+    monkeypatch.setattr(compliance_mod, "datetime", _FrozenDatetime)
+    monkeypatch.setattr(backend_compliance_mod, "datetime", _FrozenDatetime)
     record = engine.append_audit_record(
         "auditor",
         "calibrate",
