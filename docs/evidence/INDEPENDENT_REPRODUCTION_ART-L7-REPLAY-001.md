@@ -117,7 +117,9 @@ Permute event order (e.g. swap the two `STATE_TRANSITION` events). Independent s
 
 - Production EVO-V deployment health  
 - LIVE operational telemetry  
-- Cross-implementation parity (still UNAVAILABLE)  
-- Benchmark claims (still UNAVAILABLE)  
+- Benchmark claims (still **UNAVAILABLE**)  
+- Full EVO-V production verification or production authority (**NOT ESTABLISHED**)  
+
+**Related sealed evidence (separate capsule):** cross-implementation parity for these L7 pure verifiers is recorded as **VERIFIED** under capsule-scoped artifact **`ART-L7-PARITY-001`** (`cross_implementation_parity`). That status applies only to independent Node + Python agreement on the sealed public capsules — not to production runtime, LIVE telemetry, or benchmarks.
 
 It proves only: **this sealed public capsule independently reproduces its sealed INV-001 hashes under the documented pure algorithm.**
