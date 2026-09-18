@@ -41,6 +41,10 @@ On mismatch: public status remains **UNAVAILABLE / MISMATCH DETECTED** — do no
 - Shared only: sealed capsule JSON + documented algorithm (sorted-key canonical JSON + SHA-256)
 - Not a second copy of the same script
 
-## Promotion rule
+## Promotion rule (historical) and sealed status
 
-`PROOF-PARITY-001` may become VERIFIED only after this gate passes and a sealed parity report is published. Until then: **UNAVAILABLE**.
+**Promotion gate (historical):** parity was promoted to public VERIFIED only after this gate passed and a sealed parity report was published. Prior working name in process notes: `PROOF-PARITY-001`.
+
+**Current sealed status:** **`ART-L7-PARITY-001`** (`cross_implementation_parity`) is **VERIFIED** — capsule-scoped only (independent Node + Python agreement on the sealed public L7 capsules). See the Living Evidence Manifest.
+
+**Still not established / UNAVAILABLE:** production authority, LIVE telemetry, benchmarks, full EVO-V kernel parity, and certification/compliance claims.
