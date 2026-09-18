@@ -2,15 +2,26 @@
   {
     "name": "unicode_newline_float_and_dataset_sorting",
     "canonicalization_version": "1.0",
-    "canonical_json": "{\"meta\":{\"note\":\"A\\nB\"},\"rows\":[{\"alpha\":\"Beta\",\"zeta\":\"2.5\"},{\"alpha\":\"Café\\nLine2\",\"zeta\":\"1\"}],\"schema\":[\"alpha\",\"zeta\"]}",
-    "sha256": "ed7584cd9eb71b48e5f290fbc448489ccb2ac94136bde61c489eb26a00d7933f",
+    "canonical_json": "{\"meta\":{\"note\":\"A\\nB\"},\"rows\":[{\"alpha\":\"Beta\",\"zeta\":\"2.5\"},{\"alpha\":\"Café\\nLine2\",\"zeta\":\"1\"}],\"schema\":[\"alpha\",\"zeta\"]}",
+    "sha256": "a89461266bdf49e6710b15c5885d817d1579ef67a10aebcf7ab69db174b0a8bb",
     "payload": {
-      "schema": ["zeta", "alpha"],
-      "rows": [
-        {"zeta": 1.0, "alpha": "Café\r\nLine2"},
-        {"alpha": "Beta", "zeta": 2.5}
+      "schema": [
+        "zeta",
+        "alpha"
       ],
-      "meta": {"note": "A\rB"}
+      "rows": [
+        {
+          "zeta": 1.0,
+          "alpha": "Café\r\nLine2"
+        },
+        {
+          "alpha": "Beta",
+          "zeta": 2.5
+        }
+      ],
+      "meta": {
+        "note": "A\rB"
+      }
     }
   },
   {
@@ -19,8 +30,15 @@
     "canonical_json": "{\"a\":[3,2,1],\"b\":{\"x\":false,\"y\":true},\"c\":\"0\"}",
     "sha256": "578f157658a41f3dba23e4a037e1125b77b76f2ada18080602645204ed555c7d",
     "payload": {
-      "b": {"y": true, "x": false},
-      "a": [3, 2, 1],
+      "b": {
+        "y": true,
+        "x": false
+      },
+      "a": [
+        3,
+        2,
+        1
+      ],
       "c": 0.0
     }
   }
