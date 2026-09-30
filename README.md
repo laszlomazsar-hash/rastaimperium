@@ -1,10 +1,10 @@
-# Rasta Imperium — OFFLINE
+# Rasta Imperium — CANCELLED
 
-**This project is discontinued and offline.**
+**This project is cancelled and offline.**
 
-Nothing is operational.
-The Rastafarai Codex and related material are no longer maintained or claimed as working.
+Nothing is working.
+The Rastafarai Codex was not viable.
 
-Repository retained only for historical reference.
+Repository kept only as historical archive.
 
-— Owner decision, September 2026
+— Cancelled September 2026
